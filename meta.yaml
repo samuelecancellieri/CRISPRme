@@ -1,0 +1,34 @@
+{% set version = "1.0.0" %}
+
+package:
+  name: crisprme
+  version: {{ version }}
+
+source:
+  url: https://github.com/pinellolab/CRISPRitz/archive/v{{ version }}.tar.gz
+  sha256: 8af9c4f0d4f863f094f38b903b5e4445185f7ed6f0572772196dab8887359e3d
+
+build:
+  number: 0
+  skip: True  # [osx or py<36]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - libgomp  # [linux]
+  host:
+    - make
+    - boost
+    - python
+  run:
+    - crispritz
+
+test:
+  commands:
+    - crisprme.py
+
+about:
+  home: https://github.com/pinellolab/CRISPRitz
+  license: GPL3
+  license_file: LICENSE
+  summary: CRISPRitz, tool package for CRISPR experiments assessment and analysis.
