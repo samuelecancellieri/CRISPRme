@@ -16,9 +16,10 @@ script_path = corrected_origin_path
 
 input_args = sys.argv
 
+variant = True
+
 
 def complete_search():
-    variant = True
     if "--help" in input_args:
         print("This is the automated search process that goes from raw input up to the post-analysis of results.")
         print("These are the flags that must be used in order to run this function:")
@@ -224,7 +225,14 @@ def callHelp():
     print("help:\n",
           "\nALL FASTA FILEs USED BY THE SOFTWARE MUST BE UNZIPPED AND CHROMOSOME SEPARATED, ALL VCFs USED BY THE SOFTWARE MUST BE ZIPPED AND CHROMOSOME SEPARATED",
           # "\ncrispritz graphical-interface FUNCTION TO START LOCAL SERVER AND ACTIVATE USER GRAPHICAL INTERFACE"
-          "\ncrispritz complete-search FUNCTION SEARCHING THE WHOLE GENOME (REFERENCE AND VARIANT IF REQUESTED) AND PERFORM CFD ANALYSIS AND TARGET SELECTION",
+          "\ncrispritz version FUNCTION RETURNING THE VERSION OF CRISPRitz INSTALLED",
+          "\ncrispritz add-variants FUNCTION TO ADD VARIANTS DATA TO A FASTA GENOME",
+          "\ncrispritz index-genome FUNCTION TO CREATE GENOME INDEX TO PERFORM FAST SEARCHES WITH BULGES",
+          "\ncrispritz search FUNCTION TO PERFORM SEARCHES ON A GENOME (INDEXED OR PLAIN FASTA)",
+          "\ncrispritz scores FUNCTION TO CALCULATE THE CFD SCORE FOR A LIST OF TARGETS",
+          "\ncrispritz annotate-results FUNCTION TO ADD GENOMIC INFORMATION TO TARGETS RESULTS",
+          "\ncrispritz generate-report FUNCTION TO GENERATE GRAPHICAL REPORT FOR A SPECIFIC GUIDE",
+          "\ncrispritz process-data FUNCTION TO ANALYZE RESULTS TO GENERATE VARIANT ANALYSIS AND SAMPLE CLASSIFICATION (beta)",
           "\n\nADD help TO ANY FUNCTION TO VISUALIZE A BRIEF HELP PAGE (example: crispritz index-genome help)\n")
 
 
