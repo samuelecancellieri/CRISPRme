@@ -5,8 +5,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/pinellolab/CRISPRitz/archive/v{{ version }}.tar.gz
-  sha256: 8af9c4f0d4f863f094f38b903b5e4445185f7ed6f0572772196dab8887359e3d
+  url: https://github.com/samuelecancellieri/CRISPRme/archive/v{{ version }}.tar.gz
+  sha256: 407e625ca2da721629d0b5013400ca4247ad6c390d330253d14b66e117c0df09
 
 build:
   number: 0
@@ -28,7 +28,7 @@ test:
     - crisprme.py
 
 about:
-  home: https://github.com/pinellolab/CRISPRitz
+  home: https://github.com/samuelecancellieri/CRISPRme
   license: GPL3
   license_file: LICENSE
-  summary: CRISPRitz, tool package for CRISPR experiments assessment and analysis.
+  summary: CRISPRme, tool package for CRISPR experiments assessment and analysis.
