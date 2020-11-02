@@ -8,7 +8,7 @@ script_path = os.path.dirname(os.path.abspath(__file__))
 # path where this file is located
 # origin_path = os.path.dirname(os.path.realpath(__file__))
 # conda path
-conda_path = "opt/crisprme/"
+conda_path = "opt/crisprme/auto_search_corrected/"
 # path corrected to use with conda
 corrected_origin_path = script_path[:-3]+conda_path
 
@@ -224,8 +224,8 @@ def callHelp():
     print("help:\n",
           "\nALL FASTA FILEs USED BY THE SOFTWARE MUST BE UNZIPPED AND CHROMOSOME SEPARATED, ALL VCFs USED BY THE SOFTWARE MUST BE ZIPPED AND CHROMOSOME SEPARATED",
           # "\ncrispritz graphical-interface FUNCTION TO START LOCAL SERVER AND ACTIVATE USER GRAPHICAL INTERFACE"
-          "\ncrispritz complete-search FUNCTION SEARCHING THE WHOLE GENOME (REFERENCE AND VARIANT IF REQUESTED) AND PERFORM CFD ANALYSIS AND TARGET SELECTION",
-          "\n\nADD help TO ANY FUNCTION TO VISUALIZE A BRIEF HELP PAGE (example: crispritz index-genome help)\n")
+          "\ncrisprime complete-search FUNCTION SEARCHING THE WHOLE GENOME (REFERENCE AND VARIANT IF REQUESTED) AND PERFORM CFD ANALYSIS AND TARGET SELECTION",
+          "\n\nADD help TO ANY FUNCTION TO VISUALIZE A BRIEF HELP PAGE (example: crisprime complete-search --help)\n")
 
 
 if len(sys.argv) < 2:
