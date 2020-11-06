@@ -15,10 +15,17 @@ bDNA = sys.argv[8]
 bRNA = sys.argv[9]
 output_folder = sys.argv[10]
 
+global use_thread 
+use_thread = 0
+
 def start_indels(f):
+    global use_thread
     splitted = f.split('.')
     chrom = splitted[1]
-    os.system(f"./indels_process.sh \"{vcf_dir}/{f}\" \"{chrom}\" \"{output_folder}\" \"{vcf_name}\" \"{ref_folder}\" \"{pam_file}\" \"{guide_file}\" {bMax} {mm} {bDNA} {bRNA}")
+    if use_thread == t-1:
+        use_thread = 0
+    os.system(f"./indels_process.sh \"{vcf_dir}/{f}\" \"{chrom}\" \"{output_folder}\" \"{vcf_name}\" \"{ref_folder}\" \"{pam_file}\" \"{guide_file}\" {bMax} {mm} {bDNA} {bRNA} {use_thread}")
+    use_thread =+ 1
 
 chrs = []
 for f in os.listdir(vcf_dir):

@@ -11,6 +11,7 @@ bMax=$8
 mm=$9
 bDNA=${10}
 bRNA=${11}
+use_thread=${12}
 starting_folder=$(pwd)
 guide_name=$(basename "$guide_file")
 
