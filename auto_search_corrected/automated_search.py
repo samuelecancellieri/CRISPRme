@@ -197,6 +197,6 @@ os.chdir(script_path)
 if variant:
     os.system("./automated_search_good_parallel.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+annotationfile+" "+samplefile+" "+str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path)
 else:
-    os.system("./automated_search.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile+" _ "+str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path)
+    os.system("./automated_search_good_parallel.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile+" _ "+str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path)
     
     
