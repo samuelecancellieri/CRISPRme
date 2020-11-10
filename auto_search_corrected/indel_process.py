@@ -16,7 +16,8 @@ bDNA = sys.argv[9]
 bRNA = sys.argv[10]
 
 for f in files:
-	print("Getting indels for file", f)
-	number = f.split(".")[1]
-	os.system("./indels_process.sh "+vcf_folder+"/"+f+" "+number+" "+output_folder+" "+vcf_name+" "+ref_folder+" "+pam_file+" "+guide_file+" "+bMax+" "+mm+" "+bDNA+" "+bRNA)
+    if 'vcf' in f:
+        print("Getting indels for file", f)
+        number = f.split(".")[1]
+        os.system("./indels_process.sh "+vcf_folder+"/"+f+" "+number+" "+output_folder+" "+vcf_name+" "+ref_folder+" "+pam_file+" "+guide_file+" "+bMax+" "+mm+" "+bDNA+" "+bRNA)
 

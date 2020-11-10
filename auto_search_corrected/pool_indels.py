@@ -29,7 +29,8 @@ def start_indels(f):
 
 chrs = []
 for f in os.listdir(vcf_dir):
-    chrs.append(f)
+    if 'vcf.gz' in f:
+        chrs.append(f)
 
 cpus = len(os.sched_getaffinity(0))
 if cpus - 3 < 10:
