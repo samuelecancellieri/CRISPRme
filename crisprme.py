@@ -34,6 +34,8 @@ def complete_search():
         print("\t--mm , used to specify the number of mismatches permitted in the search phase")
         print("\t--bDNA , used to specify the number of DNA bulges permitted in the search phase")
         print("\t--bRNA , used to specify the number of RNA bulges permitted in the search phase")
+        print(
+            "\t--merge, used to specify the threshold used to merge close targets (based on genetic position), use target with highest CFD as pivot [default 0 (ZERO)]")
         print("\t--output , used to specify the output folder for the results")
         exit(0)
 
@@ -196,6 +198,25 @@ def complete_search():
             print("The range for bRNA is from 0 to", bMax)
             exit(1)
 
+    if "--merge" not in input_args:
+        # print("--merge must be contained in the input")
+        # exit(1)
+        merge_t = 0
+    else:
+        try:
+            merge_t = input_args[input_args.index("--merge")+1]
+        except IndexError:
+            print("Please input some parameter for flag --merge")
+            exit(1)
+        try:
+            merge_t = int(merge_t)
+        except:
+            print("Please input a number for flag merge")
+            exit(1)
+        if merge_t < 0:
+            print("Please specify a positive number for --merge")
+            exit(1)
+
     if "--output" not in input_args:
         print("--output must be contained in the input")
         exit(1)
@@ -212,14 +233,15 @@ def complete_search():
 
     os.chdir(script_path)
     if variant:
-        os.system("./automated_search.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+annotationfile +
-                  " "+samplefile+" "+str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path)
+        os.system("./automated_search_good_parallel_v2.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+annotationfile+" "+samplefile+" " +
+                  str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+outputfolder+" "+script_path+" "+str(len(os.sched_getaffinity(0))-2))
     else:
-        os.system("./automated_search.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile +
-                  " _ "+str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path)
-
+        os.system("./automated_search_good_parallel_v2.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile+" _ "+str(bMax)+" " +
+                  str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+outputfolder+" "+script_path+" "+str(len(os.sched_getaffinity(0))-2))
 
 # HELP FUNCTION
+
+
 def callHelp():
     print("help:\n",
           "\nALL FASTA FILEs USED BY THE SOFTWARE MUST BE UNZIPPED AND CHROMOSOME SEPARATED, ALL VCFs USED BY THE SOFTWARE MUST BE ZIPPED AND CHROMOSOME SEPARATED",

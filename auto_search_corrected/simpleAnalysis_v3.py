@@ -528,6 +528,12 @@ cfd_best.write(header + '\tCFD\n')        #Write header
 cfd_alt = open(outputFile + '.altCFD.txt', 'w+')
 cfd_alt.write(header + '\tCFD\n')        #Write header
 
+mmblg_best = open(outputFile + '.bestmmblg.txt', 'w+')
+mmblg_best.write(header + '\tCFD\n')        #Write header
+
+mmblg_alt = open(outputFile + '.altmmblg.txt', 'w+')
+mmblg_alt.write(header + '\tCFD\n')        #Write header
+
 save_cluster_targets = True
 remove_iupac = False
 save_total_general_table = False
@@ -955,54 +961,12 @@ for line in inResult:
                 cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
                 t.append(str(cfd_score))
 
-        #sort cluster on CFD
-        # cluster_to_save.sort(key = lambda x : x[-1], reverse = True)
-        
-        # ref_sub_cluster = []
-        # var_sub_cluster = []
-        # for ele in cluster_to_save:
-        #     if ele[12] == 'n':
-        #         ref_sub_cluster.append(ele)
-        #     else:
-        #         var_sub_cluster.append(ele)
-        # tie_var = False
-        # if len(var_sub_cluster) > 1 and var_sub_cluster[0][-1] == var_sub_cluster[1][-1]: #if there is more than one maximum in var group
-        #     tie_ref = True
-        #     var_elems = []
-        #     best_score = var_sub_cluster[0][-1]
-        #     for ele in var_sub_cluster:
-        #         if ele[-1] == best_score:
-        #             var_elems.append(ele)
-        #     if var_elems[0][6] == '-':
-        #         var_elems.sort(key = lambda x : x[-2], reverse = True)
-        #     else:
-        #         var_elems.sort(key = lambda x : x[-2], reverse = False)
-        # if tie_var:
-        #     cluster_to_save = [ref_sub_cluster[0], var_elems[0]]
-        
-        # Sort cluster on CFD (descending) and mms distance (ascending)
-        #try:
-        #    print('BEFORE', cluster_to_save[0][6], cluster_to_save[0][5])
-        #    for c in cluster_to_save:
-        #        print(c[-1], ' ; ', c[-2])
-
-            # if cluster_to_save[0][6] == '+':      #CFD più alto, ultima posizione mms più bassa
-            #     cluster_to_save.sort(key = lambda x : (x[-1], reversor(x[-2])), reverse = True)
-            # else:                   #CFD più alto, prima posizione mms più alta
-            #     cluster_to_save.sort(key = lambda x : (x[-1], x[-2]), reverse = True)
-        
         
         cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(x[-2])), reverse = True)
-        #cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(x[-2])), reverse = True)
-        #    print('AFTER', cluster_to_save[0][6], cluster_to_save[0][5])
-        #    for c in cluster_to_save:
-        #        print(c[-1], ' ; ', c[-2])
-        #except IndexError as e:
-        #    print(e)
-
-        #save_reference = True
-        #save_enriched = True      #Save only the highest CFD target in reference and enriched
-        #first_sample = True
+        
+        cluster_to_save_mmbl = cluster_to_save.copy()
+        cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
+        
         keys_seen = []
         saved = False
         """
@@ -1041,22 +1005,6 @@ for line in inResult:
             
         list_for_alt = []
         for c in cluster_to_save:
-            """
-            if save_reference:
-                if c[12] == 'n':
-                    c.pop(-2)
-                    cfd_best.write('\t'.join(c) + '\n')
-                    cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-                    save_reference = False
-            if save_enriched:
-                if c[12] != 'n':
-                    c.pop(-2)
-                    cfd_best.write('\t'.join(c) + '\n')
-                    cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-                    save_enriched = False
-            if not save_enriched and not save_reference:
-                break
-            """
             c.pop(-2)
             new_cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
             if new_cfd_clus_key not in keys_seen:
@@ -1077,13 +1025,64 @@ for line in inResult:
         for ele in list_for_alt:
             cfd_alt.write(ele+'\t'+str(len(list_for_alt))+ '\n')
 
+        keys_seen = []
+        saved = False
+        if cluster_to_save_mmbl:
+            c = cluster_to_save_mmbl[0]
+
+
+            #if c[12] != 'n':        #Calcola ref nello stesso allineamento del var   
+            #    ref_best_var = alignRefFromVar(c, cluster_class[c[0] + c[8]]['ref_pos_alignement']) #TODO salvare questa line sul file
+
+            #c.pop(-2)
+            best_seq = c[12]
+            cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
+            
+            if c[12] == 'n':
+                #cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
+                mmblg_best.write('\t'.join(c)+'\tn\t'+str(c[-1]))
+            else:
+                #cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
+                ref_generated = alignRefFromVar(c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
+                ref_this_clus = ref_generated[2]
+                cfd_ref = ref_generated[-1]
+                mmblg_best.write('\t'.join(c)+'\t'+ref_this_clus+'\t'+str(cfd_ref))
+            cluster_to_save_mmbl.pop(0)
+            keys_seen.append(cfd_clus_key)
+            saved = True
+            
+        list_for_alt = []
+        for c in cluster_to_save_mmbl:
+            #c.pop(-2)
+            new_cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
+            if new_cfd_clus_key not in keys_seen:
+                keys_seen.append(new_cfd_clus_key)
+                if c[12] == 'n':
+                    #cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
+                    #cfd_alt.write('\t'.join(c)+'\tn\n')
+                    list_for_alt.append('\t'.join(c)+'\tn\t'+str(c[-1]))
+                else:
+                    #cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
+                    #cfd_alt.write('\t'.join(c)+'\t'+ref_this_clus+'\n')
+                    ref_generated = alignRefFromVar(c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
+                    ref_this_clus = ref_generated[2]
+                    cfd_ref = ref_generated[-1]
+                    list_for_alt.append('\t'.join(c)+'\t'+ref_this_clus+'\t'+str(cfd_ref))
+        if saved:
+            mmblg_best.write('\t' + str(len(list_for_alt))+ '\n')
+        for ele in list_for_alt:
+            mmblg_alt.write(ele+'\t'+str(len(list_for_alt))+ '\n')
+
+
         cluster_to_save = []
         cluster_class = dict.fromkeys(dictionary_entries)       #Dizionario dove salvare le variabile per ogni tipo di scomposizione (X,DNA1,DNA2,RNA1 etc...)
                                                                #Viene re-inizializzato per ogni cluster
         current_guide_chr_pos_direction = guide_no_bulge + line[3] + line[5] + line[6]
         if line[3] != current_chr:      #New chr section, load a new dictionary
             if not os.path.exists(os.path.realpath(sys.argv[4]) + '/my_dict_' + line[3] + '.json'):
-                raise Exception("Dictionary not found"+line[3])
+                #raise Exception("Dictionary not found"+line[3])
+                current_chr = line[3]
+                chr_name = line[3]
                 pass
             else:
                 if current_chr != 'none':
@@ -1437,6 +1436,9 @@ for t in cluster_to_save:
 
 cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(x[-2])), reverse = True)
 
+cluster_to_save_mmbl = cluster_to_save.copy()
+cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
+
 keys_seen = []
 saved = False
 """
@@ -1472,22 +1474,6 @@ if cluster_to_save:
 
 list_for_alt = []
 for c in cluster_to_save:
-    """
-    if save_reference:
-        if c[12] == 'n':
-            c.pop(-2)
-            cfd_best.write('\t'.join(c) + '\n')
-            cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-            save_reference = False
-    if save_enriched:
-        if c[12] != 'n':
-            c.pop(-2)
-            cfd_best.write('\t'.join(c) + '\n')
-            cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-            save_enriched = False
-    if not save_enriched and not save_reference:
-        break
-    """
     c.pop(-2)
     new_cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
     if new_cfd_clus_key not in keys_seen:
@@ -1508,10 +1494,67 @@ if saved:
 for ele in list_for_alt:
     cfd_alt.write(ele+'\t'+str(len(list_for_alt))+'\n')
 
+keys_seen = []
+saved = False
+if cluster_to_save_mmbl:
+    c = cluster_to_save_mmbl[0]
+
+
+    #if c[12] != 'n':        #Calcola ref nello stesso allineamento del var   
+    #    ref_best_var = alignRefFromVar(c, cluster_class[c[0] + c[8]]['ref_pos_alignement']) #TODO salvare questa line sul file
+
+    #c.pop(-2)
+    best_seq = c[12]
+    cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
+    
+    if c[12] == 'n':
+        #cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
+        mmblg_best.write('\t'.join(c)+'\tn\t'+str(c[-1]))
+    else:
+        #cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
+        ref_generated = alignRefFromVar(c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
+        ref_this_clus = ref_generated[2]
+        cfd_ref = ref_generated[-1]
+        mmblg_best.write('\t'.join(c)+'\t'+ref_this_clus+'\t'+str(cfd_ref))
+    cluster_to_save_mmbl.pop(0)
+    keys_seen.append(cfd_clus_key)
+    saved = True
+    
+list_for_alt = []
+for c in cluster_to_save_mmbl:
+    #c.pop(-2)
+    new_cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
+    if new_cfd_clus_key not in keys_seen:
+        keys_seen.append(new_cfd_clus_key)
+        if c[12] == 'n':
+            #cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
+            #cfd_alt.write('\t'.join(c)+'\tn\n')
+            list_for_alt.append('\t'.join(c)+'\tn\t'+str(c[-1]))
+        else:
+            #cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
+            #cfd_alt.write('\t'.join(c)+'\t'+ref_this_clus+'\n')
+            ref_generated = alignRefFromVar(c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
+            ref_this_clus = ref_generated[2]
+            cfd_ref = ref_generated[-1]
+            list_for_alt.append('\t'.join(c)+'\t'+ref_this_clus+'\t'+str(cfd_ref))
+if saved:
+    mmblg_best.write('\t' + str(len(list_for_alt))+ '\n')
+for ele in list_for_alt:
+    mmblg_alt.write(ele+'\t'+str(len(list_for_alt))+ '\n')
+
+
+
 cfd_best.close()
 cfd_alt.close()
+mmblg_best.close()
+mmblg_alt.close()
+
 os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tCFD\tReference\tCFD_ref\t#Seq_in_cluster/' "+outputFile + '.bestCFD.txt')
 os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tCFD\tReference\tCFD_ref\t#Seq_in_cluster/' "+outputFile + '.altCFD.txt')
+
+os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tCFD\tReference\tCFD_ref\t#Seq_in_cluster/' "+outputFile + '.bestmmblg.txt')
+os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tCFD\tReference\tCFD_ref\t#Seq_in_cluster/' "+outputFile + '.altmmblg.txt')
+
 
 #Save dataframe for graph
 cfd_dataframe = pd.DataFrame.from_dict(cfd_for_graph)

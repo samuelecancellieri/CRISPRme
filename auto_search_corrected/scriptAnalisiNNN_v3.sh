@@ -99,6 +99,21 @@ echo 'Sorting and adjusting results'
 ./adjust_cols.py $jobid.bestCFD.txt 
 ./adjust_cols.py $jobid.altCFD.txt 
 
-mv $jobid.bestCFD.txt $output_folder
-mv $jobid.altCFD.txt $output_folder
+./adjust_cols.py $jobid.bestmmblg.txt 
+./adjust_cols.py $jobid.altmmblg.txt 
+
+sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.bestmmblg.txt
+sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.altmmblg.txt
+
+
+pr -m -t -J $jobid.bestCFD.txt $jobid.bestmmblg.txt > $jobid.bestMerge.txt 
+pr -m -t -J $jobid.altCFD.txt $jobid.altmmblg.txt > $jobid.altMerge.txt 
+
+rm $jobid.bestCFD.txt
+rm $jobid.altCFD.txt
+rm $jobid.bestmmblg.txt
+rm $jobid.altmmblg.txt
+
+mv $jobid.bestMerge.txt $output_folder
+mv $jobid.altMerge.txt $output_folder
 mv $jobid.CFDGraph.txt $output_folder
