@@ -11,7 +11,9 @@ mm=$5
 bDNA=$6
 bRNA=$7
 annotation_file=$8
+annotation_name=$(basename $8)
 pam_file=$9
+pam_name=$(basename $9)
 sampleID=${10}
 dict_folder=${11}
 
@@ -24,11 +26,15 @@ echo "Processing INDELs results for $key, starting post-analysis"
 true_chr=$key
 fake_chr="fake$true_chr"
 
-LC_ALL=C grep -P "$key\t" "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
+LC_ALL=C grep -P "$key\t" "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
+LC_ALL=C grep "$key" "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
+header=$(head -1 $output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt)
+sed -i 1i"$header" "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
 
-./analisi_indels_NNN.sh "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr" "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}_$key" "$annotation_file" "$output_folder/log_indels_$vcf_name" "$ref_folder/$true_chr.fa" $mm $bDNA $bRNA "$guide_file" "$pam_file" "$sampleID" "$output_folder" 
-rm "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
-tail -n +2 "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt" >> "$final_res" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-tail -n +2 "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt" >> "$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
-rm "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt"
-rm "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"
+./analisi_indels_NNN.sh "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr" "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr" "${fake_chr}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key" "$annotation_file" "$output_folder/log_indels_$vcf_name" "$ref_folder/$true_chr.fa" $mm $bDNA $bRNA "$guide_file" "$pam_file" "$sampleID" "$output_folder" 
+rm "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
+rm "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
+tail -n +2 "$output_folder/${fake_chr}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt" >> "$final_res" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+tail -n +2 "$output_folder/${fake_chr}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt" >> "$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+rm "$output_folder/${fake_chr}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt"
+rm "$output_folder/${fake_chr}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"

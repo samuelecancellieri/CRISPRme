@@ -32,5 +32,6 @@ for f in os.listdir(vcf_folder):
         chrs.append(f)
 
 
-with Pool(processes = 4) as pool:
+with Pool(processes = 6) as pool:
     pool.map(start_analysis, chrs)
+    

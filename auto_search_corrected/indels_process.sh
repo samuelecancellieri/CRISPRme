@@ -6,6 +6,7 @@ output_folder=$3
 vcf_name=$4
 ref_folder=$5
 pam_file=$6
+pam_name=$(basename $6)
 guide_file=$7
 bMax=$8
 mm=$9
@@ -85,10 +86,7 @@ fi
 
 if ! [ -f "fake${chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 	echo "Searching fake$chr"
-	crispritz.py search "genome_library/${true_pam}_${bMax}_fake$chr/" "$pam_file" "$guide_file" "fake${chr}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t  -th 1 >/dev/null
+	crispritz.py search "genome_library/${true_pam}_${bMax}_fake$chr/" "$pam_file" "$guide_file" "fake${chr}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t  -th 1 >/dev/null
 else
 	echo "Search for fake$chr already done"
 fi
-
-cd "$output_folder/.."
-touch "finished$chr.txt"
