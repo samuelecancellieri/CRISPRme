@@ -156,6 +156,7 @@ if [ "$vcf_name" != "_" ]; then
 	
 	if ! [ -f "indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 		echo "Search INDELs Start: "$(date +%F-%T) >> $output_folder/log.txt	
+		cd $starting_dir
 		./pool_search_indels.py "$ref_folder" "$vcf_folder" "$vcf_name" "$guide_file" "$pam_file" $bMax $mm $bDNA $bRNA "$output_folder" $true_pam
 		echo "Search INDELs End: "$(date +%F-%T) >> $output_folder/log.txt
 	fi
