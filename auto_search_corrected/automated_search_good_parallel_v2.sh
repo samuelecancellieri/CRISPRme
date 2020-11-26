@@ -212,8 +212,8 @@ if [ "$vcf_name" != "_" ]; then
 	./pool_post_analisi_snp.py $output_folder $ref_folder $vcf_name $guide_file $mm $bDNA $bRNA $annotation_file $pam_file $sampleID $dict_folder $final_res $final_res_alt
 	
 	echo "Post-analysis SNPs End: "$(date +%F-%T) >> $output_folder/$log	
-	# for key in "${!real_chroms[@]}"
-	# do
+	for key in "${real_chroms[@]}"
+	do
 		# echo "Processing SNPs for $key"
 		# LC_ALL=C grep -P "$key\t" "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
 		# LC_ALL=C grep -P "$key\t" "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
@@ -225,8 +225,11 @@ if [ "$vcf_name" != "_" ]; then
 		# tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt" >> "$final_res_alt" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
 		# rm "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
 		# rm "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
-		
-	# done
+		tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt" >> "$final_res" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+		tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt" >> "$final_res_alt" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+		rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt"
+		rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"
+	done
 else
 
 	final_res="$output_folder/final_results_${ref_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
@@ -266,8 +269,8 @@ if [ "$vcf_name" != "_" ]; then
 	echo "Post-analysis INDELs Start: "$(date +%F-%T) >> $output_folder/$log	
 	./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file $sampleID "$output_folder/log_indels_$vcf_name" $final_res $final_res_alt
 	echo "Post-analysis INDELs End: "$(date +%F-%T) >> $output_folder/$log	
-	# for key in "${!array_fake_chroms[@]}"
-	# do
+	for key in "${array_fake_chroms[@]}"
+	do
 		# echo "Checking for INDELs results for $key"
 		# if ! [ -f "$output_folder/finished$key.txt" ]; then 
 			# continue
@@ -285,10 +288,13 @@ if [ "$vcf_name" != "_" ]; then
 			# rm "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
 			# rm "$output_folder/finished$key.txt"
 		# fi
-	# done
+		tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt" >> "$final_res" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+		tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt" >> "$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+		rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
+		rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
+	done
 
 fi
-
 
 
 echo "Adjusting Results Start: "$(date +%F-%T) >> $output_folder/$log	
