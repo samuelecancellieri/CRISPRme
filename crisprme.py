@@ -38,6 +38,7 @@ def post_analysis_only():
         print("\t--bDNA, used to specify the number of DNA bulges permitted in the search phase")
         print("\t--bRNA, used to specify the number of RNA bulges permitted in the search phase")
         print("\t--merge, used to specify the threshold used to merge close targets")
+        print("\t--thread, used to set the number of thread used in the process (default is ALL available minus 2)")
         # print("\t--output, used to specify the output folder for the results")
         exit(0)
 
@@ -157,6 +158,26 @@ def post_analysis_only():
             print("The range for bMax is from 0 to 2")
             exit(1)
 
+    if "--thread" not in input_args:
+        # print("--thread must be contained in the input")
+        # exit(1)
+        thread = len(os.sched_getaffinity(0))-2
+    else:
+        try:
+            thread = input_args[input_args.index("--thread")+1]
+        except IndexError:
+            print("Please input some parameter for flag --thread")
+            exit(1)
+        try:
+            thread = int(thread)
+        except:
+            print("Please input a number for flag bMax")
+            exit(1)
+        if thread <= 0 or thread > len(os.sched_getaffinity(0))-2:
+            print("thread is set to default (ALL available minus 2)")
+            thread = len(os.sched_getaffinity(0))-2
+            # exit(1)
+
     if "--mm" not in input_args:
         print("--mm must be contained in the input")
         exit(1)
@@ -258,6 +279,7 @@ def search_only():
         print("\t--bDNA, used to specify the number of DNA bulges permitted in the search phase")
         print("\t--bRNA, used to specify the number of RNA bulges permitted in the search phase")
         print("\t--output, used to specify the output folder for the results")
+        print("\t--thread, used to set the number of thread used in the process (default is ALL available minus 2)")
         exit(0)
 
     if "--genome" not in input_args:
@@ -273,6 +295,26 @@ def search_only():
         if not os.path.isdir(genomedir):
             print("The folder specified for --genome does not exist")
             exit(1)
+
+    if "--thread" not in input_args:
+        # print("--thread must be contained in the input")
+        # exit(1)
+        thread = len(os.sched_getaffinity(0))-2
+    else:
+        try:
+            thread = input_args[input_args.index("--thread")+1]
+        except IndexError:
+            print("Please input some parameter for flag --thread")
+            exit(1)
+        try:
+            thread = int(thread)
+        except:
+            print("Please input a number for flag bMax")
+            exit(1)
+        if thread <= 0 or thread > len(os.sched_getaffinity(0))-2:
+            print("thread is set to default (ALL available minus 2)")
+            thread = len(os.sched_getaffinity(0))-2
+            # exit(1)
 
     if "--vcf" not in input_args:
         variant = False
@@ -432,6 +474,7 @@ def complete_search():
         print(
             "\t--merge, used to specify the threshold used to merge close targets (based on genetic position), use target with highest CFD as pivot [default 0 (ZERO)]")
         print("\t--output, used to specify the output folder for the results")
+        print("\t--thread, used to set the number of thread used in the process (default is ALL available minus 2)")
         exit(0)
 
     if "--genome" not in input_args:
@@ -447,6 +490,26 @@ def complete_search():
         if not os.path.isdir(genomedir):
             print("The folder specified for --genome does not exist")
             exit(1)
+
+    if "--thread" not in input_args:
+        # print("--thread must be contained in the input")
+        # exit(1)
+        thread = len(os.sched_getaffinity(0))-2
+    else:
+        try:
+            thread = input_args[input_args.index("--thread")+1]
+        except IndexError:
+            print("Please input some parameter for flag --thread")
+            exit(1)
+        try:
+            thread = int(thread)
+        except:
+            print("Please input a number for flag bMax")
+            exit(1)
+        if thread <= 0 or thread > len(os.sched_getaffinity(0))-2:
+            print("thread is set to default (ALL available minus 2)")
+            thread = len(os.sched_getaffinity(0))-2
+            # exit(1)
 
     if "--vcf" not in input_args:
         variant = False
