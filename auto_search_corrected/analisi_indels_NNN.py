@@ -701,7 +701,7 @@ for line in inResult:
                 cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
                 t.append(str(cfd_score))
 
-        cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(x[-2]), reversor(int(x[9]))), reverse = True)
+        cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse = True)
         cluster_to_save_mmbl = cluster_to_save.copy()
         cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
         
@@ -915,7 +915,7 @@ for t in cluster_to_save:
         t.append(str(cfd_score))
 
 
-cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(x[-2]), reversor(int(x[9]))), reverse = True)
+cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse = True)
 cluster_to_save_mmbl = cluster_to_save.copy()
 cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
 

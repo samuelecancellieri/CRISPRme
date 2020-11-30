@@ -9,6 +9,7 @@ thresh=$3 #threshold to use in order to merge near targets
 #columns start from 1
 chrom=5 #column for chromosome
 position=6 #column for position
+total=11
 snp_info=19
 cfd=21
 
@@ -21,5 +22,5 @@ echo "Sorting done in $(($ENDTIME - $STARTTIME)) seconds"
 echo -e $header | cat - $fileIn.sorted.tmp > $fileIn.sorted
 rm $fileIn.sorted.tmp
 echo "Merging targets"
-python3 remove_contiguous_samples_cfd.py $fileIn.sorted $fileOut $thresh $chrom $position $snp_info $cfd
+python3 remove_contiguous_samples_cfd.py $fileIn.sorted $fileOut $thresh $chrom $position $total $snp_info $cfd
 rm $fileIn.sorted

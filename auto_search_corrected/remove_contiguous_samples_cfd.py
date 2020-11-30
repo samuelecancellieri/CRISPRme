@@ -18,6 +18,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             else:
                 dict_var[ele[snp_info]] = [ele]
     
+    list_ref.sort(key = lambda x : x[total])
     if len(list_ref) > 1:
         best_ref = list_ref[0]
         for ele_ref in list_ref[1:]:
@@ -32,6 +33,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
     
     for key in dict_var.keys():
         list_var = dict_var[key]
+        list_var.sort(key = lambda x : x[total])
         best_var = list_var[0]
         if len(list_var) > 1:
             for ele_var in list_var[1:]:
@@ -49,8 +51,9 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
 tau = int(sys.argv[3])
 chrom = int(sys.argv[4])-1 
 pos = int(sys.argv[5])-1 
-snp_info = int(sys.argv[6])-1 
-cfd = int(sys.argv[7])-1
+total = int(sys.argv[6])-1
+snp_info = int(sys.argv[7])-1 
+cfd = int(sys.argv[8])-1
 # -1 is to get the correct "python enumeration" from the bash script
 
 start = time.time()
