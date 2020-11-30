@@ -256,10 +256,10 @@ def post_analysis_only():
     os.chdir(script_path)
     if variant:
         os.system("./post_analysis_only.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+annotationfile+" "+samplefile+" "+str(bMax) +
-                  " "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+targetdir+" "+script_path+" "+str(len(os.sched_getaffinity(0))-2))
+                  " "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+targetdir+" "+script_path+" "+str(thread))
     else:
         os.system("./post_analysis_only.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile+" _ "+str(bMax)+" "+str(mm) +
-                  " "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+targetdir+" "+script_path+" "+str(len(os.sched_getaffinity(0))-2))
+                  " "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+targetdir+" "+script_path+" "+str(thread))
 
 
 def search_only():
@@ -447,10 +447,10 @@ def search_only():
     os.chdir(script_path)
     if variant:
         os.system("./search_only.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+str(bMax)+" "+str(mm) +
-                  " "+str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path+" "+str(len(os.sched_getaffinity(0))-2))
+                  " "+str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path+" "+str(thread))
     else:
         os.system("./search_only.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+str(bMax)+" "+str(mm)+" " +
-                  str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path+" "+str(len(os.sched_getaffinity(0))-2))
+                  str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path+" "+str(thread))
 
 
 def complete_search():
@@ -692,10 +692,10 @@ def complete_search():
     os.chdir(script_path)
     if variant:
         os.system("./automated_search_good_parallel_v2.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+annotationfile+" "+samplefile+" " +
-                  str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+outputfolder+" "+script_path+" "+str(len(os.sched_getaffinity(0))-2))
+                  str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+outputfolder+" "+script_path+" "+str(thread))
     else:
         os.system("./automated_search_good_parallel_v2.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile+" _ "+str(bMax)+" " +
-                  str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+outputfolder+" "+script_path+" "+str(len(os.sched_getaffinity(0))-2))
+                  str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+outputfolder+" "+script_path+" "+str(thread))
 
 
 def target_integration():
