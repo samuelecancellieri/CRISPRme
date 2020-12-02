@@ -19,6 +19,7 @@ bDNA = sys.argv[8]
 bRNA = sys.argv[9]
 output_folder = sys.argv[10]
 true_pam = sys.argv[11]
+cpus=int(sys.argv[12])
 
 def search_indels(f):
     global use_thread
@@ -33,12 +34,12 @@ for f in os.listdir(vcf_dir):
     if 'vcf.gz' in f:
         chrs.append(f)
 
-cpus = len(os.sched_getaffinity(0))
-if cpus - 3 < 10:
-    if cpus - 3 < 0:
+#cpus = len(os.sched_getaffinity(0))
+if cpus - 1 < 10:
+    if cpus - 1 < 0:
         t = 1
     else:
-        t = cpus - 3
+        t = cpus - 1
 else:
     t = 10
 

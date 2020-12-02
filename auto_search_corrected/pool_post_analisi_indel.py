@@ -17,6 +17,7 @@ sampleID=sys.argv[10]
 dict_folder=sys.argv[11]
 final_res=sys.argv[12]
 final_res_alt=sys.argv[13]
+ncpus=int(sys.argv[14])
 
 
 
@@ -31,7 +32,9 @@ for f in os.listdir(vcf_folder):
     if 'vcf.gz' in f:
         chrs.append(f)
 
-
-with Pool(processes = 6) as pool:
+t = 6
+if ncpus < 6:
+    t = ncpus
+with Pool(processes = t) as pool:
     pool.map(start_analysis, chrs)
     
