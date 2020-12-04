@@ -132,7 +132,7 @@ done
 if ! [ -d "genome_library/"$true_pam"_${bMax}_"$ref_name ]; then
 	echo "Index-genome Reference Start: "$(date +%F-%T) >> $output_folder/$log	
 	echo "Indexing reference genome"
-	crispritz.py index-genome "$ref_name" "$ref_folder/" "$pam_file" -bMax $bMax -th $(expr $ncpus - 2)
+	crispritz.py index-genome "$ref_name" "$ref_folder/" "$pam_file" -bMax $bMax -th $ncpus
 	pid_index_ref=$!
 	echo "Index-genome Reference End: "$(date +%F-%T) >> $output_folder/$log	
 else
@@ -144,7 +144,7 @@ if [ "$vcf_name" != "_" ]; then
 	if ! [ -d "genome_library/"$true_pam"_${bMax}_${ref_name}+${vcf_name}" ]; then
 		echo "Index-genome Variant Start: "$(date +%F-%T) >> $output_folder/$log	
 		echo "Indexing variant genome"
-		crispritz.py index-genome "${ref_name}+${vcf_name}" "${ref_name}+${vcf_name}/" "$pam_file" -bMax $bMax -th $(expr $ncpus - 2) #${ref_folder%/}+${vcf_name}/
+		crispritz.py index-genome "${ref_name}+${vcf_name}" "${ref_name}+${vcf_name}/" "$pam_file" -bMax $bMax -th $ncpus #${ref_folder%/}+${vcf_name}/
 		pid_index_var=$!
 		echo "Index-genome Variant Start: "$(date +%F-%T) >> $output_folder/$log	
 	else
@@ -192,7 +192,7 @@ while kill "-0" $pid_search_ref &>/dev/null; do
 	sleep 300
 done
 if [ -f "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
-	mv "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+	mv "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 fi
 if ! [ -d "$output_folder/crispritz_profiles" ]; then
 	mkdir $output_folder/crispritz_profiles

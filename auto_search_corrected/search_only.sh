@@ -188,7 +188,7 @@ while kill "-0" $pid_search_ref &>/dev/null; do
 	sleep 300
 done
 if [ -f "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
-	mv "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+	mv "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 fi
 echo "Search Reference End: "$(date +%F-%T) >> $output_folder/$log	
 
