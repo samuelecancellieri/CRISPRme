@@ -66,14 +66,9 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         best_ref = list_ref[0]
         for ele_ref in list_ref[1:]:
             if float(ele_ref[cfd]) > float(best_ref[cfd]):
-                #fileOut_disc.write("\t".join(best_ref))
                 best_ref = ele_ref
-            #else:
-                #fileOut_disc.write("\t".join(ele_ref))
-        #fileOut.write("\t".join(best_ref))
         final_list.append(best_ref)
     elif len(list_ref) == 1:
-        #fileOut.write("\t".join(list_ref[0]))
         final_list.append(list_ref[0])
     
     for key in dict_var.keys():
@@ -83,20 +78,15 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         if len(list_var) > 1:
             for ele_var in list_var[1:]:
                 if float(ele_var[cfd]) > float(best_var[cfd]):
-                    #fileOut_disc.write("\t".join(best_var))
                     best_var = ele_var
-                #else:
-                    #fileOut_disc.write("\t".join(ele_var))
-            #fileOut.write("\t".join(best_var))
             final_list.append(best_var)
         else:
-            #fileOut.write("\t".join(best_var)) 
             final_list.append(best_var)
     
     n_ele = len(final_list)
     if n_ele > 1:
         final_list.sort(key = lambda x : float(x[cfd]), reverse=True)
-        if final_list[0][cfd] == final_list[0][cfd] and final_list[1][cfd-2] != 'n':
+        if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] != 'n':
             final_list[1][cfd-1] = str(n_ele-1)
             final_list[1][2*cfd+1] = str(n_ele-1)
             fileOut.write("\t".join(final_list[1]))
@@ -110,7 +100,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             ele[cfd-1] = str(n_ele-1)
             ele[2*cfd+1] = str(n_ele-1)
             fileOut_disc.write("\t".join(ele))
-    elif len(final_list) == 1:
+    elif n_ele == 1:
         fileOut.write("\t".join(final_list[0]))
 
 tau = int(sys.argv[3])

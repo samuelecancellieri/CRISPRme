@@ -8,7 +8,7 @@ thresh=$3 #threshold to use in order to merge near targets
 ##########ADJUST THESE PARAMETERS BASED ON INPUT FILE##########
 #columns start from 1
 chrom=5 #column for chromosome
-position=6 #column for position
+position=7 #column for cluster_position
 total=11
 snp_info=19
 cfd=21
