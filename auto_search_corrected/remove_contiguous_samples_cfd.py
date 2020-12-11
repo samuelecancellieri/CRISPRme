@@ -107,8 +107,9 @@ tau = int(sys.argv[3])
 chrom = int(sys.argv[4])-1 
 pos = int(sys.argv[5])-1 
 total = int(sys.argv[6])-1
-snp_info = int(sys.argv[7])-1 
-cfd = int(sys.argv[8])-1
+true_guide = int(sys.argv[7])-1
+snp_info = int(sys.argv[8])-1 
+cfd = int(sys.argv[9])-1
 # -1 is to get the correct "python enumeration" from the bash script
 
 start = time.time()
@@ -120,16 +121,18 @@ with open(sys.argv[1], 'r') as fileIn:
             fileOut_disc.write(header)
             prev_pos = -(tau+1)
             best_row = ""
+            prev_guide = ""
             prev_chr = ""
             prev_snp = ""
             cluster = []
             for line in fileIn:
                 splitted = line.split("\t")
-                if prev_chr != splitted[chrom] or int(splitted[pos]) - prev_pos > tau:
+                if prev_guide != splitted[true_guide] or prev_chr != splitted[chrom] or int(splitted[pos]) - prev_pos > tau:
                     get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info)
                     cluster = [splitted]
                 else:
                     cluster.append(splitted)
+                prev_guide = splitted[true_guide]
                 prev_pos = int(splitted[pos])
                 prev_chr = splitted[chrom]
                 prev_snp = splitted[snp_info]
