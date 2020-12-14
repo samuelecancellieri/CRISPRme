@@ -5,6 +5,9 @@ fileIn=$1
 fileOut=$2
 thresh=$3 #threshold to use in order to merge near targets
 
+#EXTRACT DIRECTORY FROM REF FILE
+dir=$(dirname $1)
+
 ##########ADJUST THESE PARAMETERS BASED ON INPUT FILE##########
 #columns start from 1
 chrom=5 #column for chromosome
@@ -17,7 +20,7 @@ cfd=21
 echo "Sorting file"
 header=$(head -1 $fileIn)
 STARTTIME=$(date +%s)
-tail -n +2 $fileIn | LC_ALL=C sort -T'.' -k$true_guide,$true_guide -k$chrom,$chrom -k$position,${position}n -o $fileIn.sorted.tmp
+tail -n +2 $fileIn | LC_ALL=C sort -T $dir -k$true_guide,$true_guide -k$chrom,$chrom -k$position,${position}n -o $fileIn.sorted.tmp
 ENDTIME=$(date +%s)
 echo "Sorting done in $(($ENDTIME - $STARTTIME)) seconds"
 echo -e $header | cat - $fileIn.sorted.tmp > $fileIn.sorted
