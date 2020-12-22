@@ -35,7 +35,7 @@ pam_file=${11}
 sampleID=${12} 
 
 output_folder=${13}
-
+jobid="${output_folder}"/$3
 
 # 1) Rimozione duplicati, estrazione semicommon e unique e creazione file total
 echo 'Creazione file .total.txt'
@@ -114,6 +114,6 @@ rm $jobid.altCFD.txt
 rm $jobid.bestmmblg.txt
 rm $jobid.altmmblg.txt
 
-mv $jobid.bestMerge.txt $output_folder
-mv $jobid.altMerge.txt $output_folder
-mv $jobid.CFDGraph.txt $output_folder
+#mv $jobid.bestMerge.txt $output_folder
+#mv $jobid.altMerge.txt $output_folder
+#mv $jobid.CFDGraph.txt $output_folder
