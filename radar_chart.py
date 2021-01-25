@@ -182,7 +182,7 @@ def generatePlot(guide, guideDict, motifDict, totalcount, source):
     table.xticks = ([])
     table.yticks = ([])
 
-    plt.suptitle(str(totalcount)+" Mismatches + Bulge",
+    plt.suptitle(str(totalcount)+" Mismatches + Bulge_"+source,
                  horizontalalignment='center', color='black', size=25)
 
     plt.tight_layout()
