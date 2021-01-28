@@ -18,6 +18,16 @@ def rev_comp(a):
     return 'C'
 
 
+def createBedforMultiAlternative(variantList):
+    for elem in variantList:
+        split = elem.strip().split('_')
+        chrom = split[0]
+        pos = split[1]
+        bedFile = open(outputDir + originFileName + chrom + '.bed', 'a+')
+        bedFile.write(chrom.replace('chr', '')+'\t'+pos+'\t'+str(int(pos+1)))
+    bedFile.close()
+
+
 print('READING INPUT FILES')
 
 # READ INPUT FILES
@@ -135,6 +145,8 @@ for nline, line in enumerate(inCrispritzResults):
     variantList = ['n']
     if 'alt' in origin and str(x[20]) != str(x[21]):
         variantList = str(x[18]).strip().split(',')
+        if len(variantList) > 1:
+            createBedforMultiAlternative(variantList)
         var_pos = []
         # generate variant position corrected to be in the positive strand
         if '+' in str(x[7]):
