@@ -23,14 +23,18 @@ def rev_comp(a):
 def createBedforMultiAlternative(variantList, samples):
     # 5096 conta degli alleli di 1000G
     # bcftools view -H -r 1:222531770 originalVCFs/ALL.chr1.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
+    # bed file containing snp position to search in the vcf
     toSearchBed = open(outputDir + originFileName + '.to_search.bed', 'w')
+    # bed file with vcf data extracted
     vcfBedFile = outputDir + originFileName + '.temp.bed'
+    # file with samples to limit extraction in vcf file
     samplesFile = open(outputDir + originFileName + '.samples.bed', 'w')
-    suppressOut = outputDir + originFileName + '.suppress.out'
+    # cycle over sample to save them in a file to extract from vcf
     for sample in samples.strip().split(','):
         samplesFile.write(sample+'\n')
     samplesFile.close()
     samplesFile = outputDir + originFileName + '.samples.bed'
+    # cycle over variant in list to extract the correct ones from vcf
     for elem in variantList:
         split = elem.strip().split('_')
         chrom = split[0]
@@ -39,10 +43,10 @@ def createBedforMultiAlternative(variantList, samples):
         for vcf in vcfList:
             if chrom+'.' in vcf:
                 vcfFile = vcf
-        subprocess.run(['tabix', str(vcfFile), '>', suppressOut])
+        subprocess.run(['tabix', str(vcfFile)])
         vcfChr = chrom.replace('chr', '')
         toSearchBed.write(vcfChr+'\t'+str(int(pos)-1) +
-                          '\t'+str(int(pos)+1)+'\n')
+                          '\t'+str(pos)+'\n')
     toSearchBed.close()
     toSearchBed = outputDir + originFileName + '.to_search.bed'
     subprocess.run(['bcftools', 'view', '-H', '-R',
@@ -51,6 +55,7 @@ def createBedforMultiAlternative(variantList, samples):
     allele1 = list()
     allele2 = list()
     haplotype = 0
+    # read line from vcf exctraction to obtain the alleles
     for line in open(vcfBedFile, 'r'):
         split = line.strip().split('\t')
         tempHaploList = list()
@@ -60,17 +65,18 @@ def createBedforMultiAlternative(variantList, samples):
         haplotypeDict[split[1]] = tempHaploList
         allele1 = [1]*len(tempHaploList)
         allele2 = [1]*len(tempHaploList)
-
+    # count the correct haplotype frequence by and with sum operation
+    # e.g. 0|1 and 1|1 will return 0|1 that will be counted as 1 for that sample haplotype
     for snp in haplotypeDict:
         for count, sample in enumerate(haplotypeDict[snp]):
             allele1_snp = sample.strip().split('|')[0]
             allele2_snp = sample.strip().split('|')[1]
             allele1[count] = int(allele1[count]) and int(allele1_snp)
             allele2[count] = int(allele2[count]) and int(allele2_snp)
-
+    # final sum to generete haplotype frequency of the specific target
     for count, allele in enumerate(allele1):
         haplotype += int(allele1[count]) + int(allele2[count])
-
+    # return to save the haplo freq divided by the number of alleles in 1000G (i.e. 2548samples*2alleles)
     return float(haplotype)/5096
 
 
