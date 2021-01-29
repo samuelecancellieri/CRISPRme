@@ -3,16 +3,17 @@
 #$1 is CFD targets file
 #$2 is genecode annotation
 #$3 is empirical data for the guide
-#$4 is the guide (e.g. CTAACAGTTGCTTTTATCACNNN)
-#$5 is output name for integrated data
-#$6 is vcf directory to multi-variant haplotype frequence count
+#$4 is the guide file
+#$5 is genome version (hg38)
+#$6 is output directory for the data
+#$7 is vcf directory to multi-variant haplotype frequence count
 
 #EXTRACT DIRECTORY FROM REF FILE
 dir=$(dirname $1)
 
 #EXAMPLE CALL bash post_process.sh sg1617.best.only_indels.txt gencode.protein_coding.bed sg1617.empiricalresults.tsv guide.txt hg38 sg1617.test
 
-starting_dir=$7
+starting_dir=$8
 echo 'Preparing files for post processing'
 sed -i '/#/d' $1
 LC_ALL=C sort -T $dir -k21,21rg $1 -o $1
