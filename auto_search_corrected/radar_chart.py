@@ -26,32 +26,19 @@ matplotlib.use('Agg')
 
 warnings.filterwarnings("ignore")
 
-# argv 1 is Guide
-# argv 2 is total value
-# argv 3 is annotation file (new version)
-# argv 4 is extended profile (can be 'no' for web server)
-# argv 5 is second summary for barplot (optional, 'no' if not given in input)
-# argv 6 is gecko Summary file
-# argv 7 is for web server: create png instead of pguideDataFrame (-ws) (optional)
-# argv 8 is for sample/pop/superpop report (-sample HG001/EUR/TSI) with this option, the annotation file is .sample_annotation.GUIDE.sample.txt
-# TODO if argv8 is selected, from argv6 get the directory containing the summary of the specific sample for gecko -> line 618
-# NOTE al momento lo script funziona con gecko.annotation.summary; la comparison con i sample la fa su annotation.summary. Quando l'analisi per sample sarà fatta, la comparison
-# con i sampla dovrà essere fatta sul file specifico
 plt.style.use('seaborn-poster')
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
-# matplotlib.rcParams["figure.figsize"] = [100, 80]
-# SIZE_GECKO = 123411  # NOTE modify if new gecko annotations are done
-# SIZE_GECKO = 111671
 random.seed(a=None, version=2)
 # final file containing all the results after post processing
-inGuideFile = open(sys.argv[1], 'r')
-inFinalFile = open(sys.argv[2], 'r')
-inSamplesIDFile = open(sys.argv[3], 'r').readlines()
-inSamplesIDFile.pop(0)
+inGuideFile = open(sys.argv[1], 'r')  # guide file used during search
+inFinalFile = open(sys.argv[2], 'r')  # final result file from search
+inSamplesIDFile = open(sys.argv[3], 'r').readlines()  # sampleID file
+inSamplesIDFile.pop(0)  # pop header from sampleID file
+# annotation file used during search
 inAnnotationsFile = open(sys.argv[4], 'r')
-outDir = sys.argv[5]
-threads = int(sys.argv[6])
+outDir = sys.argv[5]  # directory to output the figures
+threads = int(sys.argv[6])  # number of concurrent execution of image creation
 
 web_server = False
 population = False
