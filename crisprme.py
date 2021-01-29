@@ -721,7 +721,10 @@ def target_integration():
         print(
             "\t--guide, used to specify the file that contains guides used for the search")
         print("\t--gencode, used to specify the file that contains gencode annotation to find nearest gene to any target")
-        print("\t--empirical_data, used to specify the file that contains gencode annotation to find nearest gene to any target")
+        print(
+            "\t--empirical_data, used to specify the file that contains gencode annotation to find nearest gene to any target [OPTIONAL]")
+        print(
+            "\t--vcf_dir, used to specify the directory containing vcf files used in the search phase, necessary to obtain haplotype frequence in multi-variant targets [OPTIONAL]")
         print("\t--output, used to specify the output folder for the results")
         exit(0)
 
@@ -737,6 +740,21 @@ def target_integration():
             exit(1)
         if not os.path.isfile(target_file):
             print("The file specified for --target_file does not exist")
+            exit(1)
+
+    if "--vcf_dir" not in input_args:
+        print("--vcf_dir non in input, multi-variant haplotype will not be calculated")
+        vcf_dir = script_path+'vuota/'
+        # exit(1)
+    else:
+        try:
+            vcf_dir = os.path.abspath(
+                input_args[input_args.index("--vcf_dir")+1])
+        except IndexError:
+            print("Please input some parameter for flag --vcf_dir")
+            exit(1)
+        if not os.path.isdir(vcf_dir):
+            print("The folder specified for --vcf_dir does not exist")
             exit(1)
 
     if "--genome_version" not in input_args:
@@ -809,7 +827,7 @@ def target_integration():
 
     os.chdir(script_path)
     os.system("./post_process.sh "+target_file+" "+gencode_file +
-              " "+empiricalfile+" "+guidefile+" "+str(genome_version)+" "+outputfolder+" "+script_path)
+              " "+empiricalfile+" "+guidefile+" "+str(genome_version)+" "+outputfolder+" "+vcf_dir+" "+script_path)
 
 # HELP FUNCTION
 

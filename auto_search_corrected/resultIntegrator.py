@@ -5,6 +5,7 @@ import sys
 import time
 import concurrent.futures
 import glob
+import subprocess
 
 
 def rev_comp(a):
@@ -19,13 +20,31 @@ def rev_comp(a):
 
 
 def createBedforMultiAlternative(variantList):
+    # 5096 conta degli alleli di 1000G
+    # bcftools view -H -r 1:222531770 originalVCFs/ALL.chr1.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
+    vcfBedFile = open(outputDir + originFileName + '.temp.bed', 'w')
     for elem in variantList:
         split = elem.strip().split('_')
         chrom = split[0]
         pos = split[1]
-        bedFile = open(outputDir + originFileName + chrom + '.bed', 'a+')
-        bedFile.write(chrom.replace('chr', '')+'\t'+pos+'\t'+str(int(pos+1)))
-    bedFile.close()
+        print(split, chrom, pos)
+        vcfFile = ''
+        for vcf in vcfList:
+            if chrom+'.' in vcf:
+                vcfFile = vcf
+        subprocess.run(['tabix', str(vcfFile)])
+        subprocess.run(['bcftools', 'view', '-H', '-r',
+                        str(chrom.replace('chr', ''))+':'+str(pos)], vcfFile, '>>', str(vcfBedFile))
+    vcfBedFile.close()
+    haplotypeDict = dict()
+    for line in open(vcfBedFile, 'r'):
+        split = line.strip().split('\t')
+        tempHaploList = []
+        for elem in split:
+            if '|' in elem:
+                tempHaploList.append(elem)
+        haplotypeDict[split[1]] = tempHaploList
+    print(haplotypeDict)
 
 
 print('READING INPUT FILES')
@@ -38,6 +57,8 @@ guideFile = sys.argv[4]  # real guide used in the search
 outputDir = sys.argv[5]  # output file name
 check = sys.argv[6].upper()  # output file name
 genomeRelease = str(sys.argv[7])  # genome used in the search phase
+# directory of vcf to perform haplotype count with more than one SVs in single target
+vcfFileDirectory = sys.argv[8]
 
 # OPEN INPUT FILES AND PREPARE OUTPUT FILE
 # crispritz results file open
@@ -48,6 +69,8 @@ inEmpiricalResults = open(empiricalResults, 'r').readlines()
 inAnnotationFile = open(annotationFile, 'r')
 # guide file
 realguide = open(guideFile, 'r').readlines()
+# list file in vcf directory
+vcfList = glob.glob(vcfFileDirectory+'*.gz')
 
 empiricalTree = IntervalTree()
 empiricalList = []
