@@ -64,7 +64,7 @@ if web_server:
     file_extension = 'png'
 
 
-def generatePlot(guide, guideDict, motifDict, totalcount, source):
+def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     # check if no targets are found for that combination source/totalcount and skip the execution
     if guideDict['General'] == 0:
@@ -158,6 +158,7 @@ def generatePlot(guide, guideDict, motifDict, totalcount, source):
     G = np.array(motifDict['G'], dtype=float)
     T = np.array(motifDict['T'], dtype=float)
     RNA = np.array(motifDict['RNA'], dtype=float)
+    DNA = np.array(motifDict['DNA'], dtype=float)
 
     p1 = plt.bar(ind, A, width, color='red', align='edge')
     p2 = plt.bar(ind, C, width, color='blue', bottom=A, align='edge')
@@ -165,8 +166,9 @@ def generatePlot(guide, guideDict, motifDict, totalcount, source):
     p4 = plt.bar(ind, T, width, color='purple', bottom=C+G+A, align='edge')
     p5 = plt.bar(ind, RNA, width, color='magenta',
                  bottom=C+G+A+T, align='edge')
-    # p6 = plt.bar(ind, RNA, width, color='gold', bottom=C+G+A+T+DNA, align='edge')
-    # p6 = plt.bar(ind, RNA, width, color='gold', bottom=C+G+A+T, align='edge')
+    p5 = plt.bar(ind, DNA, width, color='magenta',
+                 bottom=C+G+A+T+RNA, align='edge')
+
     plt.xlim(0, len(guide))
     plt.xticks([])
 
@@ -182,14 +184,14 @@ def generatePlot(guide, guideDict, motifDict, totalcount, source):
     table.xticks = ([])
     table.yticks = ([])
 
-    plt.suptitle(str(totalcount)+" Mismatches + Bulge_"+str(source),
+    plt.suptitle(str(mismatch)+"_Mismatches+"+str(bulge)+"_Bulge_"+str(source),
                  horizontalalignment='center', color='black', size=25)
 
     plt.tight_layout()
     plt.subplots_adjust(top=0.90, bottom=0.07, left=0.09,
                         right=0.99, wspace=0.25)
-    plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_"+str(totalcount) +
-                "_total"+'_'+source + "." + file_extension, format=file_extension)
+    plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
+                "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
 
     plt.close('all')
 
@@ -197,65 +199,71 @@ def generatePlot(guide, guideDict, motifDict, totalcount, source):
 def motifDictCreation(guide):
     # create time stamp for motif dict
     motifDict = dict()
-    for totalcount in range(0, 10):
-        motifDict[totalcount] = dict()
-        motifDict[totalcount]['REF'] = dict()
-        motifDict[totalcount]['REF']['A'] = [0]*len(guide)
-        motifDict[totalcount]['REF']['C'] = [0]*len(guide)
-        motifDict[totalcount]['REF']['G'] = [0]*len(guide)
-        motifDict[totalcount]['REF']['T'] = [0]*len(guide)
-        motifDict[totalcount]['REF']['RNA'] = [0]*len(guide)
+    for mismatch in range(0, 8):
+        for bulge in range(0, 3):
+            motifDict[mismatch] = dict()
+            motifDict[mismatch][bulge]['REF'] = dict()
+            motifDict[mismatch][bulge]['REF']['A'] = [0]*len(guide)
+            motifDict[mismatch][bulge]['REF']['C'] = [0]*len(guide)
+            motifDict[mismatch][bulge]['REF']['G'] = [0]*len(guide)
+            motifDict[mismatch][bulge]['REF']['T'] = [0]*len(guide)
+            motifDict[mismatch][bulge]['REF']['RNA'] = [0]*len(guide)
+            motifDict[mismatch][bulge]['REF']['DNA'] = [0]*len(guide)
         for sample in populationDict:
             superpop = populationDict[sample][0]
             pop = populationDict[sample][1]
-            motifDict[totalcount][sample] = dict()
-            motifDict[totalcount][sample]['A'] = [0]*len(guide)
-            motifDict[totalcount][sample]['C'] = [0]*len(guide)
-            motifDict[totalcount][sample]['G'] = [0]*len(guide)
-            motifDict[totalcount][sample]['T'] = [0]*len(guide)
-            motifDict[totalcount][sample]['RNA'] = [0]*len(guide)
-            if superpop not in motifDict[totalcount]:
-                motifDict[totalcount][superpop] = dict()
-                motifDict[totalcount][superpop]['A'] = [0]*len(guide)
-                motifDict[totalcount][superpop]['C'] = [0]*len(guide)
-                motifDict[totalcount][superpop]['G'] = [0]*len(guide)
-                motifDict[totalcount][superpop]['T'] = [0]*len(guide)
-                motifDict[totalcount][superpop]['RNA'] = [0]*len(guide)
-            if pop not in motifDict[totalcount]:
-                motifDict[totalcount][pop] = dict()
-                motifDict[totalcount][pop]['A'] = [0]*len(guide)
-                motifDict[totalcount][pop]['C'] = [0]*len(guide)
-                motifDict[totalcount][pop]['G'] = [0]*len(guide)
-                motifDict[totalcount][pop]['T'] = [0]*len(guide)
-                motifDict[totalcount][pop]['RNA'] = [0]*len(guide)
+            motifDict[mismatch][bulge][sample] = dict()
+            motifDict[mismatch][bulge][sample]['A'] = [0]*len(guide)
+            motifDict[mismatch][bulge][sample]['C'] = [0]*len(guide)
+            motifDict[mismatch][bulge][sample]['G'] = [0]*len(guide)
+            motifDict[mismatch][bulge][sample]['T'] = [0]*len(guide)
+            motifDict[mismatch][bulge][sample]['RNA'] = [0]*len(guide)
+            motifDict[mismatch][bulge][sample]['DNA'] = [0]*len(guide)
+            if superpop not in motifDict[mismatch][bulge]:
+                motifDict[mismatch][bulge][superpop] = dict()
+                motifDict[mismatch][bulge][superpop]['A'] = [0]*len(guide)
+                motifDict[mismatch][bulge][superpop]['C'] = [0]*len(guide)
+                motifDict[mismatch][bulge][superpop]['G'] = [0]*len(guide)
+                motifDict[mismatch][bulge][superpop]['T'] = [0]*len(guide)
+                motifDict[mismatch][bulge][superpop]['RNA'] = [0]*len(guide)
+                motifDict[mismatch][bulge][superpop]['DNA'] = [0]*len(guide)
+            if pop not in motifDict[mismatch][bulge]:
+                motifDict[mismatch][bulge][pop] = dict()
+                motifDict[mismatch][bulge][pop]['A'] = [0]*len(guide)
+                motifDict[mismatch][bulge][pop]['C'] = [0]*len(guide)
+                motifDict[mismatch][bulge][pop]['G'] = [0]*len(guide)
+                motifDict[mismatch][bulge][pop]['T'] = [0]*len(guide)
+                motifDict[mismatch][bulge][pop]['RNA'] = [0]*len(guide)
+                motifDict[mismatch][bulge][pop]['DNA'] = [0]*len(guide)
     return motifDict
 
 
 def guideDictCreation():
     # create one stamp for guideDict
     guideDict = dict()
-    for totalcount in range(0, 10):
-        guideDict[totalcount] = dict()
-        guideDict[totalcount]['REF'] = dict()
-        guideDict[totalcount]['REF']['General'] = 0
+    for mismatch in range(0, 8):
+        for bulge in range(0, 3):
+            guideDict[mismatch] = dict()
+            guideDict[mismatch][bulge] = dict()
+            guideDict[mismatch][bulge]['REF'] = dict()
+            guideDict[mismatch][bulge]['REF']['General'] = 0
         for annot in annotationsSet:
-            guideDict[totalcount]['REF'][annot] = 0
+            guideDict[mismatch][bulge]['REF'][annot] = 0
         for sample in populationDict:
             superpop = populationDict[sample][0]
             pop = populationDict[sample][1]
-            guideDict[totalcount][sample] = dict()
-            guideDict[totalcount][sample]['General'] = 0
-            if superpop not in guideDict[totalcount]:
-                guideDict[totalcount][superpop] = dict()
-                guideDict[totalcount][superpop]['General'] = 0
-            if pop not in guideDict[totalcount]:
-                guideDict[totalcount][pop] = dict()
-                guideDict[totalcount][pop]['General'] = 0
+            guideDict[mismatch][bulge][sample] = dict()
+            guideDict[mismatch][bulge][sample]['General'] = 0
+            if superpop not in guideDict[mismatch][bulge]:
+                guideDict[mismatch][bulge][superpop] = dict()
+                guideDict[mismatch][bulge][superpop]['General'] = 0
+            if pop not in guideDict[mismatch][bulge]:
+                guideDict[mismatch][bulge][pop] = dict()
+                guideDict[mismatch][bulge][pop]['General'] = 0
             for annot in annotationsSet:
-                # guideDict[totalcount]['REF'][annot] = 0
-                guideDict[totalcount][superpop][annot] = 0
-                guideDict[totalcount][pop][annot] = 0
-                guideDict[totalcount][sample][annot] = 0
+                guideDict[mismatch][bulge][superpop][annot] = 0
+                guideDict[mismatch][bulge][pop][annot] = 0
+                guideDict[mismatch][bulge][sample][annot] = 0
     return guideDict
 
 
@@ -269,24 +277,33 @@ def fillDict(guide, guideDict, motifDict):
     for line in inFinalFile:
         split = line.strip().split('\t')
         alignedSequence = split[2]  # aligned target with the guide
-        totalcount = int(split[10])  # total= mm+bul
+        mismatch = int(split[8])  # mm extracted from target file
+        bulge = int(split[9])  # bul extracted from target file
 
         # add target to reference dict
-        guideDict[totalcount]['REF']['General'] += 1
+        guideDict[mismatch][bulge]['REF']['General'] += 1
         # find annotations and add data to the reference dict
         if split[14] != 'n':
             annotationsList = split[14].strip().split(',')
             for annotation in annotationsList:
-                guideDict[totalcount]['REF'][annotation] += 1
-        # find motif in X and RNA targets TODO: integrate DNA targets
+                guideDict[mismatch][bulge]['REF'][annotation] += 1
+        # find motif in X and RNA/DNA targets
         if 'DNA' not in split[0]:
             for count, nucleotide in enumerate(alignedSequence):
                 if nucleotide.islower():
-                    motifDict[totalcount]['REF'][nucleotide.upper()
-                                                 ][count] += 1
+                    motifDict[mismatch][bulge]['REF'][nucleotide.upper()
+                                                      ][count] += 1
                 elif nucleotide == '-':
-                    motifDict[totalcount]['REF'][split[0]][count] += 1
-
+                    motifDict[mismatch][bulge]['REF'][split[0]][count] += 1
+        else:
+            alignedGuide = split[1]
+            for count, nucleotide in enumerate(alignedGuide[bulge:]):
+                if nucleotide == '-':
+                    motifDict[mismatch][bulge]['REF'][split[0]][count] += 1
+            for count, nucleotide in enumerate(alignedSequence[bulge:]):
+                if nucleotide.islower():
+                    motifDict[mismatch][bulge]['REF'][nucleotide.upper()
+                                                      ][count] += 1
         # check if samples are available and take them if yes
         samplePresent = False
         if 'n' not in split[13] and 'NO_SAMPLES' not in split[13]:
@@ -298,56 +315,84 @@ def fillDict(guide, guideDict, motifDict):
                 pop = populationDict[sample][1]
                 if superpop not in alreadySampled:  # check if superpop is already been updated for the current target to avoid duplicate count
                     alreadySampled.add(superpop)
-                    guideDict[totalcount][superpop]['General'] += 1
+                    guideDict[mismatch][bulge][superpop]['General'] += 1
+                    # find motif in X and RNA/DNA targets
                     if 'DNA' not in split[0]:
                         for count, nucleotide in enumerate(alignedSequence):
                             if nucleotide.islower():
-                                motifDict[totalcount][superpop][nucleotide.upper(
-                                )][count] += 1
+                                motifDict[mismatch][bulge][superpop][nucleotide.upper()
+                                                                     ][count] += 1
                             elif nucleotide == '-':
-                                motifDict[totalcount][superpop][split[0]
+                                motifDict[mismatch][bulge][superpop][split[0]
+                                                                     ][count] += 1
+                    else:
+                        alignedGuide = split[1]
+                        for count, nucleotide in enumerate(alignedGuide[bulge:]):
+                            if nucleotide == '-':
+                                motifDict[mismatch][bulge][superpop][split[0]
+                                                                     ][count] += 1
+                        for count, nucleotide in enumerate(alignedSequence[bulge:]):
+                            if nucleotide.islower():
+                                motifDict[mismatch][bulge][superpop][nucleotide.upper()
+                                                                     ][count] += 1
+                    if split[14] != 'n':
+                        annotationsList = split[14].strip().split(',')
+                        for annotation in annotationsList:
+                            guideDict[mismatch][bulge][superpop][annotation] += 1
+                if pop not in alreadySampled:  # check if pop is already been updated for the current target to avoid duplicate count
+                    alreadySampled.add(pop)
+                    guideDict[mismatch][bulge][pop]['General'] += 1
+                    # find motif in X and RNA/DNA targets
+                    if 'DNA' not in split[0]:
+                        for count, nucleotide in enumerate(alignedSequence):
+                            if nucleotide.islower():
+                                motifDict[mismatch][bulge][pop][nucleotide.upper()
+                                                                ][count] += 1
+                            elif nucleotide == '-':
+                                motifDict[mismatch][bulge][pop][split[0]
+                                                                ][count] += 1
+                    else:
+                        alignedGuide = split[1]
+                        for count, nucleotide in enumerate(alignedGuide[bulge:]):
+                            if nucleotide == '-':
+                                motifDict[mismatch][bulge][pop][split[0]
+                                                                ][count] += 1
+                        for count, nucleotide in enumerate(alignedSequence[bulge:]):
+                            if nucleotide.islower():
+                                motifDict[mismatch][bulge][pop][nucleotide.upper()
                                                                 ][count] += 1
                     if split[14] != 'n':
                         annotationsList = split[14].strip().split(',')
                         for annotation in annotationsList:
-                            guideDict[totalcount][superpop][annotation] += 1
-                if pop not in alreadySampled:  # check if pop is already been updated for the current target to avoid duplicate count
-                    alreadySampled.add(pop)
-                    guideDict[totalcount][pop]['General'] += 1
-                    if 'DNA' not in split[0]:
-                        for count, nucleotide in enumerate(alignedSequence):
-                            if nucleotide.islower():
-                                motifDict[totalcount][pop][nucleotide.upper()
-                                                           ][count] += 1
-                            elif nucleotide == '-':
-                                motifDict[totalcount][pop][split[0]
-                                                           ][count] += 1
-                    if split[14] != 'n':
-                        annotationsList = split[14].strip().split(',')
-                        for annotation in annotationsList:
-                            guideDict[totalcount][pop][annotation] += 1
+                            guideDict[mismatch][bulge][pop][annotation] += 1
                 # add target to single sample, in this case duplicate are allowed
-                guideDict[totalcount][sample]['General'] += 1
+                guideDict[mismatch][bulge][sample]['General'] += 1
+                # find motif in X and RNA/DNA targets
                 if 'DNA' not in split[0]:
                     for count, nucleotide in enumerate(alignedSequence):
                         if nucleotide.islower():
-                            motifDict[totalcount][sample][nucleotide.upper()
-                                                          ][count] += 1
+                            motifDict[mismatch][bulge][sample][nucleotide.upper()
+                                                               ][count] += 1
                         elif nucleotide == '-':
-                            motifDict[totalcount][sample][split[0]][count] += 1
+                            motifDict[mismatch][bulge][sample][split[0]
+                                                               ][count] += 1
+                else:
+                    alignedGuide = split[1]
+                    for count, nucleotide in enumerate(alignedGuide[bulge:]):
+                        if nucleotide == '-':
+                            motifDict[mismatch][bulge][sample][split[0]
+                                                               ][count] += 1
+                    for count, nucleotide in enumerate(alignedSequence[bulge:]):
+                        if nucleotide.islower():
+                            motifDict[mismatch][bulge][sample][nucleotide.upper()
+                                                               ][count] += 1
                 if split[14] != 'n':
                     annotationsList = split[14].strip().split(',')
                     for annotation in annotationsList:
-                        guideDict[totalcount][sample][annotation] += 1
+                        guideDict[mismatch][bulge][sample][annotation] += 1
 
 
-def cycleOverCount(totalcount):
-    # cycle over count on the dictionary to create plots
-    for elem in guideDict[totalcount]:
-        generatePlot(guide, guideDict[totalcount][elem],
-                     motifDict[totalcount][elem], totalcount, elem)
-
-
+# data containing populations and annotations
 annotationsSet = set()
 populationDict = dict()
 
@@ -368,25 +413,12 @@ for guide in inGuideFile:
     motifDict = motifDictCreation(guide)
     fillDict(guide, guideDict, motifDict)
     print('Starting image creation for guide: ', guide)
-    # keyList = guideDict[0].keys()
-    # print(keyList)
     if __name__ == '__main__':
         pool = multiprocessing.Pool(threads)
-        for totalcount in range(0, 9):
-            for elem in guideDict[totalcount]:
-                pool.apply_async(generatePlot, args=(
-                    guide, guideDict[totalcount][elem], motifDict[totalcount][elem], totalcount, elem))
+        for mismatch in range(0, 8):
+            for bulge in range(0, 3):
+                for elem in guideDict[mismatch][bulge]:
+                    pool.apply_async(generatePlot, args=(
+                        guide, guideDict[mismatch][bulge][elem], motifDict[mismatch][bulge][elem], mismatch, bulge, elem))
         pool.close()
         pool.join()
-    # for totalcount in range(0,9):
-    #     p = Pool(9)
-    #     p.map(cycleOverCount, [0,1,2,3,4,5,6,7,8])
-        # for elem in guideDict[totalcount]:
-        # generatePlot(guide, guideDict[totalcount][elem],motifDict[totalcount][elem],totalcount,elem)
-    # p = Pool(20)
-    # p.map(cycleOverCount, keyList)
-    # p.map(cycleOverCount, foe)
-
-    # for totalcount in range(0,9):
-        # for elem in guideDict[totalcount]:
-        # generatePlot(guide, guideDict[totalcount][elem],motifDict[totalcount][elem],totalcount,elem)
