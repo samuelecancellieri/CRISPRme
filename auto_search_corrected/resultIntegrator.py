@@ -6,6 +6,7 @@ import time
 import concurrent.futures
 import glob
 import subprocess
+import pandas as pd
 
 
 def rev_comp(a):
@@ -19,32 +20,58 @@ def rev_comp(a):
     return 'C'
 
 
-def createBedforMultiAlternative(variantList):
+def createBedforMultiAlternative(variantList, samples):
     # 5096 conta degli alleli di 1000G
     # bcftools view -H -r 1:222531770 originalVCFs/ALL.chr1.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
-    vcfBedFile = open(outputDir + originFileName + '.temp.bed', 'w')
+    toSearchBed = open(outputDir + originFileName + '.to_search.bed', 'w')
+    vcfBedFile = outputDir + originFileName + '.temp.bed'
+    samplesFile = open(outputDir + originFileName + '.samples.bed', 'w')
+    suppressOut = outputDir + originFileName + '.suppress.out'
+    for sample in samples.strip().split(','):
+        samplesFile.write(sample+'\n')
+    samplesFile.close()
+    samplesFile = outputDir + originFileName + '.samples.bed'
     for elem in variantList:
         split = elem.strip().split('_')
         chrom = split[0]
         pos = split[1]
-        print(split, chrom, pos)
         vcfFile = ''
         for vcf in vcfList:
             if chrom+'.' in vcf:
                 vcfFile = vcf
-        subprocess.run(['tabix', str(vcfFile)])
-        subprocess.run(['bcftools', 'view', '-H', '-r',
-                        str(chrom.replace('chr', ''))+':'+str(pos)], vcfFile, '>>', str(vcfBedFile))
-    vcfBedFile.close()
+        subprocess.run(['tabix', str(vcfFile), '>', suppressOut])
+        vcfChr = chrom.replace('chr', '')
+        toSearchBed.write(vcfChr+'\t'+str(int(pos)-1) +
+                          '\t'+str(int(pos)+1)+'\n')
+    toSearchBed.close()
+    toSearchBed = outputDir + originFileName + '.to_search.bed'
+    subprocess.run(['bcftools', 'view', '-H', '-R',
+                    toSearchBed, '-S', samplesFile, vcfFile, '-o', str(vcfBedFile)])
     haplotypeDict = dict()
+    allele1 = list()
+    allele2 = list()
+    haplotype = 0
     for line in open(vcfBedFile, 'r'):
         split = line.strip().split('\t')
-        tempHaploList = []
+        tempHaploList = list()
         for elem in split:
             if '|' in elem:
                 tempHaploList.append(elem)
         haplotypeDict[split[1]] = tempHaploList
-    print(haplotypeDict)
+        allele1 = [1]*len(tempHaploList)
+        allele2 = [1]*len(tempHaploList)
+
+    for snp in haplotypeDict:
+        for count, sample in enumerate(haplotypeDict[snp]):
+            allele1_snp = sample.strip().split('|')[0]
+            allele2_snp = sample.strip().split('|')[1]
+            allele1[count] = int(allele1[count]) and int(allele1_snp)
+            allele2[count] = int(allele2[count]) and int(allele2_snp)
+
+    for count, allele in enumerate(allele1):
+        haplotype += int(allele1[count]) + int(allele2[count])
+
+    return float(haplotype)/5096
 
 
 print('READING INPUT FILES')
@@ -70,7 +97,10 @@ inAnnotationFile = open(annotationFile, 'r')
 # guide file
 realguide = open(guideFile, 'r').readlines()
 # list file in vcf directory
-vcfList = glob.glob(vcfFileDirectory+'*.gz')
+checkVCF = False
+if 'vuota' not in vcfFileDirectory:
+    checkVCF = True
+    vcfList = glob.glob(vcfFileDirectory+'/*.gz')
 
 empiricalTree = IntervalTree()
 empiricalList = []
@@ -168,8 +198,10 @@ for nline, line in enumerate(inCrispritzResults):
     variantList = ['n']
     if 'alt' in origin and str(x[20]) != str(x[21]):
         variantList = str(x[18]).strip().split(',')
-        if len(variantList) > 1:
-            createBedforMultiAlternative(variantList)
+        if len(variantList) > 1 and checkVCF:
+            samples = x[13]
+            x[17] = createBedforMultiAlternative(variantList, samples)
+            x[17] = str(x[17])[:7]
         var_pos = []
         # generate variant position corrected to be in the positive strand
         if '+' in str(x[7]):
