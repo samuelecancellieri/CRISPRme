@@ -29,4 +29,4 @@ LC_ALL=C sort -T $dir -k4,4rg $1.found.bed -o $1.found.bed
 echo 'Starting integration with empirical data (this may take a while)'
 "$starting_dir"./resultIntegrator.py $1 $3 $1.found.bed $4 $6/ true $5 $7
 echo 'Removing unnecessary files'
-rm $1.bed $1.found.bed $1.to_search.bed $1.temp.bed $1.samples.bed
+rm $1.bed $1.found.bed $1.redirectFile.out

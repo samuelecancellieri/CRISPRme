@@ -24,16 +24,10 @@ def createBedforMultiAlternative(variantList, samples):
     # 5096 conta degli alleli di 1000G
     # bcftools view -H -r 1:222531770 originalVCFs/ALL.chr1.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
     # bed file containing snp position to search in the vcf
-    toSearchBed = open(outputDir + originFileName + '.to_search.bed', 'w')
+    # toSearchBed = open(outputDir + originFileName + '.to_search.bed', 'w')
+    toSearchList = list()
     # bed file with vcf data extracted
     vcfBedFile = outputDir + originFileName + '.temp.bed'
-    # file with samples to limit extraction in vcf file
-    samplesFile = open(outputDir + originFileName + '.samples.bed', 'w')
-    # cycle over sample to save them in a file to extract from vcf
-    for sample in samples.strip().split(','):
-        samplesFile.write(sample+'\n')
-    samplesFile.close()
-    samplesFile = outputDir + originFileName + '.samples.bed'
     # cycle over variant in list to extract the correct ones from vcf
     for elem in variantList:
         split = elem.strip().split('_')
@@ -43,20 +37,25 @@ def createBedforMultiAlternative(variantList, samples):
         for vcf in vcfList:
             if chrom+'.' in vcf:
                 vcfFile = vcf
-        subprocess.run(['tabix', str(vcfFile)])
         vcfChr = chrom.replace('chr', '')
-        toSearchBed.write(vcfChr+'\t'+str(int(pos)-1) +
-                          '\t'+str(pos)+'\n')
-    toSearchBed.close()
-    toSearchBed = outputDir + originFileName + '.to_search.bed'
-    subprocess.run(['bcftools', 'view', '-H', '-R',
-                    toSearchBed, '-S', samplesFile, vcfFile, '-o', str(vcfBedFile)])
+        toSearchList.append(vcfChr+':'+pos)
+        # toSearchBed.write(vcfChr+'\t'+str(int(pos)-1) +
+        #   '\t'+str(pos)+'\n')
+    # toSearchBed.close()
+    toSearchString = ','.join(toSearchList).strip()
+    # print(toSearchString)
+    # exit(0)
+    # toSearchBed = outputDir + originFileName + '.to_search.bed'
+    subprocess.run(['bcftools', 'view', '-H', '-r',
+                    toSearchString, '-s', samples, vcfFile, '-o', str(vcfBedFile)])
     haplotypeDict = dict()
     allele1 = list()
     allele2 = list()
     haplotype = 0
     # read line from vcf exctraction to obtain the alleles
     for line in open(vcfBedFile, 'r'):
+        if 'INDEL' in line:
+            continue
         split = line.strip().split('\t')
         tempHaploList = list()
         for elem in split:
@@ -102,11 +101,22 @@ inEmpiricalResults = open(empiricalResults, 'r').readlines()
 inAnnotationFile = open(annotationFile, 'r')
 # guide file
 realguide = open(guideFile, 'r').readlines()
+# open outputDir to write results
+originFileName = crispritzResultFile.split('/')
+originFileName = originFileName[len(originFileName)-1]
+outFile = open(outputDir + originFileName +
+               '.integrated_results.tsv', 'w')
 # list file in vcf directory
 checkVCF = False
 if 'vuota' not in vcfFileDirectory:
     checkVCF = True
     vcfList = glob.glob(vcfFileDirectory+'/*.gz')
+    redirectFile = open(outputDir + originFileName + '.redirectFile.out', 'w')
+    for vcfFile in vcfList:
+        # create tabix index if not already done
+        subprocess.run(['tabix', str(vcfFile)], stderr=redirectFile)
+    redirectFile.close()
+
 
 empiricalTree = IntervalTree()
 empiricalList = []
@@ -136,12 +146,6 @@ for count, line in enumerate(inEmpiricalResults):
     empiricalTree[int(empList[2]):int(empList[3])] = empList
     empiricalDict[str(empList[5])] = 50
     valueDict[str(empList[5])] = 'n'
-
-# open outputDir to write results
-originFileName = crispritzResultFile.split('/')
-originFileName = originFileName[len(originFileName)-1]
-outFile = open(outputDir + originFileName +
-               '.integrated_results.tsv', 'w')
 
 # writing header in file
 save = '#'
