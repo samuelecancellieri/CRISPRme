@@ -22,9 +22,8 @@ def rev_comp(a):
 
 def createBedforMultiAlternative(variantList, samples):
     # 5096 conta degli alleli di 1000G
-    # bcftools view -H -r 1:222531770 originalVCFs/ALL.chr1.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
-    # bed file containing snp position to search in the vcf
-    # toSearchBed = open(outputDir + originFileName + '.to_search.bed', 'w')
+    # bcftools view -H -r 1:222531770 -s HG00001 originalVCFs/ALL.chr1.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
+    # list containing snp position to search in the vcf
     toSearchList = list()
     # bed file with vcf data extracted
     vcfBedFile = outputDir + originFileName + '.temp.bed'
@@ -39,13 +38,9 @@ def createBedforMultiAlternative(variantList, samples):
                 vcfFile = vcf
         vcfChr = chrom.replace('chr', '')
         toSearchList.append(vcfChr+':'+pos)
-        # toSearchBed.write(vcfChr+'\t'+str(int(pos)-1) +
-        #   '\t'+str(pos)+'\n')
-    # toSearchBed.close()
+    # string with all the snps to search in the vcf file
     toSearchString = ','.join(toSearchList).strip()
-    # print(toSearchString)
-    # exit(0)
-    # toSearchBed = outputDir + originFileName + '.to_search.bed'
+    # subprocces run to call bcftools and extract the desidered snps
     subprocess.run(['bcftools', 'view', '-H', '-r',
                     toSearchString, '-s', samples, vcfFile, '-o', str(vcfBedFile)])
     haplotypeDict = dict()
