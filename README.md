@@ -12,6 +12,7 @@ The two fastest way to use CRISPRme is through the installation of Docker or Con
 ##CRISPRme Conda installation
 
 - In a conda environment, set the channels necessary to install all the packages and dependencies
+    ```
     conda config --add channels defaults
     conda config --add channels bioconda
     conda config --add channels conda-forge
