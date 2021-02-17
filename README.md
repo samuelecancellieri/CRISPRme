@@ -9,7 +9,7 @@ CRISPRme integrates CRISPRitz with a graphical interface completely dedicated to
 # CRISPRme Installation and Usage
 The two fastest way to use CRISPRme is through the installation of Docker or Conda.
 
-##CRISPRme Conda installation
+## CRISPRme Conda installation
 
 - In a conda environment, set the channels necessary to install all the packages and dependencies
     ```
@@ -28,6 +28,13 @@ The two fastest way to use CRISPRme is through the installation of Docker or Con
     ```
 Now the software is installed and ready to be used.
 
+## CRISPRme Docker installation
+- Just enter this line into any terminal with docker installed and running
+    ```
+    docker pull scancellieri/crisprme:latest
+    ```
+- This will pull the latest version of CRISPRme and now the user can create a clean docker container from the latest image
+- 
 ## Post installation test
 **Conda:**
 - Download and run this script if you have installed CRISPRitz with Conda:
