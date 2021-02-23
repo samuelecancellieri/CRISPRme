@@ -9,7 +9,7 @@ script_path = os.path.dirname(os.path.abspath(__file__))
 # path where this file is located
 # origin_path = os.path.dirname(os.path.realpath(__file__))
 # conda path
-conda_path = "opt/crisprme/auto_search_corrected/"
+conda_path = "opt/crisprme/PostProcess/"
 # path corrected to use with conda
 corrected_origin_path = script_path[:-3]+conda_path
 
