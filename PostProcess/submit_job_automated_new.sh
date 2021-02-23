@@ -209,10 +209,12 @@ if ! [ -d "$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_n
 		fi
 	else
 		echo -e "Reference Index already present"
+		echo -e 'Index-genome Reference\tEnd\t'$(date) >> $log	
 		idx_ref="$current_working_directory/genome_library/${true_pam}_2_${ref_name}"
 	fi
 else
 	echo -e "Reference Index already present"
+	echo -e 'Index-genome Reference\tEnd\t'$(date) >> $log	
 	idx_ref="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}"
 fi
 
@@ -240,14 +242,16 @@ if [ "$vcf_name" != "_" ]; then
 				crispritz.py index-genome "${ref_name}+${vcf_name}" "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" -bMax $bMax -th $ncpus
 				pid_index_ref=$!
 				echo -e 'Index-genome Variant\tEnd\t'$(date) >> $log	
-				idx_var="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}"
+				idx_var="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}+${vcf_name}"
 			fi
 		else
 			echo -e "Variant Index already present"
+			echo -e 'Index-genome Variant\tEnd\t'$(date) >> $log
 			idx_var="$current_working_directory/genome_library/${true_pam}_2_${ref_name}+${vcf_name}"
 		fi
 	else
 		echo -e "Variant Index already present"
+		echo -e 'Index-genome Variant\tEnd\t'$(date) >> $log
 		idx_var="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}+${vcf_name}"
 	fi	
 fi

@@ -68,15 +68,18 @@ def refreshSearch(n, dir_name):
                     if "Index-genome Variant\tEnd" in current_log:
                         index_status = html.P('Done', style={'color': 'green'})
                         all_done = all_done + 1
-                    elif "Index-genome Reference\tEnd" in current_log:
+                    elif "Index-genome Variant\tEnd" in current_log:
                         index_status = html.P(
-                            'Indexing Enriched Genome...' + ' ' + 'Step [3/3]', style={'color': 'orange'})
+                            'Indexing Enriched Genome...' + ' ' + 'Step [4/4]', style={'color': 'orange'})
                     elif "Index-genome Reference\tStart" in current_log:
                         index_status = html.P(
-                            'Indexing Reference Genome...' + ' ' + 'Step [2/3]', style={'color': 'orange'})
-                    elif 'Dictionaries\tStart' in current_log:
+                            'Indexing Reference Genome...' + ' ' + 'Step [3/4]', style={'color': 'orange'})
+                    elif "Indexing Indels\tStart" in current_log:
                         index_status = html.P(
-                            'Creating dictionaries...' + ' ' + 'Step [1/3]', style={'color': 'orange'})
+                            'Indexing Indels Genome...' + ' ' + 'Step [2/4]', style={'color': 'orange'})
+                    elif 'Add-variants\tStart' in current_log:
+                        index_status = html.P(
+                            'Adding variants...' + ' ' + 'Step [1/4]', style={'color': 'orange'})
                     elif 'Search Reference\tStart' in current_log:
                         index_status = html.P('Done', style={'color': 'green'})
                         all_done = all_done + 1
