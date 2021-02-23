@@ -844,8 +844,8 @@ def target_integration():
 
 
 def web_interface():
-    print(corrected_web_path)
-    subprocess.run[(corrected_web_path+'./index.py')]
+    # print(corrected_web_path)
+    subprocess.run(corrected_web_path+'./index.py')
 
 
 # HELP FUNCTION
