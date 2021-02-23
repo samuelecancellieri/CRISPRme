@@ -60,7 +60,15 @@ if [ "$vcf_name" != "_" ]; then
 	for file_chr in "$vcf_folder"/*.vcf.gz
 	do
 		file_name=$(basename $file_chr)
-		chr=$(echo -e $file_name | cut -f 2 -d'.')
+		# file_name=$(basename $file_chr)
+		IFS='.' read -ra ADDR <<< $file_name
+		for i in "${ADDR[@]}"; 
+		do
+    		if [[ $i == *"chr"* ]]; then
+  				chr=$i
+			fi
+		done
+		# chr=$(echo -e $file_name | cut -f 2 -d'.')
 		echo -e "fake$chr"
 		array_fake_chroms+=("fake$chr")	
 	done
