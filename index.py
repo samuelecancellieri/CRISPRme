@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # DASH IMPORT
 import dash_core_components as dcc
 import dash_html_components as html
@@ -37,7 +38,7 @@ app.layout = html.Div([
 def directoryCheck():
     # function to check the main directory status, if some directory is missing, create it
     directoryList = ['Genomes', 'Results',
-                     'dictionaries', 'VCF', 'annotations', 'gencode']
+                     'dictionaries', 'VCF', 'annotations', 'gencode', 'pam']
     for directory in directoryList:
         if not os.path.exists(current_working_directory+directory):
             os.makedirs(current_working_directory+directory)

@@ -5,14 +5,14 @@ import os
 import subprocess
 
 script_path = os.path.dirname(os.path.abspath(__file__))
-
+origin_path = os.path.dirname(os.path.abspath(__file__))
 # path where this file is located
 # origin_path = os.path.dirname(os.path.realpath(__file__))
 # conda path
 conda_path = "opt/crisprme/PostProcess/"
 # path corrected to use with conda
 corrected_origin_path = script_path[:-3]+conda_path
-
+corrected_web_interface_path = origin_path[:-3]+'opt/crisprme/'
 script_path = corrected_origin_path
 
 input_args = sys.argv
@@ -258,12 +258,12 @@ def post_analysis_only():
             print("Please specify a positive number for --merge")
             exit(1)
 
-    os.chdir(script_path)
+    # os.chdir(script_path)
     if variant:
-        os.system("./post_analysis_only.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+annotationfile+" "+samplefile+" "+str(bMax) +
+        os.system(script_path+"./post_analysis_only.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+annotationfile+" "+samplefile+" "+str(bMax) +
                   " "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+targetdir+" "+script_path+" "+str(thread))
     else:
-        os.system("./post_analysis_only.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile+" _ "+str(bMax)+" "+str(mm) +
+        os.system(script_path+"./post_analysis_only.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile+" _ "+str(bMax)+" "+str(mm) +
                   " "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+targetdir+" "+script_path+" "+str(thread))
 
 
@@ -453,12 +453,12 @@ def search_only():
             print("The folder specified for --output does not exist")
             exit(1)
 
-    os.chdir(script_path)
+    # os.chdir(script_path)
     if variant:
-        os.system("./search_only.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+str(bMax)+" "+str(mm) +
+        os.system(script_path+"./search_only.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+str(bMax)+" "+str(mm) +
                   " "+str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path+" "+str(thread))
     else:
-        os.system("./search_only.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+str(bMax)+" "+str(mm)+" " +
+        os.system(script_path+"./search_only.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+str(bMax)+" "+str(mm)+" " +
                   str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path+" "+str(thread))
 
 
@@ -837,10 +837,13 @@ def target_integration():
             print("The folder specified for --output does not exist")
             exit(1)
 
-    os.chdir(script_path)
-    os.system("./post_process.sh "+target_file+" "+gencode_file +
+    # os.chdir(script_path)
+    os.system(script_path+"./post_process.sh "+target_file+" "+gencode_file +
               " "+empiricalfile+" "+guidefile+" "+str(genome_version)+" "+outputfolder+" "+vcf_dir+" "+script_path)
 
+
+def web_interface():
+    subprocess.run[(corrected_web_interface_path+'./index.py')]
 # HELP FUNCTION
 
 
@@ -851,6 +854,7 @@ def callHelp():
           "\ncrisprime search-only FUNCTION SEARCHING THE WHOLE GENOME (REFERENCE AND VARIANT IF REQUESTED) PRODUCING RESULTS FOR POST-ANALYSIS",
           "\ncrisprime post-analysis-only FUNCTION THAT PERFORMS CFD ANALYSIS AND TARGET SELECTION STARTING FROM SEARCH RESULTS",
           "\ncrisprime targets-integration FUNCTION THAT INTEGRATES IN-SILICO TARGETS WITH EMPIRICAL DATA GENERATING A USABLE PANEL",
+          "\ncrisprme web-interface FUNCTION TO ACTIVATE WEB INTERFACE OF CRISPRme"
           "\n\nADD help TO ANY FUNCTION TO VISUALIZE A BRIEF HELP PAGE (example: crisprime complete-search --help)\n")
 
 
@@ -864,5 +868,7 @@ elif sys.argv[1] == 'post-analysis-only':
     post_analysis_only()
 elif sys.argv[1] == 'targets-integration':
     target_integration()
+elif sys.argv[1] == 'web-interface':
+    web_interface()
 else:
     print("ERROR! \"" + sys.argv[1] + "\" is not an allowed!")
