@@ -156,13 +156,15 @@ if [ "$vcf_name" != "_" ]; then
 		if ! [ -d "genome_library/${true_pam}_2_${ref_name}+${vcf_name}_INDELS" ]; then
 			mkdir "genome_library/${true_pam}_2_${ref_name}+${vcf_name}_INDELS"
 		fi
+		echo -e 'Add-variants\tEnd\t'$(date) >> $log
+		echo -e 'Indexing Indels\tStart\t'$(date) >> $log
 		${starting_dir}/./pool_index_indels.py "$current_working_directory/Genomes/variants_genome/" "$pam_file" $true_pam $ref_name $vcf_name $ncpus
+		echo -e 'Indexing Indels\tEnd\t'$(date) >> $log
 		if ! [ -d $current_working_directory/Genomes/${ref_name}+${vcf_name}_INDELS ]; then
 			mkdir $current_working_directory/Genomes/${ref_name}+${vcf_name}_INDELS
 		fi
 		mv $current_working_directory/Genomes/variants_genome/fake* $current_working_directory/Genomes/${ref_name}+${vcf_name}_INDELS
 		rm -r "$current_working_directory/Genomes/variants_genome/"
-		echo -e 'Add-variants\tEnd\t'$(date) >> $log
 		dict_folder="$current_working_directory/dictionaries/dictionaries_$vcf_name/"
 	else
 		echo -e "Variants already added"
@@ -174,7 +176,9 @@ fi
 cd "$current_working_directory/"
 if [ "$vcf_name" != "_" ]; then
 	if ! [ -d "$current_working_directory/genome_library/${true_pam}_2_${ref_name}+${vcf_name}_INDELS" ]; then
+		echo -e 'Indexing Indels\tStart\t'$(date) >> $log
 		${starting_dir}/./pool_index_indels.py "$current_working_directory/Genomes/${ref_name}+${vcf_name}_INDELS/" "$pam_file" $true_pam $ref_name $vcf_name $ncpus
+		echo -e 'Indexing Indels\tEnd\t'$(date) >> $log
 	fi
 fi
 
