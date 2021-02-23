@@ -551,7 +551,7 @@ def complete_search():
             exit(1)
 
     if "--gene_annotation" not in input_args:
-        gene_annotation = script_path+'vuoto.txt'
+        gene_annotation = '_'
     else:
         try:
             gene_annotation = os.path.abspath(
@@ -715,13 +715,13 @@ def complete_search():
             print("The folder specified for --output does not exist")
             exit(1)
 
-    os.chdir(script_path)
+    # os.chdir(script_path)
     if variant:
-        subprocess.run(['./submit_job_automated_new.sh', str(genomedir), str(vcfdir), str(guidefile), str(pamfile), str(annotationfile), str(
-            samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(os.getcwd()), str(gene_annotation)])
+        subprocess.run([script_path+'./submit_job_automated_new.sh', str(genomedir), str(vcfdir), str(guidefile), str(pamfile), str(annotationfile), str(
+            samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(outputfolder), str(gene_annotation)])
     else:
-        subprocess.run(['./submit_job_automated_new.sh', str(genomedir), '_', str(guidefile), str(pamfile), str(annotationfile), str(script_path+'vuoto.txt'),
-                        str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(os.getcwd()), str(gene_annotation)])
+        subprocess.run([script_path+'./submit_job_automated_new.sh', str(genomedir), '_', str(guidefile), str(pamfile), str(annotationfile), str(script_path+'vuoto.txt'),
+                        str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(outputfolder), str(gene_annotation)])
 
 
 def target_integration():
