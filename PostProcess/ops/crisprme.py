@@ -2,7 +2,6 @@
 
 import sys
 import os
-import subprocess
 
 script_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -27,21 +26,15 @@ def post_analysis_only():
         print("\t--targetdir, used to specify the directory containing the results of the search step (also post-analysis results will be stored in this folder)")
         print("\t--genome, used to specify the reference genome folder")
         print("\t--vcf, used to specify the VCF folder [OPTIONAL!]")
-        print(
-            "\t--guide, used to specify the file that contains guides used for the search")
+        print("\t--guide, used to specify the file that contains guides used for the search")
         print("\t--pam, used to specify the file that contains the pam")
         print("\t--annotation, used to specify the file that contains some annotations of the reference genome")
-        print(
-            "\t--samplesID, used to specify the file that contains the information about samples present in VCF files [OPTIONAL!]")
+        print("\t--samplesID, used to specify the file that contains the information about samples present in VCF files [OPTIONAL!]")
         print("\t--bMax, used to specify the number of bulges for the indexing of the genome(s)")
-        print(
-            "\t--mm, used to specify the number of mismatches permitted in the search phase")
-        print(
-            "\t--bDNA, used to specify the number of DNA bulges permitted in the search phase [OPTIONAL!]")
-        print(
-            "\t--bRNA, used to specify the number of RNA bulges permitted in the search phase [OPTIONAL!]")
-        print(
-            "\t--merge, used to specify the threshold used to merge close targets [OPTIONAL!]")
+        print("\t--mm, used to specify the number of mismatches permitted in the search phase")
+        print("\t--bDNA, used to specify the number of DNA bulges permitted in the search phase [OPTIONAL!]")
+        print("\t--bRNA, used to specify the number of RNA bulges permitted in the search phase [OPTIONAL!]")
+        print("\t--merge, used to specify the threshold used to merge close targets [OPTIONAL!]")
         print("\t--thread, used to set the number of thread used in the process (default is ALL available minus 2)")
         # print("\t--output, used to specify the output folder for the results")
         exit(0)
@@ -199,7 +192,7 @@ def post_analysis_only():
 
     if "--bDNA" not in input_args:
         #print("--bDNA must be contained in the input")
-        # exit(1)
+        #exit(1)
         bDNA = 0
     else:
         try:
@@ -221,7 +214,7 @@ def post_analysis_only():
 
     if "--bRNA" not in input_args:
         #print("--bRNA must be contained in the input")
-        # exit(1)
+        #exit(1)
         bRNA = 0
     else:
         try:
@@ -242,7 +235,9 @@ def post_analysis_only():
             exit(1)
 
     if "--merge" not in input_args:
-        merge_t = 3  # default merge
+        #print("--merge must be contained in the input")
+        #exit(1)
+        merge_t = 0
     else:
         try:
             merge_t = input_args[input_args.index("--merge")+1]
@@ -275,16 +270,12 @@ def search_only():
         print("These are the flags that must be used in order to run this function:")
         print("\t--genome, used to specify the reference genome folder")
         print("\t--vcf, used to specify the VCF folder [OPTIONAL!]")
-        print(
-            "\t--guide, used to specify the file that contains guides used for the search")
+        print("\t--guide, used to specify the file that contains guides used for the search")
         print("\t--pam, used to specify the file that contains the pam")
         print("\t--bMax, used to specify the number of bulges for the indexing of the genome(s)")
-        print(
-            "\t--mm, used to specify the number of mismatches permitted in the search phase")
-        print(
-            "\t--bDNA, used to specify the number of DNA bulges permitted in the search phase [OPTIONAL!]")
-        print(
-            "\t--bRNA, used to specify the number of RNA bulges permitted in the search phase [OPTIONAL!]")
+        print("\t--mm, used to specify the number of mismatches permitted in the search phase")
+        print("\t--bDNA, used to specify the number of DNA bulges permitted in the search phase [OPTIONAL!]")
+        print("\t--bRNA, used to specify the number of RNA bulges permitted in the search phase [OPTIONAL!]")
         print("\t--output, used to specify the output folder for the results")
         print("\t--thread, used to set the number of thread used in the process (default is ALL available minus 2)")
         exit(0)
@@ -397,7 +388,7 @@ def search_only():
 
     if "--bDNA" not in input_args:
         #print("--bDNA must be contained in the input")
-        # exit(1)
+        #exit(1)
         bDNA = 0
     else:
         try:
@@ -419,7 +410,7 @@ def search_only():
 
     if "--bRNA" not in input_args:
         #print("--bRNA must be contained in the input")
-        # exit(1)
+        #exit(1)
         bRNA = 0
     else:
         try:
@@ -469,23 +460,15 @@ def complete_search():
         print("These are the flags that must be used in order to run this function:")
         print("\t--genome, used to specify the reference genome folder")
         print("\t--vcf, used to specify the VCF folder [OPTIONAL!]")
-        print(
-            "\t--guide, used to specify the file that contains guides used for the search")
+        print("\t--guide, used to specify the file that contains guides used for the search")
         print("\t--pam, used to specify the file that contains the pam")
         print("\t--annotation, used to specify the file that contains some annotations of the reference genome")
-        print(
-            "\t--samplesID, used to specify the file that contains the information about samples present in VCF files [OPTIONAL!]")
-        print(
-            "\t--gene_annotation, used to specify a gencode or similar annotation to find nearest gene for each target found [OPTIONAL]")
+        print("\t--samplesID, used to specify the file that contains the information about samples present in VCF files [OPTIONAL!]")
         print("\t--bMax, used to specify the number of bulges for the indexing of the genome(s)")
-        print(
-            "\t--mm, used to specify the number of mismatches permitted in the search phase")
-        print(
-            "\t--bDNA, used to specify the number of DNA bulges permitted in the search phase [OPTIONAL!]")
-        print(
-            "\t--bRNA, used to specify the number of RNA bulges permitted in the search phase [OPTIONAL!]")
-        print(
-            "\t--merge, used to specify the threshold used to merge close targets (based on genetic position), use target with highest CFD as pivot [default 3]")
+        print("\t--mm, used to specify the number of mismatches permitted in the search phase")
+        print("\t--bDNA, used to specify the number of DNA bulges permitted in the search phase [OPTIONAL!]")
+        print("\t--bRNA, used to specify the number of RNA bulges permitted in the search phase [OPTIONAL!]")
+        print("\t--merge, used to specify the threshold used to merge close targets (based on genetic position), use target with highest CFD as pivot [default 0 (ZERO)]")
         print("\t--output, used to specify the output folder for the results")
         print("\t--thread, used to set the number of thread used in the process (default is ALL available minus 2)")
         exit(0)
@@ -548,19 +531,6 @@ def complete_search():
             exit(1)
         if not os.path.isfile(guidefile):
             print("The folder specified for --guide does not exist")
-            exit(1)
-
-    if "--gene_annotation" not in input_args:
-        gene_annotation = script_path+'vuoto.txt'
-    else:
-        try:
-            gene_annotation = os.path.abspath(
-                input_args[input_args.index("--gene_annotation")+1])
-        except IndexError:
-            print("Please input some parameter for flag --gene_annotation")
-            exit(1)
-        if not os.path.isfile(gene_annotation):
-            print("The file specified for --gene_annotation does not exist")
             exit(1)
 
     if "--pam" not in input_args:
@@ -642,7 +612,7 @@ def complete_search():
 
     if "--bDNA" not in input_args:
         #print("--bDNA must be contained in the input")
-        # exit(1)
+        #exit(1)
         bDNA = 0
     else:
         try:
@@ -664,7 +634,7 @@ def complete_search():
 
     if "--bRNA" not in input_args:
         #print("--bRNA must be contained in the input")
-        # exit(1)
+        #exit(1)
         bRNA = 0
     else:
         try:
@@ -685,7 +655,9 @@ def complete_search():
             exit(1)
 
     if "--merge" not in input_args:
-        merge_t = 3  # default merge
+        # print("--merge must be contained in the input")
+        # exit(1)
+        merge_t = 0
     else:
         try:
             merge_t = input_args[input_args.index("--merge")+1]
@@ -717,11 +689,11 @@ def complete_search():
 
     os.chdir(script_path)
     if variant:
-        subprocess.run(['./submit_job_automated_new.sh', str(genomedir), str(vcfdir), str(guidefile), str(pamfile), str(annotationfile), str(
-            samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(os.getcwd()), str(gene_annotation)])
+        os.system("./automated_search_good_parallel_v2.sh "+genomedir+" "+vcfdir+" "+guidefile+" "+pamfile+" "+annotationfile+" "+samplefile+" " +
+                  str(bMax)+" "+str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+outputfolder+" "+script_path+" "+str(thread))
     else:
-        subprocess.run(['./submit_job_automated_new.sh', str(genomedir), '_', str(guidefile), str(pamfile), str(annotationfile), str(script_path+'vuoto.txt'),
-                        str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(os.getcwd()), str(gene_annotation)])
+        os.system("./automated_search_good_parallel_v2.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+annotationfile+" _ "+str(bMax)+" " +
+                  str(mm)+" "+str(bDNA)+" "+str(bRNA)+" "+str(merge_t)+" "+outputfolder+" "+script_path+" "+str(thread))
 
 
 def target_integration():
@@ -733,10 +705,7 @@ def target_integration():
         print(
             "\t--guide, used to specify the file that contains guides used for the search")
         print("\t--gencode, used to specify the file that contains gencode annotation to find nearest gene to any target")
-        print(
-            "\t--empirical_data, used to specify the file that contains gencode annotation to find nearest gene to any target [OPTIONAL]")
-        print(
-            "\t--vcf_dir, used to specify the directory containing vcf files used in the search phase, necessary to obtain haplotype frequence in multi-variant targets [OPTIONAL]")
+        print("\t--empirical_data, used to specify the file that contains gencode annotation to find nearest gene to any target")
         print("\t--output, used to specify the output folder for the results")
         exit(0)
 
@@ -752,21 +721,6 @@ def target_integration():
             exit(1)
         if not os.path.isfile(target_file):
             print("The file specified for --target_file does not exist")
-            exit(1)
-
-    if "--vcf_dir" not in input_args:
-        print("--vcf_dir non in input, multi-variant haplotype will not be calculated")
-        vcf_dir = script_path+'vuota/'
-        # exit(1)
-    else:
-        try:
-            vcf_dir = os.path.abspath(
-                input_args[input_args.index("--vcf_dir")+1])
-        except IndexError:
-            print("Please input some parameter for flag --vcf_dir")
-            exit(1)
-        if not os.path.isdir(vcf_dir):
-            print("The folder specified for --vcf_dir does not exist")
             exit(1)
 
     if "--genome_version" not in input_args:
@@ -795,9 +749,8 @@ def target_integration():
             exit(1)
 
     if "--empirical_data" not in input_args:
-        print("--empirical_data not in input, proceeding without empirical data")
-        empiricalfile = script_path+'vuoto.txt'
-        # exit(1)
+        print("--empirical_data must be contained in the input")
+        exit(1)
     else:
         try:
             empiricalfile = os.path.abspath(
@@ -839,7 +792,7 @@ def target_integration():
 
     os.chdir(script_path)
     os.system("./post_process.sh "+target_file+" "+gencode_file +
-              " "+empiricalfile+" "+guidefile+" "+str(genome_version)+" "+outputfolder+" "+vcf_dir+" "+script_path)
+              " "+empiricalfile+" "+guidefile+" "+str(genome_version)+" "+outputfolder+" "+script_path)
 
 # HELP FUNCTION
 

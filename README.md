@@ -1,85 +1,55 @@
-# CRISPRme 
-[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/crispritz/README.html)
+# CrispritzWebApp
 
-CRISPRme is a web-based tool created to perform predictive analysis and result assessement on CRISPR/Cas experiments and visualizing everything in a simple and complete way using a web interface.
+Versione corrente: crisprme_off.py
 
-We exploited CRISPRtiz (Cancellieri, Samuele, et al. "CRISPRitz: rapid, high-throughput and variant-aware in silico off-target site identification for CRISPR genome editing." Bioinformatics 36.7 (2020): 2001-2008.) a powerful search engine we developed to fast search and account for targets and off-targets on any genome.
-CRISPRme integrates CRISPRitz with a graphical interface completely dedicated to visualize and enlighten important targets and off-targets in reference and variant-constructed genome. 
+Seguire le istruzioni del paragrafo INSTALLATION (Phase 1) da [CRISPRitz](https://github.com/InfOmics/CRISPRitz) per installare conda. Seguire i primi 8 punti, fino a quando (base) appare nel terminale.
 
-# CRISPRme Installation and Usage
-The two fastest way to use CRISPRme is through the installation of Docker or Conda.
+Modificare il file environment_for_python_3_8.yml, sostituendo name: base, con un nome da dare all'environment.
 
-## CRISPRme Conda installation
+Modificare il file environment_for_python_3_8.yml, sostituendo prefix: /root/miniconda3 con la giusta directory dove conda è installato.
 
-- In a conda environment, set the channels necessary to install all the packages and dependencies
-    ```
-    conda config --add channels defaults
-    conda config --add channels bioconda
-    conda config --add channels conda-forge
-    conda install python=3.8
-    ```
-- Now, you can install CRISPRitz by typing the command:
-    ```
-    conda install crisprme -y
-    ```
-- To test your installation, type the command:
-    ```
-    crisprme.py
-    ```
-Now the software is installed and ready to be used.
+Eseguire
 
-## CRISPRme Docker installation
-- Just enter this line into any terminal with docker installed and running
-    ```
-    docker pull scancellieri/crisprme:latest
-    ```
-- This will pull the latest version of CRISPRme and now the user can create a clean docker container from the latest image
-- 
-## Post installation test
-**Conda:**
-- Download and run this script if you have installed CRISPRitz with Conda:
-    ```
-    curl https://raw.githubusercontent.com/pinellolab/CRISPRitz/master/test_scripts/auto_test_crispritz_conda.sh --output auto_test_crispritz_conda.sh
-    ```
-- Write this command to execute the script:
-    ```
-    bash auto_test_crispritz_conda.sh
-    ```
-- Wait until this confirmation message appears:  
-“EVERY TEST PASSED!!! ENJOY CRISPRitz”
+```
+conda env create -f environment_for_python_3_8.yml
+```
 
-**Docker:**
-- Download and run this script if you have installed CRISPRitz with Docker:
-    ```
-    curl https://raw.githubusercontent.com/pinellolab/CRISPRitz/master/test_scripts/auto_test_crispritz_docker.sh --output auto_test_crispritz_docker.sh
-    ```
-- Write this command to execute the script:
-    ```
-    bash auto_test_crispritz_docker.sh
-    ```
-- Wait until this confirmation message appears:  
-“EVERY TEST PASSED!!! ENJOY CRISPRitz”
+Per creare l'environment di conda dove poter eseguire CRISPRme.
 
-## Usage (Phase 3):
-Here is a brief guide to help use CRISPRme, **if you already execute the post installation test
-(Phase [2](#phase2)), and you obtain a positive result, you have all the necessary file in the
-test_crispritz directory and you can skip this list of steps.**  
-If you did not execute the test, follow these few steps to download the necessary files to try
-CRISPRme.  
-Download test files (ONE TIME STEP):
-- The script will download the chr22 from UCSC (hg19), the correspondent VCF file from
-the 1000 Genome Project, a directory containing some test guides, a directory
-containing some PAM sequences and a directory of pre-computed genomic annotations
-for the hg19 genome.
-- Download the script with this command:
-    ```
-    curl https://raw.githubusercontent.com/pinellolab/CRISPRitz/master/test_scripts/download_test_files.sh --output download_test_files.sh
-    ```
-- Write this command to execute the script:
-    ```
-    bash download_test_files.sh
-    ```
-- The script will download every necessary file to test the software, we download only one
-chromosome and one vcf file, to save time. All the examples can be run on an entire
-genome, if you want to use the entire hg19 genome, you only need to add chromosomes
-into the `hg19_ref` directory.
+Attivare il nuovo environment con
+
+```
+conda activate nome_environment
+```
+
+Scaricare CrispritzWebApp tramite questo github. Per poter funzionare, è necessario scaricare ulteriori files:
+
+- Genoma: scaricare questo [zip](https://www.dropbox.com/s/01j6vg6dc75wkn0/genomes.zip?dl=0) e spostare le cartelle hg38_ref e hg38_ref+hg38_1000genomeproject all'interno della cartella Genomes
+- Indici: scaricare questo [zip](https://www.dropbox.com/s/wd297qosnl82xto/genome_lib.zip?dl=0) e spostare le cartelle NGG_2_hg38_ref e NGG_2_hg38_ref+hg38_1000genomeproject all'interno della cartella genome_library
+- Dizionari: scaricare questo [zip](https://www.dropbox.com/s/g2pe8tig7g6oj9c/dict.zip?dl=0), creare una cartella dal nome dictionaries , e spostare entrambi i file .json all'interno di questa cartella. NB la cartella dictionaries deve essere situata nello stesso livello della cartella CrispritzWebApp
+
+Da terminale, spostarsi all'interno della cartella CrispritzWebApp, ed eseguire:
+
+```
+python crisprme_off.py
+```
+
+Per attivare CRISPRme
+
+Usando un browser, la pagina principale si trova su:
+
+```
+127.0.0.1:8080
+```
+
+Esempio di pagina wait job (31/03/2020):
+
+```
+127.0.0.1:8080/load?job=Q47PXDTBC8
+```
+
+Esempio di result summary:
+
+```
+127.0.0.1:8080/result?job=Q47PXDTBC8
+```
