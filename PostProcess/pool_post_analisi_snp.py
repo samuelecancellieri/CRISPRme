@@ -23,7 +23,9 @@ ncpus=int(sys.argv[14])
 
 def start_analysis(f):
     splitted = f.split('.')
-    chrom = splitted[0]
+    for elem in splitted:
+        if "chr" in elem:
+            chrom = elem
     os.system(f"./post_analisi_snp.sh \"{output_folder}\" \"{ref_folder}\" \"{vcf_name}\" \"{guide_file}\" \"{mm}\" \"{bDNA}\" \"{bRNA}\" {annotation_file} {pam_file} {sampleID} {dict_folder} {final_res} {final_res_alt} {chrom}")
 
 

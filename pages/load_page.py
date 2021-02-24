@@ -68,7 +68,7 @@ def refreshSearch(n, dir_name):
                     if "Index-genome Variant\tEnd" in current_log:
                         index_status = html.P('Done', style={'color': 'green'})
                         all_done = all_done + 1
-                    elif "Index-genome Variant\tEnd" in current_log:
+                    elif "Index-genome Variant\tStart" in current_log:
                         index_status = html.P(
                             'Indexing Enriched Genome...' + ' ' + 'Step [4/4]', style={'color': 'orange'})
                     elif "Index-genome Reference\tStart" in current_log:

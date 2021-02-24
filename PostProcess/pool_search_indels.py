@@ -51,7 +51,10 @@ with Pool(processes = t) as pool:
 
 
 for key in chrs:
-    chrom = key.split('.')[1]
+    splitted = key.split('.')
+    for elem in splitted:
+        if "chr" in elem:
+            chrom = elem
     os.system(f"tail -n +2 {output_folder}/fake{chrom}_{pam_name}_{guide_name}_{mm}_{bDNA}_{bRNA}.targets.txt >> {output_folder}/indels_{ref_name}+{vcf_name}_{pam_name}_{guide_name}_{mm}_{bDNA}_{bRNA}.targets.txt")
     header = os.popen(f"head -1 {output_folder}/fake{chrom}_{pam_name}_{guide_name}_{mm}_{bDNA}_{bRNA}.targets.txt").read()
     os.system(f"rm {output_folder}/fake{chrom}_{pam_name}_{guide_name}_{mm}_{bDNA}_{bRNA}.targets.txt")
