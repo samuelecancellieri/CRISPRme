@@ -13,8 +13,10 @@ conda_path = "opt/crisprme/PostProcess/"
 # path corrected to use with conda
 corrected_origin_path = script_path[:-3]+conda_path
 corrected_web_path = origin_path[:-3]+"opt/crisprme/"
+#corrected_web_path = os.getcwd()
 
 script_path = corrected_origin_path
+#script_path = corrected_web_path+"/PostProcess/"
 
 input_args = sys.argv
 
@@ -845,7 +847,7 @@ def target_integration():
 
 def web_interface():
     # print(corrected_web_path)
-    subprocess.run(corrected_web_path+'./index.py')
+    subprocess.run(corrected_web_path+'/./index.py')
 
 
 # HELP FUNCTION

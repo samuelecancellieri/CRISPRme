@@ -24,7 +24,7 @@ current_working_directory=$(realpath ${15})
 
 gene_proximity=$(realpath ${16})
 
-# email=${17}
+email=${17}
 echo -e "CPU used: $ncpus" 
 
 
@@ -87,9 +87,9 @@ else
 	true_pam=${fullseqpam:0:-$pos}
 fi
 
-if ! [ -d "$current_working_directory/Results" ]; then
-	mkdir "$current_working_directory/Results"
-fi
+# if ! [ -d "$current_working_directory/Results" ]; then
+# 	mkdir "$current_working_directory/Results"
+# fi
 
 if ! [ -d "$current_working_directory/dictionaries" ]; then
 	mkdir "$current_working_directory/dictionaries"
@@ -482,20 +482,23 @@ fi
 
 echo -e 'Building database'
 echo -e 'Database\tStart\t'$(date) >> $log
+rm "${output_folder}/$(basename ${output_folder}).db"
 python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/$(basename ${output_folder})"
 echo -e 'Database\tEnd\t'$(date) >> $log
 
-touch "${output_folder}/dummy.txt"
-genome_version=$(echo ${ref_name} | sed 's/_ref//' | sed -e 's/\n//') #${output_folder}/Params.txt | awk '{print $2}' | sed 's/_ref//' | sed -e 's/\n//')
-echo $genome_version
-bash $starting_dir/post_process.sh "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${gene_proximity}" "${output_folder}/dummy.txt" "${guide_file}" $genome_version "${output_folder}" "vuota"
-rm "${output_folder}/dummy.txt"
-python $starting_dir/CRISPRme_plots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/imgs/"
-
+echo $gene_proximity
+if [ $gene_proximity != "_" ]; then
+	touch "${output_folder}/dummy.txt"
+	genome_version=$(echo ${ref_name} | sed 's/_ref//' | sed -e 's/\n//') #${output_folder}/Params.txt | awk '{print $2}' | sed 's/_ref//' | sed -e 's/\n//')
+	echo $genome_version
+	bash $starting_dir/post_process.sh "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${gene_proximity}" "${output_folder}/dummy.txt" "${guide_file}" $genome_version "${output_folder}" "vuota"
+	rm "${output_folder}/dummy.txt"
+	python $starting_dir/CRISPRme_plots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/imgs/"
+fi
 echo -e 'Job\tDone\t'$(date) >> $log
 echo -e 'Job End' >  $output
 echo -e "JOB END"
 
-# if [ "$email" != "" ]; then
-# 	python $starting_dir/../pages/send_mail.py $output_folder
-# fi
+if [ "$email" != "" ]; then
+	python $starting_dir/../pages/send_mail.py $output_folder
+fi
