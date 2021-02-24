@@ -516,7 +516,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             ' ' + genome_type + ' ' + app_main_directory + ' ' + str(dictionary_directory) + ' ' + str(sample_list) + ' ' + str(generate_index_ref) + ' ' + str(generate_index_enr) + ' ' + current_working_directory))
     '''
     # il 3 è il merge threshold
-    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new.sh {current_working_directory}/Genomes/{genome_ref} {vcf_folder} {guides_file} {pam} {current_working_directory}/annotations/{annotation_name} {sample_list} {max([int(dna), int(rna)])} {mms} {dna} {rna} {3} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} ../gencode/gencode.protein_coding.bed {dest_email}"
+    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new.sh {current_working_directory}/Genomes/{genome_ref} {vcf_folder} {guides_file} {pam} {current_working_directory}/annotations/{annotation_name} {sample_list} {max([int(dna), int(rna)])} {mms} {dna} {rna} {3} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/gencode/gencode.protein_coding.bed {dest_email}"
     exeggutor.submit(subprocess.run, command, shell=True)
     return '/load', '?job=' + job_id
 
