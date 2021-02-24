@@ -133,7 +133,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         for nuc in motifDict:
             if maxmax != 0:
                 motifDict[nuc][count] = float(
-                    str(float(motifDict[nuc][count])/float(maxmax))[0:5])
+                    motifDict[nuc][count]/float(maxmax))
+                # motifDict[nuc][count] = float(
+                #     str(float(motifDict[nuc][count])/float(maxmax))[0:5])
 
     ind = np.arange(0, len(guide), 1) + 0.15
     width = 0.7  # the width of the bars: can also be len(x) sequence
