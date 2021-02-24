@@ -24,7 +24,9 @@ current_working_directory = sys.argv[12]
 def search_indels(f):
     global use_thread
     splitted = f.split('.')
-    chrom = splitted[1]
+    for elem in splitted:
+        if "chr" in elem:
+            chrom = elem
     print("Searching for INDELs in", chrom)
     os.system(f"crispritz.py search {current_working_directory}/genome_library/{true_pam}_2_{ref_name}+{vcf_name}_INDELS/{true_pam}_2_fake{chrom}/ {pam_file} {guide_file} fake{chrom}_{pam_name}_{guide_name}_{mm}_{bDNA}_{bRNA} -index -mm {mm} -bDNA {bDNA} -bRNA {bRNA} -t  -th 1 >/dev/null") #
     print("Search ended for INDELs in", chrom)

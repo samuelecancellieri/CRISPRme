@@ -38,7 +38,7 @@ from supportFunctions.loadSample import associateSample
 import re
 import multiprocessing
 import string
-import azimuth.model_comparison
+# import azimuth.model_comparison
 import numpy as np
 import pandas as pd
 import subprocess
@@ -59,12 +59,12 @@ N_THR = 3
 # Return max doench value among list of extended targets
 
 
-def doenchParallel(targets, model, result):
-    doench_score = azimuth.model_comparison.predict(
-        targets, None, None, model=model, pam_audit=False)
-    doench_score = [np.around(i * 100) for i in doench_score]
-    max_doench = int(max(doench_score))
-    result.append(max_doench)
+# def doenchParallel(targets, model, result):
+#     doench_score = azimuth.model_comparison.predict(
+#         targets, None, None, model=model, pam_audit=False)
+#     doench_score = [np.around(i * 100) for i in doench_score]
+#     max_doench = int(max(doench_score))
+#     result.append(max_doench)
 
 
 def doenchForIupac(sequence_doench, guide_seq, genome_type):
@@ -555,8 +555,8 @@ targets_for_doench = dict()
 N_THR = multiprocessing.cpu_count() // 2
 refgenomedir = sys.argv[7]
 
-with open(os.path.dirname(os.path.realpath(__file__)) + "/azimuth/saved_models/V3_model_nopos.pickle", 'rb') as f:
-    model = pickle.load(f)
+# with open(os.path.dirname(os.path.realpath(__file__)) + "/azimuth/saved_models/V3_model_nopos.pickle", 'rb') as f:
+#     model = pickle.load(f)
 max_doench = 0
 sum_cfd = 0
 cfd_scores = []

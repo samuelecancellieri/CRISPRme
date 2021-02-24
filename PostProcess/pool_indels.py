@@ -27,7 +27,9 @@ use_thread = 0
 def start_indels(f):
     global use_thread
     splitted = f.split('.')
-    chrom = splitted[1]
+    for elem in splitted:
+        if "chr" in elem:
+            chrom = elem
     if use_thread == t-1:
         use_thread = 0
     os.system(f"./indels_process.sh \"{vcf_dir}/{f}\" \"{chrom}\" \"{output_folder}\" \"{vcf_name}\" \"{ref_folder}\" \"{pam_file}\" \"{guide_file}\" {bMax} {mm} {bDNA} {bRNA} {use_thread} {current_working_directory}")

@@ -24,7 +24,9 @@ cpus=int(sys.argv[12])
 def search_indels(f):
     global use_thread
     splitted = f.split('.')
-    chrom = splitted[1]
+    for elem in splitted:
+        if "chr" in elem:
+            chrom = elem
     print("Searching for INDELs in", chrom)
     os.system(f"crispritz.py search genome_library/{true_pam}_{bMax}_fake{chrom}/ {pam_file} {guide_file} fake{chrom}_{pam_name}_{guide_name}_{mm}_{bDNA}_{bRNA} -index -mm {mm} -bDNA {bDNA} -bRNA {bRNA} -t  -th 1 >/dev/null")
     print("Search ended for INDELs in", chrom)
