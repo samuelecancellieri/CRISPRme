@@ -2298,7 +2298,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
             current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
     except:
         radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-            app_main_directory+'assets/placeholder.png', 'rb').read()).decode())
+            current_working_directory+'assets/placeholder.png', 'rb').read()).decode())
     try:
         radar_href = '/Results/' + job_id + '/' + radar_img
     except:
@@ -2331,7 +2331,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     "N", "") + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png', 'rb').read()).decode())
             except:
                 first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
-                    open(app_main_directory+'/assets/placeholder.png', 'rb').read()).decode())
+                    open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
             try:
                 first_img_href = 'Results/' + job_id + '/imgs/summary_single_guide_' + \
                     guide.replace("N", "") + '_' + str(mm) + "." + str(bulge) + \
@@ -3102,7 +3102,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
         except:
             radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(
-                open(app_main_directory+'/assets/placeholder.png', 'rb').read()).decode())
+                open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
         try:
             radar_href = 'assets/Img/' + job_id + '/' + radar_img
         except:
