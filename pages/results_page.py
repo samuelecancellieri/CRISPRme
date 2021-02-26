@@ -388,7 +388,7 @@ def downloadLinkGuide(n, file_to_load, search):  # file to load = job_id.RNA.1.0
     return 'Generating download link, Please wait...', False
 
 
-@app.server.route(current_working_directory+'/Results/<path:path>')
+@app.server.route('/Results/<path:path>')
 def download_file(path):
     # print(current_working_directory)
     # print('test', path)
