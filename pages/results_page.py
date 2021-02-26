@@ -398,7 +398,7 @@ def downloadLinkGuide(n, file_to_load, search):  # file to load = job_id.RNA.1.0
     return 'Generating download link, Please wait...', False
 
 
-@app.server.route('/Results/<path:path>')
+@app.server.route(current_working_directory+'/Results/<path:path>')
 def download_file(path):
     # print('test', path)
     return flask.send_from_directory('Results/', path, as_attachment=True)
