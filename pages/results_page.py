@@ -329,11 +329,7 @@ def resultPage(job_id):
     return result_page
 
 
-DOWNLOADDIR = ''
-
 # Generate download link sumbyposition
-
-
 @app.callback(
     [Output('download-link-sumbyposition', 'children'),
      Output('interval-sumbyposition', 'disabled')],
@@ -346,8 +342,6 @@ def downloadLinkPosition(n, file_to_load, search):  # file to load =
         raise PreventUpdate
     job_id = search.split('=')[-1]
     file_to_load = file_to_load + '.zip'
-    DOWNLOADDIR = current_working_directory + \
-        'Results/' + job_id + '/' + file_to_load
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
@@ -368,8 +362,6 @@ def downloadLinkSample(n, file_to_load, search):  # file to load = job_id.HG001.
         raise PreventUpdate
     job_id = search.split('=')[-1]
     file_to_load = file_to_load + '.zip'
-    DOWNLOADDIR = current_working_directory + \
-        'Results/' + job_id + '/' + file_to_load
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
@@ -390,8 +382,6 @@ def downloadLinkGuide(n, file_to_load, search):  # file to load = job_id.RNA.1.0
         raise PreventUpdate
     job_id = search.split('=')[-1]
     file_to_load = file_to_load + '.zip'
-    DOWNLOADDIR = current_working_directory + \
-        'Results/' + job_id + '/' + file_to_load
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
