@@ -392,7 +392,7 @@ def downloadLinkGuide(n, file_to_load, search):  # file to load = job_id.RNA.1.0
 def download_file(path):
     # print(current_working_directory)
     # print('test', path)
-    return flask.send_from_directory(current_working_directory+'Results/', path, as_attachment=True)
+    return flask.send_from_directory(os.path.join(current_working_directory, 'Results/'), path, as_attachment=True)
 
 
 # Filter/sort IUPAC decomposition table for cluster page
