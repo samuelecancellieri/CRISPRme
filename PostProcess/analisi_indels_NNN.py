@@ -613,6 +613,8 @@ for line in inResult:
             final_result[4] = str(true_start_target)
             final_result[5] = str(true_start_target + diff_pos_clus)
 
+            #print(int(indel_data[5]), int(line[4]))
+
             t = final_result[2]
             mm_new_t = 0
             tmp_pos_mms =  None       #lista posizione dei mms
@@ -647,6 +649,7 @@ for line in inResult:
             cluster_class[clusterkey]['lastAF'] = last_AF #AF (come last_samples)
             cluster_class[clusterkey]['lastINDpos'] = last_INDpos
             cluster_class[clusterkey]['ref_pos_alignement'] = indel_data[6][fake_start_target:fake_start_target+len(line[2])]
+            #print("sopra", cluster_class[clusterkey]['ref_pos_alignement'])
             #cluster_class[clusterkey]['lastHaplotype'] = last_haplotype
           
         else:
@@ -712,6 +715,7 @@ for line in inResult:
 
             c.pop(-2)
             #best_seq = c[12]
+            #print(c)
             cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
             #print("KEY ORIGINALE", cfd_clus_key)
             if c[12] == 'n':
@@ -814,8 +818,9 @@ for line in inResult:
         cluster_class = dict.fromkeys(dictionary_entries)       #Dizionario dove salvare le variabile per ogni tipo di scomposizione (X,DNA1,DNA2,RNA1 etc...)
                                                                 #Viene re-inizializzato per ogni cluster
         current_guide_chr_pos_direction = guide_no_bulge + line[3] + line[5] + line[6]
+        #print(line)
         if line[3][4:] != current_chr:      #New chr section, load a new dictionary
-            print(os.path.realpath(sys.argv[4]) + '/log' + line[3].split('_')[0] + '.txt')
+            print(os.path.realpath(sys.argv[4]) + '/log' + line[3][4:] + '.txt')
             if not os.path.exists(os.path.realpath(sys.argv[4]) + '/log' + line[3][4:].split('_')[0] + '.txt'):
                 raise Exception("ERROR, NO LOG PASSED")
             else:
@@ -868,6 +873,8 @@ for line in inResult:
         diff_pos_clus = int(line[4]) - int(line[5])
         final_result[4] = str(true_start_target)
         final_result[5] = str(true_start_target + diff_pos_clus)
+
+        #print(int(indel_data[5]), int(line[4]))
         # if line[10] != "n":
         #     a = datastore[line[10]]
         #     final_result[12] = a['SAMPLES']
@@ -924,6 +931,7 @@ for line in inResult:
         cluster_class[clusterkey]['lastAF'] = last_AF #AF (come last_samples)
         cluster_class[clusterkey]['lastINDpos'] = last_INDpos
         cluster_class[clusterkey]['ref_pos_alignement'] = indel_data[6][fake_start_target:fake_start_target+len(line[2])]
+        #print("sotto", cluster_class[clusterkey]['ref_pos_alignement'])
         
 #LAST CLUSTER
 for t in cluster_to_save:

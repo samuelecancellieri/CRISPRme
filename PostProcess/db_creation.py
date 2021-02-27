@@ -118,7 +118,7 @@ with open(f"{fileIn}", "r") as f:
          if len(data)==tot_lines//10:
            insert(data)
            data=[]
-
+    insert(data)
     # create indexes
     c.execute("CREATE INDEX IF NOT EXISTS g ON final_table(Real_Guide_1)")
 

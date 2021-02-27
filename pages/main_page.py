@@ -370,7 +370,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     if genome_type == 'ref':
         genome_idx = pam_char + '_' + str(max_bulges) + '_' + genome_selected
     else:
-        if ref_var == "1000G":
+        if "1000G" in ref_var:
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + \
                 '+VCFs_1000_genome_project'
@@ -799,7 +799,7 @@ def changePlaceholderGuideTextArea(value):
     all_options = availablePAM()
     correct_options = []
     for option in all_options:
-        if value in option['label']:
+        if value == option['label'].split('.')[0].split('-')[2]:
             correct_options.append(
                 {'label': option['label'], 'value': option['value']})
     return [correct_options]
@@ -862,10 +862,10 @@ def availableCAS():
         if 'tempPAM' in cas_name:  # Skip the temp pam used for updating dictionaries
             pass
         else:
-            if 'Cas' in cas_name:
-                cas_prot = cas_name[cas_name.find("Cas"):]
-                cas_set.add(cas_prot)
-    for ele in cas_set:
+            #if 'Cas' in cas_name:
+            cas_prot = cas_name.split('.')[0].split('-')[2]
+            cas_set.add(cas_prot)
+    for ele in sorted(cas_set):
         cas_file.append({'label': ele, 'value': ele})
     return cas_file
 
