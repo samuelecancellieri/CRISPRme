@@ -36,22 +36,23 @@ sampleID=${12}
 
 output_folder=${13}
 
-awk '{print $0"\tn"}' "$REFtargets" > "$REFtargets.corrected"
-echo 'Adjusting indel positions'
-./correct_positions_targets.py "$ENRtargets"
-./bed_for_ref_seq.py "$ENRtargets.corrected" "$jobid"
-bedtools getfasta -fi "$referencegenome" -bed "$jobid.bed_for_ref" -fo "$jobid.ref_seq.fa"
-
+#awk '{print $0"\tn"}' "$REFtargets" > "$REFtargets.corrected"
+#echo 'Adjusting indel positions'
+#./correct_positions_targets.py "$ENRtargets"
+#./bed_for_ref_seq.py "$ENRtargets.corrected" "$jobid"
+#bedtools getfasta -fi "$referencegenome" -bed "$jobid.bed_for_ref" -fo "$jobid.ref_seq.fa"
+touch $REFtargets.corrected
 
 # 1) Rimozione duplicati, estrazione semicommon e unique e creazione file total
 echo 'Creazione file .total.txt'
-./extraction.sh "$REFtargets.corrected" "$ENRtargets.corrected" "$jobid"  # OUTPUT    $jobid.common_targets.txt -> Non usato
+./extraction.sh "$REFtargets.corrected" "$ENRtargets" "$jobid"  # OUTPUT    $jobid.common_targets.txt -> Non usato
                                                 #           $jobid.semi_common_targets.txt 
                                                 #           $jobid.unique_targets.txt
 
 rm "$jobid.common_targets.txt"
 rm "$REFtargets.corrected"
-rm "$ENRtargets.corrected"
+#rm "$ENRtargets.corrected"
+
 # 2) Creazione colonne PAM creation etc
 awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' "$jobid.semi_common_targets.txt" > "$jobid.semi_common_targets.minmaxdisr.txt" 
 rm "$jobid.semi_common_targets.txt"
@@ -96,15 +97,15 @@ rm "$jobid.total.txt"
 
 echo 'Estrazione sample dal file .total.cluster.txt'
 
-./analisi_indels_NNN.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" "$mismatch" "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA "$sampleID" "$jobid.ref_seq.fa"
+./analisi_indels_NNN.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" "$mismatch" "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA "$sampleID" #"$jobid.ref_seq.fa"
 # OUTPUT    $jobid.bestCFD.txt
 #           $jobid.CFDGraph.txt     (per fare l'area graph dei CFD REF vs ENR)
 # NOTA AnnotatorAllTargets.py salva su disco SOLO il target con CFD più alto nel cluster e tra le scomposizioni esistenti
 # Quindi i files jobid.samples.annotation (contentente le scomposizioni del TOP1 esistenti) e jobid.cluster.tmp.txt (contenente il miglior TOP1
 # scomposto e i target dei cluster con quell'aplotipo) NON sono creati
 rm "$jobid.total.cluster.txt"
-rm "$jobid.bed_for_ref"
-rm "$jobid.ref_seq.fa"
+#rm "$jobid.bed_for_ref"
+#rm "$jobid.ref_seq.fa"
 
 echo 'Sorting and adjusting results'
 #(head -n 1 $jobid.bestCFD.txt && tail -n +2 $jobid.bestCFD.txt | sort -k4,4 -k6,6 -T ./) > tmp  && mv tmp $jobid.bestCFD.txt
