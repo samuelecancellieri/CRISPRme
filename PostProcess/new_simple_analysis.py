@@ -66,7 +66,7 @@ for line in inTarget:
     # if (guide_no_bulge + split[3] + split[5] + split[6]) == current_guide_chr_pos_direction:
     realTarget = split[2]
     replaceTarget = split[2].replace('-', '')
-    refSeq = genomeStr[int(split[4]):int(split[4])+len(guide_no_bulge)]
+    refSeq = genomeStr[int(split[4]):int(split[4])+len(replaceTarget)]
     print(refSeq)
     print(replaceTarget)
     replaceTargetsDict = dict()
