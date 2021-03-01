@@ -82,8 +82,8 @@ for line in inTarget:
     if split[6] == '-':
         replaceTarget = reverse_complement_table(replaceTarget)
 
-    print(refSeq)
-    print(replaceTarget)
+    print('ref', refSeq)
+    print('var original', replaceTarget)
 
     totalDict = dict()
     for pos_c, c in enumerate(replaceTarget):
