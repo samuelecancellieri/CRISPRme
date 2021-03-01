@@ -96,7 +96,7 @@ for line in inTarget:
                 totalDict[(pos_c, elem)] = dict()
                 listInfo = [[rsID[i], AF_var[i], snpInfo[i]]]
                 totalDict[(pos_c, elem)][0] = [listReplaceTarget,
-                                               sampleSet[i], listInfo]
+                                               set(sampleSet[i]), listInfo]
 
     # the time of the universe
     for key in totalDict:  # for each snp in target (fixpoint)
