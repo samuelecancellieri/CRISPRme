@@ -59,6 +59,7 @@ def retrieveFromDict(chr_pos):
 
 current_guide_chr_pos_direction = ''
 listCluster = []
+inTarget.readline()
 for line in inTarget:
     split = line.strip().split('\t')
     guide_no_bulge = split[1].replace('-', '')
