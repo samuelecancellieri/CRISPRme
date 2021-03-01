@@ -1,10 +1,9 @@
 #!/usr/bin
-from os import replace
 import sys
 import json
 
 inFasta = open(sys.argv[1], 'r')  # lettura fasta del chr
-inFasta.readline()  # lettura fasta del chr
+chr = inFasta.readline().replace('>', '')  # lettura fasta del chr
 genomeStr = inFasta.readlines()  # lettura fasta del chr
 genomeStr = ''.join(genomeStr).upper()
 genomeStr = genomeStr.replace('\n', '')
@@ -39,9 +38,23 @@ iupac_code = {
 }
 
 
-def retrieveFromDict():
-    # bla
-    print('ciao')
+def retrieveFromDict(chr_pos):
+    entry = mydict[chr+','+chr_pos]
+    multi_entry = entry.split('/')
+    snp_list = []
+    sample_list = []
+    AF_list = []
+    rsID_list = []
+    snp_info_list = []
+    for entry in multi_entry:
+        split_entry = entry.split(';')
+        sample_list.append(split_entry[0])
+        snp_list.append(split_entry[1].split(',')[1])
+        rsID_list.append(split_entry[2])
+        AF_list.append(split_entry[3])
+        snp_info_list.append(
+            chr+'_'+chr_pos+'_'+split_entry[1].split(',')[0]+'_'+split_entry[1].split(',')[1])
+    return snp_list, sample_list, rsID_list, AF_list, snp_info_list
 
 
 current_guide_chr_pos_direction = ''
@@ -60,19 +73,20 @@ for line in inTarget:
             if c in iupac_code:
                 snpToReplace, sampleSet, rsID, AF_var, snpInfo = retrieveFromDict(
                     pos_c+int(split[4]))
-                listReplaceTarget = list(refSeq)
-                listReplaceTarget[pos_c] = snpToReplace
-                totalDict[pos_c] = dict()
-                listInfo = [[rsID, AF_var, snpInfo]]
-                totalDict[pos_c][0] = [listReplaceTarget,
-                                       sampleSet, listInfo]
+                for i, elem in enumerate(snpToReplace):
+                    listReplaceTarget = list(refSeq)
+                    listReplaceTarget[pos_c] = elem
+                    totalDict[(pos_c, elem)] = dict()
+                    listInfo = [[rsID[i], AF_var[i], snpInfo[i]]]
+                    totalDict[pos_c][0] = [listReplaceTarget,
+                                           sampleSet[i], listInfo]
 
         # the time of the universe
         for key in totalDict:  # for each snp in target (fixpoint)
             count = 0  # to create levels of tuple (couples,triplets,...)
             # for each other snp in target (> fixpoint)
             for newkey in totalDict:
-                if newkey > key:
+                if newkey[1] > key[1]:
                     resultSet = totalDict[key][count][1].intersection(
                         totalDict[newkey][0][1])  # extract intersection of sample to generate possible multisnp target
                     if len(resultSet) > 0:  # if set is not null
@@ -92,3 +106,8 @@ for line in inTarget:
                             totalDict[key][count][1]
                         totalDict[newkey][0][1] = totalDict[newkey][0][1] - \
                             totalDict[key][count][1]
+
+        for key in totalDict:
+            for level in totalDict[key]:
+                if len(totalDict[key][level][1]) > 0:
+                    print(totalDict[key][level])
