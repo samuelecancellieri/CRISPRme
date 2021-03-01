@@ -68,6 +68,8 @@ def retrieveFromDict(chr_pos):
 current_guide_chr_pos_direction = ''
 listCluster = []
 inTarget.readline()
+
+outfile = open('test.txt', 'w')
 for line in inTarget:
     split = line.strip().split('\t')
     guide_no_bulge = split[1].replace('-', '')
@@ -82,8 +84,8 @@ for line in inTarget:
     if split[6] == '-':
         replaceTarget = reverse_complement_table(replaceTarget)
 
-    print('ref', refSeq)
-    print('var original', replaceTarget)
+    # print('ref', refSeq)
+    # print('var original', replaceTarget)
 
     totalDict = dict()
     countIUPAC = 0
@@ -127,8 +129,10 @@ for line in inTarget:
                     totalDict[newkey][0][1] = totalDict[newkey][0][1] - \
                         totalDict[key][count][1]
 
-    if countIUPAC > 1:
-        for key in totalDict:
-            for level in totalDict[key]:
-                if len(totalDict[key][level][1]) > 0:
-                    print(totalDict[key][level])
+    outfile.write(totalDict)
+
+    # if countIUPAC > 1:
+    #     for key in totalDict:
+    #         for level in totalDict[key]:
+    #             if len(totalDict[key][level][1]) > 0:
+    #                 print(totalDict[key][level])
