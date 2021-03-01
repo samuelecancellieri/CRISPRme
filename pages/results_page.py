@@ -399,7 +399,7 @@ def downloadPersonalCard(n, file_to_load, search):
     if n is None:
         raise PreventUpdate
     job_id = search.split('=')[-1]
-    file_to_load = file_to_load+.'zip'
+    file_to_load = file_to_load+'.zip'
     if os.path.exists(current_working_directory+'Results/'+job_id+'/'+file_to_load):
         return html.A('Download zip', href=URL+'/Results/'+job_id+'/'+file_to_load), True
 
