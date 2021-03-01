@@ -129,7 +129,7 @@ for line in inTarget:
                     totalDict[newkey][0][1] = totalDict[newkey][0][1] - \
                         totalDict[key][count][1]
 
-    outfile.write(totalDict)
+    print(totalDict, file=outfile)
 
     # if countIUPAC > 1:
     #     for key in totalDict:
