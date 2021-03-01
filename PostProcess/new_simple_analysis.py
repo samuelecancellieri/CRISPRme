@@ -39,7 +39,7 @@ iupac_code = {
 
 
 def retrieveFromDict(chr_pos):
-    entry = mydict[chr+','+chr_pos]
+    entry = mydict[chr+','+str(chr_pos)]
     multi_entry = entry.split('/')
     snp_list = []
     sample_list = []
