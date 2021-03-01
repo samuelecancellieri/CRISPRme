@@ -82,6 +82,8 @@ for line in inTarget:
     if line[6] == '-':
         replaceTarget = reverse_complement_table(replaceTarget)
 
+    print(replaceTarget)
+
     totalDict = dict()
     for pos_c, c in enumerate(replaceTarget):
         if c in iupac_code:
