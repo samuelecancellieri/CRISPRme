@@ -86,8 +86,10 @@ for line in inTarget:
     print('var original', replaceTarget)
 
     totalDict = dict()
+    countIUPAC = 0
     for pos_c, c in enumerate(replaceTarget):
         if c in iupac_code:
+            countIUPAC += 1
             snpToReplace, sampleSet, rsID, AF_var, snpInfo = retrieveFromDict(
                 pos_c+int(split[4]))
             for i, elem in enumerate(snpToReplace):
@@ -112,7 +114,8 @@ for line in inTarget:
                     # add new snp to preceding target seq with snp
                     replaceTarget1 = totalDict[newkey][0][0]
                     replaceTarget2 = totalDict[key][count-1][0]
-                    replaceTarget2[newkey[0]] = replaceTarget1[newkey[0]] #dioboia
+                    replaceTarget2[newkey[0]
+                                   ] = replaceTarget1[newkey[0]]  # dioboia
                     listInfo2 = totalDict[key][count-1][2].copy()
                     listInfo2.append(totalDict[newkey][0][2])
                     # add to new level the modified seq and set of samples and info of snp
@@ -124,7 +127,8 @@ for line in inTarget:
                     totalDict[newkey][0][1] = totalDict[newkey][0][1] - \
                         totalDict[key][count][1]
 
-    for key in totalDict:
-        for level in totalDict[key]:
-            if len(totalDict[key][level][1]) > 0:
-                print(totalDict[key][level])
+    if countIUPAC > 1:
+        for key in totalDict:
+            for level in totalDict[key]:
+                if len(totalDict[key][level][1]) > 0:
+                    print(totalDict[key][level])
