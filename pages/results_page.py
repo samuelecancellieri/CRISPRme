@@ -2783,10 +2783,10 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     'Generate', id='button-sample-card'))),
                             dbc.Col(html.Div(
                                 [
-                                    html.P('Generating download link, Please wait...',
-                                           id='download-link-personalcard'),
-                                    dcc.Interval(interval=5*1000,
-                                                 id='interval-personalcard')
+                                    # html.P('Generating download link, Please wait...',
+                                    #        id='download-link-personalcard'),
+                                    # dcc.Interval(interval=5*1000,
+                                    #              id='interval-personalcard')
                                 ]
                             ))
                         ]
