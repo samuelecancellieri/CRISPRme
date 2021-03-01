@@ -61,7 +61,7 @@ def retrieveFromDict(chr_pos):
         rsID_list.append(split_entry[2])
         AF_list.append(split_entry[3])
         snp_info_list.append(
-            chr+'_'+chr_pos+'_'+split_entry[1].split(',')[0]+'_'+split_entry[1].split(',')[1])
+            chr+'_'+str(chr_pos)+'_'+split_entry[1].split(',')[0]+'_'+split_entry[1].split(',')[1])
     return snp_list, sample_list, rsID_list, AF_list, snp_info_list
 
 
