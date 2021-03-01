@@ -79,7 +79,7 @@ for line in inTarget:
     print(replaceTarget)
     replaceTargetsDict = dict()
 
-    if line[6] == '-':
+    if split[6] == '-':
         replaceTarget = reverse_complement_table(replaceTarget)
 
     print(replaceTarget)
