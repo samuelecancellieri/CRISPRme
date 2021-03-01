@@ -75,13 +75,14 @@ for line in inTarget:
     realTarget = split[2]
     replaceTarget = split[2].replace('-', '')
     refSeq = genomeStr[int(split[4]):int(split[4])+len(replaceTarget)]
-    print(refSeq)
-    print(replaceTarget)
+    # print(refSeq)
+    # print(replaceTarget)
     replaceTargetsDict = dict()
 
     if split[6] == '-':
         replaceTarget = reverse_complement_table(replaceTarget)
 
+    print(refSeq)
     print(replaceTarget)
 
     totalDict = dict()
