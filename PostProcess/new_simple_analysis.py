@@ -3,7 +3,7 @@ import sys
 import json
 
 inFasta = open(sys.argv[1], 'r')  # lettura fasta del chr
-chr = inFasta.readline().replace('>', '')  # lettura fasta del chr
+chr = inFasta.readline().strip().replace('>', '')  # lettura fasta del chr
 genomeStr = inFasta.readlines()  # lettura fasta del chr
 genomeStr = ''.join(genomeStr).upper()
 genomeStr = genomeStr.replace('\n', '')
