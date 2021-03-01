@@ -37,6 +37,14 @@ iupac_code = {
     'N': ('A', 'T', 'C', 'G')
 }
 
+# For scoring of CFD And Doench
+tab = str.maketrans("ACTGRYSWMKHDBVactgryswmkhdbv",
+                    "TGACYRSWKMDHVBtgacyrswkmdhvb")
+
+
+def reverse_complement_table(seq):
+    return seq.translate(tab)[::-1]
+
 
 def retrieveFromDict(chr_pos):
     entry = mydict[chr+','+str(chr_pos+1)]
@@ -70,6 +78,9 @@ for line in inTarget:
     print(refSeq)
     print(replaceTarget)
     replaceTargetsDict = dict()
+
+    if line[6] == '-':
+        replaceTarget = reverse_complement_table(replaceTarget)
 
     totalDict = dict()
     for pos_c, c in enumerate(replaceTarget):
