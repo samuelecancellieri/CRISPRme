@@ -112,8 +112,8 @@ for line in inTarget:
                     # go forward one level (couples,triplets,...)
                     count += 1
                     # add new snp to preceding target seq with snp
-                    replaceTarget1 = totalDict[newkey][0][0]
-                    replaceTarget2 = totalDict[key][count-1][0]
+                    replaceTarget1 = totalDict[newkey][0][0].copy()
+                    replaceTarget2 = totalDict[key][count-1][0].copy()
                     replaceTarget2[newkey[0]
                                    ] = replaceTarget1[newkey[0]]  # dioboia
                     listInfo2 = totalDict[key][count-1][2].copy()
