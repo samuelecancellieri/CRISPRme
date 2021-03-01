@@ -388,22 +388,22 @@ def downloadLinkGuide(n, file_to_load, search):  # file to load = job_id.RNA.1.0
     return 'Generating download link, Please wait...', False
 
 
-@app.callback(
-    [Output('download-link-personalcard', 'children'),
-     Output('interval-personalcard', 'disabled')],
-    [Input('interval-personalcard', 'n_intervals')],
-    [State('div-info-sumbyguide-targets', 'children'),
-     State('url', 'search')]
-)
-def downloadPersonalCard(n, file_to_load, search):
-    if n is None:
-        raise PreventUpdate
-    job_id = search.split('=')[-1]
-    file_to_load = file_to_load+'.zip'
-    if os.path.exists(current_working_directory+'Results/'+job_id+'/'+file_to_load):
-        return html.A('Download zip', href=URL+'/Results/'+job_id+'/'+file_to_load), True
+# @app.callback(
+#     [Output('download-link-personalcard', 'children'),
+#      Output('interval-personalcard', 'disabled')],
+#     [Input('interval-personalcard', 'n_intervals')],
+#     [State('div-info-sumbyguide-targets', 'children'),
+#      State('url', 'search')]
+# )
+# def downloadPersonalCard(n, file_to_load, search):
+#     if n is None:
+#         raise PreventUpdate
+#     job_id = search.split('=')[-1]
+#     file_to_load = file_to_load+'.zip'
+#     if os.path.exists(current_working_directory+'Results/'+job_id+'/'+file_to_load):
+#         return html.A('Download zip', href=URL+'/Results/'+job_id+'/'+file_to_load), True
 
-    return 'Generating download link, Please wait...', False
+#     return 'Generating download link, Please wait...', False
 
 
 @app.server.route('/Results/<path:path>')
