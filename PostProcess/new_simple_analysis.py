@@ -7,7 +7,7 @@ chr = inFasta.readline().replace('>', '')  # lettura fasta del chr
 genomeStr = inFasta.readlines()  # lettura fasta del chr
 genomeStr = ''.join(genomeStr).upper()
 genomeStr = genomeStr.replace('\n', '')
-inDict = sys.argv[2]
+inDict = open(sys.argv[2], 'r')
 inTarget = open(sys.argv[3], 'r')
 
 mydict = json.load(inDict)
