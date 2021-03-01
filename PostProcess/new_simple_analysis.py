@@ -67,6 +67,8 @@ for line in inTarget:
     realTarget = split[2]
     replaceTarget = split[2].replace('-', '')
     refSeq = genomeStr[int(split[4]):int(split[4])+len(guide_no_bulge)]
+    print(refSeq)
+    print(replaceTarget)
     replaceTargetsDict = dict()
 
     totalDict = dict()
