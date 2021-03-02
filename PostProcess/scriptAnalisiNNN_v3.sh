@@ -85,7 +85,9 @@ rm $jobid.total.txt
 
 echo 'Estrazione sample dal file .total.cluster.txt'
 
-./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA "$sampleID"
+# ./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA "$sampleID"
+./new_simple_analysis.py "$referencegenome" "$dictionaries" "$jobid.total.cluster.txt" "${pam_file}" "$jobid" "$mismatch"
+
 # OUTPUT    $jobid.bestCFD.txt
 #           $jobid.CFDGraph.txt     (per fare l'area graph dei CFD REF vs ENR)
 # NOTA AnnotatorAllTargets.py salva su disco SOLO il target con CFD più alto nel cluster e tra le scomposizioni esistenti
@@ -97,22 +99,22 @@ echo 'Sorting and adjusting results'
 #(head -n 1 $jobid.bestCFD.txt && tail -n +2 $jobid.bestCFD.txt | sort -k4,4 -k6,6 -T ./) > tmp  && mv tmp $jobid.bestCFD.txt
 #python compact_ref_var.py $jobid.bestCFD.txt
 ./adjust_cols.py $jobid.bestCFD.txt 
-./adjust_cols.py $jobid.altCFD.txt 
+# ./adjust_cols.py $jobid.altCFD.txt 
 
 ./adjust_cols.py $jobid.bestmmblg.txt 
-./adjust_cols.py $jobid.altmmblg.txt 
+# ./adjust_cols.py $jobid.altmmblg.txt 
 
 sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.bestmmblg.txt
-sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.altmmblg.txt
+# sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.altmmblg.txt
 
 
 pr -m -t -J $jobid.bestCFD.txt $jobid.bestmmblg.txt > $jobid.bestMerge.txt 
-pr -m -t -J $jobid.altCFD.txt $jobid.altmmblg.txt > $jobid.altMerge.txt 
+# pr -m -t -J $jobid.altCFD.txt $jobid.altmmblg.txt > $jobid.altMerge.txt 
 
 rm $jobid.bestCFD.txt
-rm $jobid.altCFD.txt
+# rm $jobid.altCFD.txt
 rm $jobid.bestmmblg.txt
-rm $jobid.altmmblg.txt
+# rm $jobid.altmmblg.txt
 
 # mv $jobid.bestMerge.txt $output_folder
 # mv $jobid.altMerge.txt $output_folder
