@@ -5,6 +5,7 @@ import os
 import pickle
 import numpy as np
 import pandas as pd
+import time
 
 inFasta = open(sys.argv[1], 'r')  # lettura fasta del chr
 current_chr = inFasta.readline().strip().replace('>', '')  # lettura fasta del chr
@@ -194,6 +195,7 @@ with open(sys.argv[4], 'r') as pam:
         pam_begin = len_pam * (-1)
         pam_end = None
 
+global_start = time.time()
 
 cluster_to_save = []
 target_no_bulges_in_cluster = []
@@ -479,6 +481,5 @@ os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_
 
 cfd_dataframe = pd.DataFrame.from_dict(cfd_for_graph)
 cfd_dataframe.to_csv(outputFile + '.CFDGraph.txt', sep='\t', index=False)
-print('Done', current_chr, time.time() - start_time)
 
 print('ANALYSIS COMPLETE IN', time.time() - global_start)
