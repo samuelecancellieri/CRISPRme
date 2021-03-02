@@ -388,24 +388,6 @@ def downloadLinkGuide(n, file_to_load, search):  # file to load = job_id.RNA.1.0
     return 'Generating download link, Please wait...', False
 
 
-# @app.callback(
-#     [Output('download-link-personalcard', 'children'),
-#      Output('interval-personalcard', 'disabled')],
-#     [Input('interval-personalcard', 'n_intervals')],
-#     [State('div-info-sumbyguide-targets', 'children'),
-#      State('url', 'search')]
-# )
-# def downloadPersonalCard(n, file_to_load, search):
-#     if n is None:
-#         raise PreventUpdate
-#     job_id = search.split('=')[-1]
-#     file_to_load = file_to_load+'.zip'
-#     if os.path.exists(current_working_directory+'Results/'+job_id+'/'+file_to_load):
-#         return html.A('Download zip', href=URL+'/Results/'+job_id+'/'+file_to_load), True
-
-#     return 'Generating download link, Please wait...', False
-
-
 @app.server.route('/Results/<path:path>')
 def download_file(path):
     # print(current_working_directory)
@@ -2435,19 +2417,14 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 job_id + '/' + job_id + '.' + sample + ".tmp_card.txt"
             tmp_file_2 = current_working_directory + 'Results/' + \
                 job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
-
-            # os.system(f"LC_ALL=C sort -k24rg \"{sample_grep_result}\" > \"{tmp_file}\" ; head -5 {tmp_file} > \"{tmp_file_2}\"")
             os.system(
-                f"LC_ALL=C sort -k24rg \"{sample_grep_result}\" -o \"{sample_grep_result}\"")
-            os.system(f"head - 5 {sample_grep_result} > \"{tmp_file_2}\"")
+                f"LC_ALL=C sort -k24rg \"{sample_grep_result}\" > \"{tmp_file}\" ; head -5 {tmp_file} > \"{tmp_file_2}\"")
             ans = pd.read_csv(tmp_file_2, sep='\t',
                               header=None, usecols=range(0, 23))
             with open(file_to_grep) as f_:
                 c = f_.readline().strip()
             ans.columns = c.split('\t')[:23]
             ans = ans.astype(str)
-            os.system('zip ' + sample_grep_result.replace('.txt', '.zip') +
-                      ' ' + sample_grep_result + " &")  # , shell = True)
             os.system(f"rm {tmp_file} &")
             os.system(f"rm {tmp_file_2} &")
 
@@ -2780,15 +2757,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(html.Div(dcc.Dropdown(id='dropdown-sample-card', options=[
                                     {'label': sam, 'value': sam} for sam in samples], placeholder='Select a Sample'))),
                             dbc.Col(html.Div(html.Button(
-                                    'Generate', id='button-sample-card'))),
-                            dbc.Col(html.Div(
-                                [
-                                    # html.P('Generating download link, Please wait...',
-                                    #        id='download-link-personalcard'),
-                                    # dcc.Interval(interval=5*1000,
-                                    #              id='interval-personalcard')
-                                ]
-                            ))
+                                    'Generate', id='button-sample-card')))
                         ]
                     ),
                 ],
