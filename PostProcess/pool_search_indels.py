@@ -33,7 +33,7 @@ def search_indels(f):
 
 chrs = []
 for f in os.listdir(vcf_dir):
-    if 'vcf.gz' in f:
+    if 'vcf.gz' == f[-6:]:
         chrs.append(f)
 
 cpus = len(os.sched_getaffinity(0))

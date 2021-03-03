@@ -366,6 +366,12 @@ for line in inTarget:
                                 totalDict[size+1][combinedKey][1]
                             totalDict[0][newkey][1] = totalDict[0][newkey][1] - \
                                 totalDict[size+1][combinedKey][1]
+                            
+                            if len(totalDict[size][key][1]) == 0:
+                                totalDict[size].pop(key, 'None')
+                            if len(totalDict[0][newkey][1]) == 0:
+                                totalDict[0].pop(newkey, 'None')
+
 
         if revert:
             refSeq = reverse_complement_table(refSeq)
@@ -382,7 +388,7 @@ for line in inTarget:
 
         refSeq_with_bulges = ''.join(refSeq_with_bulges)
         if split[0] == 'DNA':
-            cfd_score = calc_cfd(split[1][int(t[bulge_pos]):], refSeq_with_bulges.upper()[int(
+            cfd_score = calc_cfd(split[1][int(split[bulge_pos]):], refSeq_with_bulges.upper()[int(
                 split[bulge_pos]):-3], refSeq_with_bulges.upper()[-2:], mm_scores, pam_scores, do_scores)
             cfd_ref_seq = str(cfd_score)
         else:
