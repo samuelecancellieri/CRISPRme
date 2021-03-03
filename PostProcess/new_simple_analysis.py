@@ -15,7 +15,10 @@ genomeStr = genomeStr.replace('\n', '')
 inDict = open(sys.argv[2], 'r')
 inTarget = open(sys.argv[3], 'r')
 
-mydict = json.load(inDict)
+try:
+    mydict = json.load(inDict)
+except:
+    print("No dict found for", current_chr)
 
 iupac_code_set = {
     "R": {"A", "G"},
