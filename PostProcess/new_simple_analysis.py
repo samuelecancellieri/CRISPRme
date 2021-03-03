@@ -12,10 +12,10 @@ current_chr = inFasta.readline().strip().replace('>', '')  # lettura fasta del c
 genomeStr = inFasta.readlines()  # lettura fasta del chr
 genomeStr = ''.join(genomeStr).upper()
 genomeStr = genomeStr.replace('\n', '')
-inDict = open(sys.argv[2], 'r')
 inTarget = open(sys.argv[3], 'r')
 
 try:
+    inDict = open(sys.argv[2], 'r')
     mydict = json.load(inDict)
 except:
     print("No dict found for", current_chr)
