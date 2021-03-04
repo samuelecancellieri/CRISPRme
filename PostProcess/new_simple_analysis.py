@@ -85,6 +85,7 @@ tab = str.maketrans("ACTGRYSWMKHDBVactgryswmkhdbv",
 def reverse_complement_table(seq):
     return seq.translate(tab)[::-1]
 
+
 class reversor:
     '''
     Nel caso debba ordinare più campi però con reverse diversi, eg uno True e l'altro False, posso usare questa classe nella chiave per 
@@ -130,6 +131,7 @@ def calc_cfd(guide_seq, sg, pam, mm_scores, pam_scores, do_scores):
     score *= pam_scores[pam]
     return score
 
+
 def revcom(s):
     basecomp = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'U': 'A', '-': '-'}
     letters = list(s[::-1])
@@ -139,8 +141,9 @@ def revcom(s):
         return None  # If some IUPAC were not translated
     return ''.join(letters)
 
+
 def get_mm_pam_scores():
-    print(os.path.dirname(os.path.realpath(__file__)) )
+    print(os.path.dirname(os.path.realpath(__file__)))
     try:
         mm_scores = pickle.load(open(os.path.dirname(
             os.path.realpath(__file__)) + '/mismatch_score.pkl', 'rb'))
@@ -150,6 +153,7 @@ def get_mm_pam_scores():
     except:
         raise Exception(
             "Could not find file with mismatch scores or PAM scores")
+
 
 def retrieveFromDict(chr_pos):
     entry = mydict[current_chr+','+str(chr_pos+1)]
@@ -168,8 +172,6 @@ def retrieveFromDict(chr_pos):
         snp_info_list.append(
             current_chr+'_'+str(chr_pos+1)+'_'+split_entry[1].split(',')[0]+'_'+split_entry[1].split(',')[1])
     return snp_list, sample_list, rsID_list, AF_list, snp_info_list
-
-
 
 
 pam_at_beginning = False
@@ -228,9 +230,11 @@ for line in inTarget:
     guide = split[1]
     guide_no_bulge = split[1].replace('-', '')
     guide_no_pam = guide[pos_beg:pos_end]
-    if (guide_no_bulge + split[3] + split[5] + split[6]) != current_guide_chr_pos_direction: # SAVE TO FILE
-        current_guide_chr_pos_direction = guide_no_bulge + split[3] + split[5] + split[6] # update next cluster key 
-        
+    # SAVE TO FILE
+    if (guide_no_bulge + split[3] + split[5] + split[6]) != current_guide_chr_pos_direction:
+        current_guide_chr_pos_direction = guide_no_bulge + \
+            split[3] + split[5] + split[6]  # update next cluster key
+
         for t in cluster_to_save:
 
             if t[0] == 'DNA':
@@ -238,9 +242,10 @@ for line in inTarget:
                     t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
                 t.append(str(cfd_score))
             else:
-                cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
+                cfd_score = calc_cfd(t[1], t[2].upper()[
+                                     :-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
                 t.append(str(cfd_score))
-            #print(cfd_score)
+            # print(cfd_score)
         cluster_to_save.sort(key=lambda x: (
             float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
 
@@ -306,7 +311,6 @@ for line in inTarget:
 
         cluster_to_save = []
 
-    
     realTarget = split[2]
     replaceTarget = split[2].replace('-', '')
     refSeq = genomeStr[int(split[4]):int(split[4])+len(replaceTarget)].upper()
@@ -334,18 +338,19 @@ for line in inTarget:
                 listReplaceTarget[pos_c] = elem
                 listInfo = [[rsID[i], AF_var[i], snpInfo[i]]]
                 totalDict[0][(pos_c, elem)] = [listReplaceTarget,
-                                            set(sampleSet[i]), listInfo]
+                                               set(sampleSet[i]), listInfo]
     if countIUPAC > 0:
         createdNewLayer = True
-        for size in range(countIUPAC): # the time of the universe
+        for size in range(countIUPAC):  # the time of the universe
             if createdNewLayer:
                 createdNewLayer = False
             else:
                 break
             totalDict[size+1] = dict()
             for key in totalDict[size]:  # for each snp in target (fixpoint)
-                for newkey in totalDict[0]: # for each other snp in target (> fixpoint)
-                    if newkey[-2] > key[-2]: 
+                # for each other snp in target (> fixpoint)
+                for newkey in totalDict[0]:
+                    if newkey[-2] > key[-2]:
                         resultSet = totalDict[size][key][1].intersection(
                             totalDict[0][newkey][1])  # extract intersection of sample to generate possible multisnp target
                         if len(resultSet) > 0:  # if set is not null
@@ -354,7 +359,7 @@ for line in inTarget:
                             replaceTarget1 = totalDict[0][newkey][0].copy()
                             replaceTarget2 = totalDict[size][key][0].copy()
                             replaceTarget2[newkey[0]
-                                        ] = replaceTarget1[newkey[0]]  # dioboia
+                                           ] = replaceTarget1[newkey[0]]  # dioboia
                             listInfo2 = totalDict[size][key][2].copy()
                             listInfo2.extend(totalDict[0][newkey][2])
                             # add to next level the modified seq and set of samples and info of snp
@@ -366,12 +371,16 @@ for line in inTarget:
                                 totalDict[size+1][combinedKey][1]
                             totalDict[0][newkey][1] = totalDict[0][newkey][1] - \
                                 totalDict[size+1][combinedKey][1]
-                            
-                            if len(totalDict[size][key][1]) == 0:
-                                totalDict[size].pop(key, 'None')
-                            if len(totalDict[0][newkey][1]) == 0:
-                                totalDict[0].pop(newkey, 'None')
 
+                            # if len(totalDict[size][key][1]) == 0:
+                            #     totalDict[size].pop(key, 'None')
+                            # if len(totalDict[0][newkey][1]) == 0:
+                            #     totalDict[0].pop(newkey, 'None')
+
+        for count in totalDict:
+            for key in list(totalDict[count]):
+                if len(totalDict[count][key][1]) == 0:
+                    del totalDict[count][key]
 
         if revert:
             refSeq = reverse_complement_table(refSeq)
@@ -393,16 +402,18 @@ for line in inTarget:
             cfd_ref_seq = str(cfd_score)
         else:
             cfd_score = calc_cfd(split[1], refSeq_with_bulges.upper()[
-                                    :-3], refSeq_with_bulges.upper()[-2:], mm_scores, pam_scores, do_scores)
+                :-3], refSeq_with_bulges.upper()[-2:], mm_scores, pam_scores, do_scores)
             cfd_ref_seq = str(cfd_score)
 
         for level in totalDict:
             for key in totalDict[level]:
                 if len(totalDict[level][key][1]) > 0:
                     if revert:
-                        totalDict[level][key][0] =  reverse_complement_table(''.join(totalDict[level][key][0]))
+                        totalDict[level][key][0] = reverse_complement_table(
+                            ''.join(totalDict[level][key][0]))
                     else:
-                        totalDict[level][key][0] = ''.join(totalDict[level][key][0])
+                        totalDict[level][key][0] = ''.join(
+                            totalDict[level][key][0])
 
                     final_line = split.copy()
 
@@ -418,7 +429,8 @@ for line in inTarget:
                             mm_new_t += 1
                             tmp_pos_mms = position_t
                             if guide_no_pam[position_t] != '-':
-                                target_to_list[pos_beg + position_t] = char_t.lower()
+                                target_to_list[pos_beg +
+                                               position_t] = char_t.lower()
 
                     pam_ok = True
                     for pam_chr_pos, pam_chr in enumerate(target_to_list[pam_begin:pam_end]):
@@ -440,18 +452,19 @@ for line in inTarget:
                         # total differences between targets and guide (mismatches + bulges)
                         final_line[9] = str(mm_new_t)
                         if found_creation:
-                            final_result[10] = ''.join(target_to_list[pam_begin:pam_end])
+                            final_result[10] = ''.join(
+                                target_to_list[pam_begin:pam_end])
                         final_line[12] = ','.join(totalDict[level][key][1])
                         tmp_matrix = np.array(totalDict[level][key][2])
                         if tmp_matrix.shape[0] > 1:
-                            final_line[15] = ','.join(tmp_matrix[:,0])
-                            final_line[16] = ','.join(tmp_matrix[:,1])
-                            final_line[17] = ','.join(tmp_matrix[:,2])
+                            final_line[15] = ','.join(tmp_matrix[:, 0])
+                            final_line[16] = ','.join(tmp_matrix[:, 1])
+                            final_line[17] = ','.join(tmp_matrix[:, 2])
                         else:
                             final_line[15] = str(tmp_matrix[0][0])
                             final_line[16] = str(tmp_matrix[0][1])
                             final_line[17] = str(tmp_matrix[0][2])
-                        
+
                         final_line.append(refSeq_with_bulges)
                         final_line.append(cfd_ref_seq)
                         final_line.append(tmp_pos_mms)
@@ -469,15 +482,13 @@ for line in inTarget:
             cfd_ref_seq = str(cfd_score)
         else:
             cfd_score = calc_cfd(split[1], split[2].upper()[
-                                    :-3], split[2].upper()[-2:], mm_scores, pam_scores, do_scores)
+                :-3], split[2].upper()[-2:], mm_scores, pam_scores, do_scores)
             cfd_ref_seq = str(cfd_score)
 
         final_line.append("n")
         final_line.append(cfd_ref_seq)
         final_line.append(tmp_pos_mms)
         cluster_to_save.append(final_line)
-    
-
 
 
 cfd_best.close()
