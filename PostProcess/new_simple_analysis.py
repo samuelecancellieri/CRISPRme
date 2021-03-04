@@ -377,10 +377,11 @@ for line in inTarget:
                             # if len(totalDict[0][newkey][1]) == 0:
                             #     totalDict[0].pop(newkey, 'None')
 
-        for count in totalDict:
-            for key in list(totalDict[count]):
-                if len(totalDict[count][key][1]) == 0:
-                    del totalDict[count][key]
+        # remove empty set of SNPs without samples associated
+        # for count in totalDict:
+        #     for key in list(totalDict[count]):
+        #         if len(totalDict[count][key][1]) == 0:
+        #             del totalDict[count][key]
 
         if revert:
             refSeq = reverse_complement_table(refSeq)
