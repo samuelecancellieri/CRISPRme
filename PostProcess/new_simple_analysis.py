@@ -165,7 +165,10 @@ def retrieveFromDict(chr_pos):
     snp_info_list = []
     for entry in multi_entry:
         split_entry = entry.split(';')
-        sample_list.append(split_entry[0].strip().split(','))
+        samples = split_entry[0].strip().split(',')
+        if samples[0] == '': 
+            samples = []
+        sample_list.append(samples)
         snp_list.append(split_entry[1].strip().split(',')[1])
         rsID_list.append(split_entry[2].strip())
         AF_list.append(split_entry[3].strip())
