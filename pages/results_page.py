@@ -347,9 +347,8 @@ def downloadLinkPosition(n, file_to_load, search):  # file to load =
 
     return 'Generating download link, Please wait...', False
 
+
 # Generate download link sumbysample
-
-
 @app.callback(
     [Output('download-link-sumbysample', 'children'),
      Output('interval-sumbysample', 'disabled')],
@@ -2425,8 +2424,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 c = f_.readline().strip()
             ans.columns = c.split('\t')[:23]
             ans = ans.astype(str)
-            os.system(f"rm {tmp_file} &")
+            # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
+            os.system('zip ' + tmp_file.replace('.txt',
+                                                '.zip') + ' ' + tmp_file)  # create zip file to download result card /blocking operation on the system
+            # do not delete temp file until zip is created
+            os.system(f"rm {tmp_file} &")
 
         with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "w") as file_out:
             file_out.write(
@@ -2459,16 +2462,18 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # image_sample_card = 'data:image/png;base64,{}'.format(base64.b64encode(open(
     #    current_working_directory + 'Results/' + job_id + '/' + sample + "_personal_card.png", 'rb').read()).decode())
     try:
+        file_to_load = tmp_file.replace('.txt','.zip')
         ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
         ans = ans[ans_cols]
         out_1 = [
             # dbc.Col(
+                html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'),
             # html.A(
-            #    html.Img(src=image_sample_card, id='sample-card-img',
-            #             width="100%", height="auto"),
-            #    target="_blank",
+            #     html.Img(src=image_sample_card, id='sample-card-img',
+            #              width="100%", height="auto"),
+            #     target="_blank",
 
             # ),
             # width=10
