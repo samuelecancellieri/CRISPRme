@@ -2376,9 +2376,10 @@ def openResultDirectory(n, search, guide):
 
 
 @app.callback(
-    [  # Output('div-sample-card', 'children'),
-        Output('div-table-sample-card', 'children'),
-        Output('div-top-target-sample-card', 'children')],
+    [Output('download-link-personal-card', 'children'),
+     Output('download-link-personal-card', 'hidden'),
+     Output('div-table-sample-card', 'children'),
+     Output('div-top-target-sample-card', 'children')],
     [Input('button-sample-card', 'n_clicks')],
     [State('dropdown-sample-card', 'value'),
      State('general-profile-table', 'selected_cells'),
@@ -2462,14 +2463,16 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # image_sample_card = 'data:image/png;base64,{}'.format(base64.b64encode(open(
     #    current_working_directory + 'Results/' + job_id + '/' + sample + "_personal_card.png", 'rb').read()).decode())
     try:
-        file_to_load = tmp_file.replace('.txt','.zip')
+        file_to_load = tmp_file.replace('.txt', '.zip')
         ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
         ans = ans[ans_cols]
         out_1 = [
             # dbc.Col(
-                html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'),
+            html.A('Download zip', href=URL+'/Results/' + \
+                   job_id + '/' + file_to_load, target='_blank'),
+            False,
             # html.A(
             #     html.Img(src=image_sample_card, id='sample-card-img',
             #              width="100%", height="auto"),
@@ -2503,6 +2506,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             #    ),
             #    width=10
             # ),
+            html.A('Download zip', href=URL+'/Results/' + \
+                   job_id + '/' + file_to_load, target='_blank'),
+            False,
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
@@ -2762,7 +2768,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(html.Div(dcc.Dropdown(id='dropdown-sample-card', options=[
                                     {'label': sam, 'value': sam} for sam in samples], placeholder='Select a Sample'))),
                             dbc.Col(html.Div(html.Button(
-                                    'Generate', id='button-sample-card')))
+                                    'Generate', id='button-sample-card'))),
+                            dbc.Col(html.Div(),
+                                    id='download-link-personal-card', hidden=True)
                         ]
                     ),
                 ],
