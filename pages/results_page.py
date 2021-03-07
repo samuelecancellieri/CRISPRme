@@ -2769,8 +2769,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     {'label': sam, 'value': sam} for sam in samples], placeholder='Select a Sample'))),
                             dbc.Col(html.Div(html.Button(
                                     'Generate', id='button-sample-card'))),
-                            dbc.Col(html.Div(),
-                                    id='download-link-personal-card', hidden=True)
+                            dbc.Col(
+                                html.Div(id='download-link-personal-card', hidden=True))
                         ]
                     ),
                 ],
