@@ -2484,7 +2484,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
-                data=results_table.to_dict('records')
+                data=results_table.to_dict('records'),
+                # style_table={
+                #     'overflowX': 'scroll'
+                # }
             ),
             dash_table.DataTable(
                 id="results-table-risk",
@@ -2493,7 +2496,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 style_cell_conditional=[{
                     'if': {'column_id': 'Samples'},
                     'textAlign': 'left'
-                }]
+                }],
+                style_table={
+                    'overflowX': 'scroll'
+                }
             )
         ]
     except:
@@ -2958,7 +2964,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 backgroundColor="white"),
                             # , 'overflowX': 'auto'
                             style_table={
-                                'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px'},
+                                'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px', 'overflowX' : 'scroll'},
                             style_cell=[{
                                 # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                                 # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
