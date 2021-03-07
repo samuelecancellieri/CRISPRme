@@ -2470,7 +2470,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         ans = ans[ans_cols]
         out_1 = [
             # dbc.Col(
-            html.A('Download zip', href=URL+'/Results/' + \
+            html.A('Download private targets', href=URL+'/Results/' + \
                    job_id + '/' + file_to_load, target='_blank'),
             False,
             # html.A(
@@ -2506,7 +2506,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             #    ),
             #    width=10
             # ),
-            html.A('Download zip', href=URL+'/Results/' + \
+            html.A('Download private targets', href=URL+'/Results/' + \
                    job_id + '/' + file_to_load, target='_blank'),
             False,
             dash_table.DataTable(
