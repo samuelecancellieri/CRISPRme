@@ -2463,7 +2463,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # image_sample_card = 'data:image/png;base64,{}'.format(base64.b64encode(open(
     #    current_working_directory + 'Results/' + job_id + '/' + sample + "_personal_card.png", 'rb').read()).decode())
     try:
-        file_to_load = tmp_file.replace('.txt', '.zip')
+        file_to_load = job_id + '.' + sample + '.tmp_card.zip'
         ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
