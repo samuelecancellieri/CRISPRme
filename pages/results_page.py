@@ -2801,7 +2801,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        dff = pd.DataFrame(columns=['crRNA', 'Reference', 'DNA', 'Chromosome',
+        dff = pd.DataFrame(columns=['','crRNA', 'Reference', 'DNA', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
                                     'Bulge_Size', 'PAM_gen', 'SNP',
                                     'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
@@ -3450,6 +3450,10 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
 
                 data = data[sub_cols]
                 data.columns = [x[:-2] for x in sub_cols]
+                data[''] = [''] * data.shape[0]
+                data_cols = data.columns.tolist()
+                data_cols.remove('')
+                data_cols.insert(0, '')
 
             data = data.to_dict('records')
     else:
