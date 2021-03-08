@@ -2493,10 +2493,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 id="results-table-risk",
                 columns=[{"name": i, "id": i} for i in ans.columns],
                 data=ans.to_dict('records'),
-                style_cell_conditional=[{
+                style_cell_conditional=[
                     {'if': {'column_id': 'Bulge Type'},
                      'width': '10%'},
-                }],
+                ],
                 style_table={
                     'overflowX': 'scroll'
                 }
