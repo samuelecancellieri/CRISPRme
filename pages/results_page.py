@@ -2292,9 +2292,11 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     radar_img = '/imgs/summary_single_guide_' + \
         guide.replace("N", "") + '_' + str(mm) + '.' + str(bulge) + '_REF.png'
 
+    img_found = False
     try:
         radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
             current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
+        img_found = True
     except:
         radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
             current_working_directory+'assets/placeholder.png', 'rb').read()).decode())
@@ -2303,31 +2305,49 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     except:
         radar_href = ''
 
-    guide_images.extend([
+    if img_found:
+        guide_images.extend([
 
-        dbc.Row(html.Br()),
-        dbc.Row(
-            [
-                dbc.Col(
-                    html.A(
-                        html.Img(src=radar_src, id='radar-img-guide',
-                                 width="100%", height="auto"),
-                        target="_blank",
-                        href=radar_href
-                    ),
-                    # width=10
-                )
-            ]
-        ),
-    ])
+            dbc.Row(html.Br()),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        html.A(
+                            html.Img(src=radar_src, id='radar-img-guide',
+                                    width="100%", height="auto"),
+                            target="_blank",
+                            href=radar_href
+                        ),
+                        # width=10
+                    )
+                ]
+            ),
+        ])
+    else:
+        guide_images.extend([
+
+            dbc.Row(html.Br()),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        html.P(
+                            "IMAGE NOT FOUND FOR THIS MM+BULGE COMBINATION"
+                        ),
+                        # width=10
+                    )
+                ]
+            ),
+        ])
     class_images = [(sample, 'Samples'), (population, 'Population'),
                     (superpopulation, 'Superpopulation')]
 
     for c in class_images:
+        img_found = False
         if c[0]:
             try:
                 first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(open(job_directory + '/imgs/summary_single_guide_' + guide.replace(
                     "N", "") + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png', 'rb').read()).decode())
+                img_found = True
             except:
                 first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
                     open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
@@ -2339,22 +2359,37 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                 first_img_href = ''
             sample_images.append(dbc.Row(html.Br()))
 
-            sample_images.append(
-                dbc.Row(
-                    [
-                        dbc.Col(
-                            html.A(
-                                html.Img(src=first_img_source,
-                                         width="100%", height="auto"),
-                                target="_blank",
-                                href=first_img_href
+            if img_found:
+                sample_images.append(
+                    dbc.Row(
+                        [
+                            dbc.Col(
+                                html.A(
+                                    html.Img(src=first_img_source,
+                                            width="100%", height="auto"),
+                                    target="_blank",
+                                    href=first_img_href
+                                ),
+                                # width=10
                             ),
-                            # width=10
-                        ),
-                    ],
-                    no_gutters=True
-                ),
-            )
+                        ],
+                        no_gutters=True
+                    ),
+                )
+            else:
+                sample_images.append(
+                    dbc.Row(
+                        [
+                            dbc.Col(
+                                html.P(
+                                    "IMAGE NOT FOUND FOR THIS MM+BULGE COMBINATION"
+                                ),
+                                # width=10
+                            ),
+                        ],
+                        no_gutters=True
+                    ),
+                )
     return guide_images, sample_images
 # Open in browser the result directory
 
@@ -3133,9 +3168,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # except:
         #    barplot_href = ''
 
+        img_found = False
         try:
             radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
                 current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
+            img_found = True
         except:
             radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(
                 open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
@@ -3193,47 +3230,87 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             )
         )
         fl.append(html.Hr())
-        fl.append(
-            html.Div(
-                [
-                    dbc.Row(
-                        [
-                            dbc.Col([  # Guide part
-                                    html.Div(
-                                        [
+        if img_found:
+            fl.append(
+                html.Div(
+                    [
+                        dbc.Row(
+                            [
+                                dbc.Col([  # Guide part
+                                        html.Div(
+                                            [
 
-                                            dbc.Row(html.Br()),
-                                            dbc.Row(
-                                                [
-                                                    dbc.Col(
-                                                        html.A(
-                                                            html.Img(
-                                                                src=radar_src, id='barplot-img-guide', width="100%", height="auto"),
-                                                            target="_blank",
-                                                            href=radar_href
-                                                        ),
-                                                        # width=10
-                                                    )
-                                                ]
-                                            ),
-                                        ],
-                                        id='div-guide-image'
-                                    )
-                                    ]),
-                            dbc.Col([  # Sample part
-                                    html.Div(
-                                        [
+                                                dbc.Row(html.Br()),
+                                                dbc.Row(
+                                                    [
+                                                        dbc.Col(
+                                                            html.A(
+                                                                html.Img(
+                                                                    src=radar_src, id='barplot-img-guide', width="100%", height="auto"),
+                                                                target="_blank",
+                                                                href=radar_href
+                                                            ),
+                                                            # width=10
+                                                        )
+                                                    ]
+                                                ),
+                                            ],
+                                            id='div-guide-image'
+                                        )
+                                        ]),
+                                dbc.Col([  # Sample part
+                                        html.Div(
+                                            [
 
-                                        ],
-                                        id='div-sample-image'
-                                    )
-                                    ])
-                        ]
-                    )
-                ]
+                                            ],
+                                            id='div-sample-image'
+                                        )
+                                        ])
+                            ]
+                        )
+                    ]
 
+                )
             )
-        )
+        else:
+            fl.append(
+                html.Div(
+                    [
+                        dbc.Row(
+                            [
+                                dbc.Col([  # Guide part
+                                        html.Div(
+                                            [
+
+                                                dbc.Row(html.Br()),
+                                                dbc.Row(
+                                                    [
+                                                        dbc.Col(
+                                                            html.P(
+                                                                "NO IMAGE FOUND FOR THIS MM+BULGE COMBINATION"
+                                                            ),
+                                                            # width=10
+                                                        )
+                                                    ]
+                                                ),
+                                            ],
+                                            id='div-guide-image'
+                                        )
+                                        ]),
+                                dbc.Col([  # Sample part
+                                        html.Div(
+                                            [
+
+                                            ],
+                                            id='div-sample-image'
+                                        )
+                                        ])
+                            ]
+                        )
+                    ]
+
+                )
+            )
 
         fl.append(html.Br())
         fl.append(html.Br())
