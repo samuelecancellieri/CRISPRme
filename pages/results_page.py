@@ -2954,8 +2954,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     [
                         dbc.Col(
                             [
-                            html.Br(),
-                            html.Hr(),
+                            #html.Br(),
+                            #html.Hr(),
                             html.Div(dash_table.DataTable(
                                 id='live_table',
                                 columns=[{"name": i, "id": i}
