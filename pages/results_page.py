@@ -2330,7 +2330,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
             dbc.Row(
                 [
                     dbc.Col(
-                        html.P(
+                        html.H2(
                             "IMAGE NOT FOUND FOR THIS MM+BULGE COMBINATION"
                         ),
                         # width=10
@@ -2381,7 +2381,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     dbc.Row(
                         [
                             dbc.Col(
-                                html.P(
+                                html.H2(
                                     "IMAGE NOT FOUND FOR THIS MM+BULGE COMBINATION"
                                 ),
                                 # width=10
@@ -3286,7 +3286,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                                 dbc.Row(
                                                     [
                                                         dbc.Col(
-                                                            html.P(
+                                                            html.H2(
                                                                 "NO IMAGE FOUND FOR THIS MM+BULGE COMBINATION"
                                                             ),
                                                             # width=10
