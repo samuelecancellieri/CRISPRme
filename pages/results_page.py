@@ -2949,13 +2949,15 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             ], width=1
                         ),
                         dbc.Row(
-                                [dbc.Col(
-                                    [
-                                        html.Br(),
-                                        html.Hr(),
-                                    ]
-                                )
-                        ),
+                                [
+                                    dbc.Col(
+                                        [
+                                            html.Br(),
+                                            html.Hr(),
+                                        ]
+                                    )
+                                ]
+                        )
                     ], justify='center'
                 ),
                 dbc.Row(
