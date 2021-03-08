@@ -2494,7 +2494,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 columns=[{"name": i, "id": i} for i in ans.columns],
                 data=ans.to_dict('records'),
                 style_cell_conditional=[
-                    {'if': {'column_id': 'Bulge Type'},
+                    {'if': {'column_id': 'Bulge_type'},
                      'width': '10%'},
                 ],
                 style_table={
