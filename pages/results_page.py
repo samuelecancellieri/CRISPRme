@@ -2464,7 +2464,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     #    current_working_directory + 'Results/' + job_id + '/' + sample + "_personal_card.png", 'rb').read()).decode())
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
-        ans[''] = [''] * ans.shape[0]
+        ans[''] = [''] * ans.shape[0] #taaaaaaaaaac
         ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
@@ -2496,10 +2496,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 id="results-table-risk",
                 columns=[{"name": i, "id": i} for i in ans.columns],
                 data=ans.to_dict('records'),
-                style_cell_conditional=[
-                    {'if': {'column_id': 'Bulge_type'},
-                     'width': '250px'},
-                ],
+                # style_cell_conditional=[
+                #     {'if': {'column_id': 'Bulge_type'},
+                #      'width': '250px'},
+                # ],
                 style_table={
                     'overflowX': 'scroll'
                 }
