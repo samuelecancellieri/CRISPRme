@@ -347,9 +347,8 @@ def downloadLinkPosition(n, file_to_load, search):  # file to load =
 
     return 'Generating download link, Please wait...', False
 
+
 # Generate download link sumbysample
-
-
 @app.callback(
     [Output('download-link-sumbysample', 'children'),
      Output('interval-sumbysample', 'disabled')],
@@ -2377,9 +2376,10 @@ def openResultDirectory(n, search, guide):
 
 
 @app.callback(
-    [  # Output('div-sample-card', 'children'),
-        Output('div-table-sample-card', 'children'),
-        Output('div-top-target-sample-card', 'children')],
+    [Output('download-link-personal-card', 'children'),
+     Output('download-link-personal-card', 'hidden'),
+     Output('div-table-sample-card', 'children'),
+     Output('div-top-target-sample-card', 'children')],
     [Input('button-sample-card', 'n_clicks')],
     [State('dropdown-sample-card', 'value'),
      State('general-profile-table', 'selected_cells'),
@@ -2425,8 +2425,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 c = f_.readline().strip()
             ans.columns = c.split('\t')[:23]
             ans = ans.astype(str)
-            os.system(f"rm {tmp_file} &")
+            # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
+            os.system('zip ' + tmp_file.replace('.txt',
+                                                '.zip') + ' ' + tmp_file)  # create zip file to download result card /blocking operation on the system
+            # do not delete temp file until zip is created
+            os.system(f"rm {tmp_file} &")
 
         with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "w") as file_out:
             file_out.write(
@@ -2459,16 +2463,20 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # image_sample_card = 'data:image/png;base64,{}'.format(base64.b64encode(open(
     #    current_working_directory + 'Results/' + job_id + '/' + sample + "_personal_card.png", 'rb').read()).decode())
     try:
+        file_to_load = job_id + '.' + sample + '.tmp_card.zip'
         ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
         ans = ans[ans_cols]
         out_1 = [
             # dbc.Col(
+            html.A('Download private targets', href=URL+'/Results/' + \
+                   job_id + '/' + file_to_load, target='_blank'),
+            False,
             # html.A(
-            #    html.Img(src=image_sample_card, id='sample-card-img',
-            #             width="100%", height="auto"),
-            #    target="_blank",
+            #     html.Img(src=image_sample_card, id='sample-card-img',
+            #              width="100%", height="auto"),
+            #     target="_blank",
 
             # ),
             # width=10
@@ -2476,7 +2484,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
-                data=results_table.to_dict('records')
+                data=results_table.to_dict('records'),
+                # style_table={
+                #     'overflowX': 'scroll'
+                # }
             ),
             dash_table.DataTable(
                 id="results-table-risk",
@@ -2485,7 +2496,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 style_cell_conditional=[{
                     'if': {'column_id': 'Samples'},
                     'textAlign': 'left'
-                }]
+                }],
+                style_table={
+                    'overflowX': 'scroll'
+                }
             )
         ]
     except:
@@ -2498,6 +2512,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             #    ),
             #    width=10
             # ),
+            html.A('Download private targets', href=URL+'/Results/' + \
+                   job_id + '/' + file_to_load, target='_blank'),
+            False,
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
@@ -2757,7 +2774,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(html.Div(dcc.Dropdown(id='dropdown-sample-card', options=[
                                     {'label': sam, 'value': sam} for sam in samples], placeholder='Select a Sample'))),
                             dbc.Col(html.Div(html.Button(
-                                    'Generate', id='button-sample-card')))
+                                    'Generate', id='button-sample-card'))),
+                            dbc.Col(
+                                html.Div(id='download-link-personal-card', hidden=True))
                         ]
                     ),
                 ],
@@ -2945,7 +2964,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 backgroundColor="white"),
                             # , 'overflowX': 'auto'
                             style_table={
-                                'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px'},
+                                'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px', 'overflowX' : 'scroll'},
                             style_cell=[{
                                 # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                                 # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
