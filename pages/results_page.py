@@ -2976,7 +2976,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     backgroundColor="white"),
                                 # , 'overflowX': 'auto'
                                 style_table={
-                                    'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px', 'overflowX' : 'scroll'},
+                                    'overflowX' : 'scroll'}, #'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px', 
                                 style_cell=[{
                                     # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                                     # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
