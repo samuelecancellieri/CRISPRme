@@ -2464,9 +2464,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     #    current_working_directory + 'Results/' + job_id + '/' + sample + "_personal_card.png", 'rb').read()).decode())
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
+        ans[''] = [''] * ans.shape[0]
         ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
+        ans_cols.remove('')
+        ans_cols.insert(0, '')
         ans = ans[ans_cols]
         out_1 = [
             # dbc.Col(
