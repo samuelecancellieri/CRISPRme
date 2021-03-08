@@ -2952,51 +2952,55 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 ),
                 dbc.Row(
                     [
-                        html.Br(),
-                        html.Hr(),
-                        html.Div(dash_table.DataTable(
-                            id='live_table',
-                            columns=[{"name": i, "id": i}
-                                     for i in dff.columns],
-                            # style_cell=dict(textAlign='left'),
-                            # style_header=dict(backgroundColor="white"),
-                            style_data=dict(
-                                backgroundColor="white"),
-                            # , 'overflowX': 'auto'
-                            style_table={
-                                'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px', 'overflowX' : 'scroll'},
-                            style_cell=[{
-                                # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
-                                # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
-                                'width': '{}%'.format(len(dff.columns)),
-                                'whiteSpace': 'normal'
-                            }],
-                            # style_cell_conditional=[{'if': {'column_id': 'Annotation_Type'},
-                            #                          'textAlign': 'left',
-                            #                        }],
-                            #                        {'if': {'column_id':'MMBLG_Samples_2'},
-                            #                          'textAlign': 'left',
-                            #                          'overflow': 'hidden',
-                            #                          'textOverflow': 'ellipsis',
-                            #                          'maxWidth': 100,
-                            #                        },
-                            #                        {'if': {'column_id':'Annotation_Type_1'},
-                            #                          'textAlign': 'left',
-                            #                          'overflow': 'hidden',
-                            #                          'textOverflow': 'ellipsis',
-                            #                          'maxWidth': 200,
-                            #                        },
-                            #                        {'if': {'column_id':'MMBLG_Annotation_Type_2'},
-                            #                          'textAlign': 'left',
-                            #                          'overflow': 'hidden',
-                            #                          'textOverflow': 'ellipsis',
-                            #                          'maxWidth': 200,
-                            #                        },
-                            #                        ],
-                            page_current=0,
-                            page_size=20,
-                            page_action='custom'
-                        )
+                        dbc.Col(
+                            [
+                            html.Br(),
+                            html.Hr(),
+                            html.Div(dash_table.DataTable(
+                                id='live_table',
+                                columns=[{"name": i, "id": i}
+                                        for i in dff.columns],
+                                # style_cell=dict(textAlign='left'),
+                                # style_header=dict(backgroundColor="white"),
+                                style_data=dict(
+                                    backgroundColor="white"),
+                                # , 'overflowX': 'auto'
+                                style_table={
+                                    'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px', 'overflowX' : 'scroll'},
+                                style_cell=[{
+                                    # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                                    # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
+                                    'width': '{}%'.format(len(dff.columns)),
+                                    'whiteSpace': 'normal'
+                                }],
+                                # style_cell_conditional=[{'if': {'column_id': 'Annotation_Type'},
+                                #                          'textAlign': 'left',
+                                #                        }],
+                                #                        {'if': {'column_id':'MMBLG_Samples_2'},
+                                #                          'textAlign': 'left',
+                                #                          'overflow': 'hidden',
+                                #                          'textOverflow': 'ellipsis',
+                                #                          'maxWidth': 100,
+                                #                        },
+                                #                        {'if': {'column_id':'Annotation_Type_1'},
+                                #                          'textAlign': 'left',
+                                #                          'overflow': 'hidden',
+                                #                          'textOverflow': 'ellipsis',
+                                #                          'maxWidth': 200,
+                                #                        },
+                                #                        {'if': {'column_id':'MMBLG_Annotation_Type_2'},
+                                #                          'textAlign': 'left',
+                                #                          'overflow': 'hidden',
+                                #                          'textOverflow': 'ellipsis',
+                                #                          'maxWidth': 200,
+                                #                        },
+                                #                        ],
+                                page_current=0,
+                                page_size=20,
+                                page_action='custom'
+                            )
+                            ),
+                            ],
                         ),
                     ],
                 ),
