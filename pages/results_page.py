@@ -2495,7 +2495,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 data=ans.to_dict('records'),
                 style_cell_conditional=[
                     {'if': {'column_id': 'Bulge_type'},
-                     'width': '2000px'},
+                     'width': '250px'},
                 ],
                 style_table={
                     'overflowX': 'scroll'
