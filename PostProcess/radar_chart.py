@@ -166,14 +166,14 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     strArray = np.array([list(guide)])
     table = plt.table(cellText=strArray, loc='bottom',
-                      cellLoc='center', rowLoc='bottom')
+                      cellLoc='bottom', rowLoc='bottom')
     table.auto_set_font_size(False)
     table.set_fontsize(12)
     # table.scale(1, 1.6)
     table.xticks = ([])
     table.yticks = ([])
 
-    plt.suptitle(str(mismatch)+"_Mismatches+"+str(bulge)+"_Bulge_"+str(source),
+    plt.suptitle(str(mismatch)+" Mismatches+ "+str(bulge)+" Bulge "+str(source),
                  horizontalalignment='center', color='black', size=25)
 
     plt.tight_layout()
