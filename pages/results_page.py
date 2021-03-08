@@ -2792,7 +2792,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
         )
         fl.append(html.Div(
-            '', id='div-top-target-sample-card', style={'text-align': 'center', 'margin-left':'1%', 'margin-right':'1%'}
+            '', id='div-top-target-sample-card', style={'text-align': 'center'} #, 'margin-left':'1%', 'margin-right':'1%'
         )
         )
         fl.append(html.Div('', id='div-sample-card'))
