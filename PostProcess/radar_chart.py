@@ -160,7 +160,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     plt.xlim(0, len(guide))
     strArray = np.array([list(guide)])
-    plt.xticks(ticks=range(len(strArray)), labels=strArray)
+    plt.xticks(ticks=ind, labels=strArray)
 
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
                ('A', 'C', 'G', 'T', 'RNA', 'DNA'), fontsize=13, loc='upper right', ncol=6)
