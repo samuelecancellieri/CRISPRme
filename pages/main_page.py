@@ -201,6 +201,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # 3) Set parameters
 
     # ANNOTATION CHECK
+    annotation_name = current_working_directory+'/PostProcess/vuoto.txt'
     if 'EN' in annotation_var:
         # annotation_name = 'hg38_ref.annotations.bed'
         annotation_name = 'gencode_encode.hg38.bed'
@@ -213,10 +214,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                 f"tail -n +2 {current_working_directory}/annotations/{annotation_input} >> {current_working_directory}/annotations/ann_tmp_{job_id}.bed")
             os.system(
                 f"mv {current_working_directory}/annotations/ann_tmp_{job_id}.bed {current_working_directory}/annotations/{annotation_name}")
-    else:
+    elif 'MA' in annotation_var:
         annotation_name = annotation_input
-    if '' not in annotation_var:
-        annotation_name = current_working_directory+'/PostProcess/vuoto.txt'
 
     # GENOME TYPE CHECK
     ref_comparison = False
