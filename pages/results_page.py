@@ -3288,7 +3288,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                                     [
                                                         dbc.Col(
                                                             html.H2(
-                                                                "NO IMAGE FOUND FOR THIS MM+BULGE COMBINATION"
+                                                                "No result found for this combination of mismatches and bulges"
                                                             ),
                                                             # width=10
                                                         )
