@@ -139,7 +139,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                 # motifDict[nuc][count] = float(
                 #     str(float(motifDict[nuc][count])/float(maxmax))[0:5])
 
-    ind = np.arange(0, len(guide), 1) + 0.15
+    # ind = np.arange(0, len(guide), 1) + 0.15
+    ind = np.arange(0, len(guide), 1)
     width = 0.7  # the width of the bars: can also be len(x) sequence
 
     motif = plt.subplot(2, 1, 2, frameon=False)
@@ -164,7 +165,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.xticks(ticks=ind, labels=list(guide))
 
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
-               ('A', 'C', 'G', 'T', 'RNA', 'DNA'), fontsize=13, loc='upper right', ncol=6)
+               ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=13, loc='upper right', ncol=6)
 
     # strArray = np.array([list(guide)])
     # table = plt.table(cellText=strArray, loc='bottom',
@@ -180,8 +181,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                  horizontalalignment='center', color='black', size=25)
 
     plt.tight_layout()
-    plt.subplots_adjust(top=0.85, bottom=0.05, left=0.07,
-                        right=0.95, wspace=0.45)
+    # plt.subplots_adjust(top=0.85, bottom=0.05, left=0.05,
+    #                     right=0.95, wspace=0.45)
     plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
                 "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
 
