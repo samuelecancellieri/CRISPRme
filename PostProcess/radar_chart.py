@@ -161,7 +161,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     p6 = plt.bar(ind, DNA, width, bottom=C+G+A+T+RNA,
                  align='center')
 
-    plt.xlim(0, len(guide))
+    # plt.xlim(0, len(guide))
     # strArray = np.array([list(guide)])
     plt.xticks(ticks=ind, labels=list(guide))
 
