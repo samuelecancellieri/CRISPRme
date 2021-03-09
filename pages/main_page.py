@@ -862,7 +862,7 @@ def availableCAS():
         if 'tempPAM' in cas_name:  # Skip the temp pam used for updating dictionaries
             pass
         else:
-            #if 'Cas' in cas_name:
+            # if 'Cas' in cas_name:
             cas_prot = cas_name.split('.')[0].split('-')[2]
             cas_set.add(cas_prot)
     for ele in sorted(cas_set):
@@ -994,7 +994,7 @@ def indexPage():
             dcc.Textarea(id='text-guides', placeholder='GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC', style={
                          'width': '300px', 'height': '30px'}),
             dbc.FormText(
-                'Note: a maximum number of 1000 sequences can be provided', color='secondary')
+                'Note: a maximum number of 1000 sequences can be provided, protospace must be provided without PAM', color='secondary')
         ],
         style={'width': '300px'}  # NOTE same as text-area
     )
