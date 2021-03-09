@@ -2290,7 +2290,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     sample_images = []
 
     radar_img = '/imgs/summary_single_guide_' + \
-        guide.replace("N", "") + '_' + str(mm) + '.' + str(bulge) + '_REF.png'
+        guide.replace("N", "") + '_' + str(mm) + '.' + str(bulge) + '_TOTAL.png'
 
     img_found = False
     try:
@@ -3156,7 +3156,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         fl.append(html.Br())
 
         radar_img = '/imgs/summary_single_guide_' + guide.replace("N", "") + '_' + str(
-            0) + '_total_0.0_REF.png'  # TODO choose between 0 mm and max used mms
+            0) + '_total_0.0_TOTAL.png'  # TODO choose between 0 mm and max used mms
 
         # barplot_img = 'summary_histogram_' + guide + '_' + str(0) + '_total.png'
         # try:            #NOTE serve per non generare errori se il barplot non è stato fatto
