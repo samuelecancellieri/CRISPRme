@@ -124,6 +124,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.axis('off')
     table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
                       loc='best', colWidths=[0.25, 0.25])
+    table.auto_set_font_size(False)
+    table.set_fontsize(14)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):

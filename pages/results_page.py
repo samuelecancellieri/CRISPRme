@@ -2290,7 +2290,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     sample_images = []
 
     radar_img = '/imgs/summary_single_guide_' + \
-        guide.replace("N", "") + '_' + str(mm) + '.' + str(bulge) + '_TOTAL.png'
+        guide.replace("N", "") + '_' + str(mm) + \
+        '.' + str(bulge) + '_TOTAL.png'
 
     img_found = False
     try:
@@ -2314,7 +2315,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     dbc.Col(
                         html.A(
                             html.Img(src=radar_src, id='radar-img-guide',
-                                    width="100%", height="auto"),
+                                     width="100%", height="auto"),
                             target="_blank",
                             href=radar_href
                         ),
@@ -2366,7 +2367,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                             dbc.Col(
                                 html.A(
                                     html.Img(src=first_img_source,
-                                            width="100%", height="auto"),
+                                             width="100%", height="auto"),
                                     target="_blank",
                                     href=first_img_href
                                 ),
@@ -2499,7 +2500,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     #    current_working_directory + 'Results/' + job_id + '/' + sample + "_personal_card.png", 'rb').read()).decode())
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
-        ans[''] = [''] * ans.shape[0] #taaaaaaaaaac
+        ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
         ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
@@ -2823,11 +2824,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
 
         fl.append(html.Div(
-            '', id='div-table-sample-card', style={'text-align': 'center', 'margin-left':'1%', 'margin-right':'1%'}
+            '', id='div-table-sample-card', style={'text-align': 'center', 'margin-left': '1%', 'margin-right': '1%'}
         )
         )
         fl.append(html.Div(
-            '', id='div-top-target-sample-card', style={'text-align': 'center', 'margin-left':'1%', 'margin-right':'1%'}
+            '', id='div-top-target-sample-card', style={'text-align': 'center', 'margin-left': '1%', 'margin-right': '1%'}
         )
         )
         fl.append(html.Div('', id='div-sample-card'))
@@ -2836,7 +2837,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        dff = pd.DataFrame(columns=['','crRNA', 'Reference', 'DNA', 'Chromosome',
+        dff = pd.DataFrame(columns=['', 'crRNA', 'Reference', 'DNA', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
                                     'Bulge_Size', 'PAM_gen', 'SNP',
                                     'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
@@ -2987,14 +2988,14 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             ], width=1
                         ),
                         dbc.Row(
-                                [
-                                    dbc.Col(
-                                        [
-                                            html.Br(),
-                                            html.Hr(),
-                                        ]
-                                    )
-                                ]
+                            [
+                                dbc.Col(
+                                    [
+                                        html.Br(),
+                                        html.Hr(),
+                                    ]
+                                )
+                            ]
                         )
                     ], justify='center'
                 ),
@@ -3002,52 +3003,52 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     [
                         dbc.Col(
                             [
-                            #html.Br(),
-                            #html.Hr(),
-                            html.Div(dash_table.DataTable(
-                                id='live_table',
-                                columns=[{"name": i, "id": i}
-                                        for i in dff.columns],
-                                # style_cell=dict(textAlign='left'),
-                                # style_header=dict(backgroundColor="white"),
-                                style_data=dict(
-                                    backgroundColor="white"),
-                                # , 'overflowX': 'auto'
-                                style_table={
-                                    'overflowX' : 'scroll'}, #'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px', 
-                                style_cell=[{
-                                    # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
-                                    # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
-                                    'width': '{}%'.format(len(dff.columns)),
-                                    'whiteSpace': 'normal'
-                                }],
-                                # style_cell_conditional=[{'if': {'column_id': 'Annotation_Type'},
-                                #                          'textAlign': 'left',
-                                #                        }],
-                                #                        {'if': {'column_id':'MMBLG_Samples_2'},
-                                #                          'textAlign': 'left',
-                                #                          'overflow': 'hidden',
-                                #                          'textOverflow': 'ellipsis',
-                                #                          'maxWidth': 100,
-                                #                        },
-                                #                        {'if': {'column_id':'Annotation_Type_1'},
-                                #                          'textAlign': 'left',
-                                #                          'overflow': 'hidden',
-                                #                          'textOverflow': 'ellipsis',
-                                #                          'maxWidth': 200,
-                                #                        },
-                                #                        {'if': {'column_id':'MMBLG_Annotation_Type_2'},
-                                #                          'textAlign': 'left',
-                                #                          'overflow': 'hidden',
-                                #                          'textOverflow': 'ellipsis',
-                                #                          'maxWidth': 200,
-                                #                        },
-                                #                        ],
-                                page_current=0,
-                                page_size=20,
-                                page_action='custom'
-                            )
-                            ),
+                                # html.Br(),
+                                # html.Hr(),
+                                html.Div(dash_table.DataTable(
+                                    id='live_table',
+                                    columns=[{"name": i, "id": i}
+                                             for i in dff.columns],
+                                    # style_cell=dict(textAlign='left'),
+                                    # style_header=dict(backgroundColor="white"),
+                                    style_data=dict(
+                                        backgroundColor="white"),
+                                    # , 'overflowX': 'auto'
+                                    style_table={
+                                        'overflowX': 'scroll'},  # 'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px',
+                                    style_cell=[{
+                                        # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                                        # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
+                                        'width': '{}%'.format(len(dff.columns)),
+                                        'whiteSpace': 'normal'
+                                    }],
+                                    # style_cell_conditional=[{'if': {'column_id': 'Annotation_Type'},
+                                    #                          'textAlign': 'left',
+                                    #                        }],
+                                    #                        {'if': {'column_id':'MMBLG_Samples_2'},
+                                    #                          'textAlign': 'left',
+                                    #                          'overflow': 'hidden',
+                                    #                          'textOverflow': 'ellipsis',
+                                    #                          'maxWidth': 100,
+                                    #                        },
+                                    #                        {'if': {'column_id':'Annotation_Type_1'},
+                                    #                          'textAlign': 'left',
+                                    #                          'overflow': 'hidden',
+                                    #                          'textOverflow': 'ellipsis',
+                                    #                          'maxWidth': 200,
+                                    #                        },
+                                    #                        {'if': {'column_id':'MMBLG_Annotation_Type_2'},
+                                    #                          'textAlign': 'left',
+                                    #                          'overflow': 'hidden',
+                                    #                          'textOverflow': 'ellipsis',
+                                    #                          'maxWidth': 200,
+                                    #                        },
+                                    #                        ],
+                                    page_current=0,
+                                    page_size=20,
+                                    page_action='custom'
+                                )
+                                ),
                             ],
                         ),
                     ],
