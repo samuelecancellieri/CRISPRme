@@ -3,7 +3,6 @@ genome_library/*
 Results/*
 dictionaries/*
 VCF/*
-annotations/*
 *.pyc
 gencode/*
 Cache/*
