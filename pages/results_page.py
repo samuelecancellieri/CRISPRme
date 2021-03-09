@@ -2332,7 +2332,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                 [
                     dbc.Col(
                         html.H2(
-                            "IMAGE NOT FOUND FOR THIS MM+BULGE COMBINATION"
+                            "No result found for this combination of mismatches and bulges"
                         ),
                         # width=10
                     )
@@ -2383,7 +2383,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                         [
                             dbc.Col(
                                 html.H2(
-                                    "IMAGE NOT FOUND FOR THIS MM+BULGE COMBINATION"
+                                    "No result found for this combination of mismatches and bulges"
                                 ),
                                 # width=10
                             ),
