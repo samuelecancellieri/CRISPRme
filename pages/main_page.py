@@ -215,6 +215,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                 f"mv {current_working_directory}/annotations/ann_tmp_{job_id}.bed {current_working_directory}/annotations/{annotation_name}")
     else:
         annotation_name = annotation_input
+    if '' not in annotation_var:
+        annotation_name = current_working_directory+'/PostProcess/vuoto.txt'
 
     # GENOME TYPE CHECK
     ref_comparison = False
