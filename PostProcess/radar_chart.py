@@ -141,7 +141,6 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     # ind = np.arange(0, len(guide), 1) + 0.15
     ind = np.arange(0, len(guide), 1)
-    ind[0] = ind[0]+0.15
     width = 0.7  # the width of the bars: can also be len(x) sequence
 
     motif = plt.subplot(2, 1, 2, frameon=False)
