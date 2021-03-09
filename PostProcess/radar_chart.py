@@ -159,13 +159,13 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     p6 = plt.bar(ind, DNA, width, bottom=C+G+A+T+RNA, align='edge')
 
     plt.xlim(0, len(guide))
-    strArray = np.array([list(guide)])
-    plt.xticks(ticks=ind, labels=strArray)
+    # strArray = np.array([list(guide)])
+    plt.xticks(ticks=ind, labels=list(guide))
 
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
                ('A', 'C', 'G', 'T', 'RNA', 'DNA'), fontsize=13, loc='upper right', ncol=6)
 
-    strArray = np.array([list(guide)])
+    # strArray = np.array([list(guide)])
     # table = plt.table(cellText=strArray, loc='bottom',
     #                   cellLoc='center', rowLoc='bottom')
     # table.auto_set_font_size(False)
