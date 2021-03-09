@@ -277,10 +277,10 @@ def fillDict(guide, guideDict, motifDict):
         mismatch = int(split[8])  # mm extracted from target file
         bulge = int(split[9])  # bul extracted from target file
 
-        # add target to reference dict
+        # add target to TOTAL dict
         # print(mismatch, bulge, guideDict[mismatch][bulge]['TOTAL']['General'])
         guideDict[mismatch][bulge]['TOTAL']['General'] += 1
-        # find annotations and add data to the reference dict
+        # find annotations and add data to the TOTAL dict
         if split[14] != 'n':
             annotationsList = split[14].strip().split(',')
             for annotation in annotationsList:
