@@ -151,12 +151,12 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     RNA = np.array(motifDict['RNA'], dtype=float)
     DNA = np.array(motifDict['DNA'], dtype=float)
 
-    p1 = plt.bar(ind, A, width, align='edge')
-    p2 = plt.bar(ind, C, width, bottom=A, align='edge')
-    p3 = plt.bar(ind, G, width, bottom=A+C, align='edge')
-    p4 = plt.bar(ind, T, width, bottom=C+G+A, align='edge')
-    p5 = plt.bar(ind, RNA, width, bottom=C+G+A+T, align='edge')
-    p6 = plt.bar(ind, DNA, width, bottom=C+G+A+T+RNA, align='edge')
+    p1 = plt.bar(ind, A, width, align='center')
+    p2 = plt.bar(ind, C, width, bottom=A, align='center')
+    p3 = plt.bar(ind, G, width, bottom=A+C, align='center')
+    p4 = plt.bar(ind, T, width, bottom=C+G+A, align='center')
+    p5 = plt.bar(ind, RNA, width, bottom=C+G+A+T, align='center')
+    p6 = plt.bar(ind, DNA, width, bottom=C+G+A+T+RNA, align='center')
 
     plt.xlim(0, len(guide))
     # strArray = np.array([list(guide)])
