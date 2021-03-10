@@ -67,6 +67,8 @@ def resultPage(job_id):
     # Load mismatches
     with open(current_working_directory + 'Results/' + value + '/Params.txt') as p:
         all_params = p.read()
+        real_genome_name = (next(s for s in all_params.split('\n')
+                                 if 'Genome_idx' in s)).split('\t')[-1]
         mms = (next(s for s in all_params.split('\n')
                     if 'Mismatches' in s)).split('\t')[-1]
         bulge_dna = (next(s for s in all_params.split(
@@ -81,12 +83,15 @@ def resultPage(job_id):
                            if 'Max_bulges' in s)).split('\t')[-1]
 
     genome_name = genome_type_f
-    genome_type = 'ref'
-    if '+' in genome_type_f:
-        genome_type = 'var'
-        genome_name = genome_name.split('_')[0] + ' Variants'
-    else:
-        genome_name = genome_name.split('_')[0] + ' Reference'
+    if '+' in real_genome_name:
+        genome_name = genome_name+'+'+real_genome_name.strip().split('+')[-1]
+    # genome_name = genome_type_f
+    # genome_type = 'ref'
+    # if '+' in genome_type_f:
+    #     genome_type = 'var'
+    #     genome_name = genome_name.split('_')[0] + ' Variants'
+    # else:
+    #     genome_name = genome_name.split('_')[0] + ' Reference'
     if 'True' in ref_comp:
         genome_type = 'both'
     mms = int(mms[0])
@@ -164,7 +169,7 @@ def resultPage(job_id):
         )
     final_list.append(
         html.H3('Result Summary - ' + genome_name + ' - Mismatches ' +
-                str(mms) + ' - DNA ' + bulge_dna + ' - RNA ' + bulge_rna)
+                str(mms) + ' - DNA bulges ' + bulge_dna + ' - RNA bulges ' + bulge_rna)
     )
 
     add_to_description = html.P(
