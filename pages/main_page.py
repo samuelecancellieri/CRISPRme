@@ -260,6 +260,12 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             'samplesID/1000G/samples_VCFs_1000_genome_project.txt'
         dictionary_directory = current_working_directory + \
             'dictionaries/dictionary_VCFs_1000_genome_project'
+    elif 'HGDP' in ref_var:
+        vcf_folder = current_working_directory+"/VCF/hg38_HGDP/"
+        sample_list = current_working_directory + \
+            'samplesID/hg38_HGDP/HGDP.samplesID.txt'
+        dictionary_directory = current_working_directory + \
+            'dictionaries/dictionary_VCFs_1000_genome_project'
     elif "PV" in ref_var:
         # genome_selected = data_personal_genome[sel_cel_genome['row']
         #                                       ]["Personal Genomes"]
@@ -889,6 +895,8 @@ def changeVariantsChecklistState(genome_value):
         checklist_variants_options = []
         checklist_variants_options.append({'label': ' plus 1000 Genome Project variants',
                                            'value': '1000G', 'disabled': False})
+        checklist_variants_options.append({'label': ' plus HGDP variants',
+                                           'value': 'HGDP', 'disabled': False})
         checklist_variants_options.append({'label': ' plus Personal Variants',
                                            'value': 'PV', 'disabled': False})
     personal_vcf = get_more_VCF(genome_value)
@@ -932,7 +940,7 @@ def get_more_VCF(genome_value):
     vcf_dir = []
     genome_value = genome_value.replace(" ", "_")
     for dir in onlydir:
-        if 'VCFs_1000_genome_project' not in dir and 'None' not in dir and genome_value in dir:
+        if 'HGDP' not in dir and 'VCFs_1000_genome_project' not in dir and 'None' not in dir and genome_value in dir:
             vcf_dir.append({'label': dir, 'value': dir})
     return vcf_dir
 
@@ -1043,6 +1051,8 @@ def indexPage():
                 dcc.Checklist(options=[
                     {'label': ' plus 1000 Genome Project variants',
                      'value': '1000G', 'disabled': True},
+                    {'label': ' plus HGDP variants',
+                     'value': 'HGDP', 'disabled': True},
                     {'label': ' plus Personal Variants',
                      'value': 'PV', 'disabled': True}
                 ],
