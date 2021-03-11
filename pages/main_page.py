@@ -1183,7 +1183,7 @@ def indexPage():
                                 html.Div(
                                     [
                                         genome_content,
-                                        html.Br(),
+                                        # html.Br(),
                                         html.Br(),
                                         thresholds_content
                                     ],
@@ -1234,7 +1234,7 @@ def indexPage():
                 # ),
             ],
             style={'background-color': 'rgba(157, 195, 230, 0.39)', 'border-radius': '5px',
-                   'border': '1px solid black', 'margin-left': '15%', 'margin-right': '15%'},
+                   'border': '1px solid black', 'margin-left': '10%', 'margin-right': '10%'},
             # style={'background-color': 'rgba(157, 195, 230, 0.39)', 'border-radius': '5px',
             #        'border': '1px solid black'},
             id='steps-background'
