@@ -283,7 +283,7 @@ def generate_table_results(dataframe, page, max_rows=10):
         for col in dataframe.columns:
             if col == 'Job':
                 jobID = str(dataframe.iloc[i + (page - 1)*max_rows][col])
-                row_hist.append(html.Td(html.A(jobID, target='_blank', href=URL + '/result?job=' + jobID), style={
+                row_hist.append(html.Td(html.A(jobID, target='_blank', href=URL + '/load?job=' + jobID), style={
                     'vertical-align': 'middle', 'text-align': 'center'}))
             else:
                 row_hist.append(
@@ -317,7 +317,7 @@ def historyPage():
             [
                 html.H3('Results History'),
                 html.P(
-                    'List of available results. Click on the \'Load\' link to open the corresponding result in a new page.')
+                    'List of available results. Click on the link to open the corresponding load page in a new tab.')
             ]
         )
     )
