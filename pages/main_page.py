@@ -1234,7 +1234,7 @@ def indexPage():
                 # ),
             ],
             style={'background-color': 'rgba(157, 195, 230, 0.39)', 'border-radius': '5px',
-                   'border': '1px solid black', 'margin-left': '10%', 'margin-right': '10%'},
+                   'border': '1px solid black', 'margin-left': '5%', 'margin-right': '5%'},
             # style={'background-color': 'rgba(157, 195, 230, 0.39)', 'border-radius': '5px',
             #        'border': '1px solid black'},
             id='steps-background'
