@@ -1106,7 +1106,7 @@ def indexPage():
                 style={'display': 'inline-block'}
             ),
         ],
-        # style={'tex-align': 'center'}
+        style={'margin-top': '10%'}
     )
 
     annotation_content = html.Div(
@@ -1184,7 +1184,7 @@ def indexPage():
                                     [
                                         genome_content,
                                         # html.Br(),
-                                        html.Br(),
+                                        # html.Br(),
                                         thresholds_content
                                     ],
                                     id='column-two-step-2',
