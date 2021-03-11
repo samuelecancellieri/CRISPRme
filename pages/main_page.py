@@ -381,6 +381,10 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + \
                 '+VCFs_1000_genome_project'
+        elif 'HGDP' in ref_var:
+            genome_idx = pam_char + '_' + \
+                str(max_bulges) + '_' + genome_selected + \
+                '+HGDP'
         else:
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + '+' + vcf_input
