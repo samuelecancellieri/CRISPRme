@@ -481,12 +481,13 @@ if [ "$vcf_name" != "_" ]; then
 fi
 
 echo -e 'Building database'
-echo -e 'Database\tStart\t'$(date) >> $log
+echo -e 'Creating database\tStart\t'$(date) >> $log
 rm "${output_folder}/$(basename ${output_folder}).db"
 python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/$(basename ${output_folder})"
-echo -e 'Database\tEnd\t'$(date) >> $log
+echo -e 'Creating database\tEnd\t'$(date) >> $log
 
 echo $gene_proximity
+echo -e 'Integrating results\tStart\t'$(date) >> $log
 if [ $gene_proximity != "_" ]; then
 	touch "${output_folder}/dummy.txt"
 	genome_version=$(echo ${ref_name} | sed 's/_ref//' | sed -e 's/\n//') #${output_folder}/Params.txt | awk '{print $2}' | sed 's/_ref//' | sed -e 's/\n//')
@@ -495,6 +496,7 @@ if [ $gene_proximity != "_" ]; then
 	rm "${output_folder}/dummy.txt"
 	python $starting_dir/CRISPRme_plots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/imgs/"
 fi
+echo -e 'Integrating results\tEnd\t'$(date) >> $log
 echo -e 'Job\tDone\t'$(date) >> $log
 echo -e 'Job End' >  $output
 echo -e "JOB END"

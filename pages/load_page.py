@@ -21,6 +21,8 @@ from os import listdir
      Output('post-process-status', 'children'),
      Output('merge-status', 'children'),
      Output('images-status', 'children'),
+     Output('database-status', 'children'),
+     Output('integrate-status', 'children'),
      Output('view-results', 'href'),
      Output('no-directory-error', 'children')],
     [Input('load-page-check', 'n_intervals')],
@@ -57,6 +59,8 @@ def refreshSearch(n, dir_name):
                 post_process_status = html.P('To do', style={'color': 'red'})
                 merge_status = html.P('To do', style={'color': 'red'})
                 images_status = html.P('To do', style={'color': 'red'})
+                database_status = html.P('To do', style={'color': 'red'})
+                integrate_status = html.P('To do', style={'color': 'red'})
                 current_log = log.read()
 
                 variant = False
@@ -144,6 +148,20 @@ def refreshSearch(n, dir_name):
                 elif 'Creating images\tStart' in current_log:
                     images_status = html.P(
                         'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
+
+                if 'Creating database\tEnd' in current_log:
+                    database_status = html.P('Done', style={'color': 'green'})
+                    all_done = all_done + 1
+                elif 'Creating database\tStart' in current_log:
+                    database_status = html.P(
+                        'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
+                
+                if 'Integrating results\tEnd' in current_log:
+                    integrate_status = html.P('Done', style={'color': 'green'})
+                    all_done = all_done + 1
+                elif 'Integrating results\tStart' in current_log:
+                    integrate_status = html.P(
+                        'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
                 '''
                 if ('Search-index\tDone' in current_log and 'Search\tDone' in current_log):
                     search_status = html.P('Done', style = {'color':'green'})
@@ -216,13 +234,13 @@ def refreshSearch(n, dir_name):
                 else:
                     return {'visibility':'hidden'},  search_status, report_status, post_process_status,'', ''
                 '''
-                if all_done == 5 or 'Job\tDone' in current_log:
-                    return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, '/result?job=' + dir_name.split('=')[-1], ''
+                if all_done == 7 or 'Job\tDone' in current_log:
+                    return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, '/result?job=' + dir_name.split('=')[-1], ''
                 else:
-                    return {'visibility': 'hidden'}, index_status, search_status, post_process_status, merge_status, images_status, '', ''
+                    return {'visibility': 'hidden'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, '', ''
         elif 'queue.txt' in onlyfile:
-            return {'visibility': 'hidden'}, html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), '', dbc.Alert("Job submitted. Current status: in queue", color="info")
-    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), '', dbc.Alert("The selected result does not exist", color="danger")
+            return {'visibility': 'hidden'}, html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),'', dbc.Alert("Job submitted. Current status: in queue", color="info")
+    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),html.P('Not available', style={'color': 'red'}),'', dbc.Alert("The selected result does not exist", color="danger")
 
 # Load Page
 
@@ -266,7 +284,9 @@ def load_page():
                                     html.Li('Searching crRNA'),
                                     html.Li('Post processing'),
                                     html.Li('Merge Targets'),
-                                    html.Li('Generating images')
+                                    html.Li('Generating images'),
+                                    html.Li('Populating database'),
+                                    html.Li('Integrating results'),
                                     #html.Li('Annotating result'),
                                     #html.Li('Generating report')
                                 ]
@@ -286,6 +306,10 @@ def load_page():
                                             'color': 'red'}, id='merge-status'),
                                     html.Li('To do', style={
                                             'color': 'red'}, id='images-status'),
+                                    html.Li('To do', style={
+                                            'color': 'red'}, id='database-status'),
+                                    html.Li('To do', style={
+                                            'color': 'red'}, id='integrate-status'),
                                     #html.Li('To do', style = {'color':'red'}, id = 'annotate-result-status'),
                                     #html.Li('To do', style = {'color':'red'}, id = 'generate-report-status')
                                 ],
