@@ -113,7 +113,7 @@ def resultPage(job_id):
     col_targetfor = col_targetfor + ' Mismatches + Bulges)'
 
     columns_profile_table = [
-        {'name': ['', 'Guide'], 'id':'Guide', 'type':'text'},
+        {'name': ['', 'gRNA (protospacer+PAM)'], 'id':'Guide', 'type':'text'},
         {'name': ['', 'Nuclease'], 'id':'Nuclease', 'type':'text'},
         {'name': ['', 'CFD'], 'id':'CFD', 'type':'text'},
         # {'name': ['', 'Doench 2016'], 'id':'Doench 2016',
@@ -279,7 +279,7 @@ def resultPage(job_id):
         final_list.append(
             dcc.Tabs(id="tabs-reports", value='tab-query-table', children=[
                 dcc.Tab(label='Querying summary', value='tab-query-table'),
-                dcc.Tab(label='Summary by Guide',
+                dcc.Tab(label='Summary by gRNA',
                         value='tab-summary-by-guide'),
                 dcc.Tab(label='Summary by Position',
                         value='tab-summary-by-position'),
