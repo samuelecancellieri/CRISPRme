@@ -2997,7 +2997,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 dbc.Col(
                                     [
                                         html.Br(),
-                                        # html.Hr(),
+                                        html.Hr(),
                                     ]
                                 )
                             ]
