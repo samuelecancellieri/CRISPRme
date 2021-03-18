@@ -2976,8 +2976,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             [
                                 html.Div(
                                     html.Button('Submit', id='submit-val', n_clicks=0,
-                                                style={
-                                                    'position': 'absolute', 'center': '50%'}
+                                                # style={
+                                                #     'position': 'absolute', 'center': '50%'}
                                                 ),
                                 ),
                             ], width=1
@@ -2986,8 +2986,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             [
                                 html.Div(
                                     html.Button('Reset', id='reset-val', n_clicks=0,
-                                                style={'position': 'absolute',
-                                                       'center': '50%'}
+                                                # style={'position': 'absolute',
+                                                #        'center': '50%'}
                                                 )
                                 ),
                             ], width=1
