@@ -114,11 +114,11 @@ def resultPage(job_id):
 
     columns_profile_table = [
         {'name': ['', 'gRNA (protospacer+PAM)'], 'id':'Guide', 'type':'text'},
-        {'name': ['', 'Nuclease',''], 'id':'Nuclease', 'type':'text'},
+        {'name': ['', 'Nuclease', ''], 'id':'Nuclease', 'type':'text'},
         {'name': ['', 'CFD'], 'id':'CFD', 'type':'text'},
         # {'name': ['', 'Doench 2016'], 'id':'Doench 2016',
         #    'type':'text'},  # Doench, only for REF or VAR
-        {'name': ['', 'Doench 2016',''], 'id':'Doench 2016',
+        {'name': ['', 'Doench 2016', ''], 'id':'Doench 2016',
             'type':'text'},  # REF Doench, only for Both
         # {'name': ['Doench 2016', 'Enriched'], 'id':'Enriched',
         #    'type':'text'},  # VAR Doench, only for Both
@@ -3050,7 +3050,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #                        },
                                     #                        ],
                                     page_current=0,
-                                    page_size=20,
+                                    page_size=10,
                                     page_action='custom'
                                 )
                                 ),
