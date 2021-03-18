@@ -36,25 +36,29 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
 
     best_HGDP = []
     best_1000G = []
-    best_cfd_1000G = 0
+    best_cfd_1000G_or_ref = 0
     if len(list_HGDP) > 0:
         best_HGDP = list_HGDP[0]
+        best_cfd_1000G_or_ref = float(best_HGDP[cfd+1])
     if len(list_1000G) > 0:
         best_1000G = list_1000G[0]
-        best_cfd_1000G = float(best_1000G[cfd])
+        if best_cfd_1000G_or_ref < float(best_1000G[cfd]):
+            best_cfd_1000G_or_ref = float(best_1000G[cfd])
+        if best_cfd_1000G_or_ref < float(best_1000G[cfd+1]):
+            best_cfd_1000G_or_ref = float(best_1000G[cfd+1])
 
     #append diff_cfd from best 1000G in cluster
     for ele in list_HGDP:
-        ele.append(str(float(ele[cfd]) - best_cfd_1000G))
+        ele.append(str(float(ele[cfd]) - best_cfd_1000G_or_ref))
     
     for ele in list_1000G:
-        ele.append(str(float(ele[cfd]) - best_cfd_1000G))
+        ele.append(str(float(ele[cfd]) - best_cfd_1000G_or_ref))
 
 
     #write best target in bestFile
     populations = []
     n_seq_in_cluster = str(len(list_1000G) + len(list_HGDP) - 1)
-    if len(best_HGDP) > 0 and float(best_HGDP[cfd]) - best_cfd_1000G > 0:
+    if len(best_HGDP) > 0 and float(best_HGDP[cfd]) - best_cfd_1000G_or_ref > 0:
         best_HGDP[cfd-1] = n_seq_in_cluster
         best_HGDP[2*cfd+1] = n_seq_in_cluster
         

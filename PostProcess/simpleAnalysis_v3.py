@@ -276,12 +276,6 @@ print("READING INPUT FILES")
 # }
 # superpopulation = ['EAS', 'EUR', 'AFR', 'AMR','SAS']
 
-try:
-    dict_sample_to_pop, dict_pop_to_sup, dict_superpop_to_pop, dict_pop_to_sample, all_samples, all_pop, superpopulation, gender_sample = associateSample.loadSampleAssociation(
-        sys.argv[11])
-except:
-    print("No samplesID passed")
-    pass
 # READ INPUT FILES
 annotationFile = sys.argv[1]  # file with annotation
 resultsFile = sys.argv[2]  # file with results from search

@@ -13,11 +13,11 @@ bDNA=sys.argv[6]
 bRNA=sys.argv[7]
 annotation_file=sys.argv[8]
 pam_file=sys.argv[9]
-sampleID=sys.argv[10]
-dict_folder=sys.argv[11]
-final_res=sys.argv[12]
-final_res_alt=sys.argv[13]
-ncpus=int(sys.argv[14])
+# sampleID=sys.argv[10]
+dict_folder=sys.argv[10]
+final_res=sys.argv[11]
+final_res_alt=sys.argv[12]
+ncpus=int(sys.argv[13])
 
 
 
@@ -26,7 +26,7 @@ def start_analysis(f):
     for elem in splitted:
         if "chr" in elem:
             chrom = elem
-    os.system(f"./post_analisi_indel.sh \"{output_folder}\" \"{ref_folder}\" \"{vcf_folder}\" \"{guide_file}\" \"{mm}\" \"{bDNA}\" \"{bRNA}\" {annotation_file} {pam_file} {sampleID} {dict_folder} {final_res} {final_res_alt} {chrom}")
+    os.system(f"./post_analisi_indel.sh \"{output_folder}\" \"{ref_folder}\" \"{vcf_folder}\" \"{guide_file}\" \"{mm}\" \"{bDNA}\" \"{bRNA}\" {annotation_file} {pam_file} {dict_folder} {final_res} {final_res_alt} {chrom}")
 
 
 chrs = []

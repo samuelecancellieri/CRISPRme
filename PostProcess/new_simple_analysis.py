@@ -441,11 +441,11 @@ for line in inTarget:
                         if pam_chr.upper() not in iupac_code_set[pam[pam_chr_pos]]:
                             pam_ok = False
 
-                    reference_pam = target_to_list[pam_begin:pam_end]
+                    target_pam_ref = refSeq_with_bulges[pam_begin:pam_end]
                     found_creation = False
-                    for pos_pam_ref, pam_char_ref in enumerate(reference_pam):
+                    for pos_pam, pam_char in enumerate(target_pam_ref):
                         # ref char not in set of general pam char
-                        if not iupac_code_set[pam[pos_pam_ref]] & iupac_code_set[pam_char_ref]:
+                        if not iupac_code_set[pam[pos_pam]] & iupac_code_set[pam_char]:
                             found_creation = True
 
                     if mm_new_t - int(split[8]) > allowed_mms:
@@ -456,7 +456,7 @@ for line in inTarget:
                         # total differences between targets and guide (mismatches + bulges)
                         final_line[9] = str(mm_new_t)
                         if found_creation:
-                            final_result[10] = ''.join(
+                            final_line[10] = ''.join(
                                 target_to_list[pam_begin:pam_end])
                         final_line[12] = ','.join(totalDict[level][key][1])
                         tmp_matrix = np.array(totalDict[level][key][2])

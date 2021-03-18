@@ -32,11 +32,11 @@ bulgesRNA=$9
 
 guide_file=${10} 
 pam_file=${11} 
-sampleID=${12} 
+# sampleID=${12} 
 
-output_folder=${13}
+output_folder=${12}
 
-
+echo $jobid
 # 1) Rimozione duplicati, estrazione semicommon e unique e creazione file total
 echo 'Creazione file .total.txt'
 ./extraction.sh $REFtargets $ENRtargets $jobid  # OUTPUT    $jobid.common_targets.txt -> Non usato
@@ -85,7 +85,7 @@ rm $jobid.total.txt
 
 echo 'Estrazione sample dal file .total.cluster.txt'
 
-# ./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA "$sampleID"
+# ./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA 
 ./new_simple_analysis.py "$referencegenome" "$dictionaries" "$jobid.total.cluster.txt" "${pam_file}" "$jobid" "$mismatch"
 
 # OUTPUT    $jobid.bestCFD.txt

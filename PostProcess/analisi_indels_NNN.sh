@@ -32,9 +32,9 @@ bulgesRNA=$9
 
 guide_file=${10} 
 pam_file=${11} 
-sampleID=${12} 
+# sampleID=${12} 
 
-output_folder=${13}
+output_folder=${12}
 
 #awk '{print $0"\tn"}' "$REFtargets" > "$REFtargets.corrected"
 #echo 'Adjusting indel positions'
@@ -97,7 +97,7 @@ rm "$jobid.total.txt"
 
 echo 'Estrazione sample dal file .total.cluster.txt'
 
-./analisi_indels_NNN.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" "$mismatch" "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA "$sampleID" #"$jobid.ref_seq.fa"
+./analisi_indels_NNN.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" "$mismatch" "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA
 # OUTPUT    $jobid.bestCFD.txt
 #           $jobid.CFDGraph.txt     (per fare l'area graph dei CFD REF vs ENR)
 # NOTA AnnotatorAllTargets.py salva su disco SOLO il target con CFD più alto nel cluster e tra le scomposizioni esistenti

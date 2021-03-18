@@ -243,7 +243,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # VCF CHECK
     if genome_type == 'ref':
         sample_list = None
-        dictionary_directory = None
+        # dictionary_directory = None
     # else:
     #    sample_list = current_working_directory + \
     #        'samplesID/samples_' + genome_selected + '.txt'
@@ -251,33 +251,43 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     #        'dictionaries/dictionary_' + genome_selected
 
     # print('valore del vcf', ref_var)
-    print(ref_var)
-    if len(ref_var) == 0:
-        vcf_folder = "_"
-    elif '1000G' in ref_var:
-        vcf_folder = current_working_directory+"/VCF/VCFs_1000_genome_project"
-        sample_list = current_working_directory + \
-            'samplesID/1000G/samples_VCFs_1000_genome_project.txt'
-        dictionary_directory = current_working_directory + \
-            'dictionaries/dictionary_VCFs_1000_genome_project'
-    elif 'HGDP' in ref_var:
-        vcf_folder = current_working_directory+"/VCF/hg38_HGDP/"
-        sample_list = current_working_directory + \
-            'samplesID/hg38_HGDP/HGDP.samplesID.txt'
-        dictionary_directory = current_working_directory + \
-            'dictionaries/dictionary_VCFs_1000_genome_project'
-    elif "PV" in ref_var:
-        # genome_selected = data_personal_genome[sel_cel_genome['row']
-        #                                       ]["Personal Genomes"]
-        vcf_folder = current_working_directory+"/VCF/" + vcf_input
+    sample_list = []
+    with open(result_dir+"/list_vcfs.txt", 'w') as vcf_file:
+        if len(ref_var) == 0:
+            vcf_folder = "_"
+        if '1000G' in ref_var:
+            vcf_folder = current_working_directory+"/VCF/VCFs_1000_genome_project"
+            vcf_file.write(vcf_folder+"\n")
+            sample_list.append(current_working_directory + \
+                'samplesID/1000G/samples_VCFs_1000_genome_project.txt')
+            # dictionary_directory = current_working_directory + \
+            #     'dictionaries/dictionary_VCFs_1000_genome_project'
+        if 'HGDP' in ref_var:
+            vcf_folder = current_working_directory+"/VCF/hg38_HGDP/"
+            vcf_file.write(vcf_folder+"\n")
+            sample_list.append(current_working_directory + \
+                'samplesID/hg38_HGDP/HGDP.samplesID.txt')
+            # dictionary_directory = current_working_directory + \
+            #     'dictionaries/dictionary_VCFs_1000_genome_project'
+        if "PV" in ref_var:
+            # genome_selected = data_personal_genome[sel_cel_genome['row']
+            #                                       ]["Personal Genomes"]
+            vcf_folder = current_working_directory+"/VCF/" + vcf_input
+            vcf_file.write(vcf_folder+"\n")
+            # genome_ref = genome_selected.split("+")[0].replace(" ", "_")
+            # sample_list = current_working_directory + 'samplesID/' + vcf_input
+            sample_list.append(current_working_directory + "/samplesID/" + vcf_input + "/" + [f for f in listdir(
+                current_working_directory + 'samplesID/' + vcf_input) if isfile(join(current_working_directory + 'samplesID/' + vcf_input, f))][0])
 
-        # genome_ref = genome_selected.split("+")[0].replace(" ", "_")
-        # sample_list = current_working_directory + 'samplesID/' + vcf_input
-        sample_list = current_working_directory + "/samplesID/" + vcf_input + "/" + [f for f in listdir(
-            current_working_directory + 'samplesID/' + vcf_input) if isfile(join(current_working_directory + 'samplesID/' + vcf_input, f))][0]
+            # dictionary_directory = current_working_directory + \
+            #     'dictionaries/'+genome_ref+'+'+vcf_input
 
-        dictionary_directory = current_working_directory + \
-            'dictionaries/'+genome_ref+'+'+vcf_input
+    with open(result_dir+"/samplesID.txt", 'w') as sampleID_file:
+        for ele in sample_list:
+            sampleID_file.write(ele+"\n")
+    # for ele in sample_list:
+    #     os.system(f"tail -n +2 {ele} >> {result_dir}/sampleID.txt")
+    # os.system(f"sed -i 1i\"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tGENDER\" {result_dir}/sampleID.txt")
 
     send_email = False
     if adv_opts is None:
@@ -374,20 +384,26 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # Check if index exists, otherwise set generate_index to true
     # genome_indices_created = [f for f in listdir(
         # current_working_directory + 'genome_library') if isdir(join(current_working_directory + 'genome_library', f))]
+    genome_idx_list = []
     if genome_type == 'ref':
         genome_idx = pam_char + '_' + str(max_bulges) + '_' + genome_selected
+        genome_idx_list.append(genome_idx)
     else:
         if "1000G" in ref_var:
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + \
                 '+VCFs_1000_genome_project'
-        elif 'HGDP' in ref_var:
+            genome_idx_list.append(genome_idx)
+        if 'HGDP' in ref_var:
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + \
                 '+HGDP'
+            genome_idx_list.append(genome_idx)
         else:
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + '+' + vcf_input
+            genome_idx_list.append(genome_idx)
+    genome_idx = ','.join(genome_idx_list)
     # genome_idx = ''
     # genome_idx_ref = ''
     # for gidx in genome_indices_created:
@@ -527,7 +543,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             ' ' + genome_type + ' ' + app_main_directory + ' ' + str(dictionary_directory) + ' ' + str(sample_list) + ' ' + str(generate_index_ref) + ' ' + str(generate_index_enr) + ' ' + current_working_directory))
     '''
     # il 3 è il merge threshold
-    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new.sh {current_working_directory}/Genomes/{genome_ref} {vcf_folder} {guides_file} {pam} {current_working_directory}/annotations/{annotation_name} {sample_list} {max([int(dna), int(rna)])} {mms} {dna} {rna} {3} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/gencode/gencode.protein_coding.bed {dest_email}"
+    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new_multiple_vcfs.sh {current_working_directory}/Genomes/{genome_ref} {result_dir}/list_vcfs.txt {guides_file} {pam} {current_working_directory}/annotations/{annotation_name} {result_dir}/samplesID.txt {max([int(dna), int(rna)])} {mms} {dna} {rna} {3} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/gencode/gencode.protein_coding.bed {dest_email}"
     exeggutor.submit(subprocess.run, command, shell=True)
     return '/load', '?job=' + job_id
 
@@ -881,12 +897,12 @@ def availableCAS():
     return cas_file
 
 
-@app.callback(
-    [Output('checklist-variants', 'value')],
-    [Input('available-genome', 'value')]
-)
-def reset_radio_genome(value):
-    return ['']
+# @app.callback(
+#     [Output('checklist-variants', 'value')],
+#     [Input('available-genome', 'value')]
+# )
+# def reset_radio_genome(value):
+#     return ['']
 
 
 @app.callback(
