@@ -114,11 +114,11 @@ def resultPage(job_id):
 
     columns_profile_table = [
         {'name': ['', 'gRNA (protospacer+PAM)'], 'id':'Guide', 'type':'text'},
-        {'name': ['', 'Nuclease'], 'id':'Nuclease', 'type':'text'},
+        {'name': ['', 'Nuclease',''], 'id':'Nuclease', 'type':'text'},
         {'name': ['', 'CFD'], 'id':'CFD', 'type':'text'},
         # {'name': ['', 'Doench 2016'], 'id':'Doench 2016',
         #    'type':'text'},  # Doench, only for REF or VAR
-        {'name': ['', 'Doench 2016'], 'id':'Doench 2016',
+        {'name': ['', 'Doench 2016',''], 'id':'Doench 2016',
             'type':'text'},  # REF Doench, only for Both
         # {'name': ['Doench 2016', 'Enriched'], 'id':'Enriched',
         #    'type':'text'},  # VAR Doench, only for Both
@@ -314,7 +314,7 @@ def resultPage(job_id):
         final_list.append(
             dcc.Tabs(id="tabs-reports", value='tab-query-table', children=[
                 dcc.Tab(label='Querying summary', value='tab-query-table'),
-                dcc.Tab(label='Summary by Guide',
+                dcc.Tab(label='Summary by gRNA',
                         value='tab-summary-by-guide'),
                 dcc.Tab(label='Summary by Sample',
                         value='tab-summary-by-sample'),
