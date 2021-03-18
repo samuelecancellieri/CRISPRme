@@ -2990,7 +2990,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                                 #        'center': '50%'}
                                                 )
                                 )
-                            ],  width=1
+                            ],  width={"size": 1, "offset": 1},
                         ),
                         # dbc.Row(
                         #     [
