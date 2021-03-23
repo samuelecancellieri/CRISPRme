@@ -399,7 +399,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                 str(max_bulges) + '_' + genome_selected + \
                 '+HGDP'
             genome_idx_list.append(genome_idx)
-        else:
+        if "PV" in ref_var:
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + '+' + vcf_input
             genome_idx_list.append(genome_idx)

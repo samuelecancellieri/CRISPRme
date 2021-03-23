@@ -103,7 +103,11 @@ def get_results():
                 genome_idx = (next(s for s in all_params.split(
                     '\n') if 'Genome_idx' in s)).split('\t')[-1]
                 if '+' in genome_idx:
-                    genome_idx = genome_idx.split('+')[-1]
+                    splitted = genome_idx.split(',')
+                    genome_idx = []
+                    for ele in splitted:
+                        genome_idx.append(ele.split('+')[-1])
+                    genome_idx = ','.join(genome_idx)
                 else:
                     genome_idx = 'Reference'
                 pam = (next(s for s in all_params.split(
