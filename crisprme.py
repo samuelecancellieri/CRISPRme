@@ -477,7 +477,7 @@ def complete_search():
         print("\t--pam, used to specify the file that contains the pam")
         print("\t--annotation, used to specify the file that contains some annotations of the reference genome")
         print(
-            "\t--samplesID, used to specify the file that contains the information about samples present in VCF files [OPTIONAL!]")
+            "\t--samplesID, used to specify the file with a list of files (one per line) containing the information about samples present in VCF files [OPTIONAL!]")
         print(
             "\t--gene_annotation, used to specify a gencode or similar annotation to find nearest gene for each target found [OPTIONAL]")
         print("\t--bMax, used to specify the number of bulges for the indexing of the genome(s)")
@@ -607,7 +607,7 @@ def complete_search():
             print("Please input some parameter for flag --samplesID")
             exit(1)
         if not os.path.isfile(samplefile):
-            print("The folder specified for --samplesID does not exist")
+            print("The file specified for --samplesID does not exist")
             exit(1)
 
     if "--bMax" not in input_args:
