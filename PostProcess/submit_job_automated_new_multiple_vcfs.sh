@@ -1,6 +1,8 @@
 #!/bin/bash
 
 #file for automated search of guide+pam in reference and variant genomes
+echo "" >> $2
+echo "" >> $6
 
 ref_folder=$(realpath $1)
 # vcf_folder=$(realpath $2)
