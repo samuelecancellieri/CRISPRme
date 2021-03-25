@@ -14,11 +14,11 @@ search_bar = dbc.Row(
                    'text-decoration': 'none', 'color': 'white'}),
             active=True,
             className='testHover', style={'text-decoration': 'none', 'color': 'white', 'font-size': '1.5rem'})),
-        dbc.Col(dbc.NavLink(
-            html.A('PERSONAL_DATA_MANAGEMENT', href=URL + '/genome-dictionary-management', target='',
-                   style={'text-decoration': 'none', 'color': 'white'}),
-            active=True,
-            className='testHover', style={'text-decoration': 'none', 'color': 'white', 'font-size': '1.5rem', 'display': DISPLAY_OFFLINE})),
+        # dbc.Col(dbc.NavLink(
+        #     html.A('PERSONAL_DATA_MANAGEMENT', href=URL + '/genome-dictionary-management', target='',
+        #            style={'text-decoration': 'none', 'color': 'white'}),
+        #     active=True,
+        #     className='testHover', style={'text-decoration': 'none', 'color': 'white', 'font-size': '1.5rem', 'display': DISPLAY_OFFLINE})),
         dbc.Col(dbc.NavLink(
             html.A('MANUAL', href=URL + '/user-guide', target='',
                    style={'text-decoration': 'none', 'color': 'white'}),
