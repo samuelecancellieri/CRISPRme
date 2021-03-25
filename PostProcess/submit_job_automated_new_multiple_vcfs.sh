@@ -41,6 +41,9 @@ rm $output_folder/queue.txt
 #for vcf_f in "${vcf_list[@]}"; 
 while read vcf_f;
 do
+	if [ -z "$vcf_f" ]; then
+		continue
+	fi
 	vcf_folder=$(realpath ${vcf_f})
 	ref_name=$(basename $1)
 	#folder_of_folders=$(dirname $1)
