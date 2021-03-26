@@ -1,9 +1,9 @@
 Genomes/*
 genome_library/*
 Results/*
-dictionaries/*
-VCF/*
+Dictionaries/*
+VCFs/*
 *.pyc
-gencode/*
+Gencode/*
 Cache/*
 *nohup*

@@ -209,11 +209,11 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             annotation_name = 'gencode_encode.hg38+' + \
                 "".join(annotation_input.split('.')[:-1]) + '.bed'
             os.system(
-                f"cp {current_working_directory}/annotations/gencode_encode.hg38.bed {current_working_directory}/annotations/ann_tmp_{job_id}.bed")
+                f"cp {current_working_directory}/Annotations/gencode_encode.hg38.bed {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
             os.system(
-                f"tail -n +2 {current_working_directory}/annotations/{annotation_input} >> {current_working_directory}/annotations/ann_tmp_{job_id}.bed")
+                f"tail -n +2 {current_working_directory}/Annotations/{annotation_input} >> {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
             os.system(
-                f"mv {current_working_directory}/annotations/ann_tmp_{job_id}.bed {current_working_directory}/annotations/{annotation_name}")
+                f"mv {current_working_directory}/Annotations/ann_tmp_{job_id}.bed {current_working_directory}/Annotations/{annotation_name}")
     elif 'MA' in annotation_var:
         annotation_name = annotation_input
 
@@ -256,29 +256,29 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         if len(ref_var) == 0:
             vcf_folder = "_"
         if '1000G' in ref_var:
-            vcf_folder = current_working_directory+"/VCF/VCFs_1000_genome_project"
+            vcf_folder = current_working_directory+"/VCFs/hg38_1000G/"
             vcf_file.write(vcf_folder+"\n")
             sample_list.append(current_working_directory + \
-                'samplesID/1000G/samples_VCFs_1000_genome_project.txt')
+                'samplesIDs/hg38_1000G.samplesID.txt')
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/dictionary_VCFs_1000_genome_project'
         if 'HGDP' in ref_var:
-            vcf_folder = current_working_directory+"/VCF/hg38_HGDP/"
+            vcf_folder = current_working_directory+"/VCFs/hg38_HGDP/"
             vcf_file.write(vcf_folder+"\n")
             sample_list.append(current_working_directory + \
-                'samplesID/hg38_HGDP/HGDP.samplesID.txt')
+                'samplesIDs/hg38_HGDP.samplesID.txt')
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/dictionary_VCFs_1000_genome_project'
         if "PV" in ref_var:
             # genome_selected = data_personal_genome[sel_cel_genome['row']
             #                                       ]["Personal Genomes"]
-            vcf_folder = current_working_directory+"/VCF/" + vcf_input
+            vcf_folder = current_working_directory+"/VCFs/" + vcf_input
             vcf_file.write(vcf_folder+"\n")
             # genome_ref = genome_selected.split("+")[0].replace(" ", "_")
             # sample_list = current_working_directory + 'samplesID/' + vcf_input
-            sample_list.append(current_working_directory + "/samplesID/" + vcf_input + "/" + [f for f in listdir(
-                current_working_directory + 'samplesID/' + vcf_input) if isfile(join(current_working_directory + 'samplesID/' + vcf_input, f))][0])
-
+            # sample_list.append(current_working_directory + "/samplesID/" + vcf_input + "/" + [f for f in listdir(
+            #     current_working_directory + 'samplesID/' + vcf_input) if isfile(join(current_working_directory + 'samplesID/' + vcf_input, f))][0])
+            sample_list.append(current_working_directory + "/samplesIDs/" + vcf_input + ".samplesID.txt")
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/'+genome_ref+'+'+vcf_input
 
@@ -303,7 +303,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             e.close()
 
     pam_len = 0
-    with open(current_working_directory + 'pam/' + pam + '.txt') as pam_file:
+    with open(current_working_directory + 'PAMs/' + pam + '.txt') as pam_file:
         pam_char = pam_file.readline()
         index_pam_value = pam_char.split(' ')[-1]
         if int(pam_char.split(' ')[-1]) < 0:
@@ -392,12 +392,12 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         if "1000G" in ref_var:
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + \
-                '+VCFs_1000_genome_project'
+                '+hg38_1000G'
             genome_idx_list.append(genome_idx)
         if 'HGDP' in ref_var:
             genome_idx = pam_char + '_' + \
                 str(max_bulges) + '_' + genome_selected + \
-                '+HGDP'
+                '+hg38_HGDP'
             genome_idx_list.append(genome_idx)
         if "PV" in ref_var:
             genome_idx = pam_char + '_' + \
@@ -539,11 +539,11 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     '''
     command = app_main_directory + 'PostProcess/./submit_job.final.sh ' + current_working_directory + 'Results/' + job_id + ' ' + current_working_directory +  'Genomes/' + genome_selected + ' ' + current_working_directory + 'Genomes/' + genome_ref + ' ' + current_working_directory + 'genome_library/' + genome_idx + (
         ' ' + pam + ' ' + guides_file + ' ' + str(mms) + ' ' + str(dna) + ' ' + str(rna) + ' ' + str(search_index) + ' ' + str(search) + ' ' + str(annotation) + (
-            ' ' + str(report) + ' ' + str(gecko_comp) + ' ' + str(ref_comparison) + ' ' + current_working_directory +  'genome_library/' + genome_idx_ref + ' ' + str(send_email) + ' '  + current_working_directory +  'annotations/' + annotation_file +
+            ' ' + str(report) + ' ' + str(gecko_comp) + ' ' + str(ref_comparison) + ' ' + current_working_directory +  'genome_library/' + genome_idx_ref + ' ' + str(send_email) + ' '  + current_working_directory +  'Annotations/' + annotation_file +
             ' ' + genome_type + ' ' + app_main_directory + ' ' + str(dictionary_directory) + ' ' + str(sample_list) + ' ' + str(generate_index_ref) + ' ' + str(generate_index_enr) + ' ' + current_working_directory))
     '''
     # il 3 è il merge threshold
-    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new_multiple_vcfs.sh {current_working_directory}/Genomes/{genome_ref} {result_dir}/list_vcfs.txt {guides_file} {pam} {current_working_directory}/annotations/{annotation_name} {result_dir}/samplesID.txt {max([int(dna), int(rna)])} {mms} {dna} {rna} {3} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/gencode/gencode.protein_coding.bed {dest_email}"
+    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new_multiple_vcfs.sh {current_working_directory}/Genomes/{genome_ref} {result_dir}/list_vcfs.txt {guides_file} {pam} {current_working_directory}/Annotations/{annotation_name} {result_dir}/samplesID.txt {max([int(dna), int(rna)])} {mms} {dna} {rna} {3} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/Gencode/gencode.protein_coding.bed {dest_email}"
     exeggutor.submit(subprocess.run, command, shell=True)
     return '/load', '?job=' + job_id
 
@@ -866,7 +866,7 @@ def availablePAM():
         the 'PAM' directory. Used as input parameter for the 'options' element of a Dash Droplist
     '''
     onlyfile = [f for f in listdir(
-        current_working_directory + 'pam') if isfile(join(current_working_directory + 'pam', f))]
+        current_working_directory + 'PAMs') if isfile(join(current_working_directory + 'PAMs', f))]
     # removed .txt for better visualization
     onlyfile = [x.replace('.txt', '') for x in onlyfile]
     pam_file = []
@@ -880,7 +880,7 @@ def availablePAM():
 
 def availableCAS():
     onlyfile = [f for f in listdir(
-        current_working_directory + 'pam') if isfile(join(current_working_directory + 'pam', f))]
+        current_working_directory + 'PAMs') if isfile(join(current_working_directory + 'PAMs', f))]
     # removed .txt for better visualization
     onlyfile = [x.replace('.txt', '') for x in onlyfile]
     cas_file = []
@@ -943,7 +943,7 @@ def availableGenomes():
 
 
 def get_more_annotations():
-    annotation_dir = glob.glob(current_working_directory + 'annotations/*.bed')
+    annotation_dir = glob.glob(current_working_directory + 'Annotations/*.bed')
     annotation_list = []
 
     for elem in annotation_dir:
@@ -955,12 +955,12 @@ def get_more_annotations():
 
 
 def get_more_VCF(genome_value):
-    onlydir = [f for f in listdir(current_working_directory + 'VCF')
-               if isdir(join(current_working_directory + 'VCF', f))]
+    onlydir = [f for f in listdir(current_working_directory + 'VCFs')
+               if isdir(join(current_working_directory + 'VCFs', f))]
     vcf_dir = []
     genome_value = genome_value.replace(" ", "_")
     for dir in onlydir:
-        if 'HGDP' not in dir and 'VCFs_1000_genome_project' not in dir and 'None' not in dir and genome_value in dir:
+        if 'hg38_HGDP' not in dir and 'hg38_1000G' not in dir and 'None' not in dir and genome_value in dir:
             vcf_dir.append({'label': dir, 'value': dir})
     return vcf_dir
 

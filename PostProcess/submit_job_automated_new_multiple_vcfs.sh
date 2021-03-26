@@ -104,8 +104,8 @@ do
 	# 	mkdir "$current_working_directory/Results"
 	# fi
 
-	if ! [ -d "$current_working_directory/dictionaries" ]; then
-		mkdir "$current_working_directory/dictionaries"
+	if ! [ -d "$current_working_directory/Dictionaries" ]; then
+		mkdir "$current_working_directory/Dictionaries"
 	fi
 
 	if ! [ -d "$current_working_directory/Genomes" ]; then
@@ -131,14 +131,14 @@ do
 			#	mkdir "${ref_name}+${vcf_name}"
 			#fi
 			mv "$current_working_directory/Genomes/variants_genome/SNPs_genome/${ref_name}_enriched/" "./${ref_name}+${vcf_name}/"
-			if ! [ -d "$current_working_directory/dictionaries/dictionaries_${vcf_name}/" ]; then
-				mkdir "$current_working_directory/dictionaries/dictionaries_${vcf_name}/"
+			if ! [ -d "$current_working_directory/Dictionaries/dictionaries_${vcf_name}/" ]; then
+				mkdir "$current_working_directory/Dictionaries/dictionaries_${vcf_name}/"
 			fi
-			if ! [ -d "$current_working_directory/dictionaries/log_indels_${vcf_name}/" ]; then
-				mkdir "$current_working_directory/dictionaries/log_indels_${vcf_name}/"
+			if ! [ -d "$current_working_directory/Dictionaries/log_indels_${vcf_name}/" ]; then
+				mkdir "$current_working_directory/Dictionaries/log_indels_${vcf_name}/"
 			fi
-			mv $current_working_directory/Genomes/variants_genome/SNPs_genome/*.json $current_working_directory/dictionaries/dictionaries_${vcf_name}/
-			mv $current_working_directory/Genomes/variants_genome/SNPs_genome/log*.txt $current_working_directory/dictionaries/log_indels_${vcf_name}/
+			mv $current_working_directory/Genomes/variants_genome/SNPs_genome/*.json $current_working_directory/Dictionaries/dictionaries_${vcf_name}/
+			mv $current_working_directory/Genomes/variants_genome/SNPs_genome/log*.txt $current_working_directory/Dictionaries/log_indels_${vcf_name}/
 			cd "$current_working_directory/"
 			if ! [ -d "genome_library/${true_pam}_2_${ref_name}+${vcf_name}_INDELS" ]; then
 				mkdir "genome_library/${true_pam}_2_${ref_name}+${vcf_name}_INDELS"
@@ -152,10 +152,10 @@ do
 			fi
 			mv $current_working_directory/Genomes/variants_genome/fake* $current_working_directory/Genomes/${ref_name}+${vcf_name}_INDELS
 			rm -r "$current_working_directory/Genomes/variants_genome/"
-			dict_folder="$current_working_directory/dictionaries/dictionaries_$vcf_name/"
+			dict_folder="$current_working_directory/Dictionaries/dictionaries_$vcf_name/"
 		else
 			echo -e "Variants already added"
-			dict_folder="$current_working_directory/dictionaries/dictionaries_$vcf_name/"
+			dict_folder="$current_working_directory/Dictionaries/dictionaries_$vcf_name/"
 		fi
 	fi
 
@@ -169,8 +169,8 @@ do
 		fi
 	fi
 
-	if [ -d "$current_working_directory/dictionaries/fake_chrom_$vcf_name" ]; then
-		rm -r "$current_working_directory/dictionaries/fake_chrom_$vcf_name"
+	if [ -d "$current_working_directory/Dictionaries/fake_chrom_$vcf_name" ]; then
+		rm -r "$current_working_directory/Dictionaries/fake_chrom_$vcf_name"
 	fi
 
 	cd "$current_working_directory/"
@@ -353,7 +353,7 @@ do
 		cd "$starting_dir"
 		
 		echo -e 'Post-analysis INDELs\tStart\t'$(date) >> $log	
-		./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/dictionaries/" $final_res $final_res_alt $ncpus
+		./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
 		echo -e 'Post-analysis INDELs\tEnd\t'$(date) >> $log	
 		for key in "${array_fake_chroms[@]}"
 		do	
