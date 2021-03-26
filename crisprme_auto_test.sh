@@ -3,17 +3,17 @@
 echo "download all necessary folders and data"
 #first download all the necessary data and test folders
 wget https://github.com/samuelecancellieri/CRISPRme/raw/main/crisprme_test.tar.gz
-tar -xzvf crisprme_test.tar.gz
+tar -xzf crisprme_test.tar.gz
 
 echo "unzip data"
 #unzip annotations
 cd crisprme_test/Annotations/
-tar -xzvf gencode_encode.hg38.tar.gz
+tar -xzf gencode_encode.hg38.tar.gz
 cd ../
 
 #unzip gencode
 cd crisprme_test/Gencode/
-tar -xzvf gencode.protein_coding.tar.gz
+tar -xzf gencode.protein_coding.tar.gz
 cd ../
 
 echo "start download VCF data and genome (this may take a long time due to connection speed)"
