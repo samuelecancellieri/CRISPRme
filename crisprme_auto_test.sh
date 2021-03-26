@@ -39,4 +39,4 @@ cd ../../
 #download hg38
 cd Genomes/
 wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chromFa.tar.gz
-tar -xf hg38.chromFa.tar.gz
+tar -xzf hg38.chromFa.tar.gz
