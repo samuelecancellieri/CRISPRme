@@ -1,7 +1,7 @@
 #crisprme download and test
 
 #first download all the necessary data and test folders
-wget https://github.com/samuelecancellieri/CRISPRme/raw/main/crisprme_test.zip
+wget https://github.com/samuelecancellieri/CRISPRme/raw/main/crisprme_folders.zip
 unzip crisprme_test.zip
 
 #unzip annotations
