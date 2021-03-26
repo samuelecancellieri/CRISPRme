@@ -1,17 +1,17 @@
 #crisprme download and test
 
 #first download all the necessary data and test folders
-wget https://github.com/samuelecancellieri/CRISPRme/raw/main/crisprme_folders.zip
-unzip crisprme_folders.zip
+wget https://github.com/samuelecancellieri/CRISPRme/raw/main/crisprme_test.tar.gz
+tar -xzvf crisprme_test.tar.gz
 
 #unzip annotations
 cd crisprme_test/Annotations/
-unzip gencode_encode.hg38.zip
+tar -xzvf gencode_encode.hg38.tar.gz
 cd ../
 
 #unzip gencode
 cd crisprme_test/Gencode/
-unzip gencode.protein_coding.zip
+tar -xzvf gencode.protein_coding.tar.gz
 cd ../
 
 #download VCFs data
