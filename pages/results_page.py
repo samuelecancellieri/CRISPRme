@@ -94,6 +94,8 @@ def resultPage(job_id):
     #     genome_name = genome_name.split('_')[0] + ' Reference'
     if 'True' in ref_comp:
         genome_type = 'both'
+    else:
+        genome_type = 'ref'
     mms = int(mms[0])
 
     # load acfd for each guide

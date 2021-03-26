@@ -1,11 +1,10 @@
 #!/bin/bash
 
 #file for automated search of guide+pam in reference and variant genomes
-echo "" >> $2
-echo "" >> $6
+
 
 ref_folder=$(realpath $1)
-# vcf_folder=$(realpath $2)
+vcf_list=$(realpath $2)
 # IFS=',' read -ra vcf_list <<< $2
 guide_file=$(realpath $3)
 pam_file=$(realpath $4)
@@ -39,6 +38,15 @@ touch $output
 
 rm $output_folder/queue.txt
 #for vcf_f in "${vcf_list[@]}"; 
+if [ $2 == "_" ]; then
+	echo -e "_" >> $output_folder/tmp_list_vcf.txt
+	vcf_list=$output_folder/tmp_list_vcf.txt
+fi
+echo "" >> $vcf_list
+if [ $6 != "_" ]; then
+	echo "" >> $6
+fi
+
 while read vcf_f;
 do
 	if [ -z "$vcf_f" ]; then
@@ -47,7 +55,7 @@ do
 	vcf_folder=$(realpath ${vcf_f})
 	ref_name=$(basename $1)
 	#folder_of_folders=$(dirname $1)
-	vcf_name=$(basename $vcf_folder)
+	vcf_name=$(basename $vcf_f)
 	echo "STARTING ANALYSIS FOR $vcf_name"
 	# echo $vcf_name
 	guide_name=$(basename $3)
@@ -365,12 +373,15 @@ do
 		done
 
 	fi
-done < $2
+done < $vcf_list
 echo -e "Adding header to files"
 sed -i 1i"#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref" "$final_res"
 
 while read samples;
 do
+	if [ -z "$samples" ]; then
+		continue
+	fi
 	tail -n +2 $samples >> "$output_folder/sampleID.txt"
 done < $sampleID
 sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tGENDER" "$output_folder/sampleID.txt"

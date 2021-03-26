@@ -255,6 +255,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     with open(result_dir+"/list_vcfs.txt", 'w') as vcf_file:
         if len(ref_var) == 0:
             vcf_folder = "_"
+            vcf_file.write(vcf_folder+"\n")
         if '1000G' in ref_var:
             vcf_folder = current_working_directory+"/VCFs/hg38_1000G/"
             vcf_file.write(vcf_folder+"\n")
