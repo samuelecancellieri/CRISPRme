@@ -86,16 +86,16 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
     n_ele = len(final_list)
     if n_ele > 1:
         final_list.sort(key = lambda x : float(x[cfd]), reverse=True)
-        if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] != 'n':
-            final_list[0][cfd-1] = str(n_ele-1)
-            final_list[0][2*cfd+1] = str(n_ele-1)
-            fileOut.write("\t".join(final_list[0]))
-            final_list.pop(0)
-        else:
+        if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] == 'n':
             final_list[1][cfd-1] = str(n_ele-1)
             final_list[1][2*cfd+1] = str(n_ele-1)
             fileOut.write("\t".join(final_list[1]))
             final_list.pop(1)
+        else:
+            final_list[0][cfd-1] = str(n_ele-1)
+            final_list[0][2*cfd+1] = str(n_ele-1)
+            fileOut.write("\t".join(final_list[0]))
+            final_list.pop(0)
         for ele in final_list:
             ele[cfd-1] = str(n_ele-1)
             ele[2*cfd+1] = str(n_ele-1)
