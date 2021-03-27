@@ -250,13 +250,13 @@ def alignRefFromVar(line):#chr_fake, start_pos, len_guide, bulge):
     return [sequence, cfd]
 '''
 
-print('ESECUZIONE DI ANNOTATION E CALC SAMPLE INSIEME')
-print('TEST PER ANNOTAZIONE COMPLETA: I TARGET SENZA ANNOTAZIONE SONO SALVATI COME \"n\"')
-print('SE UN  TARGET HA 1+ ANNOTAZIONI, LE SALVA IN SINGOLA UNICA RIGA')
-print('RIMOZIONE DEI TARGET CHE NON HANNO SAMPLES')
-print('CALCOLO SCORES')
-print('SOSTITUZIONE IUPAC DI TUTTI I TARGET CON CHAR DEL TOP1SCOMPOSTO')
-print("READING INPUT FILES")
+# print('ESECUZIONE DI ANNOTATION E CALC SAMPLE INSIEME')
+# print('TEST PER ANNOTAZIONE COMPLETA: I TARGET SENZA ANNOTAZIONE SONO SALVATI COME \"n\"')
+# print('SE UN  TARGET HA 1+ ANNOTAZIONI, LE SALVA IN SINGOLA UNICA RIGA')
+# print('RIMOZIONE DEI TARGET CHE NON HANNO SAMPLES')
+# print('CALCOLO SCORES')
+# print('SOSTITUZIONE IUPAC DI TUTTI I TARGET CON CHAR DEL TOP1SCOMPOSTO')
+# print("READING INPUT FILES")
 #Dictionaries for annotating samples
 
 #Dict for populations
@@ -374,7 +374,7 @@ totalDict = {}
 
 start_time = time.time()
 
-print("EXECUTING PRELIMINARY OPERATIONS")
+#print("EXECUTING PRELIMINARY OPERATIONS")
 
 # annotationsTree = IntervalTree()
 # annotationsSet = set()
@@ -390,11 +390,11 @@ print("EXECUTING PRELIMINARY OPERATIONS")
 # for item in annotationsSet:
 #     totalDict[item] = [0]*10
 
-print("PRELIMINARY OPERATIONS COMPLETED IN: %s seconds" % (time.time() - start_time))
+#print("PRELIMINARY OPERATIONS COMPLETED IN: %s seconds" % (time.time() - start_time))
 
 start_time = time.time()
 
-print("EXECUTING ANNOTATION")
+#print("EXECUTING ANNOTATION")
 
 with open(resultsFile, 'r') as resFile:
     header_len = len(resFile.readline().strip().split('\t'))
