@@ -87,7 +87,8 @@ def resultPage(job_id):
         genome_name = [genome_name]
         splitted_genome_names = real_genome_name.strip().split(',')
         for name in splitted_genome_names:
-            genome_name.append(name)
+            name_corrected = name.split("+")[1]
+            genome_name.append(name_corrected)
         genome_name = '+'.join(genome_name)
     # genome_name = genome_type_f
     # genome_type = 'ref'
@@ -1883,10 +1884,13 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                          header=None, usecols=range(0, 24))
     except:
         df = pd.DataFrame(columns=header)
+    df[''] = [''] * df.shape[0]
     df.columns = header
     df_cols = df.columns.tolist()
     df_cols.remove('Samples')
+    df_cols.remove('')
     df_cols.append('Samples')
+    df_cols.insert(0, '')
     df = df[df_cols]
 
     out_1 = [
