@@ -334,12 +334,8 @@ for line in inTarget:
         if c in iupac_code:
             # print(c)
             countIUPAC += 1
-            if split[0] == "RNA" and split[6] == '+':
-                snpToReplace, sampleSet, rsID, AF_var, snpInfo = retrieveFromDict(
-                    pos_c+int(split[5]))
-            else:
-                snpToReplace, sampleSet, rsID, AF_var, snpInfo = retrieveFromDict(
-                    pos_c+int(split[4]))
+            snpToReplace, sampleSet, rsID, AF_var, snpInfo = retrieveFromDict(
+                pos_c+int(split[4]))
             for i, elem in enumerate(snpToReplace):
                 listReplaceTarget = list(refSeq)
                 listReplaceTarget[pos_c] = elem
