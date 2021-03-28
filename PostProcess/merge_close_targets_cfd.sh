@@ -17,7 +17,7 @@ cfd=21
 echo "Sorting file"
 header=$(head -1 $fileIn)
 STARTTIME=$(date +%s)
-tail -n +2 $fileIn | LC_ALL=C sort -T'.' -k$true_guide,$true_guide -k$chrom,$chrom -k$position,${position}n -o $fileIn.sorted.tmp
+tail -n +2 $fileIn | LC_ALL=C sort -T$(dirname $(realpath $fileIn)) -k$true_guide,$true_guide -k$chrom,$chrom -k$position,${position}n -o $fileIn.sorted.tmp
 ENDTIME=$(date +%s)
 echo "Sorting done in $(($ENDTIME - $STARTTIME)) seconds"
 echo -e $header | cat - $fileIn.sorted.tmp > $fileIn.sorted
