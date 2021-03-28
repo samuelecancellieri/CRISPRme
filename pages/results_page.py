@@ -1884,8 +1884,8 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                          header=None, usecols=range(0, 24))
     except:
         df = pd.DataFrame(columns=header)
-    df[''] = [''] * df.shape[0]
     df.columns = header
+    df[''] = [''] * df.shape[0]
     df_cols = df.columns.tolist()
     df_cols.remove('Samples')
     df_cols.remove('')
