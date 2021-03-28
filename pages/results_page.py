@@ -84,7 +84,11 @@ def resultPage(job_id):
 
     genome_name = genome_type_f
     if '+' in real_genome_name:
-        genome_name = genome_name+'+'+real_genome_name.strip().split('+')[-1]
+        genome_name = [genome_name]
+        splitted_genome_names = real_genome_name.strip().split(',')
+        for name in splitted_genome_names:
+            genome_name.append(name)
+        genome_name = '+'.join(genome_name)
     # genome_name = genome_type_f
     # genome_type = 'ref'
     # if '+' in genome_type_f:
@@ -1893,7 +1897,10 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
             style_cell_conditional=[{
                 'if': {'column_id': 'Samples'},
                 'textAlign': 'left'
-            }]
+            }],
+            style_table={
+                'overflowX': 'scroll'
+            }
 
         )
     ]
