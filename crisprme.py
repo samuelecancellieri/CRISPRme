@@ -719,7 +719,60 @@ def complete_search():
             print("The folder specified for --output does not exist")
             exit(1)
 
+
+    pam_len = 0
+    with open(pamfile, 'r') as pam_file:
+        pam_char = pam_file.readline()
+        index_pam_value = pam_char.split(' ')[-1]
+        if int(pam_char.split(' ')[-1]) < 0:
+            end_idx = int(pam_char.split(' ')[-1]) * (-1)
+            pam_char = pam_char.split(' ')[0][0: end_idx]
+            pam_len = end_idx
+            pam_begin = True
+        else:
+            end_idx = int(pam_char.split(' ')[-1])
+            pam_char = pam_char.split(' ')[0][end_idx * (-1):]
+            pam_len = end_idx
+            pam_begin = False
+    genome_ref = os.path.basename(genomedir)
+    annotation_name = os.path.basename(annotationfile)
+    nuclease = os.path.basename(pamfile).split('.')[0].split('-')[2]
+    if bMax != 0:
+        search_index = True
+    else:
+        search_index = False
+    if variant:
+        genome_idx_list = []
+        with open(vcfdir, 'r') as vcfs:
+            for line in vcfs:
+                if len(line) > 0:
+                    if line[-2] == "/":
+                        line = line[:-2]
+                    base_vcf = os.path.basename(line)
+                    genome_idx_list.append(pam_char + '_' + str(bMax) + '_' + base_vcf.strip())
+        genome_idx = ','.join(genome_idx_list)
+        ref_comparison = True
+    else:
+        genome_idx = pam_char + '_' + str(bMax) + '_' + genome_ref
+        ref_comparison = False
     # os.chdir(script_path)
+    with open(outputfolder + '/Params.txt', 'w') as p:
+        p.write('Genome_selected\t' + genome_ref.replace(' ', '_') + '\n')
+        p.write('Genome_ref\t' + genome_ref + '\n')
+        if search_index:
+            p.write('Genome_idx\t' + genome_idx + '\n')
+        else:
+            p.write('Genome_idx\t' + 'None\n')
+        p.write('Pam\t' + pam_char + '\n')
+        p.write('Max_bulges\t' + str(bMax) + '\n')
+        p.write('Mismatches\t' + str(mm) + '\n')
+        p.write('DNA\t' + str(bDNA) + '\n')
+        p.write('RNA\t' + str(bRNA) + '\n')
+        p.write('Annotation\t' + str(annotation_name) + '\n')
+        p.write('Nuclease\t' + str(nuclease) + '\n')
+        # p.write('Gecko\t' + str(gecko_comp) + '\n')
+        p.write('Ref_comp\t' + str(ref_comparison) + '\n')
+        p.close()
     if variant:
         subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), str(vcfdir), str(guidefile), str(pamfile), str(annotationfile), str(
             samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(outputfolder), str(gene_annotation)])
