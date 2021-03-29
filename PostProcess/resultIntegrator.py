@@ -242,7 +242,8 @@ for nline, line in enumerate(inCrispritzResults):
                 variantList[count] = ''.join(
                     reversed(firstcomp))+str(int(var_pos[count])+correction)+''.join(reversed(secondcomp))
 
-    saveDict['real_guide'] = str(realguide[0]).strip()
+    # saveDict['real_guide'] = str(realguide[0]).strip()
+    saveDict['real_guide'] = str(x[15]).strip()
     saveDict['genome'] = genomeRelease
     saveDict['chr'] = str(x[4])
     saveDict['prim_pos'] = str(x[6])
