@@ -216,5 +216,5 @@ Example call:
     ```
 - Docker
     ```
-    docker run -v ${PWD}:/DATA -w /DATA -p 8080:80 -i scancellieri/crisprme crisprme.py web-interface
+    docker run -v ${PWD}:/DATA -w /DATA -p 8080:8080 -i scancellieri/crisprme crisprme.py web-interface
     ```
