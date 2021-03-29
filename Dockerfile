@@ -13,9 +13,10 @@ RUN conda config --add channels bioconda
 
 #update packages of the docker system
 RUN apt-get update && apt-get install gsl-bin libgsl0-dev -y && apt-get install libgomp1 -y && apt-get clean
+RUN apt-get upgrade -y && apt-get clean
 
 #Install crisprme package (change the dafault version of python to 3.8)
-RUN conda update -n base -c defaults conda
 RUN conda install python=3.8 -y
-RUN conda install crisprme -y && conda clean --all -y
-RUN conda update crisprme -y
+RUN conda install crispritz -y
+RUN conda install crisprme -y
+RUN conda update --all
