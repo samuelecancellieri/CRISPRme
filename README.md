@@ -124,9 +124,14 @@ https://docs.docker.com/docker-for-mac/install/ (MacOS)**
 - If the previous “hello from docker” message is printed, everything is perfectly set.
 
 ## Post installation test (Phase <a name="phase2">2</a>):
-- Download and run this package if you have installed CRISPRme or Docker with Conda:
+- Download and untar this package:
     ```
-    https://drive.google.com/file/d/11wn9pg6AWzDYZ7V_LjBIjGvgx95bnVJ1/view?usp=sharing
+    Download https://drive.google.com/file/d/11wn9pg6AWzDYZ7V_LjBIjGvgx95bnVJ1/view?usp=sharing
+    tar -xvf crisprme_test.tar.gz
+    ```
+- Then enter the directory
+    ```
+    cd crisprme_test/
     ```
 - Write this command to execute the script if you installed with Conda:
     ```
@@ -139,15 +144,15 @@ https://docs.docker.com/docker-for-mac/install/ (MacOS)**
 - You will see the processing starting, first with the download of all the necessary data and then with the analysis, depending on the system hardware and internet connection this may take very different time
 
 ## Usage (Phase 3):
-**<a name="Add-Variant">3.1</a> CRISPRme complete-search function**  
-This tool is created to perform a complete search from scratch.  
+**<a name="Add-Variant">3.1</a> CRISPRme Complete-Search function**  
+This function perform a complete search from scratch producing all the results and post-analysis data.
 Input:
 - Directory containing a genome in fasta format, need to be separated into single
 chromosome files.
 - Text file containing path to VCF directories [OPTIONAL]
 - Text file with a list of guide (1 to N)
 - Text file with a single PAM sequence
-- Bed file with annotation, containing a list of genetic regions with a function association
+- Bed file with annotation, containing a list of genetic regions with a function associated
 - Text file containing a list of path to samplesID file (1 to N) equal to the number of VCF dataset used [OPTIONAL]
 - Bed file extracted from Gencode data to find gene proximity of targets
 - Maximal number of allowed bulges of any kind to compute in the index genome
@@ -176,34 +181,25 @@ Example call:
     docker run -v ${PWD}:/DATA -w /DATA -i scancellieri/crisprme crisprme.py complete-search --genome Genomes/hg38/ --vcf list_vcf.txt/ --guide sg1617.txt --pam PAMs/20bp-NGG-spCas9.txt --annotation Annotations/gencode_encode.hg38.bed --samplesID list_samplesID.txt --gene_annotation Gencode/gencode.protein_coding.bed --bMax 2 --mm 6 --bDNA 2 --bRNA 2 --merge 3 --output Results/sg1617/ --thread 4
     ```
 
-**<a name="Index-Genome">3.2</a> CRISPRitz Index-Genome Tool**  
-This tool is created to generate an index genome (similar to the bwa-index step). This step is
-time consuming (from 30 to 60 minutes) but helps to save a lot of execution time while
-searching with lot of guides and with the support of bulges (DNA and RNA). If do not need to
-search with bulges, skip this passage.  
+**<a name="Index-Genome">3.2</a> CRISPRitz Targets-Integration function**  
+This function produces the integrated data starting from a Merge file (best/alt).
 Input:
-- Name of the genome to create (e.g. `hg19_ref`).
-- Directory containing a genome in fasta format, need to be separated into single
-chromosome files.
-- Text file containing the PAM (including a number of Ns equal to the guide length) and a
-space separated number indicating the length of the PAM sequence (e.g. Cas9 PAM is
-NNNNNNNNNNNNNNNNNNNNNGG 3). The sequence is composed by 20 Ns and
-NGG, followed by number 3, representing the length of the PAM sequence.
-- Number of bulges to include in the database to perform the following search (i.e. the max
-number bulges allowed for DNA and RNA when searching on the database)
-- Number of threads to use for the analysis (Optional)
+- Best/Alt merge targets file, containing the processed targets
+- Genome version, the name of the genome used in the search, such as hg38,hg19,mm10 and so on
+- Bed file extracted from Gencode data to find gene proximity of targets
+- Bed file containing empirical verified OT, like via GUIDE-seq, CIRCLE-seq and other sequencing protocols
+- Directory of VCF data used in the search, supporting only one dataset at the time
+- Output directory, in which all the temporary data and final integrated results will be created
 
 Output:
-- Directory containing an index genome in .bin format, separated into single chromosome
-files, containing all the candidate targets for a selected PAM, adding also characters to
-perform bulge search.
+- Directory containing the integrated result file with all the targets from the merge input file and a notfound file containing all the targets from empirical verified OT that does not match in a predicted in-silico target
 
 Example call:
 - Conda
     ```
-    crispritz.py index-genome hg19_ref hg19_ref/ pam/pamNGG.txt -bMax 2 -th 4
+    crisprme.py targets-integration --targets sg1617.bestMerge.txt --genome_version hg38 --guide sg1617.txt --gencode Gencode/gencode.protein_coding.bed --output .
     ```
 - Docker
     ```
-    docker run -v ${PWD}:/DATA -w /DATA -i pinellolab/crispritz crispritz.py index-genome hg19_ref hg19_ref/ pam/pamNGG.txt -bMax 2 -th 4
+    docker run -v ${PWD}:/DATA -w /DATA -i i scancellieri/crisprme crisprme.py targets-integration --targets sg1617.bestMerge.txt --genome_version hg38 --guide sg1617.txt --gencode Gencode/gencode.protein_coding.bed --output .
     ```
