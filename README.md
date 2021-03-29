@@ -52,7 +52,8 @@ Here we summarize the steps to install CRISPRitz with Docker and Conda.
     ```
 - Now, you can install CRISPRme by typing the command:
     ```
-    conda install crisprme -y
+    conda create -n crisprme python=3.8 crisprme -y
+    conda activate crisprme
     ```
 - To test your installation, type the command:
     ```
@@ -126,10 +127,11 @@ https://docs.docker.com/docker-for-mac/install/ (MacOS)**
 ## Post installation test (Phase <a name="phase2">2</a>):
 - Download and untar this package:
     ```
-    https://drive.google.com/file/d/11wn9pg6AWzDYZ7V_LjBIjGvgx95bnVJ1/view?usp=sharing
+    conda install gdown -y
+    gdown https://drive.google.com/file/d/11wn9pg6AWzDYZ7V_LjBIjGvgx95bnVJ1/view?usp=sharing
     tar -xvf crisprme_test.tar.gz
     ```
-- Then enter the directory
+- Then move into the directory
     ```
     cd crisprme_test/
     ```
@@ -137,7 +139,7 @@ https://docs.docker.com/docker-for-mac/install/ (MacOS)**
     ```
     bash crisprme_auto_test_conda.sh
     ```
-- Write this command to execute the script if you installed with Docker:
+- Write this command to execute the script if you want to use Docker (the script will automatically download the necessary docker image):
     ```
     bash crisprme_auto_test_docker.sh
     ```
