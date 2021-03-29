@@ -147,7 +147,7 @@ https://docs.docker.com/docker-for-mac/install/ (MacOS)**
 - You will see the processing starting, first with the download of all the necessary data and then with the analysis, depending on the system hardware and internet connection this may take very different time
 
 ## Usage (Phase 3):
-**<a name="Add-Variant">3.1</a> CRISPRme Complete-Search function**  
+**<a name="Complete-Search">3.1</a> CRISPRme Complete-Search function**  
 This function perform a complete search from scratch producing all the results and post-analysis data.
 Input:
 - Directory containing a genome in fasta format, need to be separated into single
@@ -184,7 +184,7 @@ Example call:
     docker run -v ${PWD}:/DATA -w /DATA -i scancellieri/crisprme crisprme.py complete-search --genome Genomes/hg38/ --vcf list_vcf.txt/ --guide sg1617.txt --pam PAMs/20bp-NGG-spCas9.txt --annotation Annotations/gencode_encode.hg38.bed --samplesID list_samplesID.txt --gene_annotation Gencode/gencode.protein_coding.bed --bMax 2 --mm 6 --bDNA 2 --bRNA 2 --merge 3 --output Results/sg1617/ --thread 4
     ```
 
-**<a name="Index-Genome">3.2</a> CRISPRitz Targets-Integration function**  
+**<a name="Targets-Integration">3.2</a> CRISPRme Targets-Integration function**  
 This function produces the integrated data starting from a Merge file (best/alt).
 Input:
 - Best/Alt merge targets file, containing the processed targets
@@ -205,4 +205,17 @@ Example call:
 - Docker
     ```
     docker run -v ${PWD}:/DATA -w /DATA -i i scancellieri/crisprme crisprme.py targets-integration --targets sg1617.bestMerge.txt --genome_version hg38 --guide sg1617.txt --gencode Gencode/gencode.protein_coding.bed --output .
+    ```
+    
+**<a name="Web-Interface">3.2</a> CRISPRme Web-Interface function**  
+This function starts the server to use the web-interface
+
+Example call:
+- Conda
+    ```
+    crisprme.py web-interface
+    ```
+- Docker
+    ```
+    docker run -v ${PWD}:/DATA -w /DATA -i scancellieri/crisprme crisprme.py web-interface
     ```
