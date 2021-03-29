@@ -471,7 +471,8 @@ def complete_search():
         print("This is the automated search process that goes from raw input up to the post-analysis of results.")
         print("These are the flags that must be used in order to run this function:")
         print("\t--genome, used to specify the reference genome folder")
-        print("\t--vcf, used to specify the file containing a list of VCF folders (one per line) [OPTIONAL!]")
+        print(
+            "\t--vcf, used to specify the file containing a list of VCF folders (one per line) [OPTIONAL!]")
         print(
             "\t--guide, used to specify the file that contains guides used for the search")
         print("\t--pam, used to specify the file that contains the pam")
@@ -733,8 +734,7 @@ def target_integration():
         print("These are the flags that must be used in order to run this function:")
         print("\t--targets, used to specify the final result file to use in the panel creation process")
         print("\t--genome_version, used to specify the genome version used in the search phase (e.g. hg38)")
-        print(
-            "\t--guide, used to specify the file that contains guides used for the search")
+        # print("\t--guide, used to specify the file that contains guides used for the search")
         print("\t--gencode, used to specify the file that contains gencode annotation to find nearest gene to any target")
         print(
             "\t--empirical_data, used to specify the file that contains gencode annotation to find nearest gene to any target [OPTIONAL]")
@@ -784,8 +784,9 @@ def target_integration():
             exit(1)
 
     if "--guide" not in input_args:
-        print("--guide must be contained in the input")
-        exit(1)
+        guidefile = script_path+'vuoto.txt'
+        # print("--guide must be contained in the input")
+        # exit(1)
     else:
         try:
             guidefile = os.path.abspath(
