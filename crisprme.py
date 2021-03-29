@@ -749,7 +749,7 @@ def complete_search():
                     if line[-2] == "/":
                         line = line[:-2]
                     base_vcf = os.path.basename(line)
-                    genome_idx_list.append(pam_char + '_' + str(bMax) + '_' + base_vcf.strip())
+                    genome_idx_list.append(pam_char + '_' + str(bMax) + '_' + genome_ref + '+' + base_vcf.strip())
         genome_idx = ','.join(genome_idx_list)
         ref_comparison = True
     else:
@@ -773,6 +773,7 @@ def complete_search():
         # p.write('Gecko\t' + str(gecko_comp) + '\n')
         p.write('Ref_comp\t' + str(ref_comparison) + '\n')
         p.close()
+    os.system(f'cp {guidefile} {outputfolder}/guides.txt')
     if variant:
         subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), str(vcfdir), str(guidefile), str(pamfile), str(annotationfile), str(
             samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(outputfolder), str(gene_annotation)])
