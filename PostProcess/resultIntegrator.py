@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 
-from intervaltree import Interval, IntervalTree
+from intervaltree import IntervalTree
 import sys
 import time
-import concurrent.futures
 import glob
 import subprocess
-import pandas as pd
 
 
 def rev_comp(a):
