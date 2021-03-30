@@ -809,7 +809,7 @@ def target_integration():
         print(
             "\t--empirical_data, used to specify the file that contains gencode annotation to find nearest gene to any target [OPTIONAL]")
         print(
-            "\t--vcf_dir, used to specify the directory containing vcf files used in the search phase, necessary to obtain haplotype frequence in multi-variant targets [OPTIONAL]")
+            "\t--vcf_dir, used to specify the directory containing vcf files used in the search phase, necessary to obtain haplotype frequence in multi-variant targets [OPTIONAL][BETA]")
         print("\t--output, used to specify the output folder for the results")
         exit(0)
 
