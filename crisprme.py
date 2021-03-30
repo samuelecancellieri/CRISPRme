@@ -719,7 +719,6 @@ def complete_search():
             print("The folder specified for --output does not exist")
             exit(1)
 
-
     pam_len = 0
     with open(pamfile, 'r') as pam_file:
         pam_char = pam_file.readline()
@@ -745,11 +744,12 @@ def complete_search():
         genome_idx_list = []
         with open(vcfdir, 'r') as vcfs:
             for line in vcfs:
-                if len(line) > 0:
+                if line.strip():
                     if line[-2] == "/":
                         line = line[:-2]
                     base_vcf = os.path.basename(line)
-                    genome_idx_list.append(pam_char + '_' + str(bMax) + '_' + genome_ref + '+' + base_vcf.strip())
+                    genome_idx_list.append(
+                        pam_char + '_' + str(bMax) + '_' + genome_ref + '+' + base_vcf.strip())
         genome_idx = ','.join(genome_idx_list)
         ref_comparison = True
     else:
