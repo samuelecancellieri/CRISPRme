@@ -16,6 +16,7 @@ corrected_web_path = origin_path[:-3]+"opt/crisprme/"
 #corrected_web_path = os.getcwd()
 
 script_path = corrected_origin_path
+current_working_directory = os.getcwd() + '/'
 #script_path = corrected_web_path+"/PostProcess/"
 
 input_args = sys.argv
@@ -464,6 +465,14 @@ input_args = sys.argv
 #         os.system(script_path+"./search_only.sh "+genomedir+" _ "+guidefile+" "+pamfile+" "+str(bMax)+" "+str(mm)+" " +
 #                   str(bDNA)+" "+str(bRNA)+" "+outputfolder+" "+script_path+" "+str(thread))
 
+def directoryCheck():
+    # function to check the main directory status, if some directory is missing, create it
+    directoryList = ['Genomes', 'Results', 'Dictionaries',
+                     'VCFs', 'Annotations', 'Gencode', 'PAMs', 'samplesIDs']
+    for directory in directoryList:
+        if not os.path.exists(current_working_directory+directory):
+            os.makedirs(current_working_directory+directory)
+
 
 def complete_search():
     variant = True
@@ -490,9 +499,12 @@ def complete_search():
             "\t--bRNA, used to specify the number of RNA bulges permitted in the search phase [OPTIONAL!]")
         print(
             "\t--merge, used to specify the threshold used to merge close targets (based on genetic position), use target with highest CFD as pivot [default 3]")
-        print("\t--output, used to specify the output folder for the results")
+        print("\t--output, used to specify the output name for the results (these results will be saved into Results/<name>)")
         print("\t--thread, used to set the number of thread used in the process (default is ALL available minus 2)")
         exit(0)
+
+    # check if all directories are found, if not, create them
+    directoryCheck()
 
     if "--genome" not in input_args:
         print("--genome must be contained in the input")
@@ -710,8 +722,12 @@ def complete_search():
         exit(1)
     else:
         try:
-            outputfolder = os.path.abspath(
-                input_args[input_args.index("--output")+1])
+            outputfolder = 'Results/' + \
+                input_args[input_args.index("--output")+1]
+            if not os.path.exists(current_working_directory+outputfolder):
+                os.makedirs(current_working_directory+outputfolder)
+            # outputfolder = os.path.abspath(
+            #     input_args[input_args.index("--output")+1])
         except IndexError:
             print("Please input some parameter for flag --output")
             exit(1)
@@ -776,10 +792,10 @@ def complete_search():
     os.system(f'cp {guidefile} {outputfolder}/guides.txt')
     if variant:
         subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), str(vcfdir), str(guidefile), str(pamfile), str(annotationfile), str(
-            samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(outputfolder), str(gene_annotation)])
+            samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(current_working_directory), str(gene_annotation)])
     else:
         subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), '_', str(guidefile), str(pamfile), str(annotationfile), str(script_path+'vuoto.txt'),
-                        str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(outputfolder), str(gene_annotation)])
+                        str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(current_working_directory), str(gene_annotation)])
 
 
 def target_integration():
