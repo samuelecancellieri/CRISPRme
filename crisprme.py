@@ -533,7 +533,7 @@ def complete_search():
         try:
             thread = int(thread)
         except:
-            print("Please input a number for flag bMax")
+            print("Please input a number for flag thread")
             exit(1)
         if thread <= 0 or thread > len(os.sched_getaffinity(0))-2:
             print("thread is set to default (ALL available minus 2)")
@@ -722,10 +722,10 @@ def complete_search():
         exit(1)
     else:
         try:
-            outputfolder = 'Results/' + \
+            outputfolder = current_working_directory+'Results/' + \
                 input_args[input_args.index("--output")+1]
-            if not os.path.exists(current_working_directory+outputfolder):
-                os.makedirs(current_working_directory+outputfolder)
+            if not os.path.exists(outputfolder):
+                os.makedirs(outputfolder)
             # outputfolder = os.path.abspath(
             #     input_args[input_args.index("--output")+1])
         except IndexError:
