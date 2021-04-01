@@ -52,7 +52,7 @@ do
 	if [ -z "$vcf_f" ]; then
 		continue
 	fi
-	vcf_folder=$(realpath ${vcf_f})
+	vcf_folder="${current_working_directory}/VCFs/${vcf_f}"
 	ref_name=$(basename $1)
 	#folder_of_folders=$(dirname $1)
 	vcf_name=$(basename $vcf_f)
@@ -383,7 +383,7 @@ do
 		continue
 	fi
 	# tail -n +2 $samples >> "$output_folder/sampleID.txt"
-	grep -v '#' $samples >> "$output_folder/sampleID.txt"
+	grep -v '#' "${current_working_directory}/samplesIDs/$samples" >> "$output_folder/sampleID.txt"
 done < $sampleID
 sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tGENDER" "$output_folder/sampleID.txt"
 
