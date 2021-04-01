@@ -128,7 +128,7 @@ https://docs.docker.com/docker-for-mac/install/ (MacOS)**
 - Download and untar this package:
     ```
     conda install gdown -y
-    gdown https://drive.google.com/file/d/11wn9pg6AWzDYZ7V_LjBIjGvgx95bnVJ1/view?usp=sharing
+    gdown https://drive.google.com/uc?id=11wn9pg6AWzDYZ7V_LjBIjGvgx95bnVJ1
     tar -xvf crisprme_test.tar.gz
     ```
 - Then move into the directory
@@ -144,6 +144,24 @@ https://docs.docker.com/docker-for-mac/install/ (MacOS)**
     bash crisprme_auto_test_docker.sh
     ```
 - You will see the processing starting, first with the download of all the necessary data and then with the analysis, depending on the system hardware and internet connection this may take very different time
+
+After downloading and untaring the package, you will have a ready to use CRISPRme directory, remember DO NOT change any name of folders in the directory to avoid losing data or force the recreation of indexing and dictionaries. You MUST use the default directories to store all your data since the software recognizes only files and folder in the own folders structure.
+Here a more detailed explanation of the folder structure:
+![Folder_structure](https://github.com/pinellolab/CRISPRme/blob/main/folder_structure.png)
+- Genomes: folder containing all the genomes in fasta format, each genome has to be saved into a specific folder and the name of the folder will be used to identify the genome itself and all the correlated data (VCF and samplesID).
+  - hg19: folder containing fasta files of human genome 19.
+  - hg38: folder containing fasta file of human genome 38.
+- VCFs: folder containing all the VCFs datasets, each dataset has to be saved into a specific folder and the name must contain the genome release correlated to the variant data.
+  - hg38_HGDP: folder containing vcf files of HGDP set correlated with hg38.
+  - hg38_1000G: folder containing vcf files of 1000G set correlated with hg38.
+- samplesIDs: folder containing all the samplesID files, one for each VCF dataset, the name of the file must contain the identifier of a VCF dataset and the samplesID suffix.
+  - hg38_HGDP.samplesID.txt: tabulated file with header to identify samples for HGDP dataset.
+  - hg38_1000G.samplesID.txt: tabulated file with header to identify samples for 1000G dataset.
+- Annotations: folder containing all the annotation bed files, there is no restriction on the name for this file.
+  - gencode_encode.hg38.bed: bed file containing all the pregenerated annotations from gencode and encode datasets.
+- PAMs: folder containing all the PAM text files, one for each PAM, the name of the file must contain the name of the Cas protein as last field (field separator character “-”).
+  - 20bp-NGG-spCas9.txt: text file containing the single line PAM, in the name is contained the position of the crRNA (the first 20bps), the position of the PAM sequence (the following 3 nucleotides, NGG) and the Cas protein (spCas9).
+
 
 ## Usage (Phase 3):
 **<a name="Complete-Search">3.1</a> CRISPRme Complete-Search function**  
@@ -213,8 +231,4 @@ Example call:
 - Conda
     ```
     crisprme.py web-interface
-    ```
-- Docker
-    ```
-    docker run -v ${PWD}:/DATA -w /DATA -p 8080:8080 -i scancellieri/crisprme crisprme.py web-interface
     ```
