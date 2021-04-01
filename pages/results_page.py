@@ -2625,8 +2625,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
         # fl.append(html.Button(html.A('Download Full list of targets', href = URL + '/data/' + job_id + '/' + job_id + '.targets.' + guide + '.zip' ,target = '_blank', style = {'text-decoration':'none', 'color':'black'} )))
 
-        fl.append(html.Button('Open Result Directory',
-                              id='button-open-result-directory'))
+        # fl.append(html.Button('Open Result Directory',
+        #                       id='button-open-result-directory'))
         fl.append(html.Div(guide, id='div-open-result-directory',
                            style={'display': 'none'}))
         fl.append(html.Br())

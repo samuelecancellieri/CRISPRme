@@ -36,7 +36,7 @@ touch $log
 output=$output_folder/output.txt
 touch $output
 
-rm $output_folder/queue.txt
+# rm $output_folder/queue.txt
 #for vcf_f in "${vcf_list[@]}"; 
 if [ $2 == "_" ]; then
 	echo -e "_" >> $output_folder/tmp_list_vcf.txt
@@ -382,7 +382,8 @@ do
 	if [ -z "$samples" ]; then
 		continue
 	fi
-	tail -n +2 $samples >> "$output_folder/sampleID.txt"
+	# tail -n +2 $samples >> "$output_folder/sampleID.txt"
+	grep -v '#' $samples >> "$output_folder/sampleID.txt"
 done < $sampleID
 sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tGENDER" "$output_folder/sampleID.txt"
 
