@@ -267,6 +267,7 @@ def guideDictCreation():
 
 def fillDict(guide, guideDict, motifDict):
     # fill dictionary with info read from the final file
+    inFinalFile.seek(0)
     if '#' in inFinalFile.readline():
         print('SKIP HEADER')
     else:
@@ -275,6 +276,8 @@ def fillDict(guide, guideDict, motifDict):
     for line in inFinalFile:
         # print(line)
         split = line.strip().split('\t')
+        if guide in split[15]:
+            continue
         alignedSequence = split[2]  # aligned target with the guide
         mismatch = int(split[8])  # mm extracted from target file
         bulge = int(split[9])  # bul extracted from target file
