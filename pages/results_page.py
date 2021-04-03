@@ -3025,7 +3025,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 # html.Hr(),
                                 html.Div(dash_table.DataTable(
                                     id='live_table',
-                                    columns=['', {"name": i, "id": i}
+                                    columns=[{"name": i, "id": i}
                                              for i in dff.columns],
                                     # style_cell=dict(textAlign='left'),
                                     # style_header=dict(backgroundColor="white"),
