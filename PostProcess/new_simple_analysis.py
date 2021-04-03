@@ -104,7 +104,7 @@ class reversor:
 
 def calc_cfd(guide_seq, sg, pam, mm_scores, pam_scores, do_scores):
     if do_scores == False:
-        print("NON CALCOLO")
+        # print("NON CALCOLO")
         score = 0
         return score
     score = 1
