@@ -262,30 +262,33 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             vcf_folder = "_"
             vcf_file.write(vcf_folder+"\n")
         if '1000G' in ref_var:
-            vcf_folder = current_working_directory+"/VCFs/hg38_1000G/"
+            # vcf_folder = current_working_directory+"/VCFs/hg38_1000G/"
+            vcf_folder = "hg38_1000G/"
             vcf_file.write(vcf_folder+"\n")
-            sample_list.append(current_working_directory +
-                               'samplesIDs/hg38_1000G.samplesID.txt')
+            # sample_list.append(current_working_directory +                               'samplesIDs/hg38_1000G.samplesID.txt')
+            sample_list.append('hg38_1000G.samplesID.txt')
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/dictionary_VCFs_1000_genome_project'
         if 'HGDP' in ref_var:
-            vcf_folder = current_working_directory+"/VCFs/hg38_HGDP/"
+            # vcf_folder = current_working_directory+"/VCFs/hg38_HGDP/"
+            vcf_folder = "hg38_HGDP/"
             vcf_file.write(vcf_folder+"\n")
-            sample_list.append(current_working_directory +
-                               'samplesIDs/hg38_HGDP.samplesID.txt')
+            # sample_list.append(current_working_directory +'samplesIDs/hg38_HGDP.samplesID.txt')
+            sample_list.append('hg38_HGDP.samplesID.txt')
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/dictionary_VCFs_1000_genome_project'
         if "PV" in ref_var:
             # genome_selected = data_personal_genome[sel_cel_genome['row']
             #                                       ]["Personal Genomes"]
-            vcf_folder = current_working_directory+"/VCFs/" + vcf_input
+            # vcf_folder = current_working_directory+"/VCFs/" + vcf_input
+            vcf_folder = vcf_input
             vcf_file.write(vcf_folder+"\n")
             # genome_ref = genome_selected.split("+")[0].replace(" ", "_")
             # sample_list = current_working_directory + 'samplesID/' + vcf_input
             # sample_list.append(current_working_directory + "/samplesID/" + vcf_input + "/" + [f for f in listdir(
             #     current_working_directory + 'samplesID/' + vcf_input) if isfile(join(current_working_directory + 'samplesID/' + vcf_input, f))][0])
-            sample_list.append(current_working_directory +
-                               "/samplesIDs/" + vcf_input + ".samplesID.txt")
+            # sample_list.append(current_working_directory + "/samplesIDs/" + vcf_input + ".samplesID.txt")
+            sample_list.append(vcf_input + ".samplesID.txt")
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/'+genome_ref+'+'+vcf_input
 
