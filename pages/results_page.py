@@ -125,8 +125,8 @@ def resultPage(job_id):
         {'name': ['', 'CFD'], 'id':'CFD', 'type':'text'},
         # {'name': ['', 'Doench 2016'], 'id':'Doench 2016',
         #    'type':'text'},  # Doench, only for REF or VAR
-        {'name': ['', 'Doench 2016', ''], 'id':'Doench 2016',
-            'type':'text'},  # REF Doench, only for Both
+        # {'name': ['', 'Doench 2016', ''], 'id':'Doench 2016',
+        #     'type':'text'},  # REF Doench, only for Both
         # {'name': ['Doench 2016', 'Enriched'], 'id':'Enriched',
         #    'type':'text'},  # VAR Doench, only for Both
         {'name': [
