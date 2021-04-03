@@ -322,7 +322,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     if guide_type == 'GS':
         text_sequence = text_guides
         print(text_sequence)
-        exit()
+        # exit()
         # Extract sequence and create the guides
         guides = []
         for name_and_seq in text_sequence.split('>'):
@@ -351,6 +351,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     if len(text_guides.split('\n')) > 1000:
         text_guides = '\n'.join(text_guides.split('\n')[:1000]).strip()
     len_guides = len(text_guides.split('\n')[0])
+
     # Adjust guides by adding Ns to make compatible with Crispritz
     if (pam_begin):
         pam_to_file = pam_char + ('N' * len_guides) + ' ' + index_pam_value
