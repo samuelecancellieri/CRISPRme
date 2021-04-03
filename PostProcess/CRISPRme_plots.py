@@ -22,8 +22,18 @@ import matplotlib
 # set matplotlib to not use X11 server
 matplotlib.use('Agg')
 
+# # Read file
+# df = pd.read_csv(sys.argv[1], sep="\t",
+#                  index_col=False, na_values=['n'], nrows=1200)
+# out_folder = sys.argv[2]
+
+# # Make index column that numbers the OTs starting from 1
+# df = df.reset_index()
+# df["index"] += 1
+
 # Read file
-df = pd.read_csv(sys.argv[1], sep="\t", na_values=['n'], nrows=1200)
+df = pd.read_csv(sys.argv[1], sep="\t",
+                 index_col=False, na_values=['n'], nrows=1200)
 out_folder = sys.argv[2]
 
 # Make index column that numbers the OTs starting from 1
