@@ -350,7 +350,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             guides.extend(convert_pam.getGuides(
                 extracted_seq, pam_char, len_guide_sequence, pam_begin))
             text_guides = '\n'.join(guides).strip()
-    print(text_guides, 'and', guides)
+    print(text_guides, 'and', guides, 'and', pam)
     exit()
     text_guides = text_guides.upper()
     for g in text_guides.split('\n'):
