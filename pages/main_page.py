@@ -165,15 +165,20 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         genome_selected = 'hg38_ref'
     if pam is None or pam == '':
         pam = '20bp-NGG-SpCas9'
+        len_guide_sequence = 20
+    else:
+        for elem in pam.split('-'):
+            if 'bp' in elem:
+                len_guide_sequence = int(elem.replace('bp', ''))
     if text_guides is None or text_guides == '':
         text_guides = 'GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC'
-    else:
+    elif guide_type != 'GS':
         text_guides = text_guides.strip()
         if (not all(len(elem) == len(text_guides.split('\n')[0]) for elem in text_guides.split('\n'))):
             text_guides = selectSameLenGuides(text_guides)
     # if (len_guide_sequence is None or str(len_guide_sequence) == '') and ('sequence-tab' in active_tab):
     #    len_guide_sequence = 20
-    len_guide_sequence = 20
+    print('guide len', len_guide_sequence)
     # if (text_sequence is None or text_sequence == '') and ('sequence-tab' in active_tab):
     #    text_sequence = '>sequence\nTACCCCAAACGCGGAGGCGCCTCGGGAAGGCGAGGTGGGCAAGTTCAATGCCAAGCGTGACGGGGGA'
 
@@ -325,9 +330,9 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         # exit()
         # Extract sequence and create the guides
         guides = []
-        extracted_seqs = list()
-        for lines in text_guides:
-            print('linea', lines)
+        # extracted_seqs = list()
+        # for lines in text_sequence:
+        #     print('linea', lines)
         for name_and_seq in text_sequence.split('>'):
             if '' == name_and_seq:
                 continue
@@ -341,7 +346,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                     name, seq, genome_ref.replace(' ', '_'))
             else:
                 extracted_seq = seq.strip()
-            print('extracted seq', extracted_seq)
+            # print('extracted seq', extracted_seq)
             guides.extend(convert_pam.getGuides(
                 extracted_seq, pam_char, len_guide_sequence, pam_begin))
             text_guides = '\n'.join(guides).strip()
