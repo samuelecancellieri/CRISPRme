@@ -178,7 +178,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             text_guides = selectSameLenGuides(text_guides)
     # if (len_guide_sequence is None or str(len_guide_sequence) == '') and ('sequence-tab' in active_tab):
     #    len_guide_sequence = 20
-    print('guide len', len_guide_sequence)
+    # print('guide len', len_guide_sequence)
     # if (text_sequence is None or text_sequence == '') and ('sequence-tab' in active_tab):
     #    text_sequence = '>sequence\nTACCCCAAACGCGGAGGCGCCTCGGGAAGGCGAGGTGGGCAAGTTCAATGCCAAGCGTGACGGGGGA'
 
@@ -326,7 +326,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
 
     if guide_type == 'GS':
         text_sequence = text_guides
-        print(text_sequence)
+        # print(text_sequence)
         # exit()
         # Extract sequence and create the guides
         guides = []
@@ -346,12 +346,12 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                     name, seq, genome_ref.replace(' ', '_'))
             else:
                 extracted_seq = seq.strip()
-            print('extracted seq', extracted_seq)
+            # print('extracted seq', extracted_seq)
             guides.extend(convert_pam.getGuides(
                 extracted_seq, pam_char, len_guide_sequence, pam_begin))
         text_guides = '\n'.join(guides).strip()
-    print(text_guides, 'and', guides, 'and', pam_char)
-    exit()
+    # print(text_guides, 'and', guides, 'and', pam_char)
+    # exit()
     text_guides = text_guides.upper()
     for g in text_guides.split('\n'):
         for c in g:
