@@ -338,7 +338,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                     name, seq, genome_ref.replace(' ', '_'))
             else:
                 extracted_seq = seq.strip()
-
+            print('extracted seq', extracted_seq)
             guides.extend(convert_pam.getGuides(
                 extracted_seq, pam_char, len_guide_sequence, pam_begin))
             text_guides = '\n'.join(guides).strip()
