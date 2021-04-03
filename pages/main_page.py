@@ -326,7 +326,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         # Extract sequence and create the guides
         guides = []
         extracted_seqs = list()
-        for lines in text_guides.split('\n'):
+        for lines in text_guides:
             print('linea', lines)
         for name_and_seq in text_sequence.split('>'):
             if '' == name_and_seq:
