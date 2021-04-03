@@ -180,18 +180,18 @@ def resultPage(job_id):
     )
 
     add_to_description = html.P(
-        'General summary for the given guides. For each guide, the number of Off-Targets found for each Mismatch + Bulge value is shown.'
+        'General summary for input guides. For each guide, is reported the count of targets in reference and variant genome grouped by mismatches count and bulge size.'
     )
     if genome_type == 'both':
         add_to_description = html.P(
             [
-                'General summary for the given guides. For each guide, the number of ',
-                html.Span(
-                    "Samples for each Class is provided",
-                    id="tooltip-sample-class",
-                    style={"textDecoration": "underline", "cursor": "pointer"}
-                ),
-                ', along with the number of Off-Targets found for each Mismatch + Bulge value, for both Reference and Enriched Genomes.',
+                'General summary for input guides. For each guide, is reported the count of targets in reference and variant genome grouped by mismatches count and bulge size.',
+                # html.Span(
+                #     "Samples for each Class is provided",
+                #     id="tooltip-sample-class",
+                #     style={"textDecoration": "underline", "cursor": "pointer"}
+                # ),
+                # ', along with the number of Off-Targets found for each Mismatch + Bulge value, for both Reference and Enriched Genomes.',
                 dbc.Tooltip(
                     [
                         html.Div([html.P([html.B('Class 0:'), ' Samples that does not have any On-Targets']),
@@ -2877,26 +2877,26 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         target_opt = [label, value]
         try:
             img_panel = dbc.Row(  # row with plot
+                [
+                    dbc.Col(
                         [
-                            dbc.Col(
-                                [
-                                    html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                                        id='top-1000-score', width="80%", height="auto"),
-                                        target="_blank")
-                                ], width={"size": 10, "offset": 2}
-                            )
-                        ]
+                            html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                                id='top-1000-score', width="80%", height="auto"),
+                                target="_blank")
+                        ], width={"size": 10, "offset": 2}
                     )
+                ]
+            )
         except:
             img_panel = dbc.Row(  # row with plot
-                        [
-                            dbc.Col(
-                                [html.Div()]
-                            )   
-                        ]
+                [
+                    dbc.Col(
+                        [html.Div()]
                     )
-        
+                ]
+            )
+
         query_tab_content = html.Div(
             [
                 img_panel,
