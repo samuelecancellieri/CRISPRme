@@ -259,15 +259,15 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         if '1000G' in ref_var:
             vcf_folder = current_working_directory+"/VCFs/hg38_1000G/"
             vcf_file.write(vcf_folder+"\n")
-            sample_list.append(current_working_directory + \
-                'samplesIDs/hg38_1000G.samplesID.txt')
+            sample_list.append(current_working_directory +
+                               'samplesIDs/hg38_1000G.samplesID.txt')
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/dictionary_VCFs_1000_genome_project'
         if 'HGDP' in ref_var:
             vcf_folder = current_working_directory+"/VCFs/hg38_HGDP/"
             vcf_file.write(vcf_folder+"\n")
-            sample_list.append(current_working_directory + \
-                'samplesIDs/hg38_HGDP.samplesID.txt')
+            sample_list.append(current_working_directory +
+                               'samplesIDs/hg38_HGDP.samplesID.txt')
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/dictionary_VCFs_1000_genome_project'
         if "PV" in ref_var:
@@ -279,7 +279,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             # sample_list = current_working_directory + 'samplesID/' + vcf_input
             # sample_list.append(current_working_directory + "/samplesID/" + vcf_input + "/" + [f for f in listdir(
             #     current_working_directory + 'samplesID/' + vcf_input) if isfile(join(current_working_directory + 'samplesID/' + vcf_input, f))][0])
-            sample_list.append(current_working_directory + "/samplesIDs/" + vcf_input + ".samplesID.txt")
+            sample_list.append(current_working_directory +
+                               "/samplesIDs/" + vcf_input + ".samplesID.txt")
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/'+genome_ref+'+'+vcf_input
 
@@ -320,6 +321,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
 
     if guide_type == 'GS':
         text_sequence = text_guides
+        print(text_sequence)
+        exit()
         # Extract sequence and create the guides
         guides = []
         for name_and_seq in text_sequence.split('>'):
@@ -408,25 +411,25 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # genome_idx = ''
     # genome_idx_ref = ''
     # for gidx in genome_indices_created:
-        # if pam_char in gidx and genome_selected in gidx:
-            # if int(gidx.split('_')[1]) >= int(max_bulges):
-            # if '+' in gidx:
-            # genome_idx = gidx
-            # genome_idx_ref = gidx.split('+')[0]
+    # if pam_char in gidx and genome_selected in gidx:
+    # if int(gidx.split('_')[1]) >= int(max_bulges):
+    # if '+' in gidx:
+    # genome_idx = gidx
+    # genome_idx_ref = gidx.split('+')[0]
 
     # if genome_idx == '':
-        # if int(max_bulges) > 0:
-            # generate_index_enr = True
-            # with open(result_dir + '/pam_indexing.txt', 'w+') as pam_id_file:
-            # pam_id_file.write(pam_to_indexing)
-        # genome_idx = pam_char + '_' + str(max_bulges) + '_' + genome_selected
+    # if int(max_bulges) > 0:
+    # generate_index_enr = True
+    # with open(result_dir + '/pam_indexing.txt', 'w+') as pam_id_file:
+    # pam_id_file.write(pam_to_indexing)
+    # genome_idx = pam_char + '_' + str(max_bulges) + '_' + genome_selected
     # if genome_idx_ref == '':
-        # if int(max_bulges) > 0:
-            # generate_index_ref = True
-            # with open(result_dir + '/pam_indexing.txt', 'w+') as pam_id_file:
-            # pam_id_file.write(pam_to_indexing)
-        # genome_idx_ref = pam_char + '_' + \
-            # str(max_bulges) + '_' + genome_selected.split('+')[0]
+    # if int(max_bulges) > 0:
+    # generate_index_ref = True
+    # with open(result_dir + '/pam_indexing.txt', 'w+') as pam_id_file:
+    # pam_id_file.write(pam_to_indexing)
+    # genome_idx_ref = pam_char + '_' + \
+    # str(max_bulges) + '_' + genome_selected.split('+')[0]
 
     # if ref_var != '':
     #     generate_index_enr = False
