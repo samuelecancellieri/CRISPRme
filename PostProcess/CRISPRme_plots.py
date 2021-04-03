@@ -35,6 +35,7 @@ matplotlib.use('Agg')
 df = pd.read_csv(sys.argv[1], sep="\t",
                  index_col=False, na_values=['n'], nrows=1200)
 out_folder = sys.argv[2]
+guide = sys.argv[3]
 
 # Make index column that numbers the OTs starting from 1
 df = df.reset_index()
@@ -120,7 +121,7 @@ plt.legend(handles=[star, circle, red, blue, gray])
 
 # Save
 plt.tight_layout()
-plt.savefig(out_folder+"CRISPRme_top_100_linear_annotated_for_supplement.png")
+plt.savefig(out_folder+f"CRISPRme_top_100_linear_annotated_for_supplement_{guide}.png")
 plt.clf()
 
 
@@ -173,5 +174,5 @@ plt.legend(handles=[red, blue])
 
 # Save
 plt.tight_layout()
-plt.savefig(out_folder+"CRISPRme_top_1000_log_for_main_text.png")
+plt.savefig(out_folder+f"CRISPRme_top_1000_log_for_main_text_{guide}.png")
 plt.clf()

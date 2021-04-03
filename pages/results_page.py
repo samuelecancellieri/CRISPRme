@@ -2875,20 +2875,31 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         label = [{'label': lab} for lab in all_options.keys()]
         value = [{'value': val} for val in all_value.keys()]
         target_opt = [label, value]
+        try:
+            img_panel = dbc.Row(  # row with plot
+                        [
+                            dbc.Col(
+                                [
+                                    html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                                        id='top-1000-score', width="80%", height="auto"),
+                                        target="_blank")
+                                ], width={"size": 10, "offset": 2}
+                            )
+                        ]
+                    )
+        except:
+            img_panel = dbc.Row(  # row with plot
+                        [
+                            dbc.Col(
+                                [html.Div()]
+                            )   
+                        ]
+                    )
+        
         query_tab_content = html.Div(
             [
-                dbc.Row(  # row with plot
-                    [
-                        dbc.Col(
-                            [
-                                html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                    current_working_directory + 'Results/' + job_id + '/imgs/CRISPRme_top_1000_log_for_main_text.png', 'rb').read()).decode()),
-                                    id='top-1000-score', width="80%", height="auto"),
-                                    target="_blank")
-                            ], width={"size": 10, "offset": 2}
-                        )
-                    ]
-                ),
+                img_panel,
                 dbc.Row(  # row with main group by, secondo group by and thresholds
                     [
                         dbc.Col(  # col0 phantom target select

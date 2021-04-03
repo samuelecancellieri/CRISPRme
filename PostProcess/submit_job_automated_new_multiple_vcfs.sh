@@ -486,13 +486,30 @@ echo -e 'Creating database\tEnd\t'$(date) >> $log
 
 echo $gene_proximity
 echo -e 'Integrating results\tStart\t'$(date) >> $log
+echo -e "\n" >> $guide_file
+# while read guide;
+# do
+# 	if [ -z "$guide" ]; then
+# 		continue
+# 	fi
+# 	touch "${output_folder}/imgs/CRISPRme_top_1000_log_for_main_text_${guide}.png"
+# done < $guide_file
 if [ $gene_proximity != "_" ]; then
 	touch "${output_folder}/dummy.txt"
 	genome_version=$(echo ${ref_name} | sed 's/_ref//' | sed -e 's/\n//') #${output_folder}/Params.txt | awk '{print $2}' | sed 's/_ref//' | sed -e 's/\n//')
 	echo $genome_version
 	bash $starting_dir/post_process.sh "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${gene_proximity}" "${output_folder}/dummy.txt" "${guide_file}" $genome_version "${output_folder}" "vuota"
 	rm "${output_folder}/dummy.txt"
-	python $starting_dir/CRISPRme_plots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/imgs/"
+	while read guide;
+	do
+		if [ -z "$guide" ]; then
+			continue
+		fi
+		head -1 "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >> "${output_folder}/tmp_linda_plot_file_${guide}.txt"
+		fgrep "$guide" "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >> "${output_folder}/tmp_linda_plot_file_${guide}.txt"
+		python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide
+		rm "${output_folder}/tmp_linda_plot_file_${guide}.txt"
+	done < $guide_file
 fi
 echo -e 'Integrating results\tEnd\t'$(date) >> $log
 echo -e 'Job\tDone\t'$(date) >> $log
