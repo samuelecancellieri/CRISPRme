@@ -276,7 +276,7 @@ def fillDict(guide, guideDict, motifDict):
     for line in inFinalFile:
         # print(line)
         split = line.strip().split('\t')
-        if guide in split[15]:
+        if guide not in split[15]:
             continue
         alignedSequence = split[2]  # aligned target with the guide
         mismatch = int(split[8])  # mm extracted from target file
