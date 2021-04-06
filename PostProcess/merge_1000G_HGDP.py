@@ -41,11 +41,15 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
     best_HGDP = []
     best_1000G = []
     best_cfd_1000G_or_ref = 0
+    cfd_var = -1
     if len(list_HGDP) > 0:
         best_HGDP = list_HGDP[0]
+        cfd_var = float(best_HGDP[cfd])
         best_cfd_1000G_or_ref = float(best_HGDP[cfd+1])
     if len(list_1000G) > 0:
         best_1000G = list_1000G[0]
+        if cfd_var < float(best_1000G[cfd]):
+            cfd_var = float(best_1000G[cfd])
         #print('prev 1000G best cfd',best_cfd_1000G_or_ref)
         if best_cfd_1000G_or_ref < float(best_1000G[cfd]):
             best_cfd_1000G_or_ref = float(best_1000G[cfd])
@@ -58,7 +62,8 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         #print('prev ref best cfd',best_cfd_1000G_or_ref)
         if best_cfd_1000G_or_ref <= float(best_ref[cfd]):
             best_cfd_1000G_or_ref = float(best_ref[cfd])
-            ref_is_best = True
+            if best_cfd_1000G_or_ref >= cfd_var:
+                ref_is_best = True
 
     #append diff_cfd from best 1000G in cluster
     for ele in list_HGDP:
