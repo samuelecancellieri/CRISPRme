@@ -2413,20 +2413,20 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 # Open in browser the result directory
 
 
-@app.callback(
-    Output('div-open-result-directory', 'children'),
-    [Input('button-open-result-directory', 'n_clicks')],
-    [State('url', 'search'),
-     State('div-open-result-directory', 'children')]
-)
-def openResultDirectory(n, search, guide):
-    if n is None:
-        raise PreventUpdate
-    # TODO decidere se aprire tutta la cartella, solo il file, e nel secondo caso creare copia submit job che non rimuova .targets.GUIDE.txt
-    job_id = search.split('=')[-1]
-    wb.open_new_tab(current_working_directory + 'Results/' +
-                    job_id + '/' + job_id + '.targets.' + guide + '.txt')
-    raise PreventUpdate
+# @app.callback(
+#     Output('div-open-result-directory', 'children'),
+#     [Input('button-open-result-directory', 'n_clicks')],
+#     [State('url', 'search'),
+#      State('div-open-result-directory', 'children')]
+# )
+# def openResultDirectory(n, search, guide):
+#     if n is None:
+#         raise PreventUpdate
+#     # TODO decidere se aprire tutta la cartella, solo il file, e nel secondo caso creare copia submit job che non rimuova .targets.GUIDE.txt
+#     job_id = search.split('=')[-1]
+#     wb.open_new_tab(current_working_directory + 'Results/' +
+#                     job_id + '/' + job_id + '.targets.' + guide + '.txt')
+#     raise PreventUpdate
 
 
 @app.callback(
@@ -2627,8 +2627,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
         # fl.append(html.Button('Open Result Directory',
         #                       id='button-open-result-directory'))
-        fl.append(html.Div(guide, id='div-open-result-directory',
-                           style={'display': 'none'}))
+        # fl.append(html.Div(guide, id='div-open-result-directory',
+        #                    style={'display': 'none'}))
         fl.append(html.Br())
         df = pd.read_csv(job_directory + job_id +
                          '.summary_by_guide.' + guide + '.txt', sep='\t')
