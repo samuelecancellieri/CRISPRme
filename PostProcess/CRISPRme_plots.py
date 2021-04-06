@@ -18,6 +18,10 @@ import matplotlib.colors as mcolors
 #import seaborn as sns
 import sys
 import matplotlib
+import warnings
+
+# ignore all warnings
+warnings.filterwarnings("ignore")
 
 # set matplotlib to not use X11 server
 matplotlib.use('Agg')
@@ -121,7 +125,8 @@ plt.legend(handles=[star, circle, red, blue, gray])
 
 # Save
 plt.tight_layout()
-plt.savefig(out_folder+f"CRISPRme_top_100_linear_annotated_for_supplement_{guide}.png")
+plt.savefig(
+    out_folder+f"CRISPRme_top_100_linear_annotated_for_supplement_{guide}.png")
 plt.clf()
 
 
