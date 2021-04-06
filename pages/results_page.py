@@ -2307,10 +2307,16 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     guide_images = []
     sample_images = []
 
+    guide = guide.replace("N", "")
     radar_img = '/imgs/summary_single_guide_' + \
         guide.replace("N", "") + '_' + str(mm) + \
         '.' + str(bulge) + '_TOTAL.png'
 
+    if not os.path.isfile(f"{job_directory}/{radar_img}"):
+        try:
+            os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
+        except:
+            pass
     img_found = False
     try:
         radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
@@ -2361,11 +2367,18 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     (superpopulation, 'Superpopulation')]
 
     for c in class_images:
+        
         img_found = False
         if c[0]:
+            current_img = job_directory + '/imgs/summary_single_guide_' + guide.replace(
+                    "N", "") + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
+            if not os.path.isfile(current_img):
+                try:
+                    os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} {c[0]} {job_directory}/imgs/")
+                except:
+                    pass
             try:
-                first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(open(job_directory + '/imgs/summary_single_guide_' + guide.replace(
-                    "N", "") + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png', 'rb').read()).decode())
+                first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_img, 'rb').read()).decode())
                 img_found = True
             except:
                 first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
@@ -3185,9 +3198,14 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         '''
         fl.append(html.Br())
 
+        guide = guide.replace("N", "")
         radar_img = '/imgs/summary_single_guide_' + guide.replace("N", "") + '_' + str(
             0) + '_total_0.0_TOTAL.png'  # TODO choose between 0 mm and max used mms
-
+        if not os.path.isfile(f"{job_directory}/{radar_img}"):
+            try:
+                os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json 0 0 TOTAL {job_directory}/imgs/")
+            except:
+                pass
         # barplot_img = 'summary_histogram_' + guide + '_' + str(0) + '_total.png'
         # try:            #NOTE serve per non generare errori se il barplot non è stato fatto
         #    barplot_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' + job_id + '/' + barplot_img, 'rb').read()).decode())
