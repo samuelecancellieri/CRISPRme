@@ -917,6 +917,9 @@ def target_integration():
 
 
 def web_interface():
+    if "--help" in input_args:
+        print("This function must be launched without input, it starts a local server to use the web interface.")
+        print("Open your web-browser and write 127.0.0.1:8080 in the search bar if you are executing locally, if you are executing on an extern server write <yourserverip>:8080 in the search bar")
     # print(corrected_web_path)
     subprocess.run(corrected_web_path+'/./index.py')
 
@@ -929,7 +932,7 @@ def callHelp():
           #"\ncrisprime search-only FUNCTION SEARCHING THE WHOLE GENOME (REFERENCE AND VARIANT IF REQUESTED) PRODUCING RESULTS FOR POST-ANALYSIS",
           #"\ncrisprime post-analysis-only FUNCTION THAT PERFORMS CFD ANALYSIS AND TARGET SELECTION STARTING FROM SEARCH RESULTS",
           "\n\ncrisprime.py targets-integration FUNCTION THAT INTEGRATES IN-SILICO TARGETS WITH EMPIRICAL DATA GENERATING A USABLE PANEL",
-          "\n\ncrisprime.py web-interface FUNCTION TO ACTIVATE WEB INTERFACE OF CRISPRme"
+          "\n\ncrisprime.py web-interface FUNCTION TO ACTIVATE WEB INTERFACE OF CRISPRme TO USE WITH A BROWSER LOCALLY"
           "\n\nADD help TO ANY FUNCTION TO VISUALIZE A BRIEF HELP PAGE (example: crisprime.py complete-search --help)\n")
 
 
