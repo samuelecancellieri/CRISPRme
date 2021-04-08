@@ -341,17 +341,31 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                 continue
             name = name_and_seq[:name_and_seq.find('\n')]
             seq = name_and_seq[name_and_seq.find('\n'):]
-            seq = seq.strip().split()
-            seq = ''.join(seq)
+            # seq = seq.strip().split()
+            # seq = ''.join(seq)
+            seq = seq.strip()
             # name, seq = name_and_seq.strip().split('\n')
             if 'chr' in seq:
-                extracted_seq = extract_seq.extractSequence(
-                    name, seq, genome_ref.replace(' ', '_'))
+                # extracted_seq = extract_seq.extractSequence(
+                #         name, seq, genome_ref.replace(' ', '_'))
+                for single_row in seq.split('\n'):
+                    if '' == single_row:
+                        continue
+                    pieces_of_row = single_row.strip().split('\t')
+                    seq_to_extract = pieces_of_row[0]+":"+pieces_of_row[1]+"-"+pieces_of_row[2]
+                    extracted_seq = extract_seq.extractSequence(
+                        name, seq_to_extract, genome_ref.replace(' ', '_'))
+                    guides.extend(convert_pam.getGuides(
+                        extracted_seq, pam_char, len_guide_sequence, pam_begin))
             else:
+                seq = seq.split()
+                seq = ''.join(seq)
                 extracted_seq = seq.strip()
+                guides.extend(convert_pam.getGuides(
+                    extracted_seq, pam_char, len_guide_sequence, pam_begin))
             # print('extracted seq', extracted_seq)
-            guides.extend(convert_pam.getGuides(
-                extracted_seq, pam_char, len_guide_sequence, pam_begin))
+            # guides.extend(convert_pam.getGuides(
+            #     extracted_seq, pam_char, len_guide_sequence, pam_begin))
         if not guides:
             guides = "GAGTCCGAGCAGAAGAAGAA"
         text_guides = '\n'.join(guides).strip()
