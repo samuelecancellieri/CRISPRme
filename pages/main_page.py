@@ -352,7 +352,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                     if '' == single_row:
                         continue
                     pieces_of_row = single_row.strip().split()
-                    seq_to_extract = pieces_of_row[0]+":"+pieces_of_row[1]+"-"+pieces_of_row[2]
+                    seq_to_extract = pieces_of_row[0]+":" + \
+                        pieces_of_row[1]+"-"+pieces_of_row[2]
                     extracted_seq = extract_seq.extractSequence(
                         name, seq_to_extract, genome_ref.replace(' ', '_'))
                     guides.extend(convert_pam.getGuides(
@@ -873,7 +874,7 @@ def changePlaceholderGuideTextArea(value):
     if value == 'IP':
         return ['GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC']
     elif value == 'GS':
-        return ['>sequence 1\nAAGTCCCAGGACTTCAGAAGagctgtgagaccttggc\n>sequence2\nchr1:11,130,540-11,130,751']
+        return ['>sequence1\nAAGTCCCAGGACTTCAGAAGagctgtgagaccttggc\n>sequence_bed\nchr1 11130540 11130751\nchr1 1023000 1024000']
 
 
 def selectSameLenGuides(list_guides):
