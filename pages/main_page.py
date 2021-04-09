@@ -351,7 +351,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                 for single_row in seq.split('\n'):
                     if '' == single_row:
                         continue
-                    pieces_of_row = single_row.strip().split('\t')
+                    pieces_of_row = single_row.strip().split()
                     seq_to_extract = pieces_of_row[0]+":"+pieces_of_row[1]+"-"+pieces_of_row[2]
                     extracted_seq = extract_seq.extractSequence(
                         name, seq_to_extract, genome_ref.replace(' ', '_'))
