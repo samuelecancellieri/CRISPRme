@@ -36,7 +36,7 @@ touch $log
 output=$output_folder/output.txt
 touch $output
 
-# rm $output_folder/queue.txt
+rm -f $output_folder/queue.txt
 #for vcf_f in "${vcf_list[@]}"; 
 if [ $2 == "_" ]; then
 	echo -e "_" >> $output_folder/tmp_list_vcf.txt
@@ -64,6 +64,7 @@ do
 
 
 	echo -e 'Job\tStart\t'$(date) > $log
+	echo -e 'Job\tStart\t'$(date) >&2 
 
 	unset real_chroms
 	declare -a real_chroms
@@ -133,6 +134,7 @@ do
 		cd "$current_working_directory/Genomes"
 		if ! [ -d "$current_working_directory/Genomes/${ref_name}+${vcf_name}" ]; then
 			echo -e 'Add-variants\tStart\t'$(date) >> $log
+			echo -e 'Add-variants\tStart\t'$(date) >&2
 			echo -e "Adding variants"
 			crispritz.py add-variants "$vcf_folder/" "$ref_folder/" "true"
 			#if ! [ -d "${ref_name}+${vcf_name}" ]; then
@@ -152,9 +154,12 @@ do
 				mkdir "genome_library/${true_pam}_2_${ref_name}+${vcf_name}_INDELS"
 			fi
 			echo -e 'Add-variants\tEnd\t'$(date) >> $log
+			echo -e 'Add-variants\tEnd\t'$(date) >&2
 			echo -e 'Indexing Indels\tStart\t'$(date) >> $log
+			echo -e 'Indexing Indels\tStart\t'$(date) >&2
 			${starting_dir}/./pool_index_indels.py "$current_working_directory/Genomes/variants_genome/" "$pam_file" $true_pam $ref_name $vcf_name $ncpus
 			echo -e 'Indexing Indels\tEnd\t'$(date) >> $log
+			echo -e 'Indexing Indels\tEnd\t'$(date) >&2
 			if ! [ -d $current_working_directory/Genomes/${ref_name}+${vcf_name}_INDELS ]; then
 				mkdir $current_working_directory/Genomes/${ref_name}+${vcf_name}_INDELS
 			fi
@@ -172,8 +177,10 @@ do
 	if [ "$vcf_name" != "_" ]; then
 		if ! [ -d "$current_working_directory/genome_library/${true_pam}_2_${ref_name}+${vcf_name}_INDELS" ]; then
 			echo -e 'Indexing Indels\tStart\t'$(date) >> $log
+			echo -e 'Indexing Indels\tStart\t'$(date) >&2
 			${starting_dir}/./pool_index_indels.py "$current_working_directory/Genomes/${ref_name}+${vcf_name}_INDELS/" "$pam_file" $true_pam $ref_name $vcf_name $ncpus
 			echo -e 'Indexing Indels\tEnd\t'$(date) >> $log
+			echo -e 'Indexing Indels\tEnd\t'$(date) >&2
 		fi
 	fi
 
@@ -187,11 +194,13 @@ do
 			if ! [ $bMax -gt 1 ]; then
 				if ! [ -d "$current_working_directory/genome_library/${true_pam}_1_${ref_name}" ]; then
 					echo -e 'Index-genome Reference\tStart\t'$(date) >> $log	
+					echo -e 'Index-genome Reference\tStart\t'$(date) >&2	
 					echo -e 'Indexing_Reference' > $output
 					echo -e "Indexing reference genome"
 					crispritz.py index-genome "$ref_name" "$ref_folder/" "$pam_file" -bMax $bMax -th $ncpus
 					pid_index_ref=$!
 					echo -e 'Index-genome Reference\tEnd\t'$(date) >> $log	
+					echo -e 'Index-genome Reference\tEnd\t'$(date) >&2	
 					idx_ref="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}"
 				else
 					echo -e "Reference Index already present"
@@ -199,21 +208,25 @@ do
 				fi
 			else
 				echo -e 'Index-genome Reference\tStart\t'$(date) >> $log	
+				echo -e 'Index-genome Reference\tStart\t'$(date) >&2	
 				echo -e 'Indexing_Reference' > $output
 				echo -e "Indexing reference genome"
 				crispritz.py index-genome "$ref_name" "$ref_folder/" "$pam_file" -bMax $bMax -th $ncpus
 				pid_index_ref=$!
 				echo -e 'Index-genome Reference\tEnd\t'$(date) >> $log	
+				echo -e 'Index-genome Reference\tEnd\t'$(date) >&2	
 				idx_ref="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}"
 			fi
 		else
 			echo -e "Reference Index already present"
 			echo -e 'Index-genome Reference\tEnd\t'$(date) >> $log	
+			echo -e 'Index-genome Reference\tEnd\t'$(date) >&2	
 			idx_ref="$current_working_directory/genome_library/${true_pam}_2_${ref_name}"
 		fi
 	else
 		echo -e "Reference Index already present"
 		echo -e 'Index-genome Reference\tEnd\t'$(date) >> $log	
+		echo -e 'Index-genome Reference\tEnd\t'$(date) >&2
 		idx_ref="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}"
 	fi
 
@@ -224,11 +237,13 @@ do
 				if ! [ $bMax -gt 1 ]; then
 					if ! [ -d "$current_working_directory/genome_library/${true_pam}_1_${ref_name}+${vcf_name}" ]; then
 						echo -e 'Index-genome Variant\tStart\t'$(date) >> $log	
+						echo -e 'Index-genome Variant\tStart\t'$(date) >&2	
 						echo -e 'Indexing_Enriched' > $output
 						echo -e "Indexing variant genome"
 						crispritz.py index-genome "${ref_name}+${vcf_name}" "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" -bMax $bMax -th $ncpus #${ref_folder%/}+${vcf_name}/
 						pid_index_var=$!
 						echo -e 'Index-genome Variant\tEnd\t'$(date) >> $log	
+						echo -e 'Index-genome Variant\tEnd\t'$(date) >&2	
 						idx_var="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}+${vcf_name}"
 					else
 						echo -e "Variant Index already present"
@@ -236,21 +251,25 @@ do
 					fi
 				else
 					echo -e 'Index-genome Variant\tStart\t'$(date) >> $log	
+					echo -e 'Index-genome Variant\tStart\t'$(date) >&2	
 					echo -e 'Indexing_Enriched' > $output
 					echo -e "Indexing variant genome"
 					crispritz.py index-genome "${ref_name}+${vcf_name}" "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" -bMax $bMax -th $ncpus
 					pid_index_ref=$!
 					echo -e 'Index-genome Variant\tEnd\t'$(date) >> $log	
+					echo -e 'Index-genome Variant\tEnd\t'$(date) >&2	
 					idx_var="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}+${vcf_name}"
 				fi
 			else
 				echo -e "Variant Index already present"
 				echo -e 'Index-genome Variant\tEnd\t'$(date) >> $log
+				echo -e 'Index-genome Variant\tEnd\t'$(date) >&2
 				idx_var="$current_working_directory/genome_library/${true_pam}_2_${ref_name}+${vcf_name}"
 			fi
 		else
 			echo -e "Variant Index already present"
 			echo -e 'Index-genome Variant\tEnd\t'$(date) >> $log
+			echo -e 'Index-genome Variant\tEnd\t'$(date) >&2
 			idx_var="$current_working_directory/genome_library/${true_pam}_${bMax}_${ref_name}+${vcf_name}"
 		fi	
 	fi
@@ -259,6 +278,7 @@ do
 	echo $idx_ref
 	if ! [ -f "$output_folder/crispritz_targets/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 		echo -e 'Search Reference\tStart\t'$(date) >> $log	
+		echo -e 'Search Reference\tStart\t'$(date) >&2
 		echo -e 'Search Reference' >  $output
 		crispritz.py search $idx_ref "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t  -th $(expr $ncpus / 4) &
 		pid_search_ref=$!
@@ -269,10 +289,12 @@ do
 	if [ "$vcf_name" != "_" ]; then
 		if ! [ -f "$output_folder/crispritz_targets/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 			echo -e 'Search Variant\tStart\t'$(date) >> $log	
+			echo -e 'Search Variant\tStart\t'$(date) >&2	
 			echo -e 'Search Variant' >  $output
 			crispritz.py search "$idx_var" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t  -th $(expr $ncpus / 4) -var
 			mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 			echo -e 'Search Variant\tEnd\t'$(date) >> $log	
+			echo -e 'Search Variant\tEnd\t'$(date) >&2	
 		else
 			echo -e "Search for variant already done"
 		fi
@@ -280,11 +302,13 @@ do
 		if ! [ -f "$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 			echo -e "Search INDELs Start"
 			echo -e 'Search INDELs\tStart\t'$(date) >> $log	
+			echo -e 'Search INDELs\tStart\t'$(date) >&2
 			cd $starting_dir
 			./pool_search_indels.py "$ref_folder" "$vcf_folder" "$vcf_name" "$guide_file" "$pam_file" $bMax $mm $bDNA $bRNA "$output_folder" $true_pam "$current_working_directory/"
 			mv "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 			echo -e "Search INDELs End"
 			echo -e 'Search INDELs\tEnd\t'$(date) >> $log
+			echo -e 'Search INDELs\tEnd\t'$(date) >&2
 		else
 			echo -e "Search INDELs already done"
 		fi
@@ -295,6 +319,7 @@ do
 		sleep 100
 	done
 	echo -e 'Search Reference\tEnd\t'$(date) >> $log	
+	echo -e 'Search Reference\tEnd\t'$(date) >&2	
 
 	if [ -f "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 		mv "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
@@ -312,6 +337,7 @@ do
 	echo -e 'Post analysis' >  $output
 	if [ "$vcf_name" != "_" ]; then
 		echo -e 'Post-analysis SNPs\tStart\t'$(date) >> $log	
+		echo -e 'Post-analysis SNPs\tStart\t'$(date) >&2	
 		final_res="$output_folder/final_results_$(basename ${output_folder}).bestMerge.txt"
 		final_res_alt="$output_folder/final_results_$(basename ${output_folder}).altMerge.txt"
 		if ! [ -f "$final_res" ]; then
@@ -324,6 +350,7 @@ do
 		./pool_post_analisi_snp.py $output_folder $ref_folder $vcf_name $guide_file $mm $bDNA $bRNA $annotation_file $pam_file $dict_folder $final_res $final_res_alt $ncpus
 		
 		echo -e 'Post-analysis SNPs\tEnd\t'$(date) >> $log	
+		echo -e 'Post-analysis SNPs\tEnd\t'$(date) >&2	
 		for key in "${real_chroms[@]}"
 		do
 			echo "Concatenating $key"
@@ -334,6 +361,7 @@ do
 		done
 	else
 		echo -e 'Post-analysis\tStart\t'$(date) >> $log	
+		echo -e 'Post-analysis\tStart\t'$(date) >&2	
 		final_res="$output_folder/final_results_$(basename ${output_folder}).bestMerge.txt"
 		final_res_alt="$output_folder/final_results_$(basename ${output_folder}).altMerge.txt"
 		if ! [ -f "$final_res" ]; then
@@ -353,6 +381,7 @@ do
 			# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"
 		done
 		echo -e 'Post-analysis\tEnd\t'$(date) >> $log	
+		echo -e 'Post-analysis\tEnd\t'$(date) >&2	
 
 	fi
 
@@ -361,8 +390,10 @@ do
 		cd "$starting_dir"
 		
 		echo -e 'Post-analysis INDELs\tStart\t'$(date) >> $log	
+		echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2	
 		./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
 		echo -e 'Post-analysis INDELs\tEnd\t'$(date) >> $log	
+		echo -e 'Post-analysis INDELs\tEnd\t'$(date) >&2	
 		for key in "${array_fake_chroms[@]}"
 		do	
 			echo "Concatenating $key"
@@ -392,16 +423,20 @@ sampleID=$output_folder/sampleID.txt
 
 echo -e 'Merging targets' >  $output
 echo -e 'Merging Close Targets\tStart\t'$(date) >> $log	
+echo -e 'Merging Close Targets\tStart\t'$(date) >&2	
 ./merge_close_targets_cfd.sh $final_res $final_res.trimmed $merge_t
 mv $final_res.trimmed $final_res
 mv $final_res.trimmed.discarded_samples $final_res_alt
 
 echo -e 'Merging Close Targets\tEnd\t'$(date) >> $log	
+echo -e 'Merging Close Targets\tEnd\t'$(date) >&2	
 
 echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >> $log	
+echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >&2	
 ./merge_alt_chr.sh $final_res $final_res.chr_merged
 
 echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >> $log	
+echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >&2	
 
 mv $final_res.chr_merged $final_res
 
@@ -425,6 +460,7 @@ mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
 
 echo -e 'Creating images' >  $output
 echo -e 'Creating images\tStart\t'$(date) >> $log	
+echo -e 'Creating images\tStart\t'$(date) >&2	
 echo -e "Adding risk score"
 ./add_risk_score.py $final_res $final_res.risk
 mv "$final_res.risk" "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
@@ -473,6 +509,7 @@ else
 	rm dummy.txt
 fi
 echo -e 'Creating images\tEnd\t'$(date) >> $log	
+echo -e 'Creating images\tEnd\t'$(date) >&2	
 
 # if [ "$vcf_name" != "_" ]; then
 # 	cp $sampleID $output_folder/sampleID.txt
@@ -480,14 +517,17 @@ echo -e 'Creating images\tEnd\t'$(date) >> $log
 
 echo -e 'Building database'
 echo -e 'Creating database\tStart\t'$(date) >> $log
+echo -e 'Creating database\tStart\t'$(date) >&2
 if [ -f "${output_folder}/$(basename ${output_folder}).db" ]; then
 	rm "${output_folder}/$(basename ${output_folder}).db"
 fi
 python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/$(basename ${output_folder})"
 echo -e 'Creating database\tEnd\t'$(date) >> $log
+echo -e 'Creating database\tEnd\t'$(date) >&2
 
 echo $gene_proximity
 echo -e 'Integrating results\tStart\t'$(date) >> $log
+echo -e 'Integrating results\tStart\t'$(date) >&2
 echo -e "\n" >> $guide_file
 # while read guide;
 # do
@@ -515,7 +555,9 @@ if [ $gene_proximity != "_" ]; then
 	done < $guide_file
 fi
 echo -e 'Integrating results\tEnd\t'$(date) >> $log
+echo -e 'Integrating results\tEnd\t'$(date) >&2
 echo -e 'Job\tDone\t'$(date) >> $log
+echo -e 'Job\tDone\t'$(date) >&2
 echo -e 'Job End' >  $output
 echo -e "JOB END"
 
