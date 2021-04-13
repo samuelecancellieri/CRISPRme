@@ -2479,6 +2479,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         sample_grep_result = current_working_directory + 'Results/' + \
             job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
 
+        print('printo i vari integrated da fare')
+        print(integrated_to_grep, integrated_personal, integrated_private)
         # copy header from integrated results into sample files
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
         os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
