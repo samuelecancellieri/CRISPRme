@@ -2482,14 +2482,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         print('printo i vari integrated da fare')
         print(integrated_to_grep, integrated_personal, integrated_private)
         # copy header from integrated results into sample files
-        # os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
-        # os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
-
-        os.system(f"head -1 {integrated_to_grep}")
-        os.system(f"head -1 {integrated_to_grep}")
-
-        os.system(f"LC_ALL=C fgrep {sample} {integrated_to_grep}")
-
+        os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
+        os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
         os.system(
             f"LC_ALL=C fgrep {sample} {integrated_to_grep} >> {integrated_personal}")
         os.system(
