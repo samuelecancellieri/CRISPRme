@@ -2491,9 +2491,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
         # plot for images in personal card
         os.system(f"python {app_main_directory}/PostProcess/CRISPRme_plots.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.personal &> {current_working_directory}/Results/{job_id}/warnings.txt")
-        os.system(f"python {app_main_directory}/PostProcess/CRISPRme_plots.py {integrated_private} {current_working_directory}/Results/{job_id}/ {guide}.private &> {current_working_directory}/Results/{job_id}/warnings.txt")
+        os.system(f"python {app_main_directory}/PostProcess/CRISPRme_plots.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.private &> {current_working_directory}/Results/{job_id}/warnings.txt")
         os.system(
-            f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt")
+            f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal} &")
 
         private = 0
         for line in open(sample_grep_result):
