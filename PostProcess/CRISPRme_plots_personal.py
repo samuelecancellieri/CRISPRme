@@ -135,7 +135,7 @@ Log, ref/alt, top 1000: for main text
 """
 # matplotlib plot settings
 plt.rcParams["figure.dpi"] = 600
-# plt.rcParams["figure.figsize"] = 7.5, 2.25
+plt.rcParams["figure.figsize"] = 4, 4
 plt.rcParams.update({'font.size': 7})
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
