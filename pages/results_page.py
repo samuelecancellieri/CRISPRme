@@ -2551,21 +2551,19 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 ans.columns = c.split('\t')[:23]
 
     # image for personal and private
-    # image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' +
-    #                                                                              job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.personal.png', 'rb').read()).decode())
-    # image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' +
-                                                                                job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.private.png', 'rb').read()).decode())
+    # image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.personal.png', 'rb').read()).decode())
+    # image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' + job_id + f'/imgss/CRISPRme_top_1000_log_for_main_text_{guide}.private.png', 'rb').read()).decode())
 
     try:
-        file_to_load=job_id + '.' + sample + '.tmp_card.zip'
-        ans['']=[''] * ans.shape[0]  # taaaaaaaaaac
-        ans_cols=ans.columns.tolist()
+        file_to_load = job_id + '.' + sample + '.tmp_card.zip'
+        ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
+        ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
         ans_cols.remove('')
         ans_cols.insert(0, '')
-        ans=ans[ans_cols]
-        out_1=[
+        ans = ans[ans_cols]
+        out_1 = [
             # dbc.Col(
             html.A('Download private targets', href=URL+'/Results/' + \
                    job_id + '/' + file_to_load, target='_blank'),
