@@ -2367,18 +2367,20 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     (superpopulation, 'Superpopulation')]
 
     for c in class_images:
-        
+
         img_found = False
         if c[0]:
             current_img = job_directory + '/imgs/summary_single_guide_' + guide.replace(
-                    "N", "") + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
+                "N", "") + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
             if not os.path.isfile(current_img):
                 try:
-                    os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} {c[0]} {job_directory}/imgs/")
+                    os.system(
+                        f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} {c[0]} {job_directory}/imgs/")
                 except:
                     pass
             try:
-                first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_img, 'rb').read()).decode())
+                first_img_source = 'data:image/png;base64,{}'.format(
+                    base64.b64encode(open(current_img, 'rb').read()).decode())
                 img_found = True
             except:
                 first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
@@ -2467,12 +2469,28 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         pam_creation = df.loc[sample, 8]
 
         file_to_grep = job_directory + job_id + '.bestMerge.txt'
+        integrated_to_grep = job_directory+job_id + \
+            '.bestMerge.txt.integrated_results.tsv'
+        integrated_personal = current_working_directory + 'Results/' + \
+            job_id + '/' + job_id + '.' + sample + '.' + guide + '.integrated.personal.txt'
+        integrated_private = current_working_directory + 'Results/' + \
+            job_id + '/' + job_id + '.' + sample + '.' + guide + '.integrated.private.txt'
         # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
         sample_grep_result = current_working_directory + 'Results/' + \
             job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
 
+        # copy header from integrated results into sample files
+        os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
+        os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
+        os.system(
+            f"LC_ALL=C fgrep {sample} {integrated_to_grep} >> {integrated_personal}")
+        os.system(
+            f"awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
         os.system(
             f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
+
+        # python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &> "${output_folder}/warnings.txt"
+        python $starting_dir/CRISPRme_plots.py
         private = 0
         for line in open(sample_grep_result):
             private += 1
@@ -2494,8 +2512,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             ans = ans.astype(str)
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
+            # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
             os.system('zip ' + tmp_file.replace('.txt',
-                                                '.zip') + ' ' + tmp_file)  # create zip file to download result card /blocking operation on the system
+                                                '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
             os.system(f"rm {tmp_file} &")
 
@@ -2839,6 +2858,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             html.Div
             (
                 [
+                    dbc.Row(
+                        [
+                            dbc.Col(),
+                            dbc.Col()
+                        ]
+                    ),
                     dbc.Row(
                         [
                             dbc.Col(html.Div(dcc.Dropdown(id='dropdown-sample-card', options=[
