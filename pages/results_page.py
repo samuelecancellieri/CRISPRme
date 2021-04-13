@@ -2479,8 +2479,6 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         sample_grep_result = current_working_directory + 'Results/' + \
             job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
 
-        print('printo i vari integrated da fare')
-        print(integrated_to_grep, integrated_personal, integrated_private)
         # copy header from integrated results into sample files
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
         os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
@@ -2557,8 +2555,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
         current_working_directory + 'Results/' + job_id + f'/imgss/CRISPRme_top_1000_log_for_main_text_{guide}.private.png', 'rb').read()).decode())
 
-    os.system(
-        f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
+    # os.system(
+    #     f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
         ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
