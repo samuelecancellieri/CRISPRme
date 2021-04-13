@@ -2471,10 +2471,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         file_to_grep = job_directory + job_id + '.bestMerge.txt'
         integrated_to_grep = job_directory+job_id + \
             '.bestMerge.txt.integrated_results.tsv'
-        integrated_personal = current_working_directory + 'Results/' + \
-            job_id + '/' + job_id + '.' + sample + '.' + guide + '.integrated.personal.txt'
-        integrated_private = current_working_directory + 'Results/' + \
-            job_id + '/' + job_id + '.' + sample + '.' + guide + '.integrated.private.txt'
+        integrated_personal = job_directory + job_id + '.' + \
+            sample + '.' + guide + '.integrated.personal.txt'
+        integrated_private = job_directory + job_id + '.' + \
+            sample + '.' + guide + '.integrated.private.txt'
         # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
         sample_grep_result = current_working_directory + 'Results/' + \
             job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
