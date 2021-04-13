@@ -2489,8 +2489,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         os.system(
             f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
 
-        # python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &> "${output_folder}/warnings.txt"
-        python $starting_dir/CRISPRme_plots.py
+        # plot for images in personal card
+        os.system(f"python {app_main_directory}/PostProcess/CRISPRme_plots.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.personal &> {current_working_directory}/Results/{job_id}/warnings.txt")
+        os.system(f"python {app_main_directory}/PostProcess/CRISPRme_plots.py {integrated_private} {current_working_directory}/Results/{job_id}/ {guide}.private &> {current_working_directory}/Results/{job_id}/warnings.txt")
+        os.system(
+            f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt")
+
         private = 0
         for line in open(sample_grep_result):
             private += 1
@@ -2546,8 +2550,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     c = f_.readline().strip()
                 ans.columns = c.split('\t')[:23]
 
-    # image_sample_card = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-    #    current_working_directory + 'Results/' + job_id + '/' + sample + "_personal_card.png", 'rb').read()).decode())
+    # image for personal and private
+    image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' +
+                                                                                 job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.personal.png', 'rb').read()).decode())
+    image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' +
+                                                                                job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.private.png', 'rb').read()).decode())
+
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
         ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
@@ -2562,14 +2570,16 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             html.A('Download private targets', href=URL+'/Results/' + \
                    job_id + '/' + file_to_load, target='_blank'),
             False,
-            # html.A(
-            #     html.Img(src=image_sample_card, id='sample-card-img',
-            #              width="100%", height="auto"),
-            #     target="_blank",
-
-            # ),
-            # width=10
-            # ),
+            html.A(
+                html.Img(src=image_personal_top, id='sample-personal-top',
+                         width="100%", height="auto"),
+                target="_blank"
+            ),
+            html.A(
+                html.Img(src=image_private_top, id='sample-private-top',
+                         width="100%", height="auto"),
+                target="_blank"
+            ),
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
@@ -2601,7 +2611,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             #    ),
             #    width=10
             # ),
-            html.A('Download private targets', href=URL+'/Results/' + \
+            html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
             False,
             dash_table.DataTable(
@@ -2617,13 +2627,15 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 # Load the table/children under the tab value
 
 
-@app.callback(
+@ app.callback(
     Output('div-tab-content', 'children'),
     [Input('tabs-reports', 'value'),
      Input('general-profile-table', 'selected_cells')],
     [State('general-profile-table', 'data'),
      State('url', 'search'),
      State('div-genome-type', 'children')]
+
+
 )
 def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     if value is None or sel_cel is None or not sel_cel or not all_guides:
@@ -2858,12 +2870,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             html.Div
             (
                 [
-                    dbc.Row(
-                        [
-                            dbc.Col(),
-                            dbc.Col()
-                        ]
-                    ),
                     dbc.Row(
                         [
                             dbc.Col(html.Div(dcc.Dropdown(id='dropdown-sample-card', options=[
