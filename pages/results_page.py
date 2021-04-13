@@ -2485,7 +2485,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
         os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
         os.system(
-            f"LC_ALL=C fgrep {sample} {integrated_to_grep} >> {integrated_personal}")
+            f"LC_ALL=C fgrep {guide} {integrated_to_grep} | fgrep {sample} >> {integrated_personal}")
         os.system(
             f"awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
         os.system(
@@ -2493,9 +2493,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
         # plot for images in personal card
         os.system(
-            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.personal > warnings.txt 2>&1")
+            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.personal > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
         os.system(
-            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.private > warnings.txt 2>&1")
+            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.private > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
         os.system(
             f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
 
