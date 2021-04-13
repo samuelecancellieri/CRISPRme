@@ -2511,7 +2511,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             tmp_file_2 = current_working_directory + 'Results/' + \
                 job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
             os.system(
-                f"LC_ALL=C sort -k24rg \"{sample_grep_result}\" > \"{tmp_file}\" ; head -5 {tmp_file} > \"{tmp_file_2}\"")
+                f"LC_ALL=C sort -k21,21rg \"{sample_grep_result}\" > \"{tmp_file}\" ; head -5 {tmp_file} > \"{tmp_file_2}\"")
             ans = pd.read_csv(tmp_file_2, sep='\t',
                               header=None, usecols=range(0, 23))
             with open(file_to_grep) as f_:
