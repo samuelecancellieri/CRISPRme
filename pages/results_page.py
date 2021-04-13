@@ -2447,6 +2447,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 @app.callback(
     [Output('download-link-personal-card', 'children'),
      Output('download-link-personal-card', 'hidden'),
+     Output('div-personal-plot', 'children'),
+     Output('div-private-plot', 'children'),
      Output('div-table-sample-card', 'children'),
      Output('div-top-target-sample-card', 'children')],
     [Input('button-sample-card', 'n_clicks')],
@@ -2569,8 +2571,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         ans_cols.insert(0, '')
         ans = ans[ans_cols]
         out_1 = [
-            # dbc.Col(
-            html.A('Download private targets', href=URL+'/Results/' + \
+            html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
             False,
             html.A(
@@ -2617,6 +2618,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
             False,
+            [],
+            [],
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
@@ -2887,7 +2890,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 style={'width': '50%'}
             )
         )
-
+        fl.append(html.Div(
+            [
+                dbc.Row(
+                    [
+                        dbc.Col(html.Div('', id='div-personal-plot')),
+                        dbc.Col(html.Div('', id='div-private-plot'))
+                    ]
+                )
+            ]
+        ))
         fl.append(html.Div(
             '', id='div-table-sample-card', style={'text-align': 'center', 'margin-left': '1%', 'margin-right': '1%'}
         )
