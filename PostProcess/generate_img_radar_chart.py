@@ -42,7 +42,7 @@ mismatch = sys.argv[4]
 bulge = sys.argv[5]
 elem = sys.argv[6]
 outDir = sys.argv[7]  # directory to output the figures
-#threads = int(sys.argv[6])  # number of concurrent execution of image creation
+# threads = int(sys.argv[6])  # number of concurrent execution of image creation
 
 web_server = False
 population = False
@@ -71,6 +71,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
     guideDataFrame['Percentage'] = percentage_list
     guideDataFrame.columns = ['Total', 'Percentage']
+    guideDataFrame.astype({'Total': 'int32'}).dtypes
+    # guideDataFrame['Total'] = int(guideDataFrame['Total'])
     guideDataFrame = guideDataFrame.T
     # number of variable
     categories = list(guideDataFrame)[0:]
@@ -195,11 +197,6 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.close('all')
 
 
-
-
-
-
-
 guide = guide.strip().replace('N', '')
 guideDict = json.load(guideDictFile)
 motifDict = json.load(motifDictFile)
@@ -207,5 +204,6 @@ if __name__ == '__main__':
     # skip creation if no target in global category
     if guideDict[mismatch][bulge]['TOTAL']['General'] == 0:
         sys.exit()
-    
-    generatePlot(guide, guideDict[mismatch][bulge][elem], motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
+
+    generatePlot(guide, guideDict[mismatch][bulge][elem],
+                 motifDict[mismatch][bulge][elem], mismatch, bulge, elem)

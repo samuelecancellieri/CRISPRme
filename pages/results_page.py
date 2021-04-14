@@ -1530,7 +1530,7 @@ def loadDistributionPopulations(sel_cel, all_guides, job_id):
             '\n') if 'Max_bulges' in s)).split('\t')[-1])
 
     distributions = [dbc.Row(html.P(
-        'On- and Off-Targets distributions in the Reference and Enriched Genome. For the Enriched Genome, the targets are divided into 5 SuperPopulations (EAS, EUR, AFR, AMR, SAS).', style={'margin-left': '0.75rem'}))]
+        'On- and Off-Targets distributions in the Reference and Variant Genome. For the Variant Genome, the targets are divided into 5 SuperPopulations (EAS, EUR, AFR, AMR, SAS).', style={'margin-left': '0.75rem'}))]
 
     for i in range(math.ceil((mms + max_bulges + 1) / BARPLOT_LEN)):
         all_images = []
@@ -1994,16 +1994,16 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     if genome_type == 'both':
         col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
-                            'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
+                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
     else:
         col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
-                            'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
+                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
     # Last button pressed is filtering, return the first page of the filtered table
     if max(btn_sample_section) == n:
         if genome_type == 'both':
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
-            df = df.sort_values('Targets in Enriched', ascending=False)
+            df = df.sort_values('Targets in Variant', ascending=False)
             df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
@@ -2036,7 +2036,7 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
             if genome_type == 'both':
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
-                df = df.sort_values('Targets in Enriched', ascending=False)
+                df = df.sort_values('Targets in Variant', ascending=False)
                 df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
@@ -2075,7 +2075,7 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
             if genome_type == 'both':
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
-                df = df.sort_values('Targets in Enriched', ascending=False)
+                df = df.sort_values('Targets in Variant', ascending=False)
                 df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
@@ -2258,7 +2258,7 @@ def generate_table(dataframe, id_table, genome_type, guide='', job_id='', max_ro
     # 'Bulge Type' 'Mismatches' 'Bulge Size' 'Targets in Reference' 'Targets in Enriched' 'Combined' 'PAM Creation' ''
 
     header.append(html.Tr([html.Th(x, style={
-                  'vertical-align': 'middle', 'text-align': 'center'}) for x in ['Reference', 'Enriched', 'Combined']]))
+                  'vertical-align': 'middle', 'text-align': 'center'}) for x in ['Reference', 'Variant', 'Combined']]))
     # else:
     #    header = [html.Tr([html.Th(col, style = {'vertical-align':'middle', 'text-align':'center'}) for col in dataframe.columns])]
     return html.Table(
@@ -2669,7 +2669,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # Show Summary by Guide table
         fl.append(
             html.P(
-                ['Summary table counting the number of targets found in the Enriched Genome for each combination of Bulge Type, Bulge Size and Mismatch. Select \'Show Targets\' to view the corresponding list of targets. ',
+                ['Summary table counting the number of targets found in the Variant Genome for each combination of Bulge Type, Bulge Size and Mismatch. Select \'Show Targets\' to view the corresponding list of targets. ',
                  # html.A('Click here', href = URL + '/data/' + job_id + '/' + job_id + '.targets.' + guide + '.zip' ,target = '_blank', id = 'download-full-list' ), ' to download the full list of targets.'
                  ]
             )
@@ -2710,23 +2710,23 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     elif value == 'tab-summary-by-sample':
         # Show Summary by Sample table
         fl.append(
-            html.P('Summary table counting the number of targets found in the Enriched Genome for each sample. Filter the table by selecting the Population or Superpopulation desired from the dropdowns.')
+            html.P('Summary table counting the number of targets found in the Variant Genome for each sample. Filter the table by selecting the Population or Superpopulation desired from the dropdowns.')
         )
         if genome_type == 'both':
             # col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
             col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
-                                'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
+                                'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
-            df = df.sort_values('Targets in Enriched', ascending=False)
+            df = df.sort_values('Targets in Variant', ascending=False)
             df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             # col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
             col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
-                                'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
+                                'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
-            df = df.sort_values('Targets in Enriched', ascending=False)
+            df = df.sort_values('Targets in Variant', ascending=False)
             df.drop(['Targets in Reference'], axis=1, inplace=True)
             df.drop(['Class'], axis=1, inplace=True)
         more_info_col = []
@@ -2786,7 +2786,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     elif value == 'tab-summary-by-position':
         # Show Summary by position table
         fl.append(
-            html.P('Summary table containing all the targets found in a specific position of the genome. For each position, the enriched target with the lowest Mismatch + Bulge count is shown (if no target was found in the Enriched Genome, the correspondig reference one is shown), along with his Mismatch and Bulge Size values.' +
+            html.P('Summary table containing all the targets found in a specific position of the genome. For each position, the variant target with the lowest Mismatch + Bulge count is shown (if no target was found in the Variant Genome, the correspondig reference one is shown), along with his Mismatch and Bulge Size values.' +
                    ' The subtable \'Targets in Cluster by Mismatch Value\' represents the number of targets found in that position for a particular Mismatch-Bulge Size pair.')
         )
 
