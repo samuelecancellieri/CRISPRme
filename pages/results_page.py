@@ -192,18 +192,18 @@ def resultPage(job_id):
                 #     style={"textDecoration": "underline", "cursor": "pointer"}
                 # ),
                 # ', along with the number of Off-Targets found for each Mismatch + Bulge value, for both Reference and Enriched Genomes.',
-                dbc.Tooltip(
-                    [
-                        html.Div([html.P([html.B('Class 0:'), ' Samples that does not have any On-Targets']),
-                                  html.P([html.B(
-                                      'Class 0+:'), ' Samples that have a subset of the Reference Genome On-Targets']),
-                                  html.P([html.B(
-                                      'Class 1:'), ' Samples that have the same On-Targets as the Reference Genome']),
-                                  html.P([html.B('Class 1+:'), ' Samples that creates at least a new On-Target, that is not present in the Reference Genome'])],
-                                 style={'display': 'inline-block'})
-                    ],
-                    target="tooltip-sample-class", style={'font-size': '12px'}
-                )
+                # dbc.Tooltip(
+                #     [
+                #         html.Div([html.P([html.B('Class 0:'), ' Samples that does not have any On-Targets']),
+                #                   html.P([html.B(
+                #                       'Class 0+:'), ' Samples that have a subset of the Reference Genome On-Targets']),
+                #                   html.P([html.B(
+                #                       'Class 1:'), ' Samples that have the same On-Targets as the Reference Genome']),
+                #                   html.P([html.B('Class 1+:'), ' Samples that creates at least a new On-Target, that is not present in the Reference Genome'])],
+                #                  style={'display': 'inline-block'})
+                #     ],
+                #     target="tooltip-sample-class", style={'font-size': '12px'}
+                # )
             ]
         )
     final_list.append(add_to_description)
@@ -340,8 +340,29 @@ def resultPage(job_id):
     result_page = html.Div(final_list, style={'margin': '1%'})
     return result_page
 
+# Generate downlaod link for summary table
+
+
+# @app.callback(
+#     [Output('download-link-sumbyposition', 'children'),
+#      Output('interval-sumbyposition', 'disabled')],
+#     [Input('interval-sumbyposition', 'n_intervals')],
+#     [State('div-info-sumbyposition-targets', 'children'),
+#      State('url', 'search')]
+# )
+# def downloadSummaryTable(n, file_to_load, search):
+#     if n is None:
+#         raise PreventUpdate
+#     job_id = search.split('=')[-1]
+#     file_to_load = file_to_load + '.zip'
+#     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
+#         return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
+
+#     return 'Generating download link, Please wait...', False
 
 # Generate download link sumbyposition
+
+
 @app.callback(
     [Output('download-link-sumbyposition', 'children'),
      Output('interval-sumbyposition', 'disabled')],
