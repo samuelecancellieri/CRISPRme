@@ -195,9 +195,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 def motifDictCreation(guide):
     # create time stamp for motif dict
     motifDict = dict()
-    for mismatch in range(0, 8):
+    for mismatch in range(0, 11):
         motifDict[mismatch] = dict()
-        for bulge in range(0, 3):
+        for bulge in range(0, 6):
             motifDict[mismatch][bulge] = dict()
             motifDict[mismatch][bulge]['TOTAL'] = dict()
             motifDict[mismatch][bulge]['TOTAL']['A'] = [0]*len(guide)
@@ -240,9 +240,9 @@ def motifDictCreation(guide):
 def guideDictCreation():
     # create one stamp for guideDict
     guideDict = dict()
-    for mismatch in range(0, 8):
+    for mismatch in range(0, 11):
         guideDict[mismatch] = dict()
-        for bulge in range(0, 3):
+        for bulge in range(0, 6):
             guideDict[mismatch][bulge] = dict()
             guideDict[mismatch][bulge]['TOTAL'] = dict()
             guideDict[mismatch][bulge]['TOTAL']['General'] = 0
@@ -299,6 +299,9 @@ def fillDict(guide, guideDict, motifDict):
                                                         ][count] += 1
                 elif nucleotide == '-':
                     motifDict[mismatch][bulge]['TOTAL'][split[0]][count] += 1
+                if guide[count] == 'N':
+                    motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
+                                                        ][count] += 1
         else:
             alignedGuide = split[1]
             for count, nucleotide in enumerate(alignedGuide[bulge:]):
@@ -306,6 +309,9 @@ def fillDict(guide, guideDict, motifDict):
                     motifDict[mismatch][bulge]['TOTAL'][split[0]][count] += 1
             for count, nucleotide in enumerate(alignedSequence[bulge:]):
                 if nucleotide.islower():
+                    motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
+                                                        ][count] += 1
+                if guide[count] == 'N':
                     motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
                                                         ][count] += 1
         # check if samples are available and take them if yes
@@ -329,6 +335,9 @@ def fillDict(guide, guideDict, motifDict):
                             elif nucleotide == '-':
                                 motifDict[mismatch][bulge][superpop][split[0]
                                                                      ][count] += 1
+                            if guide[count] == 'N':
+                                motifDict[mismatch][bulge][superpop][nucleotide.upper()
+                                                                     ][count] += 1
                     else:
                         alignedGuide = split[1]
                         for count, nucleotide in enumerate(alignedGuide[bulge:]):
@@ -337,6 +346,9 @@ def fillDict(guide, guideDict, motifDict):
                                                                      ][count] += 1
                         for count, nucleotide in enumerate(alignedSequence[bulge:]):
                             if nucleotide.islower():
+                                motifDict[mismatch][bulge][superpop][nucleotide.upper()
+                                                                     ][count] += 1
+                            if guide[count] == 'N':
                                 motifDict[mismatch][bulge][superpop][nucleotide.upper()
                                                                      ][count] += 1
                     if split[14] != 'n':
@@ -355,6 +367,9 @@ def fillDict(guide, guideDict, motifDict):
                             elif nucleotide == '-':
                                 motifDict[mismatch][bulge][pop][split[0]
                                                                 ][count] += 1
+                            if guide[count] == 'N':
+                                motifDict[mismatch][bulge][pop][nucleotide.upper()
+                                                                ][count] += 1
                     else:
                         alignedGuide = split[1]
                         for count, nucleotide in enumerate(alignedGuide[bulge:]):
@@ -363,6 +378,9 @@ def fillDict(guide, guideDict, motifDict):
                                                                 ][count] += 1
                         for count, nucleotide in enumerate(alignedSequence[bulge:]):
                             if nucleotide.islower():
+                                motifDict[mismatch][bulge][pop][nucleotide.upper()
+                                                                ][count] += 1
+                            if guide[count] == 'N':
                                 motifDict[mismatch][bulge][pop][nucleotide.upper()
                                                                 ][count] += 1
                     if split[14] != 'n':
@@ -380,6 +398,9 @@ def fillDict(guide, guideDict, motifDict):
                         elif nucleotide == '-':
                             motifDict[mismatch][bulge][sample][split[0]
                                                                ][count] += 1
+                        if guide[count] == 'N':
+                            motifDict[mismatch][bulge][sample][nucleotide.upper()
+                                                               ][count] += 1
                 else:
                     alignedGuide = split[1]
                     for count, nucleotide in enumerate(alignedGuide[bulge:]):
@@ -388,6 +409,9 @@ def fillDict(guide, guideDict, motifDict):
                                                                ][count] += 1
                     for count, nucleotide in enumerate(alignedSequence[bulge:]):
                         if nucleotide.islower():
+                            motifDict[mismatch][bulge][sample][nucleotide.upper()
+                                                               ][count] += 1
+                        if guide[count] == 'N':
                             motifDict[mismatch][bulge][sample][nucleotide.upper()
                                                                ][count] += 1
                 if split[14] != 'n':
@@ -412,7 +436,8 @@ for line in inSamplesIDFile:
     populationDict[split[0]] = [split[2], split[1]]
 
 for guide in inGuideFile:
-    guide = guide.strip().replace('N', '')
+    # guide = guide.strip().replace('N', '')
+    guide = guide.strip()
     guideDict = guideDictCreation()
     motifDict = motifDictCreation(guide)
     fillDict(guide, guideDict, motifDict)

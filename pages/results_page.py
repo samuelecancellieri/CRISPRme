@@ -285,10 +285,10 @@ def resultPage(job_id):
     if genome_type == 'ref':
         final_list.append(
             dcc.Tabs(id="tabs-reports", value='tab-query-table', children=[
-                dcc.Tab(label='Querying summary', value='tab-query-table'),
-                dcc.Tab(label='Summary by gRNA',
+                dcc.Tab(label='Custom Ranking', value='tab-query-table'),
+                dcc.Tab(label='Summary by MM/bulges',
                         value='tab-summary-by-guide'),
-                dcc.Tab(label='Summary by Position',
+                dcc.Tab(label='Query genomic region',
                         value='tab-summary-by-position'),
                 dcc.Tab(label='Graphical Summary',
                         value='tab-summary-graphical'),
@@ -320,16 +320,16 @@ def resultPage(job_id):
         final_list.append(html.Br())
         final_list.append(
             dcc.Tabs(id="tabs-reports", value='tab-query-table', children=[
-                dcc.Tab(label='Querying summary', value='tab-query-table'),
-                dcc.Tab(label='Summary by gRNA',
+                dcc.Tab(label='Custom Ranking', value='tab-query-table'),
+                dcc.Tab(label='Summary by MM/bulges',
                         value='tab-summary-by-guide'),
                 dcc.Tab(label='Summary by Sample',
                         value='tab-summary-by-sample'),
-                dcc.Tab(label='Summary by Position',
+                dcc.Tab(label='Query genomic region',
                         value='tab-summary-by-position'),
                 dcc.Tab(label='Graphical Summary',
                         value='tab-summary-graphical'),
-                dcc.Tab(label='Personal Card',
+                dcc.Tab(label='Personal Cards',
                         value='tab-graphical-sample-card'),
             ])
         )
