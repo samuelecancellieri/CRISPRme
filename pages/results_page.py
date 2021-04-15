@@ -286,11 +286,11 @@ def resultPage(job_id):
         final_list.append(
             dcc.Tabs(id="tabs-reports", value='tab-query-table', children=[
                 dcc.Tab(label='Custom Ranking', value='tab-query-table'),
-                dcc.Tab(label='Summary by MM/bulges',
+                dcc.Tab(label='Summary by Mismatches/Bulges',
                         value='tab-summary-by-guide'),
-                dcc.Tab(label='Query genomic region',
+                dcc.Tab(label='Query Genomic Region',
                         value='tab-summary-by-position'),
-                dcc.Tab(label='Graphical Summary',
+                dcc.Tab(label='Graphical Reports',
                         value='tab-summary-graphical'),
 
 
@@ -321,15 +321,15 @@ def resultPage(job_id):
         final_list.append(
             dcc.Tabs(id="tabs-reports", value='tab-query-table', children=[
                 dcc.Tab(label='Custom Ranking', value='tab-query-table'),
-                dcc.Tab(label='Summary by MM/bulges',
+                dcc.Tab(label='Summary by Mismatches/Bulges',
                         value='tab-summary-by-guide'),
                 dcc.Tab(label='Summary by Sample',
                         value='tab-summary-by-sample'),
-                dcc.Tab(label='Query genomic region',
+                dcc.Tab(label='Query Genomic Region',
                         value='tab-summary-by-position'),
-                dcc.Tab(label='Graphical Summary',
+                dcc.Tab(label='Graphical Reports',
                         value='tab-summary-graphical'),
-                dcc.Tab(label='Personal Cards',
+                dcc.Tab(label='Personal Risk Cards',
                         value='tab-graphical-sample-card'),
             ])
         )
