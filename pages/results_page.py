@@ -1875,10 +1875,18 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     if chrom == 'None':
         raise PreventUpdate
         # chrom = None
-    pos = filter_q[1]
-    if pos == 'None':
+    # pos = filter_q[1]
+    # if pos == 'None':
+    #     raise PreventUpdate
+    #     # pos = None
+    start = filter_q[1]
+    if start == 'None':
         raise PreventUpdate
-        # pos = None
+    
+    end = filter_q[2]
+    if end == 'None':
+        raise PreventUpdate
+
 
     current_page = current_page.split('/')[0]
     current_page = int(current_page)
@@ -1892,11 +1900,11 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     file_to_grep = job_directory + job_id + '.bestMerge.txt'
     # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
     pos_grep_result = current_working_directory + \
-        'Results/' + job_id + '/' + job_id + '.' + pos + '.txt'
+        'Results/' + job_id + '/' + job_id + '.' + start + "." + end + '.txt'
 
-    os.system(
-        f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
-    # os.popen(f'LC_ALL=C fgrep {guide} {file_to_grep_alt} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" >> {pos_grep_result}').read()
+    #os.system(
+    #    f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
+    os.system(f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
 
     with open(file_to_grep, 'r') as ftg:
         header = ftg.readline().split('\t')[:24]
@@ -1924,8 +1932,9 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                 'textAlign': 'left'
             }],
             style_table={
-                'overflowX': 'scroll'
-            }
+                'overflowX': 'scroll',
+            },
+            page_size=10,
 
         )
     ]
@@ -1939,18 +1948,19 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     Output('div-position-filter-query', 'children'),
     [Input('button-filter-position', 'n_clicks')],
     [State('dropdown-chr-table-position', 'value'),
-     State('input-position', 'value')]
+     State('input-position-start', 'value'),
+     State('input-position-end', 'value')]
 )
-def updatePositionFilter(n, chrom, pos_start):  # , pos_end
+def updatePositionFilter(n, chrom, pos_start, pos_end):  # , pos_end
 
     if n is None:
         raise PreventUpdate
 
     if pos_start == '':
         pos_start = 'None'
-    # if pos_end == '':
-    #    pos_end = 'None'
-    return str(chrom) + ',' + str(pos_start)  # + ',' + str(pos_end)
+    if pos_end == '':
+        pos_end = 'None'
+    return str(chrom) + ',' + str(pos_start) + ',' + str(pos_end)
 
 # Callback to view next/prev page on sample table
 
@@ -2859,12 +2869,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         [
                             dbc.Col(html.Div(dcc.Dropdown(
                                 options=chr_file, id='dropdown-chr-table-position', placeholder='Select a chromosome'))),
-                            dbc.Col(
-                                html.Div(dcc.Input(placeholder='Position', id='input-position'))),
-                            # dbc.Col(html.Div(dcc.Input(placeholder = 'Start Position', id = 'input-position-start'))),
-                            # dbc.Col(html.Div(dcc.Input(placeholder = 'End Position', id = 'input-position-end'))),
+                            #dbc.Col(
+                                #html.Div(dcc.Input(placeholder='Position', id='input-position'))),
+                            dbc.Col(html.Div(dcc.Input(placeholder = 'Start Position', id = 'input-position-start'))),
+                            dbc.Col(html.Div(dcc.Input(placeholder = 'End Position', id = 'input-position-end'))),
                             dbc.Col(html.Div(html.Button(
                                     'Filter', id='button-filter-position')))
+                            #)
                         ]
                     ),
                 ],
