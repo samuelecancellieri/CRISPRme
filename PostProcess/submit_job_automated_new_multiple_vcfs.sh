@@ -42,9 +42,9 @@ if [ $2 == "_" ]; then
 	echo -e "_" >> $output_folder/tmp_list_vcf.txt
 	vcf_list=$output_folder/tmp_list_vcf.txt
 fi
-echo "" >> $vcf_list
+echo >> $vcf_list
 if [ $6 != "_" ]; then
-	echo "" >> $6
+	echo >> $6
 fi
 
 while read vcf_f;
@@ -528,7 +528,7 @@ echo -e 'Creating database\tEnd\t'$(date) >&2
 echo $gene_proximity
 echo -e 'Integrating results\tStart\t'$(date) >> $log
 echo -e 'Integrating results\tStart\t'$(date) >&2
-echo -e "\n" >> $guide_file
+echo >> $guide_file
 # while read guide;
 # do
 # 	if [ -z "$guide" ]; then
@@ -554,6 +554,12 @@ if [ $gene_proximity != "_" ]; then
 		rm "${output_folder}/tmp_linda_plot_file_${guide}.txt"
 	done < $guide_file
 fi
+truncate -s -1 $guide_file
+truncate -s -1 $vcf_list
+if [ $6 != "_" ]; then
+	truncate -s -1 $6
+fi
+
 echo -e 'Integrating results\tEnd\t'$(date) >> $log
 echo -e 'Integrating results\tEnd\t'$(date) >&2
 echo -e 'Job\tDone\t'$(date) >> $log

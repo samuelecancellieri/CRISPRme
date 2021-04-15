@@ -792,11 +792,11 @@ def complete_search():
     os.system(f'cp {guidefile} {outputfolder}/guides.txt')
     if variant:
         with open(f"{outputfolder}/log_verbose.txt", 'w') as log_verbose:
-            subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), str(vcfdir), str(guidefile), str(pamfile), str(annotationfile), str(
+            subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), str(vcfdir), str(outputfolder)+"/guides.txt", str(pamfile), str(annotationfile), str(
                 samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(current_working_directory), str(gene_annotation)], stdout=log_verbose)
     else:
         with open(f"{outputfolder}/log_verbose.txt", 'w') as log_verbose:
-            subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), '_', str(guidefile), str(pamfile), str(annotationfile), str(script_path+'vuoto.txt'),
+            subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), '_', str(outputfolder)+"/guides.txt", str(pamfile), str(annotationfile), str(script_path+'vuoto.txt'),
                             str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(current_working_directory), str(gene_annotation)], stdout=log_verbose)
 
 
