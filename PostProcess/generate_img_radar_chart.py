@@ -9,6 +9,8 @@ import warnings
 import glob
 from itertools import islice
 import sys
+
+from pandas.core.tools.numeric import to_numeric
 import numpy as np
 import scipy.spatial.distance as sp
 from math import pi
@@ -124,6 +126,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.subplot(2, 2, 2)
     transpose_list = []
     guideDataFrame = guideDataFrame.T
+    guideDataFrame['Total'] = to_numeric(
+        guideDataFrame['Total'], downcast='integer')
+    print('lamadonna', guideDataFrame)
     for elem in categories:
         transpose_list.append(list(guideDataFrame.loc[elem]))
         # transpose_list.append(
