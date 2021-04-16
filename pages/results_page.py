@@ -277,7 +277,7 @@ def resultPage(job_id):
                     #                        {'if': {'column_id': 'Reference'},
                     #                        'width': '10%',
                     #                        }],
-                ), id='div-general-profile-table', style={"margin-left": "10%", "margin-right": "10%"})
+                ), id='div-general-profile-table', style={"margin-left": "5%", "margin-right": "5%"})
         )
     )
 
