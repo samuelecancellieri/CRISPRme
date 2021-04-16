@@ -3313,26 +3313,32 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
 
         total_buttons = [
-            html.Div(
-                [
-                    html.P("Select Mismatches"),
-                    dcc.Dropdown(id='mm-dropdown',
-                                 options=opt_mm,
-                                 value='0',
-                                 clearable=False,
-                                 style={'width': '60px'}
-                                 )
-                ], style={'display': 'inline-block', "margin-right": "20px"}),
-            html.Div(
-                [
-                    html.P("Select Bulges"),
-                    dcc.Dropdown(id='blg-dropdown',
-                                 options=opt_blg,
-                                 value='0',
-                                 clearable=False,
-                                 style={'width': '60px'}
-                                 )
-                ], style={'display': 'inline-block', "margin-right": "20px"})
+            dbc.Col(
+                html.Div(
+                    [
+                        html.P("Select Mismatches"),
+                        dcc.Dropdown(id='mm-dropdown',
+                                     options=opt_mm,
+                                     value='0',
+                                     clearable=False,
+                                     style={'width': '60px'}
+                                     )
+                    ]
+                )
+            ),
+            dbc.Col(
+                html.Div(
+                    [
+                        html.P("Select Bulges"),
+                        dcc.Dropdown(id='blg-dropdown',
+                                     options=opt_blg,
+                                     value='0',
+                                     clearable=False,
+                                     style={'width': '60px'}
+                                     )
+                    ]
+                )
+            )
         ]
         # DA SPOSTARE DOPO BARPLOT E RADCHART TOTAL
         sample_buttons = [
@@ -3385,9 +3391,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     dbc.Row(
                         [
                             dbc.Col(
-                                html.Div(total_buttons)
+                                html.Div(total_buttons),
                             )
-                        ]
+                        ], align="center",
                     )
                 ]
             )
