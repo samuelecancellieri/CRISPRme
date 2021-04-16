@@ -72,7 +72,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     guideDataFrame['Percentage'] = percentage_list
     guideDataFrame.columns = ['Total', 'Percentage']
     # convert to int total column
-    guideDataFrame['Total'] = guideDataFrame['Total'].astype('int32')
+    guideDataFrame['Total'] = guideDataFrame['Total'].to_numeric(
+        downcast='integer')
     # guideDataFrame['Total'] = int(guideDataFrame['Total'])
     guideDataFrame = guideDataFrame.T
     # number of variable
