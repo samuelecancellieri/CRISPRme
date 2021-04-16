@@ -3362,8 +3362,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(
                                 html.Div(total_buttons)
                             ),
-                            dbc.Col(
-                                html.Div(sample_buttons))
+                            # dbc.Col(
+                            #     html.Div(sample_buttons))
                         ]
                     )
                 ]
@@ -3377,16 +3377,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #  Output('div-population-barplot', 'children'),
         #  Output('div-radar-chart-sample', 'children'),
         #  Output('div-sample-image', 'children')],
-        # fl.append(
-        #     html.Div(
-        #         dbc.Row(
-        #             [
-        #                 dbc.Col(populations_barplots),
-        #                 dbc.Col(radar_chart_total_content)
-        #             ]
-        #         )
-        #     )
-        # )
+        fl.append(
+            html.Div(
+                dbc.Row(
+                    [
+                        dbc.Col(populations_barplots),
+                        dbc.Col(radar_chart_total_content)
+                    ]
+                )
+            )
+        )
         # fl.append(
         #     dbc.Row(
         #         dbc.Col(radar_chart_content)
