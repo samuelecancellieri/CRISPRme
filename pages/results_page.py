@@ -3399,16 +3399,18 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #  Output('div-sample-image', 'children')],
         fl.append(
             html.Div(
-                dbc.Row(
-                    [
-                        dbc.Col(populations_barplots),
-                        dbc.Col(radar_chart_total_content)
-                    ]
-                ),
-                dbc.Row(
-                    dbc.Col(
-                        html.Div(sample_buttons))
-                )
+                [
+                    dbc.Row(
+                        [
+                            dbc.Col(populations_barplots),
+                            dbc.Col(radar_chart_total_content)
+                        ]
+                    ),
+                    dbc.Row(
+                        dbc.Col(
+                            html.Div(sample_buttons))
+                    )
+                ]
             )
         )
         # fl.append(
