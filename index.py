@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # DASH IMPORT
+from operator import truediv
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -37,7 +38,8 @@ app.layout = html.Div([
 
 def directoryCheck():
     # function to check the main directory status, if some directory is missing, create it
-    directoryList = ['Genomes', 'Results', 'Dictionaries', 'VCFs', 'Annotations', 'Gencode', 'PAMs', 'samplesIDs']
+    directoryList = ['Genomes', 'Results', 'Dictionaries',
+                     'VCFs', 'Annotations', 'Gencode', 'PAMs', 'samplesIDs']
     for directory in directoryList:
         if not os.path.exists(current_working_directory+directory):
             os.makedirs(current_working_directory+directory)
@@ -86,6 +88,6 @@ def changePage(href, path, search, hash_guide):
 
 if __name__ == '__main__':
     directoryCheck()
-    app.run_server(host='0.0.0.0', port=8080, debug=False,
-                   dev_tools_ui=False, dev_tools_props_check=False)
+    app.run_server(host='0.0.0.0', port=8080, debug=True,
+                   dev_tools_ui=True, dev_tools_props_check=True)
     cache.clear()  # delete cache when server is closed
