@@ -3324,7 +3324,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                      style={'width': '60px'}
                                      )
                     ]
-                )
+                ), width=4
             ),
             dbc.Col(
                 html.Div(
@@ -3337,7 +3337,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                      style={'width': '60px'}
                                      )
                     ]
-                )
+                ), width=4
             )
         ]
         # DA SPOSTARE DOPO BARPLOT E RADCHART TOTAL
