@@ -3332,21 +3332,24 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     html.P("Select a Superpopulation"),
                     html.Div(
                         dcc.Dropdown(
-                            options=super_populations, id='dropdown-superpopulation-sample', placeholder='SuperPopulation', style=samp_style))
+                            options=super_populations, id='dropdown-superpopulation-sample', placeholder='SuperPopulation', style=samp_style, width='20px'), style={'display': 'inline-block', "margin-right": "20px"}
+                    )
                 ]
             ),
             html.Div(
                 [
                     html.P("Select a Superpopulation"),
                     html.Div(dcc.Dropdown(
-                        options=populations, id='dropdown-population-sample', placeholder='Population', style=samp_style))
+                        options=populations, id='dropdown-population-sample', placeholder='Population', style=samp_style), style={'display': 'inline-block', "margin-right": "20px"}
+                    )
                 ]
             ),
             html.Div(
                 [
                     html.P("Select a Sample"),
                     html.Div(dcc.Dropdown(
-                        id='dropdown-sample', placeholder='Sample', style=samp_style))
+                        id='dropdown-sample', placeholder='Sample', style=samp_style), style={'display': 'inline-block', "margin-right": "20px"}
+                    )
                 ]
             )
         ]
@@ -3361,8 +3364,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(
                                 html.Div(total_buttons)
                             ),
-                            # dbc.Col(
-                            #     html.Div(sample_buttons))
+                            dbc.Col(
+                                html.Div(sample_buttons))
                         ]
                     )
                 ]
