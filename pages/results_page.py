@@ -2342,23 +2342,26 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     try:
         guide_images.append(
             dbc.Row(
-                dbc.Col(
-                    [
-                        html.A(
-                            html.Img(
-                                src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                    current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
-                                id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
+                [
+                    dbc.Col(
+                        [
+                            html.A(
+                                html.Img(
+                                    src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                        current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
+                                    id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
+                                ),
+                                target="_blank",
+                                href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
+                                guide + '_' +
+                                str(int(mm)+int(bulge)) + 'total.png'
                             ),
-                            target="_blank",
-                            href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
-                            guide + '_' + str(int(mm)+int(bulge)) + 'total.png'
-                        ),
-                        html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
-                            'display': 'inline-block'}), style={'text-align': 'center'})
-                    ]
-                )
-            ), justify='center'
+                            html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+                                'display': 'inline-block'}), style={'text-align': 'center'})
+                        ]
+                    )
+                ], justify='center'
+            )
         )
     except:
         guide_images.append(
@@ -2383,8 +2386,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                             target="_blank")
                     ], width={"size": 10, "offset": 4}
                 )
-            ]
-        ), justify='center'
+            ], justify='center'
+        )
     )
 
     # guide = guide.replace("N", "")
