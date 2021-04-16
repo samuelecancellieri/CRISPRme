@@ -2334,8 +2334,8 @@ def check_existance_sample(job_directory, job_id, sample):
      State('general-profile-table', 'data')]
 )
 def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, search, all_guides):
-    if sel_cel is None:
-        raise PreventUpdate
+    # if sel_cel is None:
+    #     raise PreventUpdate
     print('entro update tab')
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
@@ -3379,16 +3379,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #  Output('div-population-barplot', 'children'),
         #  Output('div-radar-chart-sample', 'children'),
         #  Output('div-sample-image', 'children')],
-        # fl.append(
-        #     html.Div(
-        #         dbc.Row(
-        #             [
-        #                 dbc.Col(populations_barplots),
-        #                 dbc.Col(radar_chart_total_content)
-        #             ]
-        #         )
-        #     )
-        # )
+        fl.append(
+            html.Div(
+                dbc.Row(
+                    [
+                        # dbc.Col(populations_barplots),
+                        dbc.Col(radar_chart_total_content)
+                    ]
+                )
+            )
+        )
         # fl.append(
         #     dbc.Row(
         #         dbc.Col(radar_chart_content)
