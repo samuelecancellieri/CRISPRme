@@ -2340,20 +2340,20 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     sample_images = []
 
     # top1000 image in graph sumamry
-    guide_images.append(
-        dbc.Row(  # row with plot
-            [
-                dbc.Col(
-                    html.Div(
-                        html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                            id='top-1000-score', width='80%'),
-                            target="_blank")
-                    ), width={"size": 6, "offset": 2},
-                )
-            ]
-        )
-    )
+    # guide_images.append(
+    #     dbc.Row(  # row with plot
+    #         [
+    #             dbc.Col(
+    #                 html.Div(
+    #                     html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+    #                         current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+    #                         id='top-1000-score', width='80%'),
+    #                         target="_blank")
+    #                 ), width={"size": 6, "offset": 2},
+    #             )
+    #         ]
+    #     )
+    # )
 
     try:
         guide_images.append(
@@ -3390,37 +3390,52 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             super_populations = []
             populations = []
         # fl.append(html.P('Select Mismatch Value'))
+
+        top1000_image = dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                            id='top-1000-score', width="80%", height="auto"),
+                            target="_blank")
+                    ], width={"size": 10, "offset": 2}
+                )
+            ]
+        )
+
         fl.append(
             html.Div(
-                [dbc.Row(
-                    [
+                [
+                    top1000_image,
+                    dbc.Row(
+                        [
+                            dbc.Col(
+                                [
+                                    # html.P('Select Mismatch Value'),
+                                    html.Div(fl_mm_blg)
+                                    # html.Div(fl_buttons_0),
+                                    # html.Div(fl_buttons_1),
+                                    # html.Div(fl_buttons_2),
 
-                        dbc.Col(
-                            [
-                                # html.P('Select Mismatch Value'),
-                                html.Div(fl_mm_blg)
-                                # html.Div(fl_buttons_0),
-                                # html.Div(fl_buttons_1),
-                                # html.Div(fl_buttons_2),
-
-                            ]
-                        ),
-                        dbc.Col(
-                            [
-                                html.P('Select Individual Data',
-                                       style=samp_style),
-                                dbc.Row([
+                                ]
+                            ),
+                            dbc.Col(
+                                [
+                                    html.P('Select Individual Data',
+                                           style=samp_style),
+                                    dbc.Row([
                                         dbc.Col(html.Div(dcc.Dropdown(
                                             options=super_populations, id='dropdown-superpopulation-sample', placeholder='Select a Super Population', style=samp_style))),
                                         dbc.Col(html.Div(dcc.Dropdown(
                                             options=populations, id='dropdown-population-sample', placeholder='Select a Population', style=samp_style))),
                                         dbc.Col(html.Div(dcc.Dropdown(
                                             id='dropdown-sample', placeholder='Select a Sample', style=samp_style))),
-                                        ])
-                            ]
-                        )
-                    ]
-                ),
+                                    ])
+                                ]
+                            )
+                        ]
+                    ),
                 ]
             )
         )
