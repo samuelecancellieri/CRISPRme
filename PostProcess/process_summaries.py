@@ -108,17 +108,20 @@ with open(path_output + '.general_target_count.txt', 'w+') as general_count:
                 if var:
                     samples = splitted[13].split(",")
                     seen_superpop = set()
+                    seen_pop = set()
                     for sample in samples:
                         if sample != "NO_SAMPLES":
                             dict_samples[sample][3] += 1
-                            dict_pop[dict_samples[sample][1]] += 1
-                            dict_superpop[dict_samples[sample][2]] += 1
+                            seen_pop.add(dict_samples[sample][1])
                             seen_superpop.add(dict_samples[sample][2])
                             if pam_creation:
                                 dict_samples[sample][6] += 1
                     for superpop in seen_superpop:
+                        dict_superpop[superpop] += 1
                         count_superpop[guide][superpop]['distributions'][int(
                             splitted[8]) + int(splitted[9])][int(splitted[9])] += 1
+                    for pop in seen_pop:
+                        dict_pop[pop] += 1
                 else:
                     add_to_general_table[guide]['distributions'][int(
                         splitted[8]) + int(splitted[9])][int(splitted[9])] += 1
