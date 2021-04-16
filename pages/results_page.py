@@ -211,6 +211,7 @@ def resultPage(job_id):
         html.Div(
             html.Div(
                 dash_table.DataTable(
+                    export_format='csv',
                     id='general-profile-table',
                     # page_size=PAGE_SIZE,
                     columns=columns_profile_table,
