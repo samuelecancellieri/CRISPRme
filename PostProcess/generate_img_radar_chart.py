@@ -72,8 +72,12 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     guideDataFrame['Percentage'] = percentage_list
     guideDataFrame.columns = ['Total', 'Percentage']
     # convert to int total column
-    guideDataFrame['Total'] = pd.to_numeric(
-        guideDataFrame['Total'], downcast='integer')
+    for elem in guideDataFrame['Total']:
+        print(elem)
+        elem = elem.split('.')[0]
+        print('dopo', elem)
+        # guideDataFrame['Total'][elem] =
+    # guideDataFrame['Total'] = [for elem in guide]
     # guideDataFrame['Total'] = int(guideDataFrame['Total'])
     guideDataFrame = guideDataFrame.T
     print(guideDataFrame)
