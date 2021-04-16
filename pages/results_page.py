@@ -3336,8 +3336,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         ]
         # DA SPOSTARE DOPO BARPLOT E RADCHART TOTAL
         sample_buttons = [
-            html.Div(
-                [
+            dbc.Col(
+                html.Div(
                     html.P("Select a Superpopulation"),
                     html.Div(
                         dcc.Dropdown(
@@ -3345,32 +3345,29 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             id='dropdown-superpopulation-sample',
                             placeholder='SuperPopulation',
                             style=samp_style),
-                        style={'display': 'inline-block'}
                     )
-                ]
+                )
             ),
-            html.Div(
-                [
+            dbc.Col(
+                html.Div(
                     html.P("Select a Population"),
                     html.Div(dcc.Dropdown(
                         options=populations,
                         id='dropdown-population-sample',
                         placeholder='Population',
                         style=samp_style),
-                        style={'display': 'inline-block'}
                     )
-                ]
+                )
             ),
-            html.Div(
-                [
+            dbc.Col(
+                html.Div(
                     html.P("Select a Sample"),
                     html.Div(dcc.Dropdown(
                         id='dropdown-sample',
                         placeholder='Sample',
                         style=samp_style),
-                        style={'display': 'inline-block'}
                     )
-                ]
+                )
             )
         ]
         fl.append(
@@ -3407,8 +3404,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         ]
                     ),
                     dbc.Row(
-                        dbc.Col(
-                            html.Div(sample_buttons))
+                        sample_buttons
                     )
                 ]
             )
