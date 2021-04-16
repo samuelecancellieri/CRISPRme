@@ -2348,23 +2348,27 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     guide_images = []
     sample_images = []
 
-    population_barplots.extend(
-        [
-            html.A(
-                html.Img(
-                    src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                        current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
-                    id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
+    try:
+        population_barplots.extend(
+            [
+                html.A(
+                    html.Img(
+                        src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                            current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
+                        id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
+                    ),
+                    target="_blank",
+                    href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
+                    guide + '_' +
+                    str(int(mm)+int(bulge)) + 'total.png'
                 ),
-                target="_blank",
-                href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
-                guide + '_' +
-                str(int(mm)+int(bulge)) + 'total.png'
-            ),
-            html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
-                'display': 'inline-block'}), style={'text-align': 'center'})
-        ]
-    )
+                html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+                    'display': 'inline-block'}), style={'text-align': 'center'})
+            ]
+        )
+    except:
+        population_barplots = [
+            html.Div(html.P('No targets found with '+str(mm)+'and'+str(bulge)))]
 
     # try:
     #     guide_images.extend(  # population barplot
@@ -3383,7 +3387,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             html.Div(
                 dbc.Row(
                     [
-                        # dbc.Col(populations_barplots),
+                        dbc.Col(populations_barplots),
                         dbc.Col(radar_chart_total_content)
                     ]
                 )
