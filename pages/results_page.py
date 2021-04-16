@@ -2318,7 +2318,11 @@ def check_existance_sample(job_directory, job_id, sample):
 
 
 @app.callback(
-    [Output('div-guide-image', 'children'),
+    # [Output('div-guide-image', 'children'),
+    #  Output('div-sample-image', 'children')],
+    [Output('div-radar-chart-total', 'children'),
+     Output('div-population-barplot', 'children'),
+     Output('div-radar-chart-sample', 'children'),
      Output('div-sample-image', 'children')],
     [Input('mm-dropdown', 'value'),
      Input('blg-dropdown', 'value'),
@@ -2339,76 +2343,96 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     # search for getting job id
     # get guide with sel_cel and all_data
+    radar_chart_images = []
+    population_barplots = []
     guide_images = []
     sample_images = []
 
-    try:
-        guide_images.extend(  # population barplot
-            [
-                html.A(
-                    html.Img(
-                        src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                            current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
-                        id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
-                    ),
-                    target="_blank",
-                    href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
-                    guide + '_' +
-                    str(int(mm)+int(bulge)) + 'total.png'
-                ),
-                html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
-                    'display': 'inline-block'}), style={'text-align': 'center'})
-            ]
-        )
-    except:
-        guide_images.append(
-            html.Div(html.P('No Targets found with ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges', style={
-                'display': 'inline-block'}), style={'text-align': 'center'}),
-            # html.Div(html.P('Distribution ' + str(mm) + ' Mismatches + Bulges ', style = {'display':'inline-block'} ),style = {'text-align':'center'})
-        )
-
-    # guide = guide.replace("N", "")
-    radar_img = '/imgs/summary_single_guide_' + \
-        guide + '_' + str(mm) + \
-        '.' + str(bulge) + '_TOTAL.png'
-
-    if not os.path.isfile(f"{job_directory}/{radar_img}"):
-        # try:
-        print('faccio radar chart')
-        os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
-        # except:
-        # pass
-
-    img_found = False
-    try:
-        radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-            current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
-        img_found = True
-    except:
-        radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-            current_working_directory+'assets/placeholder.png', 'rb').read()).decode())
-    try:
-        radar_href = '/Results/' + job_id + '/' + radar_img
-    except:
-        radar_href = ''
-
-    if img_found:
-        guide_images.append(
+    population_barplots.extend(
+        [
             html.A(
-                html.Img(src=radar_src, id='radar-img-guide',
-                         width="100%", height="auto"),
+                html.Img(
+                    src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                        current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
+                    id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
+                ),
                 target="_blank",
-                href=radar_href
-            )
-        )
-    else:
-        guide_images.append(
-            html.H2(
-                "No result found for this combination of mismatches and bulges"
-            )
-        )
-    class_images = [(sample, 'Samples'), (population, 'Population'),
-                    (superpopulation, 'Superpopulation')]
+                href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
+                guide + '_' +
+                str(int(mm)+int(bulge)) + 'total.png'
+            ),
+            html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+                'display': 'inline-block'}), style={'text-align': 'center'})
+        ]
+    )
+
+    # try:
+    #     guide_images.extend(  # population barplot
+    #         [
+    #             html.A(
+    #                 html.Img(
+    #                     src='data:image/png;base64,{}'.format(base64.b64encode(open(
+    #                         current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
+    #                     id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
+    #                 ),
+    #                 target="_blank",
+    #                 href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
+    #                 guide + '_' +
+    #                 str(int(mm)+int(bulge)) + 'total.png'
+    #             ),
+    #             html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+    #                 'display': 'inline-block'}), style={'text-align': 'center'})
+    #         ]
+    #     )
+    # except:
+    #     guide_images.append(
+    #         html.Div(html.P('No Targets found with ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges', style={
+    #             'display': 'inline-block'}), style={'text-align': 'center'}),
+    #         # html.Div(html.P('Distribution ' + str(mm) + ' Mismatches + Bulges ', style = {'display':'inline-block'} ),style = {'text-align':'center'})
+    #     )
+
+    # # guide = guide.replace("N", "")
+    # radar_img = '/imgs/summary_single_guide_' + \
+    #     guide + '_' + str(mm) + \
+    #     '.' + str(bulge) + '_TOTAL.png'
+
+    # if not os.path.isfile(f"{job_directory}/{radar_img}"):
+    #     # try:
+    #     print('faccio radar chart')
+    #     os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
+    #     # except:
+    #     # pass
+
+    # img_found = False
+    # try:
+    #     radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+    #         current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
+    #     img_found = True
+    # except:
+    #     radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+    #         current_working_directory+'assets/placeholder.png', 'rb').read()).decode())
+    # try:
+    #     radar_href = '/Results/' + job_id + '/' + radar_img
+    # except:
+    #     radar_href = ''
+
+    # if img_found:
+    #     guide_images.append(
+    #         html.A(
+    #             html.Img(src=radar_src, id='radar-img-guide',
+    #                      width="100%", height="auto"),
+    #             target="_blank",
+    #             href=radar_href
+    #         )
+    #     )
+    # else:
+    #     guide_images.append(
+    #         html.H2(
+    #             "No result found for this combination of mismatches and bulges"
+    #         )
+    #     )
+    # class_images = [(sample, 'Samples'), (population, 'Population'),
+    #                 (superpopulation, 'Superpopulation')]
 
     # for c in class_images:
     #     img_found = False
@@ -2455,7 +2479,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     #                     )
     #                 )
     #             )
-    return guide_images, sample_images
+    return radar_chart_images, population_barplots, guide_images, sample_images
 # Open in browser the result directory
 
 
@@ -3240,7 +3264,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                      ]
         # fl.append(html.Br())
 
-        # guide = guide.replace("N", "")
+        # guide = guide.strip()
         # radar_img = '/imgs/summary_single_guide_' + guide + '_' + str(
         #     0) + '_total_0.0_TOTAL.png'  # TODO choose between 0 mm and max used mms
         # if not os.path.isfile(f"{job_directory}/{radar_img}"):
@@ -3248,15 +3272,17 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #         os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json 0 0 TOTAL {job_directory}/imgs/")
         #     except:
         #         pass
-        # barplot_img = 'summary_histogram_' + guide + '_' + str(0) + '_total.png'
-        # try:            #NOTE serve per non generare errori se il barplot non è stato fatto
-        #    barplot_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' + job_id + '/' + barplot_img, 'rb').read()).decode())
+        # barplot_img = 'summary_histogram_' + \
+        #     guide + '_' + str(0) + '_total.png'
+        # try:  # NOTE serve per non generare errori se il barplot non è stato fatto
+        #     barplot_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+        #         current_working_directory + 'Results/' + job_id + '/' + barplot_img, 'rb').read()).decode())
         # except:
-        #    barplot_src = ''
+        #     barplot_src = ''
         # try:
-        #    barplot_href = 'assets/Img/' + job_id + '/' + barplot_img
+        #     barplot_href = 'assets/Img/' + job_id + '/' + barplot_img
         # except:
-        #    barplot_href = ''
+        #     barplot_href = ''
 
         # img_found = False
         # try:
@@ -3325,7 +3351,24 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 ]
             )
         )
-        radar_chart_content = html.Div('', id='div-guide-image')
+        radar_chart_total_content = html.Div('', id='div-radar-chart-total')
+        populations_barplots = html.Div('', id='div-population-barplot')
+        radar_chart_sample_content = html.Div('', id='div-radar-chart-sample')
+        sample_image_content = html.Div('', id='div-sample-image')
+        # [Output('div-radar-chart-total', 'children'),
+        #  Output('div-population-barplot', 'children'),
+        #  Output('div-radar-chart-sample', 'children'),
+        #  Output('div-sample-image', 'children')],
+        fl.append(
+            html.Div(
+                dbc.Row(
+                    [
+                        dbc.Col(populations_barplots),
+                        dbc.Col(radar_chart_total_content)
+                    ]
+                )
+            )
+        )
         # fl.append(
         #     dbc.Row(
         #         dbc.Col(radar_chart_content)
