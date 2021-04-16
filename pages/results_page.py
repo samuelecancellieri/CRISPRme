@@ -2449,9 +2449,9 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                 first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
                     open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
             try:
-                first_img_href = 'Results/' + job_id + '/imgs/summary_single_guide_' +
-                guide + '_' + str(mm) + "." + str(bulge) +
-                '_' + c[0] + '.png'
+                first_img_href = 'Results/' + job_id + '/imgs/summary_single_guide_' +\
+                    guide + '_' + str(mm) + "." + str(bulge) +\
+                    '_' + c[0] + '.png'
             except:
                 first_img_href = ''
             sample_images.append(dbc.Row(html.Br()))
