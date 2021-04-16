@@ -197,7 +197,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.close('all')
 
 
-guide = guide.strip().replace('N', '')
+guide = guide.strip()
 guideDict = json.load(guideDictFile)
 motifDict = json.load(motifDictFile)
 if __name__ == '__main__':
