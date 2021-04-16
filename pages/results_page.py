@@ -3338,35 +3338,41 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         sample_buttons = [
             dbc.Col(
                 html.Div(
-                    html.P("Select a Superpopulation"),
-                    html.Div(
-                        dcc.Dropdown(
-                            options=super_populations,
-                            id='dropdown-superpopulation-sample',
-                            placeholder='SuperPopulation',
+                    [
+                        html.P("Select a Superpopulation"),
+                        html.Div(
+                            dcc.Dropdown(
+                                options=super_populations,
+                                id='dropdown-superpopulation-sample',
+                                placeholder='SuperPopulation',
+                                style=samp_style),
+                        )
+                    ]
+                )
+            ),
+            dbc.Col(
+                html.Div(
+                    [
+                        html.P("Select a Population"),
+                        html.Div(dcc.Dropdown(
+                            options=populations,
+                            id='dropdown-population-sample',
+                            placeholder='Population',
                             style=samp_style),
-                    )
+                        )
+                    ]
                 )
             ),
             dbc.Col(
                 html.Div(
-                    html.P("Select a Population"),
-                    html.Div(dcc.Dropdown(
-                        options=populations,
-                        id='dropdown-population-sample',
-                        placeholder='Population',
-                        style=samp_style),
-                    )
-                )
-            ),
-            dbc.Col(
-                html.Div(
-                    html.P("Select a Sample"),
-                    html.Div(dcc.Dropdown(
-                        id='dropdown-sample',
-                        placeholder='Sample',
-                        style=samp_style),
-                    )
+                    [
+                        html.P("Select a Sample"),
+                        html.Div(dcc.Dropdown(
+                            id='dropdown-sample',
+                            placeholder='Sample',
+                            style=samp_style),
+                        )
+                    ]
                 )
             )
         ]
