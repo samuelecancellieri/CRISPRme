@@ -2359,11 +2359,11 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
         '.' + str(bulge) + '_TOTAL.png'
 
     if not os.path.isfile(f"{job_directory}/{radar_img}"):
-        try:
-            print('faccio radar image')
-            os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
-        except:
-            pass
+        # try:
+        print('faccio radar image')
+        os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
+        # except:
+        #     pass
     img_found = False
     try:
         radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
