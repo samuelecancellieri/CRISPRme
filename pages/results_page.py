@@ -3414,9 +3414,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     dbc.Row(
                         sample_buttons
                     ),
-                    dbc.Row(
-                        dbc.Col(radar_chart_sample_content)
-                    )
+                    dbc.Row(radar_chart_sample_content)
                 ]
             )
         )
