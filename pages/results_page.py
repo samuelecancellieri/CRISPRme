@@ -1883,11 +1883,10 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     start = filter_q[1]
     if start == 'None':
         raise PreventUpdate
-    
+
     end = filter_q[2]
     if end == 'None':
         raise PreventUpdate
-
 
     current_page = current_page.split('/')[0]
     current_page = int(current_page)
@@ -1903,9 +1902,10 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     pos_grep_result = current_working_directory + \
         'Results/' + job_id + '/' + job_id + '.' + start + "." + end + '.txt'
 
-    #os.system(
+    # os.system(
     #    f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
-    os.system(f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
+    os.system(
+        f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
 
     with open(file_to_grep, 'r') as ftg:
         header = ftg.readline().split('\t')[:24]
@@ -2870,13 +2870,15 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         [
                             dbc.Col(html.Div(dcc.Dropdown(
                                 options=chr_file, id='dropdown-chr-table-position', placeholder='Select a chromosome'))),
-                            #dbc.Col(
-                                #html.Div(dcc.Input(placeholder='Position', id='input-position'))),
-                            dbc.Col(html.Div(dcc.Input(placeholder = 'Start Position', id = 'input-position-start'))),
-                            dbc.Col(html.Div(dcc.Input(placeholder = 'End Position', id = 'input-position-end'))),
+                            # dbc.Col(
+                            # html.Div(dcc.Input(placeholder='Position', id='input-position'))),
+                            dbc.Col(
+                                html.Div(dcc.Input(placeholder='Start Position', id='input-position-start'))),
+                            dbc.Col(
+                                html.Div(dcc.Input(placeholder='End Position', id='input-position-end'))),
                             dbc.Col(html.Div(html.Button(
                                     'Filter', id='button-filter-position')))
-                            #)
+                            # )
                         ]
                     ),
                 ],
@@ -3688,7 +3690,7 @@ def set_columns_options(selected_target):
                  'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score', 'CFD_Absolute_Risk_Score']}
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk_Score'],
+    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score'],
                    'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score']}
     # target_options = {' Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], ' Bulges': [' Mismatches', ' Mismatch+Bulges', ' CFD'], ' Mismatch+Bulges': [' Mismatches', ' Bulges', ' CFD'], ' CFD': [
     #     ' Mismatches', ' Bulges', ' Mismatch+Bulges'], ' Risk_Score': [], ' Absolute_Risk_Score': [], ' Risk_Score': [], ' Risk_Score': []}
