@@ -3240,7 +3240,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         return fl
     else:  # tab-graphical
         # Show Report images
-        samp_style = {'width': '70px'}
+        samp_style = {}
         if genome_type == 'ref':
             samp_style = {'display': 'none'}
 
@@ -3410,7 +3410,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         ]
                     ),
                     dbc.Row(
-                        sample_buttons
+                        sample_buttons, no_gutters=True,
                     )
                 ]
             )
