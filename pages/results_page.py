@@ -2365,20 +2365,19 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     if img_found:
         guide_images.extend(
             [
-
                 # dbc.Row(html.Br()),
-                dbc.Row(  # row with plot
-                    [
-                        dbc.Col(
-                            [
-                                html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                    current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                                    id='top-1000-score', width="80%", height="auto"),
-                                    target="_blank")
-                            ]  # width={"size": 10, "offset": 2}
-                        )
-                    ], justify="center",
-                ),
+                # dbc.Row(  # row with plot
+                #     [
+                #         dbc.Col(
+                #             [
+                #                 html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                #                     current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                #                     id='top-1000-score', width="80%", height="auto"),
+                #                     target="_blank")
+                #             ]  # width={"size": 10, "offset": 2}
+                #         )
+                #     ], justify="center",
+                # ),
                 dbc.Row(
                     [
                         dbc.Col(
