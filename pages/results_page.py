@@ -2339,7 +2339,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     guide_images = []
     sample_images = []
 
-    guide_images.extend(
+    guide_images.append(
         dbc.Row(  # row with plot
             [
                 dbc.Col(
