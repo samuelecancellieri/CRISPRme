@@ -1904,8 +1904,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
 
     #os.system(
     #    f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
-    # LC_ALL=C fgrep {guide} {file_to_grep} | 
-    os.system(f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
+    os.system(f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
 
     with open(file_to_grep, 'r') as ftg:
         header = ftg.readline().split('\t')[:24]
