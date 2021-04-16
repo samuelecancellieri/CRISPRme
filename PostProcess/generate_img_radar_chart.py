@@ -133,13 +133,12 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         transpose_list.append(list(guideDataFrame.loc[elem]))
         # transpose_list.append(
         #     [guideDataFrame.loc[elem, 'Total'], guideDataFrame.loc[elem, 'Percentage']])
-    print(transpose_list)
+    # print(transpose_list)
     templist = list()
     for couple in transpose_list:
-        print(couple[0])
         couple[0] = int(couple[0])
-        print(couple[0])
         templist.append(couple)
+    # templist to convert into only the total column
     transpose_list = templist
 
     plt.axis('off')
