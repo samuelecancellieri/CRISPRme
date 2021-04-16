@@ -3348,7 +3348,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 style=samp_style),
                         )
                     ]
-                )
+                ), md=4
             ),
             dbc.Col(
                 html.Div(
@@ -3361,7 +3361,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             style=samp_style),
                         )
                     ]
-                )
+                ), md=4
             ),
             dbc.Col(
                 html.Div(
@@ -3373,7 +3373,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             style=samp_style),
                         )
                     ]
-                )
+                ), md=4
             )
         ]
         fl.append(
@@ -3410,7 +3410,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         ]
                     ),
                     dbc.Row(
-                        sample_buttons, no_gutters=True,
+                        sample_buttons
                     )
                 ]
             )
