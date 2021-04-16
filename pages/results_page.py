@@ -2336,7 +2336,7 @@ def check_existance_sample(job_directory, job_id, sample):
 def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, search, all_guides):
     # if sel_cel is None:
     #     raise PreventUpdate
-    print('entro update tab')
+    # print('entro update tab')
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
@@ -2407,7 +2407,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     if not os.path.isfile(f"{job_directory}/{radar_img}"):
         # try:
-        print('faccio radar chart')
+        # print('faccio radar chart')
         os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
         # except:
         # pass
