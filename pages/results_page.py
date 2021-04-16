@@ -3325,11 +3325,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             )
         )
         radar_chart_content = html.Div('', id='div-guide-image')
-        fl.append(
-            dbc.Row(
-                dbc.Col(radar_chart_content)
-            )
-        )
+        # fl.append(
+        #     dbc.Row(
+        #         dbc.Col(radar_chart_content)
+        #     )
+        # )
         # fl.append(html.Hr())
         # if img_found:
         #     fl.append(
