@@ -2433,8 +2433,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
         img_found = False
         if c[0]:
-            current_img = job_directory + '/imgs/summary_single_guide_' +
-            guide + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
+            current_img = job_directory + '/imgs/summary_single_guide_' +\
+                guide + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
             if not os.path.isfile(current_img):
                 try:
                     os.system(
