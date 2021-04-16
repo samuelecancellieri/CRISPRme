@@ -3353,7 +3353,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         fl.append(
             html.Div(
                 [
-                    html.P('DIOOO BESTIA'),
                     dbc.Row(
                         dbc.Col(top1000_image, width={"size": 10, "offset": 2})
                     ),
