@@ -2322,8 +2322,8 @@ def check_existance_sample(job_directory, job_id, sample):
     #  Output('div-sample-image', 'children')],
     [Output('div-radar-chart-total', 'children'),
      Output('div-population-barplot', 'children'),
-     Output('div-radar-chart-sample', 'children'),
-     Output('div-sample-image', 'children')],
+     Output('div-sample-image', 'children'),
+     Output('div-radar-chart-sample', 'children')],
     [Input('mm-dropdown', 'value'),
      Input('blg-dropdown', 'value'),
      Input('dropdown-superpopulation-sample', 'value'),
@@ -2440,54 +2440,54 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                 "No result found for this combination of mismatches and bulges"
             )
         )
-    # class_images = [(sample, 'Samples'), (population, 'Population'),
-    #                 (superpopulation, 'Superpopulation')]
+    class_images = [(sample, 'Samples'), (population, 'Population'),
+                    (superpopulation, 'Superpopulation')]
 
-    # for c in class_images:
-    #     img_found = False
-    #     if c[0]:
-    #         current_img = job_directory + '/imgs/summary_single_guide_' +\
-    #             guide + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
-    #         if not os.path.isfile(current_img):
-    #             try:
-    #                 os.system(
-    #                     f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} {c[0]} {job_directory}/imgs/")
-    #             except:
-    #                 pass
-    #         try:
-    #             first_img_source = 'data:image/png;base64,{}'.format(
-    #                 base64.b64encode(open(current_img, 'rb').read()).decode())
-    #             img_found = True
-    #         except:
-    #             first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
-    #                 open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
-    #         try:
-    #             first_img_href = 'Results/' + job_id + '/imgs/summary_single_guide_' +\
-    #                 guide + '_' + str(mm) + "." + str(bulge) +\
-    #                 '_' + c[0] + '.png'
-    #         except:
-    #             first_img_href = ''
-    #         sample_images.append(dbc.Row(html.Br()))
+    for c in class_images:
+        img_found = False
+        if c[0]:
+            current_img = job_directory + '/imgs/summary_single_guide_' +\
+                guide + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
+            if not os.path.isfile(current_img):
+                try:
+                    os.system(
+                        f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} {c[0]} {job_directory}/imgs/")
+                except:
+                    pass
+            try:
+                first_img_source = 'data:image/png;base64,{}'.format(
+                    base64.b64encode(open(current_img, 'rb').read()).decode())
+                img_found = True
+            except:
+                first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
+                    open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
+            try:
+                first_img_href = 'Results/' + job_id + '/imgs/summary_single_guide_' +\
+                    guide + '_' + str(mm) + "." + str(bulge) +\
+                    '_' + c[0] + '.png'
+            except:
+                first_img_href = ''
+            # sample_images.append(dbc.Row(html.Br()))
 
-    #         if img_found:
-    #             sample_images.append(
-    #                 dbc.Col(
-    #                     html.A(
-    #                         html.Img(src=first_img_source,
-    #                                  width="100%", height="auto"),
-    #                         target="_blank",
-    #                         href=first_img_href
-    #                     )
-    #                 )
-    #             )
-    #         else:
-    #             sample_images.append(
-    #                 dbc.Col(
-    #                     html.H2(
-    #                         "No result found for this combination of mismatches and bulges"
-    #                     )
-    #                 )
-    #             )
+            if img_found:
+                sample_images.append(
+                    dbc.Col(
+                        html.A(
+                            html.Img(src=first_img_source,
+                                     width="100%", height="auto"),
+                            target="_blank",
+                            href=first_img_href
+                        )
+                    )
+                )
+            else:
+                sample_images.append(
+                    dbc.Col(
+                        html.H2(
+                            "No result found for this combination of mismatches and bulges"
+                        )
+                    )
+                )
     return radar_chart_images, population_barplots, guide_images, sample_images
 # Open in browser the result directory
 
@@ -3413,6 +3413,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     html.Br(),
                     dbc.Row(
                         sample_buttons
+                    ),
+                    dbc.Row(
+                        dbc.Col(radar_chart_sample_content)
                     )
                 ]
             )
