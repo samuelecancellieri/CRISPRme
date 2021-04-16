@@ -2339,6 +2339,37 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     guide_images = []
     sample_images = []
 
+    try:
+        guide_images.append(
+            dbc.Col(
+                [
+                    html.A(
+                        html.Img(
+                            src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
+                            id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
+                        ),
+                        target="_blank",
+                        href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
+                        guide + '_' + str(int(mm)+int(bulge)) + 'total.png'
+                    ),
+                    html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+                        'display': 'inline-block'}), style={'text-align': 'center'})
+                ]
+            )
+        )
+    except:
+        guide_images.append(
+            dbc.Col(
+                [
+                    html.Div(html.P('No Targets found with ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges', style={
+                             'display': 'inline-block'}), style={'text-align': 'center'}),
+                    # html.Div(html.P('Distribution ' + str(mm) + ' Mismatches + Bulges ', style = {'display':'inline-block'} ),style = {'text-align':'center'})
+                ],
+                align='center'
+            )
+        )
+
     guide_images.append(
         dbc.Row(  # row with plot
             [
@@ -2348,9 +2379,9 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                             current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
                             id='top-1000-score', width="80%", height="auto"),
                             target="_blank")
-                    ]  # width={"size": 10, "offset": 2}
+                    ], width={"size": 10, "offset": 2}
                 )
-            ], justify="center",
+            ]
         ))
 
     # guide = guide.replace("N", "")
