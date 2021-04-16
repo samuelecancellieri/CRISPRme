@@ -76,6 +76,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         guideDataFrame['Total'], downcast='integer')
     # guideDataFrame['Total'] = int(guideDataFrame['Total'])
     guideDataFrame = guideDataFrame.T
+    print(guideDataFrame)
     # number of variable
     categories = list(guideDataFrame)[0:]
     N = len(categories)
