@@ -2360,6 +2360,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     if not os.path.isfile(f"{job_directory}/{radar_img}"):
         try:
+            print('faccio radar image')
             os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
         except:
             pass
