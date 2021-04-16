@@ -3388,7 +3388,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     ),
                     dbc.Row(
                         total_buttons, justify='center'
-                    )
+                    ),
+                    html.Br()
                 ]
             )
         )
@@ -3409,6 +3410,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(radar_chart_total_content)
                         ]
                     ),
+                    html.Br(),
                     dbc.Row(
                         sample_buttons
                     )

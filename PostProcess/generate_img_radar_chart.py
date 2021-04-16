@@ -174,7 +174,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.xticks(ticks=ind, labels=list(guide))
 
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
-               ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=13, loc='upper right', ncol=6)
+               ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=13, loc='upper left', ncol=6)
 
     # strArray = np.array([list(guide)])
     # table = plt.table(cellText=strArray, loc='bottom',
