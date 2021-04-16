@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # DASH IMPORT
-from operator import truediv
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -88,6 +87,6 @@ def changePage(href, path, search, hash_guide):
 
 if __name__ == '__main__':
     directoryCheck()
-    app.run_server(host='0.0.0.0', port=8080, debug=True,
-                   dev_tools_ui=True, dev_tools_props_check=True)
+    app.run_server(host='0.0.0.0', port=8080, debug=False,
+                   dev_tools_ui=False, dev_tools_props_check=False)
     cache.clear()  # delete cache when server is closed
