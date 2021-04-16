@@ -2347,9 +2347,9 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     html.Div(
                         html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
                             current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                            id='top-1000-score'),
+                            id='top-1000-score', width='80%'),
                             target="_blank")
-                    ), width={"size": 6, "offset": 3},
+                    ), width={"size": 6, "offset": 2},
                 )
             ]
         )
