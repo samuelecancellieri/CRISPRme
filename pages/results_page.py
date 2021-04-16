@@ -315,7 +315,7 @@ def resultPage(job_id):
                         )),
                         id="collapse-populations",
                     ),
-                ]
+                ], hidden=True
             )
         )
         final_list.append(html.Br())
