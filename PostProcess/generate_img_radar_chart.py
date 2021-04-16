@@ -134,6 +134,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         # transpose_list.append(
         #     [guideDataFrame.loc[elem, 'Total'], guideDataFrame.loc[elem, 'Percentage']])
     print(transpose_list)
+    for couple in transpose_list:
+        print(couple[0])
+
     plt.axis('off')
     table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
                       loc='best', colWidths=[0.25, 0.25])
