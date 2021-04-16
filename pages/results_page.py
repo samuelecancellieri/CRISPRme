@@ -3368,8 +3368,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(
                                 html.Div(total_buttons)
                             ),
-                            dbc.Col(
-                                html.Div(sample_buttons))
+                            # dbc.Col(
+                            #     html.Div(sample_buttons))
                         ]
                     )
                 ]
