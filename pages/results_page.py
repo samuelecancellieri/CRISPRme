@@ -3231,9 +3231,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         return fl
     else:  # tab-graphical
         # Show Report images
-        samp_style = {'width': '40px'}
+        samp_style = {'width': '70px'}
         if genome_type == 'ref':
-            samp_style = {'display': 'none', 'width': '40px'}
+            samp_style = {'display': 'none'}
 
         # fl.append(html.Br())
         fl.append(html.P(
@@ -3332,7 +3332,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     html.P("Select a Superpopulation"),
                     html.Div(
                         dcc.Dropdown(
-                            options=super_populations, id='dropdown-superpopulation-sample', placeholder='SuperPopulation', style=samp_style), style={'display': 'inline-block', "margin-right": "1px"}
+                            options=super_populations, id='dropdown-superpopulation-sample', placeholder='SuperPopulation', style=samp_style), style={'display': 'inline-block'}
                     )
                 ]
             ),
@@ -3340,7 +3340,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 [
                     html.P("Select a Superpopulation"),
                     html.Div(dcc.Dropdown(
-                        options=populations, id='dropdown-population-sample', placeholder='Population', style=samp_style), style={'display': 'inline-block', "margin-right": "1px"}
+                        options=populations, id='dropdown-population-sample', placeholder='Population', style=samp_style), style={'display': 'inline-block'}
                     )
                 ]
             ),
