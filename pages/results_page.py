@@ -211,6 +211,7 @@ def resultPage(job_id):
         html.Div(
             html.Div(
                 dash_table.DataTable(
+                    export_format='csv',
                     id='general-profile-table',
                     # page_size=PAGE_SIZE,
                     columns=columns_profile_table,
@@ -314,7 +315,7 @@ def resultPage(job_id):
                         )),
                         id="collapse-populations",
                     ),
-                ]
+                ], hidden=True
             )
         )
         final_list.append(html.Br())
@@ -1882,11 +1883,10 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     start = filter_q[1]
     if start == 'None':
         raise PreventUpdate
-    
+
     end = filter_q[2]
     if end == 'None':
         raise PreventUpdate
-
 
     current_page = current_page.split('/')[0]
     current_page = int(current_page)
@@ -1902,9 +1902,10 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     pos_grep_result = current_working_directory + \
         'Results/' + job_id + '/' + job_id + '.' + start + "." + end + '.txt'
 
-    #os.system(
+    # os.system(
     #    f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
-    os.system(f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
+    os.system(
+        f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
 
     with open(file_to_grep, 'r') as ftg:
         header = ftg.readline().split('\t')[:24]
@@ -2338,16 +2339,53 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     guide_images = []
     sample_images = []
 
-    guide = guide.replace("N", "")
+    try:
+        guide_images.append(
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            html.A(
+                                html.Img(
+                                    src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                        current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
+                                    id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
+                                ),
+                                target="_blank",
+                                href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
+                                guide + '_' +
+                                str(int(mm)+int(bulge)) + 'total.png'
+                            ),
+                            html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+                                'display': 'inline-block'}), style={'text-align': 'center'})
+                        ]
+                    )
+                ], justify='center'
+            )
+        )
+    except:
+        guide_images.append(
+            dbc.Col(
+                [
+                    html.Div(html.P('No Targets found with ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges', style={
+                             'display': 'inline-block'}), style={'text-align': 'center'}),
+                    # html.Div(html.P('Distribution ' + str(mm) + ' Mismatches + Bulges ', style = {'display':'inline-block'} ),style = {'text-align':'center'})
+                ],
+                align='center'
+            )
+        )
+
+    # guide = guide.replace("N", "")
     radar_img = '/imgs/summary_single_guide_' + \
-        guide.replace("N", "") + '_' + str(mm) + \
+        guide + '_' + str(mm) + \
         '.' + str(bulge) + '_TOTAL.png'
 
     if not os.path.isfile(f"{job_directory}/{radar_img}"):
-        try:
-            os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
-        except:
-            pass
+        # try:
+        print('faccio radar image')
+        os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
+        # except:
+        #     pass
     img_found = False
     try:
         radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
@@ -2362,27 +2400,39 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
         radar_href = ''
 
     if img_found:
-        guide_images.extend([
-
-            dbc.Row(html.Br()),
-            dbc.Row(
-                [
-                    dbc.Col(
-                        html.A(
-                            html.Img(src=radar_src, id='radar-img-guide',
-                                     width="100%", height="auto"),
-                            target="_blank",
-                            href=radar_href
-                        ),
-                        # width=10
-                    )
-                ]
-            ),
-        ])
+        guide_images.extend(
+            [
+                # dbc.Row(html.Br()),
+                # dbc.Row(  # row with plot
+                #     [
+                #         dbc.Col(
+                #             [
+                #                 html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                #                     current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                #                     id='top-1000-score', width="80%", height="auto"),
+                #                     target="_blank")
+                #             ]  # width={"size": 10, "offset": 2}
+                #         )
+                #     ], justify="center",
+                # ),
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            html.A(
+                                html.Img(src=radar_src, id='radar-img-guide',
+                                         width="100%", height="auto"),
+                                target="_blank",
+                                href=radar_href
+                            ),
+                            # width=10
+                        )
+                    ]
+                ),
+            ])
     else:
         guide_images.extend([
 
-            dbc.Row(html.Br()),
+            # dbc.Row(html.Br()),
             dbc.Row(
                 [
                     dbc.Col(
@@ -2401,8 +2451,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
         img_found = False
         if c[0]:
-            current_img = job_directory + '/imgs/summary_single_guide_' + guide.replace(
-                "N", "") + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
+            current_img = job_directory + '/imgs/summary_single_guide_' + \
+                guide + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
             if not os.path.isfile(current_img):
                 try:
                     os.system(
@@ -2418,7 +2468,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
             try:
                 first_img_href = 'Results/' + job_id + '/imgs/summary_single_guide_' + \
-                    guide.replace("N", "") + '_' + str(mm) + "." + str(bulge) + \
+                    guide + '_' + str(mm) + "." + str(bulge) + \
                     '_' + c[0] + '.png'
             except:
                 first_img_href = ''
@@ -2700,7 +2750,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # Show Summary by Guide table
         fl.append(
             html.P(
-                ['Summary table counting the number of targets found in the Variant Genome for each combination of Bulge Type, Bulge Size and Mismatch. Select \'Show Targets\' to view the corresponding list of targets. ',
+                ['Summary table counting the number of targets found in the Reference and Variant Genome for each combination of Bulge Type, Bulge Size and Mismatch. Select \'Show Targets\' to view the corresponding list of targets. ',
                  # html.A('Click here', href = URL + '/data/' + job_id + '/' + job_id + '.targets.' + guide + '.zip' ,target = '_blank', id = 'download-full-list' ), ' to download the full list of targets.'
                  ]
             )
@@ -2817,12 +2867,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     elif value == 'tab-summary-by-position':
         # Show Summary by position table
         fl.append(
-            html.P('Summary table containing all the targets found in a specific position of the genome. For each position, the variant target with the lowest Mismatch + Bulge count is shown (if no target was found in the Variant Genome, the correspondig reference one is shown), along with his Mismatch and Bulge Size values.' +
-                   ' The subtable \'Targets in Cluster by Mismatch Value\' represents the number of targets found in that position for a particular Mismatch-Bulge Size pair.')
+            html.P(
+                'Summary table containing all the targets found in a specific range of positions (chr, start, end) of the genome.')
         )
 
         fl.append(
-            html.P('Filter the table by selecting the chromosome of interest and writing the start and/or end position of the region to view.')
+            html.P('Filter the table by selecting the chromosome of interest and writing the start and end position of the region to view.')
         )
         # Dropdown chromosomes
         try:
@@ -2853,7 +2903,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     for chr_name in chr_file]
 
         # Colonne tabella: chr, pos, target migliore, min mm, min bulges, num target per ogni categoria di mm e bulge, show targets; ordine per total, poi mm e poi bulge
-        start_time = time.time()
+        # start_time = time.time()
         # df = pd.read_csv( job_directory + job_id + '.summary_by_position.' + guide +'.txt', sep = '\t')
         # df.rename(columns = {'#Chromosome':'Chromosome'}, inplace = True)
         # more_info_col = []
@@ -2869,13 +2919,15 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         [
                             dbc.Col(html.Div(dcc.Dropdown(
                                 options=chr_file, id='dropdown-chr-table-position', placeholder='Select a chromosome'))),
-                            #dbc.Col(
-                                #html.Div(dcc.Input(placeholder='Position', id='input-position'))),
-                            dbc.Col(html.Div(dcc.Input(placeholder = 'Start Position', id = 'input-position-start'))),
-                            dbc.Col(html.Div(dcc.Input(placeholder = 'End Position', id = 'input-position-end'))),
+                            # dbc.Col(
+                            # html.Div(dcc.Input(placeholder='Position', id='input-position'))),
+                            dbc.Col(
+                                html.Div(dcc.Input(placeholder='Start Position', id='input-position-start'))),
+                            dbc.Col(
+                                html.Div(dcc.Input(placeholder='End Position', id='input-position-end'))),
                             dbc.Col(html.Div(html.Button(
                                     'Filter', id='button-filter-position')))
-                            #)
+                            # )
                         ]
                     ),
                 ],
@@ -2903,7 +2955,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         samples = df.iloc[:, 0]
         fl.append(
             html.P(
-                'In this page single Sample Risk Card can be generated and inspected')
+                'Summary page containing the single Personal Risk card to be inspected and downloaded')
         )
         fl.append(
             html.Div
@@ -2944,6 +2996,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         fl.append(html.Div('', id='div-sample-card'))
         return fl
     elif value == 'tab-query-table':
+        fl.append(html.P('Summary page to query the final result file selecting one/two column to group by the table and extract requested targets'))
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
@@ -2956,8 +3009,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                      'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score', 'CFD_Absolute_Risk_Score']}
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-        all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk_Score', ' Absolute_Risk_Score'],
-                       'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk_Score', ' Absolute_Risk_Score']}
+        all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score'],
+                       'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score']}
     # target_o
 
         # all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD'],
@@ -2967,31 +3020,31 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         label = [{'label': lab} for lab in all_options.keys()]
         value = [{'value': val} for val in all_value.keys()]
         target_opt = [label, value]
-        try:
-            img_panel = dbc.Row(  # row with plot
-                [
-                    dbc.Col(
-                        [
-                            html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                                id='top-1000-score', width="80%", height="auto"),
-                                target="_blank")
-                        ], width={"size": 10, "offset": 2}
-                    )
-                ]
-            )
-        except:
-            img_panel = dbc.Row(  # row with plot
-                [
-                    dbc.Col(
-                        [html.Div()]
-                    )
-                ]
-            )
+        # try:
+        #     img_panel = dbc.Row(  # row with plot
+        #         [
+        #             dbc.Col(
+        #                 [
+        #                     html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+        #                         current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+        #                         id='top-1000-score', width="80%", height="auto"),
+        #                         target="_blank")
+        #                 ], width={"size": 10, "offset": 2}
+        #             )
+        #         ]
+        #     )
+        # except:
+        #     img_panel = dbc.Row(  # row with plot
+        #         [
+        #             dbc.Col(
+        #                 [html.Div()]
+        #             )
+        #         ]
+        #     )
 
         query_tab_content = html.Div(
             [
-                img_panel,
+                # img_panel,
                 dbc.Row(  # row with main group by, secondo group by and thresholds
                     [
                         dbc.Col(  # col0 phantom target select
@@ -3201,13 +3254,14 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # fl.append(
 
         return fl
-    else:
+    else: #tab-graphical
         # Show Report images
         samp_style = {}
         if genome_type == 'ref':
             samp_style = {'display': 'none'}
 
-        fl.append(html.Br())
+        # fl.append(html.Br())
+        fl.append(html.P('Summary Graphical report collecting all the plots and images produced during the search'))
 
         opt_mm = []
         for i in range(int(mms)+1):
@@ -3277,8 +3331,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         '''
         fl.append(html.Br())
 
-        guide = guide.replace("N", "")
-        radar_img = '/imgs/summary_single_guide_' + guide.replace("N", "") + '_' + str(
+        # guide = guide.replace("N", "")
+        radar_img = '/imgs/summary_single_guide_' + guide + '_' + str(
             0) + '_total_0.0_TOTAL.png'  # TODO choose between 0 mm and max used mms
         if not os.path.isfile(f"{job_directory}/{radar_img}"):
             try:
@@ -3322,37 +3376,52 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             super_populations = []
             populations = []
         # fl.append(html.P('Select Mismatch Value'))
+
+        top1000_image = dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                            id='top-1000-score', width="80%", height="auto"),
+                            target="_blank")
+                    ], width={"size": 10, "offset": 2}
+                )
+            ]
+        )
+
         fl.append(
             html.Div(
-                [dbc.Row(
-                    [
+                [
+                    top1000_image,
+                    dbc.Row(
+                        [
+                            dbc.Col(
+                                [
+                                    # html.P('Select Mismatch Value'),
+                                    html.Div(fl_mm_blg)
+                                    # html.Div(fl_buttons_0),
+                                    # html.Div(fl_buttons_1),
+                                    # html.Div(fl_buttons_2),
 
-                        dbc.Col(
-                            [
-                                # html.P('Select Mismatch Value'),
-                                html.Div(fl_mm_blg)
-                                # html.Div(fl_buttons_0),
-                                # html.Div(fl_buttons_1),
-                                # html.Div(fl_buttons_2),
-
-                            ]
-                        ),
-                        dbc.Col(
-                            [
-                                html.P('Select Individual Data',
-                                       style=samp_style),
-                                dbc.Row([
+                                ]
+                            ),
+                            dbc.Col(
+                                [
+                                    html.P('Select Individual Data',
+                                           style=samp_style),
+                                    dbc.Row([
                                         dbc.Col(html.Div(dcc.Dropdown(
                                             options=super_populations, id='dropdown-superpopulation-sample', placeholder='Select a Super Population', style=samp_style))),
                                         dbc.Col(html.Div(dcc.Dropdown(
                                             options=populations, id='dropdown-population-sample', placeholder='Select a Population', style=samp_style))),
                                         dbc.Col(html.Div(dcc.Dropdown(
                                             id='dropdown-sample', placeholder='Select a Sample', style=samp_style))),
-                                        ])
-                            ]
-                        )
-                    ]
-                ),
+                                    ])
+                                ]
+                            )
+                        ]
+                    ),
                 ]
             )
         )
@@ -3687,8 +3756,8 @@ def set_columns_options(selected_target):
                  'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score', 'CFD_Absolute_Risk_Score']}
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk_Score', ' Absolute_Risk_Score'],
-                   'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk_Score', ' Absolute_Risk_Score']}
+    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score'],
+                   'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score']}
     # target_options = {' Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], ' Bulges': [' Mismatches', ' Mismatch+Bulges', ' CFD'], ' Mismatch+Bulges': [' Mismatches', ' Bulges', ' CFD'], ' CFD': [
     #     ' Mismatches', ' Bulges', ' Mismatch+Bulges'], ' Risk_Score': [], ' Absolute_Risk_Score': [], ' Risk_Score': [], ' Risk_Score': []}
     # main_order_dict = dict()
@@ -3743,7 +3812,7 @@ def set_display_children(selected_order):
     target_value = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
         'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
     target_label = {'Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], 'Bulge_Size': [' Mismatches', ' Mismatch+Bulges', ' CFD'], 'Total': [' Mismatches', ' Bulges', ' CFD'],
-                    'CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
+                    'CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges'], 'Highest CFD Risk Score': [], 'Highest CFD Absolute Risk Score': [], 'CFD Risk Score': [], 'CFD Absolute Risk Score': []}
 
     gi = []
     if selected_order is not None:

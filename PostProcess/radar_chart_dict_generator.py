@@ -52,144 +52,144 @@ if web_server:
     file_extension = 'png'
 
 
-def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
+# def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
-    # check if no targets are found for that combination source/totalcount and skip the execution
-    if guideDict['General'] == 0:
-        return
-    percentage_list = []
-    for elem in guideDict:
-        if float(guideDict['General']) != 0:
-            percentage_list.append(
-                float(str(float(guideDict[elem])/float(guideDict['General']))[0:5]))
-        else:
-            percentage_list.append(float(0))
+#     # check if no targets are found for that combination source/totalcount and skip the execution
+#     if guideDict['General'] == 0:
+#         return
+#     percentage_list = []
+#     for elem in guideDict:
+#         if float(guideDict['General']) != 0:
+#             percentage_list.append(
+#                 float(str(float(guideDict[elem])/float(guideDict['General']))[0:5]))
+#         else:
+#             percentage_list.append(float(0))
 
-    guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
-    guideDataFrame['Percentage'] = percentage_list
-    guideDataFrame.columns = ['Total', 'Percentage']
-    guideDataFrame = guideDataFrame.T
-    # number of variable
-    categories = list(guideDataFrame)[0:]
-    N = len(categories)
+#     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
+#     guideDataFrame['Percentage'] = percentage_list
+#     guideDataFrame.columns = ['Total', 'Percentage']
+#     guideDataFrame = guideDataFrame.T
+#     # number of variable
+#     categories = list(guideDataFrame)[0:]
+#     N = len(categories)
 
-    # We are going to plot the first line of the data frame.
-    # But we need to repeat the first value to close the circular graph:
-    values = guideDataFrame.loc['Percentage'].values.flatten().tolist()
-    values += values[:1]
+#     # We are going to plot the first line of the data frame.
+#     # But we need to repeat the first value to close the circular graph:
+#     values = guideDataFrame.loc['Percentage'].values.flatten().tolist()
+#     values += values[:1]
 
-    # What will be the angle of each axis in the plot? (we divide the plot / number of variable)
-    angles = [n / float(N) * 2 * pi for n in range(N)]
-    angles += angles[:1]
+#     # What will be the angle of each axis in the plot? (we divide the plot / number of variable)
+#     angles = [n / float(N) * 2 * pi for n in range(N)]
+#     angles += angles[:1]
 
-    # Initialise the spider plot
-    ax = plt.subplot(2, 2, 1, polar=True)
+#     # Initialise the spider plot
+#     ax = plt.subplot(2, 2, 1, polar=True)
 
-    for label, rot in zip(ax.get_xticklabels(), angles):
-        if (rot == 0):
-            label.set_horizontalalignment("center")
-        if (rot > 0):
-            label.set_horizontalalignment("left")
-        if (rot > 3):
-            label.set_horizontalalignment("center")
-        if (rot > 4):
-            label.set_horizontalalignment("right")
+#     for label, rot in zip(ax.get_xticklabels(), angles):
+#         if (rot == 0):
+#             label.set_horizontalalignment("center")
+#         if (rot > 0):
+#             label.set_horizontalalignment("left")
+#         if (rot > 3):
+#             label.set_horizontalalignment("center")
+#         if (rot > 4):
+#             label.set_horizontalalignment("right")
 
-    # Draw one axe per variable + add labels labels yet
-    plt.xticks(angles[:-1], categories, color='black', size=14)
+#     # Draw one axe per variable + add labels labels yet
+#     plt.xticks(angles[:-1], categories, color='black', size=14)
 
-    # Draw ylabels
-    # # # Draw ylabels
-    ax.set_rlabel_position(0)
-    plt.yticks([0, 0.25, 0.50, 0.75], ["0", "0.25",
-                                       "0.50", "0.75"], color="black", size=12)
-    plt.ylim(0, 1)
+#     # Draw ylabels
+#     # # # Draw ylabels
+#     ax.set_rlabel_position(0)
+#     plt.yticks([0, 0.25, 0.50, 0.75], ["0", "0.25",
+#                                        "0.50", "0.75"], color="black", size=12)
+#     plt.ylim(0, 1)
 
-    # Fill area
-    ax.fill(angles, values, 'b', alpha=0.1)
+#     # Fill area
+#     ax.fill(angles, values, 'b', alpha=0.1)
 
-    # # # offset posizione y-axis
-    ax.set_theta_offset(pi / 2)
-    ax.set_theta_direction(-1)
-    # Plot data
-    ax.plot(angles, values, linewidth=1, linestyle='solid')
+#     # # # offset posizione y-axis
+#     ax.set_theta_offset(pi / 2)
+#     ax.set_theta_direction(-1)
+#     # Plot data
+#     ax.plot(angles, values, linewidth=1, linestyle='solid')
 
-    plt.subplot(2, 2, 2)
-    transpose_list = []
-    guideDataFrame = guideDataFrame.T
-    for elem in categories:
-        transpose_list.append(list(guideDataFrame.loc[elem]))
-        # transpose_list.append(
-        #     [guideDataFrame.loc[elem, 'Total'], guideDataFrame.loc[elem, 'Percentage']])
+#     plt.subplot(2, 2, 2)
+#     transpose_list = []
+#     guideDataFrame = guideDataFrame.T
+#     for elem in categories:
+#         transpose_list.append(list(guideDataFrame.loc[elem]))
+#         # transpose_list.append(
+#         #     [guideDataFrame.loc[elem, 'Total'], guideDataFrame.loc[elem, 'Percentage']])
 
-    plt.axis('off')
-    table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
-                      loc='best', colWidths=[0.25, 0.25])
-    table.auto_set_font_size(False)
-    table.set_fontsize(13)
+#     plt.axis('off')
+#     table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
+#                       loc='best', colWidths=[0.25, 0.25])
+#     table.auto_set_font_size(False)
+#     table.set_fontsize(13)
 
-    totalMotif = [0]*len(guide)
-    for count in range(len(guide)):
-        for nuc in motifDict:
-            totalMotif[count] += motifDict[nuc][count]
+#     totalMotif = [0]*len(guide)
+#     for count in range(len(guide)):
+#         for nuc in motifDict:
+#             totalMotif[count] += motifDict[nuc][count]
 
-    maxmax = max(totalMotif)
-    for count in range(len(guide)):
-        for nuc in motifDict:
-            if maxmax != 0:
-                motifDict[nuc][count] = float(
-                    motifDict[nuc][count]/float(maxmax))
-                # motifDict[nuc][count] = float(
-                #     str(float(motifDict[nuc][count])/float(maxmax))[0:5])
+#     maxmax = max(totalMotif)
+#     for count in range(len(guide)):
+#         for nuc in motifDict:
+#             if maxmax != 0:
+#                 motifDict[nuc][count] = float(
+#                     motifDict[nuc][count]/float(maxmax))
+#                 # motifDict[nuc][count] = float(
+#                 #     str(float(motifDict[nuc][count])/float(maxmax))[0:5])
 
-    # ind = np.arange(0, len(guide), 1) + 0.15
-    ind = np.arange(0, len(guide), 1)
-    width = 0.7  # the width of the bars: can also be len(x) sequence
+#     # ind = np.arange(0, len(guide), 1) + 0.15
+#     ind = np.arange(0, len(guide), 1)
+#     width = 0.7  # the width of the bars: can also be len(x) sequence
 
-    motif = plt.subplot(2, 1, 2, frameon=False)
+#     motif = plt.subplot(2, 1, 2, frameon=False)
 
-    A = np.array(motifDict['A'], dtype=float)
-    C = np.array(motifDict['C'], dtype=float)
-    G = np.array(motifDict['G'], dtype=float)
-    T = np.array(motifDict['T'], dtype=float)
-    RNA = np.array(motifDict['RNA'], dtype=float)
-    DNA = np.array(motifDict['DNA'], dtype=float)
+#     A = np.array(motifDict['A'], dtype=float)
+#     C = np.array(motifDict['C'], dtype=float)
+#     G = np.array(motifDict['G'], dtype=float)
+#     T = np.array(motifDict['T'], dtype=float)
+#     RNA = np.array(motifDict['RNA'], dtype=float)
+#     DNA = np.array(motifDict['DNA'], dtype=float)
 
-    p1 = plt.bar(ind, A, width, align='center')
-    p2 = plt.bar(ind, C, width, bottom=A, align='center')
-    p3 = plt.bar(ind, G, width, bottom=A+C, align='center')
-    p4 = plt.bar(ind, T, width, bottom=C+G+A, align='center')
-    p5 = plt.bar(ind, RNA, width, bottom=C+G+A+T, align='center')
-    p6 = plt.bar(ind, DNA, width, bottom=C+G+A+T+RNA,
-                 align='center')
+#     p1 = plt.bar(ind, A, width, align='center')
+#     p2 = plt.bar(ind, C, width, bottom=A, align='center')
+#     p3 = plt.bar(ind, G, width, bottom=A+C, align='center')
+#     p4 = plt.bar(ind, T, width, bottom=C+G+A, align='center')
+#     p5 = plt.bar(ind, RNA, width, bottom=C+G+A+T, align='center')
+#     p6 = plt.bar(ind, DNA, width, bottom=C+G+A+T+RNA,
+#                  align='center')
 
-    # plt.xlim(0, len(guide))
-    # strArray = np.array([list(guide)])
-    plt.xticks(ticks=ind, labels=list(guide))
+#     # plt.xlim(0, len(guide))
+#     # strArray = np.array([list(guide)])
+#     plt.xticks(ticks=ind, labels=list(guide))
 
-    plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
-               ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=13, loc='upper right', ncol=6)
+#     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
+#                ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=13, loc='upper right', ncol=6)
 
-    # strArray = np.array([list(guide)])
-    # table = plt.table(cellText=strArray, loc='bottom',
-    #                   cellLoc='center', rowLoc='bottom')
-    # table.auto_set_font_size(False)
-    # table.set_fontsize(12)
-    # # table.scale(1, 1.6)
-    # table.xticks = ([])
-    # table.yticks = ([])
-    # plt.xticks
+#     # strArray = np.array([list(guide)])
+#     # table = plt.table(cellText=strArray, loc='bottom',
+#     #                   cellLoc='center', rowLoc='bottom')
+#     # table.auto_set_font_size(False)
+#     # table.set_fontsize(12)
+#     # # table.scale(1, 1.6)
+#     # table.xticks = ([])
+#     # table.yticks = ([])
+#     # plt.xticks
 
-    plt.suptitle(str(mismatch)+" Mismatches+ "+str(bulge)+" Bulge "+str(source),
-                 horizontalalignment='center', color='black', size=25)
+#     plt.suptitle(str(mismatch)+" Mismatches+ "+str(bulge)+" Bulge "+str(source),
+#                  horizontalalignment='center', color='black', size=25)
 
-    plt.tight_layout()
-    plt.subplots_adjust(top=0.85, bottom=0.05, left=0.05,
-                        right=0.95, wspace=0.1)
-    plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
-                "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
+#     plt.tight_layout()
+#     plt.subplots_adjust(top=0.85, bottom=0.05, left=0.05,
+#                         right=0.95, wspace=0.1)
+#     plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
+#                 "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
 
-    plt.close('all')
+#     plt.close('all')
 
 
 def motifDictCreation(guide):
