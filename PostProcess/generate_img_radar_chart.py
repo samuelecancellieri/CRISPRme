@@ -74,10 +74,10 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     guideDataFrame['Percentage'] = percentage_list
     guideDataFrame.columns = ['Total', 'Percentage']
     # convert to int total column
-    print('prima', guideDataFrame)
+    # print('prima', guideDataFrame)
     # guideDataFrame['Total'] = guideDataFrame['Total'].astype('int32')
     guideDataFrame = guideDataFrame.T
-    print('dopo', guideDataFrame)
+    # print('dopo', guideDataFrame)
     # number of variable
     categories = list(guideDataFrame)[0:]
     N = len(categories)
@@ -126,14 +126,14 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.subplot(2, 2, 2)
     transpose_list = []
     guideDataFrame = guideDataFrame.T
-    guideDataFrame['Total'] = to_numeric(
-        guideDataFrame['Total'], downcast='integer')
-    print('lamadonna', guideDataFrame)
+    # guideDataFrame['Total'] = to_numeric(
+    #     guideDataFrame['Total'], downcast='integer')
+    # print('lamadonna', guideDataFrame)
     for elem in categories:
         transpose_list.append(list(guideDataFrame.loc[elem]))
         # transpose_list.append(
         #     [guideDataFrame.loc[elem, 'Total'], guideDataFrame.loc[elem, 'Percentage']])
-
+    print(transpose_list)
     plt.axis('off')
     table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
                       loc='best', colWidths=[0.25, 0.25])
