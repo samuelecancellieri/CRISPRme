@@ -275,7 +275,7 @@ def fillDict(guide, guideDict, motifDict):
         inFinalFile.seek(0)
 
     for line in inFinalFile:
-        print(line)
+        # print(line)
         split = line.strip().split('\t')
         if guide not in split[15]:
             continue
