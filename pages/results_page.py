@@ -2340,38 +2340,34 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     sample_images = []
 
     try:
-        guide_images.append(  # population barplot
-            html.Div(
-                [
-                    dbc.Col(
-                        html.A(
-                            html.Img(
-                                src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                    current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
-                                id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
-                            ),
-                            target="_blank",
-                            href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
-                            guide + '_' +
-                            str(int(mm)+int(bulge)) + 'total.png'
+        guide_images.extend(  # population barplot
+            [
+                dbc.Col(
+                    html.A(
+                        html.Img(
+                            src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
+                            id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
                         ),
-                        html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
-                            'display': 'inline-block'}), style={'text-align': 'center'})
-                    )
-                ]
-            )
+                        target="_blank",
+                        href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
+                        guide + '_' +
+                        str(int(mm)+int(bulge)) + 'total.png'
+                    ),
+                    html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+                        'display': 'inline-block'}), style={'text-align': 'center'})
+                )
+            ]
         )
     except:
         guide_images.append(
-            html.Div(
-                dbc.Col(
-                    [
-                        html.Div(html.P('No Targets found with ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges', style={
-                            'display': 'inline-block'}), style={'text-align': 'center'}),
-                        # html.Div(html.P('Distribution ' + str(mm) + ' Mismatches + Bulges ', style = {'display':'inline-block'} ),style = {'text-align':'center'})
-                    ],
-                    align='center'
-                )
+            dbc.Col(
+                [
+                    html.Div(html.P('No Targets found with ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges', style={
+                        'display': 'inline-block'}), style={'text-align': 'center'}),
+                    # html.Div(html.P('Distribution ' + str(mm) + ' Mismatches + Bulges ', style = {'display':'inline-block'} ),style = {'text-align':'center'})
+                ],
+                align='center'
             )
         )
 
@@ -2381,11 +2377,10 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
         '.' + str(bulge) + '_TOTAL.png'
 
     if not os.path.isfile(f"{job_directory}/{radar_img}"):
-        # try:
-        # print('faccio radar image')
-        os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
-        # except:
-        #     pass
+        try:
+            os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
+        except:
+            pass
     img_found = False
     try:
         radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
@@ -2400,37 +2395,28 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
         radar_href = ''
 
     if img_found:
-        guide_images.extend(
-            [
-                html.Div(
-                    dbc.Col(
-                        html.A(
-                            html.Img(src=radar_src, id='radar-img-guide',
-                                     width="100%", height="auto"),
-                            target="_blank",
-                            href=radar_href
-                        )
-                    )
+        guide_images.append(
+            dbc.Col(
+                html.A(
+                    html.Img(src=radar_src, id='radar-img-guide',
+                             width="100%", height="auto"),
+                    target="_blank",
+                    href=radar_href
                 )
-            ]
+            )
         )
     else:
-        guide_images.extend(
-            [
-                html.Div(
-                    dbc.Col(
-                        html.H2(
-                            "No result found for this combination of mismatches and bulges"
-                        ),
-                    )
-                )
-            ]
+        guide_images.append(
+            dbc.Col(
+                html.H2(
+                    "No result found for this combination of mismatches and bulges"
+                ),
+            )
         )
     class_images = [(sample, 'Samples'), (population, 'Population'),
                     (superpopulation, 'Superpopulation')]
 
     for c in class_images:
-
         img_found = False
         if c[0]:
             current_img = job_directory + '/imgs/summary_single_guide_' +\
@@ -2458,34 +2444,22 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
             if img_found:
                 sample_images.append(
-                    dbc.Row(
-                        [
-                            dbc.Col(
-                                html.A(
-                                    html.Img(src=first_img_source,
-                                             width="100%", height="auto"),
-                                    target="_blank",
-                                    href=first_img_href
-                                ),
-                                # width=10
-                            ),
-                        ],
-                        no_gutters=True
-                    ),
+                    dbc.Col(
+                        html.A(
+                            html.Img(src=first_img_source,
+                                     width="100%", height="auto"),
+                            target="_blank",
+                            href=first_img_href
+                        )
+                    )
                 )
             else:
                 sample_images.append(
-                    dbc.Row(
-                        [
-                            dbc.Col(
-                                html.H2(
-                                    "No result found for this combination of mismatches and bulges"
-                                ),
-                                # width=10
-                            ),
-                        ],
-                        no_gutters=True
-                    ),
+                    dbc.Col(
+                        html.H2(
+                            "No result found for this combination of mismatches and bulges"
+                        )
+                    )
                 )
     return guide_images, sample_images
 # Open in browser the result directory
@@ -3330,127 +3304,120 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 )
             ]
         )
-
+        # DA SPOSTARE DOPO BARPLOT E RADCHART TOTAL
+        # dbc.Col(
+        #     [
+        #         html.P('Select Individual Data',
+        #                style=samp_style),
+        #         dbc.Row([
+        #             dbc.Col(html.Div(dcc.Dropdown(
+        #                 options=super_populations, id='dropdown-superpopulation-sample', placeholder='Select a Super Population', style=samp_style))),
+        #             dbc.Col(html.Div(dcc.Dropdown(
+        #                 options=populations, id='dropdown-population-sample', placeholder='Select a Population', style=samp_style))),
+        #             dbc.Col(html.Div(dcc.Dropdown(
+        #                 id='dropdown-sample', placeholder='Select a Sample', style=samp_style))),
+        #         ])
+        #     ]
+        # )
         fl.append(
             html.Div(
                 [
                     top1000_image,
                     dbc.Row(
-                        [
-                            dbc.Col(
-                                [
-                                    # html.P('Select Mismatch Value'),
-                                    html.Div(fl_mm_blg)
-                                    # html.Div(fl_buttons_0),
-                                    # html.Div(fl_buttons_1),
-                                    # html.Div(fl_buttons_2),
-
-                                ]
-                            )
-                            # dbc.Col(
-                            #     [
-                            #         html.P('Select Individual Data',
-                            #                style=samp_style),
-                            #         dbc.Row([
-                            #             dbc.Col(html.Div(dcc.Dropdown(
-                            #                 options=super_populations, id='dropdown-superpopulation-sample', placeholder='Select a Super Population', style=samp_style))),
-                            #             dbc.Col(html.Div(dcc.Dropdown(
-                            #                 options=populations, id='dropdown-population-sample', placeholder='Select a Population', style=samp_style))),
-                            #             dbc.Col(html.Div(dcc.Dropdown(
-                            #                 id='dropdown-sample', placeholder='Select a Sample', style=samp_style))),
-                            #         ])
-                            #     ]
-                            # )
-                        ]
-                    ),
+                        dbc.Col(
+                            html.Div(fl_mm_blg)
+                        )
+                    )
                 ]
             )
         )
         # fl.append(html.Hr())
-        if img_found:
-            fl.append(
-                html.Div(
-                    [
-                        dbc.Row(
-                            [
-                                dbc.Col([  # Guide part
-                                        html.Div(
-                                            [
+        # if img_found:
+        #     fl.append(
+        #         html.Div(
+        #             [
+        #                 dbc.Row(
+        #                     [
+        #                         dbc.Col([  # Guide part
+        #                                 html.Div(
+        #                                     [
 
-                                                dbc.Row(html.Br()),
-                                                dbc.Row(
-                                                    [
-                                                        dbc.Col(
-                                                            html.A(
-                                                                html.Img(
-                                                                    src=radar_src, id='barplot-img-guide', width="100%", height="auto"),
-                                                                target="_blank",
-                                                                href=radar_href
-                                                            ),
-                                                            # width=10
-                                                        )
-                                                    ]
-                                                ),
-                                            ],
-                                            id='div-guide-image'
-                                        )
-                                        ]),
-                                dbc.Col([  # Sample part
-                                        html.Div(
-                                            [
+        #                                         # dbc.Row(html.Br()),
+        #                                         dbc.Row(
+        #                                             [
+        #                                                 dbc.Col(
+        #                                                     html.A(
+        #                                                         html.Img(
+        #                                                             src=radar_src, id='barplot-img-guide', width="100%", height="auto"),
+        #                                                         target="_blank",
+        #                                                         href=radar_href
+        #                                                     ),
+        #                                                     # width=10
+        #                                                 )
+        #                                             ]
+        #                                         ),
+        #                                     ],
+        #                                     id='div-guide-image'
+        #                                 )
+        #                                 ]),
+        #                         # dbc.Col(
+        #                         #     [  # Sample part
+        #                         #         html.Div(
+        #                         #             [
 
-                                            ],
-                                            id='div-sample-image'
-                                        )
-                                        ])
-                            ]
-                        )
-                    ]
+        #                         #             ],
+        #                         #             id='div-sample-image'
+        #                         #         )
+        #                         #         ]
+        #                         #         )
+        #                     ]
+        #                 )
+        #             ]
 
-                )
-            )
-        else:
-            fl.append(
-                html.Div(
-                    [
-                        dbc.Row(
-                            [
-                                dbc.Col([  # Guide part
-                                        html.Div(
-                                            [
+        #         )
+        #     )
+        # else:
+        #     fl.append(
+        #         html.Div(
+        #             [
+        #                 dbc.Row(
+        #                     [
+        #                         dbc.Col([  # Guide part
+        #                                 html.Div(
+        #                                     [
 
-                                                dbc.Row(html.Br()),
-                                                dbc.Row(
-                                                    [
-                                                        dbc.Col(
-                                                            html.H2(
-                                                                "No result found for this combination of mismatches and bulges"
-                                                            ),
-                                                            # width=10
-                                                        )
-                                                    ]
-                                                ),
-                                            ],
-                                            id='div-guide-image'
-                                        )
-                                        ]),
-                                dbc.Col([  # Sample part
-                                        html.Div(
-                                            [
+        #                                         dbc.Row(html.Br()),
+        #                                         dbc.Row(
+        #                                             [
+        #                                                 dbc.Col(
+        #                                                     html.H2(
+        #                                                         "No result found for this combination of mismatches and bulges"
+        #                                                     ),
+        #                                                     # width=10
+        #                                                 )
+        #                                             ]
+        #                                         ),
+        #                                     ],
+        #                                     id='div-guide-image'
+        #                                 )
+        #                                 ]),
+        #                         dbc.Col([  # Sample part
+        #                                 html.Div(
+        #                                     [
 
-                                            ],
-                                            id='div-sample-image'
-                                        )
-                                        ])
-                            ]
-                        )
-                    ]
+        #                                     ],
+        #                                     id='div-sample-image'
+        #                                 )
+        #                                 ])
+        #                     ]
+        #                 )
+        #             ]
 
-                )
-            )
+        #         )
+        #     )
 
-        fl.append(html.Br())
-        fl.append(html.Br())
+        # fl.append(html.Br())
+        # fl.append(html.Br())
 
         # TODO codice per l'integrazione del CFD graph. When .CFDGraph.txt will be integrated, remove the try/except
 
