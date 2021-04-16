@@ -106,11 +106,11 @@ with open(path_output + '.general_target_count.txt', 'w+') as general_count:
                     dict_summary_by_guide[bulge_type][3] += 1
 
                 if var:
-                    samples = splitted[13].split(",")
+                    samples = set(splitted[13].split(","))
                     seen_superpop = set()
                     seen_pop = set()
                     for sample in samples:
-                        if sample != "NO_SAMPLES":
+                        if sample != "NO_SAMPLES" and sample != '':
                             dict_samples[sample][3] += 1
                             seen_pop.add(dict_samples[sample][1])
                             seen_superpop.add(dict_samples[sample][2])
