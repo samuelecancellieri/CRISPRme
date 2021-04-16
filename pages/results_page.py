@@ -1906,7 +1906,8 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     #    f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
     # os.system(
     #     f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
-    os.system(f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
+    os.system(
+        f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
 
     with open(file_to_grep, 'r') as ftg:
         header = ftg.readline().split('\t')[:24]
@@ -3245,16 +3246,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                             )
                                ], style={'display': 'inline-block', "margin-right": "20px"})
                      ]
-        fl.append(html.Br())
+        # fl.append(html.Br())
 
         # guide = guide.replace("N", "")
-        radar_img = '/imgs/summary_single_guide_' + guide + '_' + str(
-            0) + '_total_0.0_TOTAL.png'  # TODO choose between 0 mm and max used mms
-        if not os.path.isfile(f"{job_directory}/{radar_img}"):
-            try:
-                os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json 0 0 TOTAL {job_directory}/imgs/")
-            except:
-                pass
+        # radar_img = '/imgs/summary_single_guide_' + guide + '_' + str(
+        #     0) + '_total_0.0_TOTAL.png'  # TODO choose between 0 mm and max used mms
+        # if not os.path.isfile(f"{job_directory}/{radar_img}"):
+        #     try:
+        #         os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json 0 0 TOTAL {job_directory}/imgs/")
+        #     except:
+        #         pass
         # barplot_img = 'summary_histogram_' + guide + '_' + str(0) + '_total.png'
         # try:            #NOTE serve per non generare errori se il barplot non è stato fatto
         #    barplot_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(current_working_directory + 'Results/' + job_id + '/' + barplot_img, 'rb').read()).decode())
@@ -3265,18 +3266,18 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # except:
         #    barplot_href = ''
 
-        img_found = False
-        try:
-            radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-                current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
-            img_found = True
-        except:
-            radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(
-                open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
-        try:
-            radar_href = 'assets/Img/' + job_id + '/' + radar_img
-        except:
-            radar_href = ''
+        # img_found = False
+        # try:
+        #     radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+        #         current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
+        #     img_found = True
+        # except:
+        #     radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(
+        #         open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
+        # try:
+        #     radar_href = 'assets/Img/' + job_id + '/' + radar_img
+        # except:
+        #     radar_href = ''
 
         if genome_type != 'ref':
             population_1000gp = associateSample.loadSampleAssociation(
@@ -3331,6 +3332,10 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     )
                 ]
             )
+        )
+        radar_chart_content = html.Div('', id='div-guide-image')
+        fl.append(
+            dbc.Row(radar_chart_content)
         )
         # fl.append(html.Hr())
         # if img_found:
