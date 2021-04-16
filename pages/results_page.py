@@ -3321,7 +3321,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                      options=opt_mm,
                                      value='0',
                                      clearable=False,
-                                     style={'width': '60px'}
                                      )
                     ]
                 ), width=4
@@ -3334,7 +3333,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                      options=opt_blg,
                                      value='0',
                                      clearable=False,
-                                     style={'width': '60px'}
                                      )
                     ]
                 ), width=4
