@@ -2339,9 +2339,23 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     guide_images = []
     sample_images = []
 
-    guide = guide.replace("N", "")
+    guide_images.extend(
+        dbc.Row(  # row with plot
+            [
+                dbc.Col(
+                    [
+                        html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                            id='top-1000-score', width="80%", height="auto"),
+                            target="_blank")
+                    ]  # width={"size": 10, "offset": 2}
+                )
+            ], justify="center",
+        ))
+
+    # guide = guide.replace("N", "")
     radar_img = '/imgs/summary_single_guide_' + \
-        guide.replace("N", "") + '_' + str(mm) + \
+        guide + '_' + str(mm) + \
         '.' + str(bulge) + '_TOTAL.png'
 
     if not os.path.isfile(f"{job_directory}/{radar_img}"):
@@ -2395,7 +2409,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     else:
         guide_images.extend([
 
-            dbc.Row(html.Br()),
+            # dbc.Row(html.Br()),
             dbc.Row(
                 [
                     dbc.Col(
@@ -2414,8 +2428,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
         img_found = False
         if c[0]:
-            current_img = job_directory + '/imgs/summary_single_guide_' + guide.replace(
-                "N", "") + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
+            current_img = job_directory + '/imgs/summary_single_guide_' + \
+                guide + '_' + str(mm) + '.'+str(bulge) + '_' + c[0] + '.png'
             if not os.path.isfile(current_img):
                 try:
                     os.system(
@@ -2431,7 +2445,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
             try:
                 first_img_href = 'Results/' + job_id + '/imgs/summary_single_guide_' + \
-                    guide.replace("N", "") + '_' + str(mm) + "." + str(bulge) + \
+                    guide + '_' + str(mm) + "." + str(bulge) + \
                     '_' + c[0] + '.png'
             except:
                 first_img_href = ''
@@ -3292,8 +3306,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         '''
         fl.append(html.Br())
 
-        guide = guide.replace("N", "")
-        radar_img = '/imgs/summary_single_guide_' + guide.replace("N", "") + '_' + str(
+        # guide = guide.replace("N", "")
+        radar_img = '/imgs/summary_single_guide_' + guide + '_' + str(
             0) + '_total_0.0_TOTAL.png'  # TODO choose between 0 mm and max used mms
         if not os.path.isfile(f"{job_directory}/{radar_img}"):
             try:
