@@ -2339,22 +2339,6 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     guide_images = []
     sample_images = []
 
-    # top1000 image in graph sumamry
-    # guide_images.append(
-    #     dbc.Row(  # row with plot
-    #         [
-    #             dbc.Col(
-    #                 html.Div(
-    #                     html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-    #                         current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-    #                         id='top-1000-score', width='80%'),
-    #                         target="_blank")
-    #                 ), width={"size": 6, "offset": 2},
-    #             )
-    #         ]
-    #     )
-    # )
-
     try:
         guide_images.append(
             dbc.Row(
@@ -2766,7 +2750,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # Show Summary by Guide table
         fl.append(
             html.P(
-                ['Summary table counting the number of targets found in the Variant Genome for each combination of Bulge Type, Bulge Size and Mismatch. Select \'Show Targets\' to view the corresponding list of targets. ',
+                ['Summary table counting the number of targets found in the Reference and Variant Genome for each combination of Bulge Type, Bulge Size and Mismatch. Select \'Show Targets\' to view the corresponding list of targets. ',
                  # html.A('Click here', href = URL + '/data/' + job_id + '/' + job_id + '.targets.' + guide + '.zip' ,target = '_blank', id = 'download-full-list' ), ' to download the full list of targets.'
                  ]
             )
@@ -2883,12 +2867,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     elif value == 'tab-summary-by-position':
         # Show Summary by position table
         fl.append(
-            html.P('Summary table containing all the targets found in a specific position of the genome. For each position, the variant target with the lowest Mismatch + Bulge count is shown (if no target was found in the Variant Genome, the correspondig reference one is shown), along with his Mismatch and Bulge Size values.' +
-                   ' The subtable \'Targets in Cluster by Mismatch Value\' represents the number of targets found in that position for a particular Mismatch-Bulge Size pair.')
+            html.P(
+                'Summary table containing all the targets found in a specific range of positions (chr, start, end) of the genome.')
         )
 
         fl.append(
-            html.P('Filter the table by selecting the chromosome of interest and writing the start and/or end position of the region to view.')
+            html.P('Filter the table by selecting the chromosome of interest and writing the start and end position of the region to view.')
         )
         # Dropdown chromosomes
         try:
@@ -2919,7 +2903,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     for chr_name in chr_file]
 
         # Colonne tabella: chr, pos, target migliore, min mm, min bulges, num target per ogni categoria di mm e bulge, show targets; ordine per total, poi mm e poi bulge
-        start_time = time.time()
+        # start_time = time.time()
         # df = pd.read_csv( job_directory + job_id + '.summary_by_position.' + guide +'.txt', sep = '\t')
         # df.rename(columns = {'#Chromosome':'Chromosome'}, inplace = True)
         # more_info_col = []
@@ -2971,7 +2955,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         samples = df.iloc[:, 0]
         fl.append(
             html.P(
-                'In this page single Personal Risk card can be generated and inspected')
+                'Summary page containing the single Personal Risk card to be inspected and downloaded')
         )
         fl.append(
             html.Div
@@ -3012,6 +2996,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         fl.append(html.Div('', id='div-sample-card'))
         return fl
     elif value == 'tab-query-table':
+        fl.append(html.P('Summary page to query the final result file selecting one/two column to group by the table and extract requested targets'))
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
@@ -3269,13 +3254,14 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # fl.append(
 
         return fl
-    else:
+    else: #tab-graphical
         # Show Report images
         samp_style = {}
         if genome_type == 'ref':
             samp_style = {'display': 'none'}
 
-        fl.append(html.Br())
+        # fl.append(html.Br())
+        fl.append(html.P('Summary Graphical report collecting all the plots and images produced during the search'))
 
         opt_mm = []
         for i in range(int(mms)+1):
