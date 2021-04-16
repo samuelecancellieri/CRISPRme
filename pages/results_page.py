@@ -3245,23 +3245,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         opt_blg = []
         for i in range(int(max_bulges)+1):
             opt_blg.append({'label': str(i), 'value': str(i)})
-        fl_mm_blg = [html.Div([html.P("Select Mismatches"),
-                               dcc.Dropdown(id='mm-dropdown',
-                                            options=opt_mm,
-                                            value='0',
-                                            clearable=False,
-                                            style={'width': '60px'}
-                                            )
-                               ], style={'display': 'inline-block', "margin-right": "20px"}),
-                     html.Div([html.P("Select Bulges"),
-                               dcc.Dropdown(id='blg-dropdown',
-                                            options=opt_blg,
-                                            value='0',
-                                            clearable=False,
-                                            style={'width': '60px'}
-                                            )
-                               ], style={'display': 'inline-block', "margin-right": "20px"})
-                     ]
+
         # fl.append(html.Br())
 
         # guide = guide.strip()
@@ -3312,41 +3296,77 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             populations = []
         # fl.append(html.P('Select Mismatch Value'))
 
-        top1000_image = dbc.Row(
-            [
-                dbc.Col(
-                    [
-                        html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+        top1000_image = html.Div(
+            html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
                             current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
                             id='top-1000-score', width="80%", height="auto"),
-                            target="_blank")
-                    ], width={"size": 10, "offset": 2}
-                )
-            ]
+                   target="_blank")
         )
+
+        total_buttons = [
+            html.Div(
+                [
+                    html.P("Select Mismatches"),
+                    dcc.Dropdown(id='mm-dropdown',
+                                 options=opt_mm,
+                                 value='0',
+                                 clearable=False,
+                                 style={'width': '60px'}
+                                 )
+                ], style={'display': 'inline-block', "margin-right": "20px"}),
+            html.Div(
+                [
+                    html.P("Select Bulges"),
+                    dcc.Dropdown(id='blg-dropdown',
+                                 options=opt_blg,
+                                 value='0',
+                                 clearable=False,
+                                 style={'width': '60px'}
+                                 )
+                ], style={'display': 'inline-block', "margin-right": "20px"})
+        ]
         # DA SPOSTARE DOPO BARPLOT E RADCHART TOTAL
-        # dbc.Col(
-        #     [
-        #         html.P('Select Individual Data',
-        #                style=samp_style),
-        #         dbc.Row([
-        #             dbc.Col(html.Div(dcc.Dropdown(
-        #                 options=super_populations, id='dropdown-superpopulation-sample', placeholder='Select a Super Population', style=samp_style))),
-        #             dbc.Col(html.Div(dcc.Dropdown(
-        #                 options=populations, id='dropdown-population-sample', placeholder='Select a Population', style=samp_style))),
-        #             dbc.Col(html.Div(dcc.Dropdown(
-        #                 id='dropdown-sample', placeholder='Select a Sample', style=samp_style))),
-        #         ])
-        #     ]
-        # )
+        sample_buttons = [
+            html.Div(
+                [
+                    html.P("Select a Superpopulation"),
+                    html.Div(
+                        dcc.Dropdown(
+                            options=super_populations, id='dropdown-superpopulation-sample', placeholder='SuperPopulation', style=samp_style))
+                ]
+            ),
+            html.Div(
+                [
+                    html.P("Select a Superpopulation"),
+                    html.Div(dcc.Dropdown(
+                        options=populations, id='dropdown-population-sample', placeholder='Population', style=samp_style))
+                ]
+            ),
+            html.Div(
+                [
+                    html.P("Select a Sample"),
+                    html.Div(dcc.Dropdown(
+                        id='dropdown-sample', placeholder='Sample', style=samp_style))
+                ]
+            )
+        ]
         fl.append(
             html.Div(
                 [
+                    dbc.Row(
+                        [
+                            dbc.Col(top1000_image)
+                        ], width={"size": 10, "offset": 2}
+                    ),
                     top1000_image,
                     dbc.Row(
+                        [
                         dbc.Col(
-                            html.Div(fl_mm_blg)
-                        )
+                            html.Div(total_buttons)
+                        ),
+                        dbc.Col(
+                            html.Div(sample_buttons))
+                        ]
                     )
                 ]
             )
@@ -3359,16 +3379,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #  Output('div-population-barplot', 'children'),
         #  Output('div-radar-chart-sample', 'children'),
         #  Output('div-sample-image', 'children')],
-        fl.append(
-            html.Div(
-                dbc.Row(
-                    [
-                        dbc.Col(populations_barplots),
-                        dbc.Col(radar_chart_total_content)
-                    ]
-                )
-            )
-        )
+        # fl.append(
+        #     html.Div(
+        #         dbc.Row(
+        #             [
+        #                 dbc.Col(populations_barplots),
+        #                 dbc.Col(radar_chart_total_content)
+        #             ]
+        #         )
+        #     )
+        # )
         # fl.append(
         #     dbc.Row(
         #         dbc.Col(radar_chart_content)
