@@ -41,12 +41,13 @@ guides = []
 general_table = {}
 with open(f"{path_guides}", "r") as guide_file:
     for line in guide_file:
-        stripped = line.strip()
-        guides.append(stripped)
+        if line.strip():
+            stripped = line.strip()
+            guides.append(stripped)
 
-        general_table[stripped] = dict()
-        general_table[stripped]['ref'] = np.zeros((bulge+1, mms+1), dtype=int)
-        general_table[stripped]['var'] = np.zeros((bulge+1, mms+1), dtype=int)
+            general_table[stripped] = dict()
+            general_table[stripped]['ref'] = np.zeros((bulge+1, mms+1), dtype=int)
+            general_table[stripped]['var'] = np.zeros((bulge+1, mms+1), dtype=int)
 
 add_to_general_table = {}
 count_superpop = {}
