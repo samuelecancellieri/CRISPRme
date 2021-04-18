@@ -2556,11 +2556,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
         # plot for images in personal card
         os.system(
-            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.personal > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
+            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
         os.system(
-            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.private > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
-        os.system(
-            f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
+            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
+        # os.system(f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
 
         private = 0
         for line in open(sample_grep_result):
@@ -2619,9 +2618,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
     # image for personal and private
     image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.personal.png', 'rb').read()).decode())
+        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.personal.png', 'rb').read()).decode())
     image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.private.png', 'rb').read()).decode())
+        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.private.png', 'rb').read()).decode())
 
     # os.system(
     #     f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
