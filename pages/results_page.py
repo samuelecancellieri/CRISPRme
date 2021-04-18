@@ -234,7 +234,7 @@ def resultPage(job_id):
                     style_table={
                         # 'margin-left': "10%",
                         'max-height': '260px',
-                        'overflowY': 'scroll',
+                        # 'overflowY': 'scroll',
                         # 'overflowX': 'hidden',
                     },
                     style_data={
