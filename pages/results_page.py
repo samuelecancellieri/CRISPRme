@@ -2548,11 +2548,11 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         # copy header from integrated results into sample files
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
         os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
-        os.system(f"awk /{guide}/ '$32 ~ {sample}' {integrated_to_grep} >> {integrated_personal}")
+        os.system(f"awk \'$1==\"{guide}\" && $32 ~ \"{sample}\"\' {integrated_to_grep} >> {integrated_personal}")
         # os.system(f"LC_ALL=C fgrep {guide} {integrated_to_grep} | fgrep {sample} >> {integrated_personal}")
         os.system(f"awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
         # os.system(f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
-        os.system(f"awk /{guide}/ \'$14==\"{sample}\"\' {file_to_grep} > {sample_grep_result}")
+        os.system(f"awk \/{guide}/ \'$14==\"{sample}\"\' {file_to_grep} > {sample_grep_result}")
 
         # plot for images in personal card
         os.system(
