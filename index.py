@@ -87,6 +87,7 @@ def changePage(href, path, search, hash_guide):
 
 if __name__ == '__main__':
     directoryCheck()
+    print('start')
     app.run_server(host='0.0.0.0', port=8080, debug=False,
                    dev_tools_ui=False, dev_tools_props_check=False)
     cache.clear()  # delete cache when server is closed
