@@ -55,7 +55,7 @@ def Navbar():
                     align="center",
                     no_gutters=True,
                 ),
-                href=URL,
+                href=URL + '/index',
             ),
             dbc.NavbarToggler(id="navbar-toggler"),
             dbc.Collapse(search_bar, id="navbar-collapse", navbar=True),
