@@ -3,7 +3,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 from app import URL, DISPLAY_OFFLINE
 # from index import DISPLAY_OFFLINE
-PLOTLY_LOGO = 'assets/37143442.png'
+PLOTLY_LOGO = 'assets/favicon.png'
 
 # DISPLAY_OFFLINE = ''
 search_bar = dbc.Row(
