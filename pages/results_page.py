@@ -2044,7 +2044,6 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
             df = df.sort_values('Targets in Variant', ascending=False)
             df.drop(['Targets in Reference'], axis=1, inplace=True)
-            df.drop(['Class'], axis=1, inplace=True)
         else:
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
@@ -2786,7 +2785,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
             df = df.sort_values('Targets in Variant', ascending=False)
             df.drop(['Targets in Reference'], axis=1, inplace=True)
-            df.drop(['Class'], axis=1, inplace=True)
         else:
             # col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
             col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
