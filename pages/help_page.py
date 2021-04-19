@@ -106,22 +106,22 @@ def helpPage():
                     #         html.Ul(
                     #             [
                     #                 html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                    #                     open('assets/helpPage/guides.PNG', 'rb').read()).decode()), width='40%'),
+                    #                     open('assets/helpPage/guides.png', 'rb').read()).decode()), width='40%'),
                     #                 html.Li(
                     #                     'Guides: a list of crRNAs sequences, consisting in 1 or more sequences (max 1000 sequences) to search on the genome'),
                     #                 html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                    #                     open('assets/helpPage/sequence.PNG', 'rb').read()).decode()), width='40%'),
+                    #                     open('assets/helpPage/sequence.png', 'rb').read()).decode()), width='40%'),
                     #                 html.Li('Sequence: one or more genetic sequences (max 1000 characters), each sequence MUST BE separated with the header \'>name\'. The sequence can be also submitted with a ' +
                     #                         'chromosome range, also provided with an header. The region will be extracted from the Genome selected in STEP 1'),
                     #                 html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                    #                     open('assets/helpPage/crRNA.PNG', 'rb').read()).decode()), width='20%'),
+                    #                     open('assets/helpPage/crRNA.png', 'rb').read()).decode()), width='20%'),
                     #                 html.Li(
                     #                     'Allowed mismatches: number of tolerated mismatches in a target'),
                     #                 html.Li(
                     #                     'Bulge DNA size: size of bubbles tolerated on the DNA sequence (can be consecutive(AA--AA) or interleaved(AA-A-AA)).'),
                     #                 html.Li(
                     #                     'Bulge RNA size: size of bubbles tolerated on the RNA sequence (can be consecutive(AA--AA) or interleaved(AA-A-AA))'),
-                    #                 # html.Img(src = 'data:image/png;base64,{}'.format(base64.b64encode(open('assets/helpPage/crRNA.PNG', 'rb').read()).decode()), width='20%' ),
+                    #                 # html.Img(src = 'data:image/png;base64,{}'.format(base64.b64encode(open('assets/helpPage/crRNA.png', 'rb').read()).decode()), width='20%' ),
                     #                 html.Li(
                     #                     'crRNA length: available only when a genetic sequence is given as input, represents the length of the guides (without PAM) that you want to extract from the sequence.')
                     #             ], style={'padding': '15px'}
@@ -134,7 +134,7 @@ def helpPage():
                             html.Ul(
                                 [
                                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                                        open('assets/helpPage/advOpt.PNG', 'rb').read()).decode()), width='40%'),
+                                        open('assets/helpPage/advOpt.png', 'rb').read()).decode()), width='40%'),
                                     html.Li(
                                         'The user can choose the annotation to use, either only the provided set of annotations or combine it with a personal annotation file.'),
                                     html.Li(
@@ -149,7 +149,7 @@ def helpPage():
                     #         html.Ul(
                     #             [
                     #                 html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                    #                     open('assets/helpPage/advOpt.PNG', 'rb').read()).decode()), width='40%'),
+                    #                     open('assets/helpPage/advOpt.png', 'rb').read()).decode()), width='40%'),
                     #                 html.Li(
                     #                     'Compare your results with the GeCKO v2 library: selected by default, compares the results of your guides with the results obtained in a previous search with guides from the well-known GeCKO library.'),
                     #                 html.Li('Compare your results with the corresponding reference genome: selected by default when an enriched genome is chosen, compares the results with the respective reference genome to evaluate differences when variant are added.'),
