@@ -45,10 +45,10 @@ def helpPage():
                                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
                                         open('assets/helpPage/guides.png', 'rb').read()).decode()), width='30%'),
                                     html.Li(
-                                        'Guides: a list of crRNAs sequences, consisting in 1 or more sequences (max 1000 sequences) to search on the genome'),
+                                        'Individual Protospacer(s): a list of crRNAs sequences, consisting in 1 or more sequences (max 1000 sequences) to search on the genome'),
                                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
                                         open('assets/helpPage/sequence.png', 'rb').read()).decode()), width='40%'),
-                                    html.Li('Sequence: one or more genetic sequences (max 1000 characters), each sequence MUST BE separated with the header \'>name\'. The sequence can be also submitted with a ' +
+                                    html.Li('Genomic sequence(s): one or more genetic sequences (max 1000 characters), each sequence MUST BE separated with the header \'>name\'. The sequence can be also submitted with a ' +
                                             'chromosome range, also provided with an header. The region will be extracted from the Genome selected in STEP 1'),                                    
                                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
                                         open('assets/helpPage/nuclease.png', 'rb').read()).decode()), width='30%'),
@@ -313,15 +313,13 @@ def helpPage():
                         html.Li([html.Span('Graphical Reports: ', style={
                                 'color': 'red'}), 'This page shows graphics about a specific guide, including genomic annotation and motif logos. The main feature introduced is the possibility to visualize graphical reports at individual level.']),
                         html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                            'assets/resultPage/graphicalReports.png', 'rb').read()).decode()), width='100%'),
-                        html.Ul(
-                            [
-                                html.Li(
-                                    'Select a Mismatch and Bulge Value: generate graphics with the specified mismatch+bulge value'),
-                                html.Li(
-                                    'Select Individual Data: generate individual data, by selecting Super Population, Population and Sample')
-                            ]
-                        ),
+                            'assets/resultPage/summaryByGraphic_population.png', 'rb').read()).decode()), width='100%'),
+                        html.Li(
+                            'Select a Mismatch and Bulge Value: generate graphics with the specified mismatch+bulge value'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                            'assets/resultPage/summaryByGraphic_sample.png', 'rb').read()).decode()), width='100%'),
+                        html.Li(
+                                    'Select Individual Data: generate individual data, by selecting Super Population, Population and Sample'),
 
                         html.Li([html.Span('Personal Risk Cards: ', style={
                                 'color': 'red'}), 'This page shows at individual level the most important data for a given sample.']),
