@@ -313,11 +313,11 @@ def helpPage():
                         html.Li([html.Span('Graphical Reports: ', style={
                                 'color': 'red'}), 'This page shows graphics about a specific guide, including genomic annotation and motif logos. The main feature introduced is the possibility to visualize graphical reports at individual level.']),
                         html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                            'assets/resultPage/summaryByGraphic_population.PNG', 'rb').read()).decode()), width='100%'),
+                            'assets/resultPage/summaryByGraphic_population.png', 'rb').read()).decode()), width='100%'),
                         html.Li(
                             'Select a Mismatch and Bulge Value: generate graphics with the specified mismatch+bulge value'),
                         html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                            'assets/resultPage/summaryByGraphic_sample.PNG', 'rb').read()).decode()), width='100%'),
+                            'assets/resultPage/summaryByGraphic_sample.png', 'rb').read()).decode()), width='100%'),
                         html.Li(
                                     'Select Individual Data: generate individual data, by selecting Super Population, Population and Sample'),
 
