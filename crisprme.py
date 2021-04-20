@@ -975,7 +975,7 @@ def gnomAD_converter():
             print("The file specified for --samplesID does not exist")
             exit(1)
             
-    os.system(script_path+"./convert_gnomAD.py "+vcf_dir+" "+samplefile +" "+ thread)
+    os.system(script_path+"./convert_gnomAD.py "+vcf_dir+" "+samplefile +" "+ str(thread))
         
 
 def web_interface():
