@@ -3,39 +3,86 @@
 import gzip
 import sys
 import re
-inVCF = gzip.open(sys.argv[1], 'rt')
+import glob
+import os
+import multiprocessing
+
+# inVCF = gzip.open(sys.argv[1], 'rt')
+vcfDIR = sys.argv[1]
 inPop = open(sys.argv[2], 'r').readlines()
-outVCF = gzip.open(sys.argv[1].replace('bgz', 'gz'), 'wt')
+threads = 0
+try:
+    threads = int(sys.argv[3])
+except:
+    threads = multiprocessing.cpu_count()-2
 
-header = list()
-popDict = dict()
-for pop in inPop:
-    popDict[pop.strip()] = '0|0'
-
-for line in inVCF:
-    if '##' in line:
-        header.append(line.strip())
-    else:
-        popheader = '\t'.join(popDict.keys())
-        header.append(line.strip()+'\t'+popheader+'\n')
-        break
-
-# print('\n'.join(header))
-outVCF.write('\n'.join(header))
+# outVCF = gzip.open(sys.argv[1].replace('bgz', 'gz'), 'wt')
 
 
-for line in inVCF:
-    split = line.strip().split('\t')
-    info = split[7].strip().split(';')
-    for pop in popDict:
-        popDict[pop] = '0|0'
-        for index, data in enumerate(info):
-            if 'AC-'+str(pop)+'=' in data:
-                ACvalue = int(data.strip().split('=')[1])
-                if ACvalue > 0:
-                    popDict[pop] = '0|1'
-    outVCF.write('\t'.join(split[:8])+'\t'+'\t'.join(popDict.values())+'\n')
+def convertVCF(inVCF):
+    #open VCF file
+    outVCFname = inVCF.replace('bgz', 'gz')
+    outVCF = gzip.open(inVCF.replace('bgz', 'gz'), 'wt')
+    inVCF = gzip.open(inVCF, 'rt')
 
-inVCF.close()
-outVCF.close()
-# print('\t'.join(split[:8]), '\t', '\t'.join(popDict.values()))
+    #read samplesID from file
+    header = list()
+    popDict = dict()
+    for pop in inPop:
+        if '#' in pop:
+            continue
+        popDict[pop.split()[0].strip()] = '0|0'
+
+    #read header from original VCF
+    for line in inVCF:
+        if '##' in line:
+            header.append(line.strip())
+        else:
+            popheader = '\t'.join(popDict.keys())
+            header.append('##FORMAT=<ID=GT,Number=1,Type=String,Description="Sample Collapsed Genotype">')
+            header.append(line.strip()+'\tFORMAT'+'\t'+popheader+'\n')
+            break
+    #insert header into new VCF
+    outVCF.write('\n'.join(header))
+
+    #read each variant into the VCF
+    for line in inVCF:
+        split = line.strip().split('\t')
+        if split[6] != 'PASS': #skip rows with no PASS in FILTER
+            continue
+        info = split[7].strip().split(';')
+        for pop in popDict:
+            popDict[pop] = '0|0'
+            for index, data in enumerate(info): #read AC for each gnomAD population and insert a fake GT for each sample
+                if 'AC_'+str(pop)+'=' in data:
+                    ACvalue = int(data.strip().split('=')[1])
+                    if ACvalue > 0:
+                        popDict[pop] = '0|1'
+        split[7] = info[2]
+        #write each line passing the filtering into the new VCF
+        outVCF.write('\t'.join(split[:8])+'\tGT\t'+'\t'.join(popDict.values())+'\n')
+
+    inVCF.close()
+    outVCF.close()
+    return outVCFname
+
+def bcftools_merging(outVCFname):    
+    finaloutVCF = outVCFname.replace('genomes','genomes.collapsed')
+    os.system(f"bcftools norm -m+ -O z -o {finaloutVCF} {outVCFname}")
+    
+def full_process(inVCF):
+    # print('faccio')
+    outVCFname = convertVCF(inVCF)
+    bcftools_merging(outVCFname)
+    os.system(f"rm -f {outVCFname}")
+
+
+if __name__ == '__main__':
+    pool = multiprocessing.Pool(threads)
+    #call convert vcf for each vcf in dir
+    listVCF = glob.glob(vcfDIR+'/*.vcf.bgz')
+    for inVCF in listVCF:
+        pool.apply_async(full_process, args=(inVCF,))
+    # wait until all threads are completed than join
+    pool.close()
+    pool.join()
