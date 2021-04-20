@@ -2,12 +2,10 @@
 
 import gzip
 import sys
-import re
 import glob
 import os
 import multiprocessing
 
-# inVCF = gzip.open(sys.argv[1], 'rt')
 vcfDIR = sys.argv[1]
 inPop = open(sys.argv[2], 'r').readlines()
 threads = 0
@@ -15,9 +13,6 @@ try:
     threads = int(sys.argv[3])
 except:
     threads = multiprocessing.cpu_count()-2
-
-# outVCF = gzip.open(sys.argv[1].replace('bgz', 'gz'), 'wt')
-
 
 def convertVCF(inVCF):
     #open VCF file
