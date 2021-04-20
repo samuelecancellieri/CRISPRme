@@ -361,6 +361,8 @@ def downloadLinkSample(n, file_to_load, search):  # file to load =
     job_id = search.split('=')[-1]
     # file_to_load = file_to_load + '.zip'
     file_to_load = file_to_load + '.txt'
+    
+    file_to_load = file_to_load.strip().split('/')[-1]
     print(file_to_load)
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
