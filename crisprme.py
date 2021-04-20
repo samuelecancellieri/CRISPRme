@@ -975,7 +975,7 @@ def gnomAD_converter():
             print("The file specified for --samplesID does not exist")
             exit(1)
             
-    os.system(script_path+"./convert_gnomAD.py "+vcf_dir+" "+samplefile +" "+ thread)
+    os.system(script_path+"./convert_gnomAD.py "+vcf_dir+" "+samplefile +" "+ str(thread))
         
 
 def web_interface():
@@ -1005,6 +1005,8 @@ if len(sys.argv) < 2:
     callHelp()
 elif sys.argv[1] == 'complete-search':
     complete_search()
+elif sys.argv[1] == 'gnomAD-converter':
+    gnomAD_converter()
 # elif sys.argv[1] == 'search-only':
 #     search_only()
 # elif sys.argv[1] == 'post-analysis-only':
