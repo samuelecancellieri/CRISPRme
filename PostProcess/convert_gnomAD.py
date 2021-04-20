@@ -62,7 +62,10 @@ def convertVCF(inVCF):
     return outVCFname
 
 def bcftools_merging(outVCFname):    
-    finalOutVCF = outVCFname.replace('genomes','genomes.collapsed')
+    # finalOutVCF = outVCFname.replace('genomes','genomes.collapsed')
+    tempName = outVCFname.strip().split('.')
+    tempName[-3] = tempName[-3]+'.collapsed'
+    finalOutVCF = '.'.join(tempName)
     os.system(f"bcftools norm -m+ -O z -o {finalOutVCF} {outVCFname}")
     
 def full_process(inVCF):
