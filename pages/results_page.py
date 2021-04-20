@@ -64,6 +64,11 @@ def resultPage(job_id):
     if (not isdir(job_directory)):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
 
+    count_guides = 0
+    with open(current_working_directory + 'Results/' + value + '/guides.txt') as g:
+        for line in g:
+            count_guides += 1
+        
     # Load mismatches
     with open(current_working_directory + 'Results/' + value + '/Params.txt') as p:
         all_params = p.read()
@@ -234,7 +239,7 @@ def resultPage(job_id):
                     style_table={
                         # 'margin-left': "10%",
                         'max-height': '260px',
-                        # 'overflowY': 'scroll',
+                        'overflowY': 'auto',
                         # 'overflowX': 'hidden',
                     },
                     style_data={

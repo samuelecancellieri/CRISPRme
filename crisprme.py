@@ -917,6 +917,66 @@ def target_integration():
     os.system(script_path+"./post_process.sh "+target_file+" "+gencode_file +
               " "+empiricalfile+" "+guidefile+" "+str(genome_version)+" "+outputfolder+" "+vcf_dir+" "+script_path)
 
+def gnomAD_converter():
+    if "--help" in input_args:
+        print("This is the VCF gnomAD converter provided to convert all gnomADv3.1 VCFs into CRISPRme supported VCFs")
+        print("These are the flags that must be used in order to run this function:")
+        print("\t--gnomAD_VCFdir, used to specify the directory containing gnomADv3.1 original VCFs")
+        print("\t--samplesID, used to specify the pre-generated samplesID file necessary to introduce samples into gnomAD variant")
+        print("\t--thread, used to specify the number of core used to process VCFs in parallel (DEFAULT is ALL available minus 2) [OPTIONAL]")
+        exit(0)
+        
+    if "--gnomAD_VCFdir" not in input_args:
+        print("--gnomAD_VCFdir not in input, MANDATORY TO CONVERT DATA")
+        # vcf_dir = script_path+'vuota/'
+        exit(1)
+    else:
+        try:
+            vcf_dir = os.path.abspath(
+                input_args[input_args.index("--gnomAD_VCFdir")+1])
+        except IndexError:
+            print("Please input some parameter for flag --gnomAD_VCFdir")
+            exit(1)
+        if not os.path.isdir(vcf_dir):
+            print("The folder specified for --gnomAD_VCFdir does not exist")
+            exit(1)
+            
+    if "--thread" not in input_args:
+        # print("--thread must be contained in the input")
+        # exit(1)
+        thread = len(os.sched_getaffinity(0))-2
+    else:
+        try:
+            thread = input_args[input_args.index("--thread")+1]
+        except IndexError:
+            print("Please input some parameter for flag --thread")
+            exit(1)
+        try:
+            thread = int(thread)
+        except:
+            print("Please input a number for flag thread")
+            exit(1)
+        if thread <= 0 or thread > len(os.sched_getaffinity(0))-2:
+            print("thread is set to default (ALL available minus 2)")
+            thread = len(os.sched_getaffinity(0))-2
+            # exit(1)
+            
+    if "--samplesID" not in input_args:
+        print("--samplesID not in input, MANDATORY TO CONVERT DATA")
+        exit(1)
+    elif "--samplesID" in input_args:
+        try:
+            samplefile = os.path.abspath(
+                input_args[input_args.index("--samplesID")+1])
+        except IndexError:
+            print("Please input some parameter for flag --samplesID")
+            exit(1)
+        if not os.path.isfile(samplefile):
+            print("The file specified for --samplesID does not exist")
+            exit(1)
+            
+    os.system(script_path+"./convert_gnomAD.py "+vcf_dir+" "+samplefile +" "+ thread)
+        
 
 def web_interface():
     if "--help" in input_args:
@@ -935,11 +995,13 @@ def callHelp():
           #"\ncrisprime search-only FUNCTION SEARCHING THE WHOLE GENOME (REFERENCE AND VARIANT IF REQUESTED) PRODUCING RESULTS FOR POST-ANALYSIS",
           #"\ncrisprime post-analysis-only FUNCTION THAT PERFORMS CFD ANALYSIS AND TARGET SELECTION STARTING FROM SEARCH RESULTS",
           "\n\ncrisprime.py targets-integration FUNCTION THAT INTEGRATES IN-SILICO TARGETS WITH EMPIRICAL DATA GENERATING A USABLE PANEL",
+          "\n\ncrisprime.py gnomAD-converter FUNCTION THAT CONVERTS ALL gnomADv3.1 vcf.bgz FILES INTO COMPATIBLE VCFs",
           "\n\ncrisprime.py web-interface FUNCTION TO ACTIVATE WEB INTERFACE OF CRISPRme TO USE WITH A BROWSER LOCALLY"
           "\n\nADD help TO ANY FUNCTION TO VISUALIZE A BRIEF HELP PAGE (example: crisprime.py complete-search --help)\n")
 
 
 if len(sys.argv) < 2:
+    directoryCheck()
     callHelp()
 elif sys.argv[1] == 'complete-search':
     complete_search()
