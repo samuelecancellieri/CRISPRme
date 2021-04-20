@@ -359,7 +359,8 @@ def downloadLinkSample(n, file_to_load, search):  # file to load =
     if n is None:
         raise PreventUpdate
     job_id = search.split('=')[-1]
-    file_to_load = file_to_load + '.zip'
+    # file_to_load = file_to_load + '.zip'
+    file_to_load = file_to_load + '.txt'
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
@@ -2805,6 +2806,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             html.Div
             (
                 [
+                    html.Div(job_directory + job_id + '.summary_by_samples.' + guide,
+                                        style={'display': 'none'}, id='div-info-summary_by_sample'),
                     dbc.Row(
                         [
                             dbc.Col(html.Div(dcc.Dropdown(
@@ -2819,12 +2822,14 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         ]
                     ),
                     dbc.Row(
-                        dbc.Col(html.Div(
-                [
-                    html.P('Generating download link, Please wait...',
-                           id='download-link-sumbyposition'),
-                    dcc.Interval(interval=5*1000, id='interval-sumbyposition')
-                ])
+                        dbc.Col(
+                            html.Div(
+                                [
+                                    html.P('Generating download link, Please wait...', id='download-link-summary_by_sample'),
+                                    dcc.Interval(interval=5*1000, id='interval-summary_by_sample'),
+                                ]
+                            )
+                        )
                     )
                 ],
                 style={'width': '50%'}
