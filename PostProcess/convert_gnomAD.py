@@ -12,7 +12,7 @@ threads = 0
 try:
     threads = int(sys.argv[3])
 except:
-    threads = multiprocessing.cpu_count()-2
+    threads = len(os.sched_getaffinity(0))-2
 
 def convertVCF(inVCF):
     #open VCF file
@@ -62,14 +62,14 @@ def convertVCF(inVCF):
     return outVCFname
 
 def bcftools_merging(outVCFname):    
-    finaloutVCF = outVCFname.replace('genomes','genomes.collapsed')
-    os.system(f"bcftools norm -m+ -O z -o {finaloutVCF} {outVCFname}")
+    finalOutVCF = outVCFname.replace('genomes','genomes.collapsed')
+    os.system(f"bcftools norm -m+ -O z -o {finalOutVCF} {outVCFname}")
     
 def full_process(inVCF):
-    # print('faccio')
-    outVCFname = convertVCF(inVCF)
-    bcftools_merging(outVCFname)
-    os.system(f"rm -f {outVCFname}")
+    #function to process each VCF from initial conversion to collapsing multi-variant alleles with shared reference into one entry
+    outVCFname = convertVCF(inVCF) #convert VCF from gnomADv3.1 to VCF4.2 compatible with CRISRPme
+    bcftools_merging(outVCFname) #merge multi-variant alleles into single entry
+    os.system(f"rm -f {outVCFname}") #removed unused temp vcf file
 
 
 if __name__ == '__main__':
