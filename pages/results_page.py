@@ -365,7 +365,7 @@ def downloadLinkSample(n, file_to_load, search):  # file to load =
     file_to_load = file_to_load.strip().split('/')[-1]
     print(file_to_load)
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
-        return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
+        return html.A('Download file', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
     return 'Generating download link, Please wait...', False
 
@@ -2829,7 +2829,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             html.Div(
                                 [
                                     html.P('Generating download link, Please wait...', id='download-link-summary_by_sample'),
-                                    dcc.Interval(interval=5*1000, id='interval-summary_by_sample'),
+                                    dcc.Interval(interval=1*1000, id='interval-summary_by_sample'),
                                 ]
                             )
                         )
