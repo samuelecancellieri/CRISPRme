@@ -317,7 +317,7 @@ def helpPage():
                         html.Li(
                             'Select a Mismatch and Bulge Value: generate graphics with the specified mismatch+bulge value'),
                         html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                            'assets/resultPage/summaryByGraphic_sample.png', 'rb').read()).decode()), width='100%'),
+                            'assets/resultPage/summaryByGraphic_sample.PNG', 'rb').read()).decode()), width='100%'),
                         html.Li(
                                     'Select Individual Data: generate individual data, by selecting Super Population, Population and Sample'),
 
