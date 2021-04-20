@@ -346,29 +346,26 @@ def resultPage(job_id):
     result_page = html.Div(final_list, style={'margin': '1%'})
     return result_page
 
-# Generate downlaod link for summary table
 
+# Generate download link summary_by_sample
+@app.callback(
+    [Output('download-link-summary_by_sample', 'children'),
+     Output('interval-summary_by_sample', 'disabled')],
+    [Input('interval-summary_by_sample', 'n_intervals')],
+    [State('div-info-summary_by_sample', 'children'),
+     State('url', 'search')]
+)
+def downloadLinkSample(n, file_to_load, search):  # file to load =
+    if n is None:
+        raise PreventUpdate
+    job_id = search.split('=')[-1]
+    file_to_load = file_to_load + '.zip'
+    if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
+        return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
-# @app.callback(
-#     [Output('download-link-sumbyposition', 'children'),
-#      Output('interval-sumbyposition', 'disabled')],
-#     [Input('interval-sumbyposition', 'n_intervals')],
-#     [State('div-info-sumbyposition-targets', 'children'),
-#      State('url', 'search')]
-# )
-# def downloadSummaryTable(n, file_to_load, search):
-#     if n is None:
-#         raise PreventUpdate
-#     job_id = search.split('=')[-1]
-#     file_to_load = file_to_load + '.zip'
-#     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
-#         return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
-
-#     return 'Generating download link, Please wait...', False
+    return 'Generating download link, Please wait...', False
 
 # Generate download link sumbyposition
-
-
 @app.callback(
     [Output('download-link-sumbyposition', 'children'),
      Output('interval-sumbyposition', 'disabled')],
@@ -406,8 +403,6 @@ def downloadLinkSample(n, file_to_load, search):  # file to load = job_id.HG001.
     return 'Generating download link, Please wait...', False
 
 # Generate download link sumbyguide
-
-
 @app.callback(
     [Output('download-link-sumbyguide', 'children'),
      Output('interval-sumbyguide', 'disabled')],
@@ -964,7 +959,6 @@ def samplePage(job_id, hash):
                         dcc.Interval(interval=5*1000,
                                      id='interval-sumbysample')
                     ]
-
                 )
             ]
         )
@@ -2824,6 +2818,14 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     'Filter', id='button-filter-population-sample')))
                         ]
                     ),
+                    dbc.Row(
+                        dbc.Col(html.Div(
+                [
+                    html.P('Generating download link, Please wait...',
+                           id='download-link-sumbyposition'),
+                    dcc.Interval(interval=5*1000, id='interval-sumbyposition')
+                ])
+                    )
                 ],
                 style={'width': '50%'}
             )
