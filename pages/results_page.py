@@ -1930,7 +1930,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     out_1 = [
         dash_table.DataTable(
             id="table-position",
-            export_format="tsv",
+            export_format="csv",
             columns=[{"name": i, "id": i} for i in df.columns],
             data=df.to_dict('records'),
             style_cell_conditional=[{
