@@ -708,7 +708,7 @@ def clusterPage(job_id, hash):
             # print('qui cluster in grep')     #NOTE HEADER NON SALVATO
             os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
                      '\"\' > ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
-        os.system('zip ' + cluster_grep_result.replace('.txt',
+        os.system('zip '+'-j ' + cluster_grep_result.replace('.txt',
                                                        '.zip') + ' ' + cluster_grep_result+" &")
     final_list.append(
         html.Div(job_id + '.' + chromosome + '_' + position + '.' + guide,
@@ -978,7 +978,7 @@ def samplePage(job_id, hash):
     os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
               ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
 
-    os.system('zip ' + sample_grep_result.replace('.txt',
+    os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
                                                   '.zip') + ' ' + sample_grep_result + " &")
 
     cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
@@ -1461,7 +1461,7 @@ def guidePagev3(job_id, hash):
 
     os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
               bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\'> ' + guide_grep_result)
-    os.system('zip ' + guide_grep_result.replace('.txt', '.zip') +
+    os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
               ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
@@ -1930,6 +1930,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     out_1 = [
         dash_table.DataTable(
             id="table-position",
+            export_format="csv",
             columns=[{"name": i, "id": i} for i in df.columns],
             data=df.to_dict('records'),
             style_cell_conditional=[{
@@ -2583,8 +2584,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
-            os.system('zip ' + tmp_file.replace('.txt',
-                                                '.zip') + ' ' + tmp_file)
+            os.system('zip '+'-j ' + tmp_file.replace('.txt','.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
             os.system(f"rm {tmp_file} &")
 
@@ -2931,7 +2931,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # Folr keep current filter:  chr,pos_start,pos_end
         fl.append(html.Div('None,None,None',
                            id='div-position-filter-query', style={'display': 'none'}))
-        start_time = time.time()
+        # start_time = time.time()
         fl.append(html.Div(
             style={'text-align': 'center'}, id='div-table-position'
         )
