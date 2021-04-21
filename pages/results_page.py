@@ -238,9 +238,9 @@ def resultPage(job_id):
                     sort_by=[],
                     style_table={
                         # 'margin-left': "10%",
-                        'max-height': '260px',
-                        'overflowY': 'auto',
-                        # 'overflowX': 'hidden',
+                        'max-height': '360px', #260
+                        'overflowY': 'hidden', #auto
+                        'overflowX': 'hidden', #
                     },
                     style_data={
                         'whiteSpace': 'pre',
