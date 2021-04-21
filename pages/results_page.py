@@ -223,7 +223,7 @@ def resultPage(job_id):
                     merge_duplicate_headers=True,
                     # fixed_rows={ 'headers': True, 'data': 0 },
                     # data = profile.to_dict('records'),
-                    selected_cells=[{'row': 0, 'column': 0}],
+                    # selected_cells=[{'row': 0, 'column': 0}],
                     css=[{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                         'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
                     page_current=0,
