@@ -20,7 +20,7 @@ def helpPage():
                 'CRISPRme  performs  predictive analysis and result assessment on population and individual specific CRISPR/Cas experiments.' +
                 ' CRISPRme enumerates on- and off-target accounting simultaneously for  substitutions, DNA/RNA bulges and common genetic variants from the 1000 genomes project.'
             ]),
-            html.P(['Open this ', html.A('example', href='http://crispritz.di.univr.it/result?job=Q47PXDTBC8',
+            html.P(['Open this ', html.A('example', href='http://crisprme.di.univr.it/load?job=6FDKYQS472',
                                          target='_blank'), ' to navigate the results we show in this page'])
 
         ])
