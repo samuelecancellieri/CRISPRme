@@ -2030,10 +2030,10 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
 
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     if genome_type == 'both':
-        col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
+        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
                             'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
     else:
-        col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
+        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
                             'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
     # Last button pressed is filtering, return the first page of the filtered table
     if max(btn_sample_section) == n:
@@ -2776,7 +2776,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
         if genome_type == 'both':
             # col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
-            col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
+            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
@@ -2784,7 +2784,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             # col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
-            col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
+            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
