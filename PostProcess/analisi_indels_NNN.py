@@ -200,10 +200,10 @@ def alignRefFromVar(line, ref_seq):#chr_fake, start_pos, len_guide, bulge):
     t[2] = sequence
     if t[0] == 'DNA':
         cfd_score = calc_cfd(t[1][int(line[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
-        cfd = str(cfd_score)
+        cfd = "{:.3f}".format(cfd_score) #str(cfd_score)
     else:
         cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
-        cfd = str(cfd_score)
+        cfd = "{:.3f}".format(cfd_score) #str(cfd_score)
     return [sequence, cfd]
 
 
@@ -699,10 +699,12 @@ for line in inResult:
            
             if t[0] == 'DNA':
                 cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
-                t.append(str(cfd_score))
+                #t.append(str(cfd_score))
+                t.append("{:.3f}".format(cfd_score))
             else:
                 cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
-                t.append(str(cfd_score))
+                #t.append(str(cfd_score))
+                t.append("{:.3f}".format(cfd_score))
 
         cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse = True)
         cluster_to_save_mmbl = cluster_to_save.copy()
@@ -938,10 +940,12 @@ for line in inResult:
 for t in cluster_to_save:
     if t[0] == 'DNA':
         cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
-        t.append(str(cfd_score))
+        #t.append(str(cfd_score))
+        t.append("{:.3f}".format(cfd_score))
     else:
         cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
-        t.append(str(cfd_score))
+        #t.append(str(cfd_score))
+        t.append("{:.3f}".format(cfd_score))
 
 
 cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse = True)

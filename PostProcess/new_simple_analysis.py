@@ -243,12 +243,14 @@ for line in inTarget:
             if t[0] == 'DNA':
                 cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(
                     t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
-                t.append(str(cfd_score))
+                #t.append(str(cfd_score))
+                t.append("{:.3f}".format(cfd_score))
             else:
                 cfd_score = calc_cfd(t[1], t[2].upper()[
                                      :-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
-                t.append(str(cfd_score))
-            # print(cfd_score)
+                #t.append(str(cfd_score))
+                t.append("{:.3f}".format(cfd_score))
+            
         cluster_to_save.sort(key=lambda x: (
             float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
 
@@ -403,11 +405,11 @@ for line in inTarget:
         if split[0] == 'DNA':
             cfd_score = calc_cfd(split[1][int(split[bulge_pos]):], refSeq_with_bulges.upper()[int(
                 split[bulge_pos]):-3], refSeq_with_bulges.upper()[-2:], mm_scores, pam_scores, do_scores)
-            cfd_ref_seq = str(cfd_score)
+            cfd_ref_seq = "{:.3f}".format(cfd_score) #str(cfd_score)
         else:
             cfd_score = calc_cfd(split[1], refSeq_with_bulges.upper()[
                 :-3], refSeq_with_bulges.upper()[-2:], mm_scores, pam_scores, do_scores)
-            cfd_ref_seq = str(cfd_score)
+            cfd_ref_seq = "{:.3f}".format(cfd_score) #str(cfd_score)
 
         for level in totalDict:
             for key in totalDict[level]:
@@ -483,11 +485,11 @@ for line in inTarget:
         if split[0] == 'DNA':
             cfd_score = calc_cfd(split[1][int(split[bulge_pos]):], split[2].upper()[int(
                 split[bulge_pos]):-3], split[2].upper()[-2:], mm_scores, pam_scores, do_scores)
-            cfd_ref_seq = str(cfd_score)
+            cfd_ref_seq = "{:.3f}".format(cfd_score)#str(cfd_score)
         else:
             cfd_score = calc_cfd(split[1], split[2].upper()[
                 :-3], split[2].upper()[-2:], mm_scores, pam_scores, do_scores)
-            cfd_ref_seq = str(cfd_score)
+            cfd_ref_seq = "{:.3f}".format(cfd_score)#str(cfd_score)
 
         final_line.append("n")
         final_line.append(cfd_ref_seq)
@@ -500,12 +502,13 @@ for t in cluster_to_save:
     if t[0] == 'DNA':
         cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(
             t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
-        t.append(str(cfd_score))
+        #t.append(str(cfd_score))
+        t.append("{:.3f}".format(cfd_score))
     else:
         cfd_score = calc_cfd(t[1], t[2].upper()[
                                 :-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
-        t.append(str(cfd_score))
-        # print(cfd_score)
+        #t.append(str(cfd_score))
+        t.append("{:.3f}".format(cfd_score))
         
 cluster_to_save.sort(key=lambda x: (
     float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
