@@ -86,6 +86,8 @@ def resultPage(job_id):
             '\n') if 'Ref_comp' in s)).split('\t')[-1]
         max_bulges = (next(s for s in all_params.split('\n')
                            if 'Max_bulges' in s)).split('\t')[-1]
+        pam_name = (next(s for s in all_params.split('\n')
+                           if 'Pam' in s)).split('\t')[-1]
 
     genome_name = genome_type_f
     if '+' in real_genome_name:
@@ -180,7 +182,7 @@ def resultPage(job_id):
                 ], color='warning')
         )
     final_list.append(
-        html.H3('Result Summary - ' + genome_name + ' - Mismatches ' +
+        html.H3('Result Summary - ' + genome_name + ' - PAM '+ pam_name +' - Mismatches ' +
                 str(mms) + ' - DNA bulges ' + bulge_dna + ' - RNA bulges ' + bulge_rna)
     )
 
