@@ -313,7 +313,7 @@ def fillDict(guide, guideDict, motifDict):
                         motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()][count] += 1
             for count, ennes in enumerate(guide): #to correct reading of guides N's when upstream PAM
                 if ennes == 'N':
-                    motifDict[mismatch][bulge]['TOTAL'][alignedSequence[count]][count] += 1
+                    motifDict[mismatch][bulge]['TOTAL'][alignedSequence[count].upper()][count] += 1
                 else:
                     break
         # check if samples are available and take them if yes
