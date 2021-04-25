@@ -153,7 +153,10 @@ with open(path_output + '.general_target_count.txt', 'w+') as general_count:
                         f"{key}\t{entry[0]}\t{entry[1]}\t{entry[2]}\t{entry[3]}\t{entry[3]}\t{entry[4]}\t{entry[5]}\t{entry[6]}\n")
 
         with open(f"{path_output}.acfd.txt", "a") as acfd:
-            acfd.write(guide+"\t"+str(100/(100+sum_cfds))+"\tNA\tNA\n")
+            if sum_cfds == 0:
+                acfd.write(guide+"\t0\tNA\tNA\n")
+            else:
+                acfd.write(guide+"\t"+str(100/(100+sum_cfds))+"\tNA\tNA\n")
 
         df_general_count = pd.DataFrame(general_table[guide]['ref'])
         df_general_count = df_general_count.append(
