@@ -182,7 +182,7 @@ def resultPage(job_id):
                 ], color='warning')
         )
     final_list.append(
-        html.H3('Result Summary - ' + genome_name + ' - PAM '+ pam_name.split()[-1] +' - Mismatches ' +
+        html.H3('Result Summary - ' + genome_name + ' - PAM '+ pam_name.split(' ')[1] +' - Mismatches ' +
                 str(mms) + ' - DNA bulges ' + bulge_dna + ' - RNA bulges ' + bulge_rna)
     )
 
