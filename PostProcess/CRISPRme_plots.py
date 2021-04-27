@@ -40,8 +40,8 @@ df = pd.read_csv(sys.argv[1], sep="\t", index_col=False, na_values=['n'], nrows=
 out_folder = sys.argv[2]
 guide = sys.argv[3]
 
-#Remove targets with no variant and CFD=1
-df =df.loc[df["CFD_ref"] != 1]
+#Remove targets with no variant and CFD_ref=1
+df =df.loc[df["highest_CFD_score(ref)"] != 1.0]
 
 # data = data.loc[data["cases"] != 0]
 # Make index column that numbers the OTs starting from 1
