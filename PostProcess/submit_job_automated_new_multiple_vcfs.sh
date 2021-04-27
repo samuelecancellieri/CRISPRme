@@ -33,8 +33,8 @@ echo -e "CPU used: $ncpus"
 log=$output_folder/log.txt
 touch $log
 
-output=$output_folder/output.txt
-touch $output
+# output=$output_folder/output.txt
+# touch $output
 
 rm -f $output_folder/queue.txt
 #for vcf_f in "${vcf_list[@]}"; 
@@ -195,7 +195,7 @@ do
 				if ! [ -d "$current_working_directory/genome_library/${true_pam}_1_${ref_name}" ]; then
 					echo -e 'Index-genome Reference\tStart\t'$(date) >> $log	
 					echo -e 'Index-genome Reference\tStart\t'$(date) >&2	
-					echo -e 'Indexing_Reference' > $output
+					# echo -e 'Indexing_Reference' > $output
 					echo -e "Indexing reference genome"
 					crispritz.py index-genome "$ref_name" "$ref_folder/" "$pam_file" -bMax $bMax -th $ncpus
 					pid_index_ref=$!
@@ -209,7 +209,7 @@ do
 			else
 				echo -e 'Index-genome Reference\tStart\t'$(date) >> $log	
 				echo -e 'Index-genome Reference\tStart\t'$(date) >&2	
-				echo -e 'Indexing_Reference' > $output
+				# echo -e 'Indexing_Reference' > $output
 				echo -e "Indexing reference genome"
 				crispritz.py index-genome "$ref_name" "$ref_folder/" "$pam_file" -bMax $bMax -th $ncpus
 				pid_index_ref=$!
@@ -238,7 +238,7 @@ do
 					if ! [ -d "$current_working_directory/genome_library/${true_pam}_1_${ref_name}+${vcf_name}" ]; then
 						echo -e 'Index-genome Variant\tStart\t'$(date) >> $log	
 						echo -e 'Index-genome Variant\tStart\t'$(date) >&2	
-						echo -e 'Indexing_Enriched' > $output
+						# echo -e 'Indexing_Enriched' > $output
 						echo -e "Indexing variant genome"
 						crispritz.py index-genome "${ref_name}+${vcf_name}" "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" -bMax $bMax -th $ncpus #${ref_folder%/}+${vcf_name}/
 						pid_index_var=$!
@@ -252,7 +252,7 @@ do
 				else
 					echo -e 'Index-genome Variant\tStart\t'$(date) >> $log	
 					echo -e 'Index-genome Variant\tStart\t'$(date) >&2	
-					echo -e 'Indexing_Enriched' > $output
+					# echo -e 'Indexing_Enriched' > $output
 					echo -e "Indexing variant genome"
 					crispritz.py index-genome "${ref_name}+${vcf_name}" "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" -bMax $bMax -th $ncpus
 					pid_index_ref=$!
@@ -279,7 +279,7 @@ do
 	if ! [ -f "$output_folder/crispritz_targets/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 		echo -e 'Search Reference\tStart\t'$(date) >> $log	
 		echo -e 'Search Reference\tStart\t'$(date) >&2
-		echo -e 'Search Reference' >  $output
+		# echo -e 'Search Reference' >  $output
 		crispritz.py search $idx_ref "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t  -th $(expr $ncpus / 4) &
 		pid_search_ref=$!
 	else
@@ -290,7 +290,7 @@ do
 		if ! [ -f "$output_folder/crispritz_targets/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 			echo -e 'Search Variant\tStart\t'$(date) >> $log	
 			echo -e 'Search Variant\tStart\t'$(date) >&2	
-			echo -e 'Search Variant' >  $output
+			# echo -e 'Search Variant' >  $output
 			crispritz.py search "$idx_var" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t  -th $(expr $ncpus / 4) -var
 			mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 			echo -e 'Search Variant\tEnd\t'$(date) >> $log	
@@ -334,7 +334,7 @@ do
 
 	echo -e "Start post-analysis"
 
-	echo -e 'Post analysis' >  $output
+	# echo -e 'Post analysis' >  $output
 	if [ "$vcf_name" != "_" ]; then
 		echo -e 'Post-analysis SNPs\tStart\t'$(date) >> $log	
 		echo -e 'Post-analysis SNPs\tStart\t'$(date) >&2	
@@ -421,7 +421,7 @@ sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tGENDER" "$output_folder
 sampleID=$output_folder/sampleID.txt
 
 
-echo -e 'Merging targets' >  $output
+# echo -e 'Merging targets' >  $output
 echo -e 'Merging Close Targets\tStart\t'$(date) >> $log	
 echo -e 'Merging Close Targets\tStart\t'$(date) >&2	
 ./merge_close_targets_cfd.sh $final_res $final_res.trimmed $merge_t
@@ -462,7 +462,7 @@ fi
 mv $output_folder/snps.CFDGraph.txt $output_folder/cfd_graphs
 mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
 
-echo -e 'Creating images' >  $output
+# echo -e 'Creating images' >  $output
 echo -e 'Creating images\tStart\t'$(date) >> $log	
 echo -e 'Creating images\tStart\t'$(date) >&2	
 echo -e "Adding risk score"
@@ -568,7 +568,7 @@ echo -e 'Integrating results\tEnd\t'$(date) >> $log
 echo -e 'Integrating results\tEnd\t'$(date) >&2
 echo -e 'Job\tDone\t'$(date) >> $log
 echo -e 'Job\tDone\t'$(date) >&2
-echo -e 'Job End' >  $output
+# echo -e 'Job End' >  $output
 echo -e "JOB END"
 
 if [ "$email" != "" ]; then
