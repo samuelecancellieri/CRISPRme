@@ -36,7 +36,7 @@ matplotlib.use('Agg')
 # df["index"] += 1
 
 # Read file
-df = pd.read_csv(sys.argv[1], sep="\t", index_col=False, na_values=['n'], nrows=1000)
+df = pd.read_csv(sys.argv[1], sep="\t", index_col=False, na_values=['n'], nrows=1200)
 out_folder = sys.argv[2]
 guide = sys.argv[3]
 
