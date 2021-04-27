@@ -41,7 +41,7 @@ out_folder = sys.argv[2]
 guide = sys.argv[3]
 
 #Remove targets with no variant and CFD_ref=1
-df =df.loc[df["highest_CFD_score(ref)"] != 1.0]
+# df =df.loc[df["highest_CFD_score(ref)"] != 1.0]
 
 # Make index column that numbers the OTs starting from 1
 df = df.reset_index()
