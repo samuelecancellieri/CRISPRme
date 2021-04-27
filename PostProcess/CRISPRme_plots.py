@@ -47,6 +47,8 @@ df =df.loc[df["highest_CFD_score(ref)"] != 1.0]
 df = df.reset_index()
 df["index"] += 1
 
+print(df)
+
 # If prim_AF = 'n', then it's a ref-nominated site, so we enter a fake numerical AF
 # This will cause a warning of invalid sqrt later on, but that's fine to ignore
 df["prim_AF"] = df["prim_AF"].fillna(-1)
