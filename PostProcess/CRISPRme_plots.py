@@ -45,7 +45,7 @@ df =df.loc[df["highest_CFD_score(ref)"] != 1.0]
 
 # Make index column that numbers the OTs starting from 1
 df = df.reset_index()
-df["index"] += 1
+# df["index"] += 1
 
 print(df)
 
