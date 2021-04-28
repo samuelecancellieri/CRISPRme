@@ -52,7 +52,7 @@ def convertVCF(inVCF):
                 if 'AC_'+str(pop)+'=' in data:
                     ACvalue = int(data.strip().split('=')[1])
                     if ACvalue > 0:
-                        popDict[pop] = '0|1'
+                        popDict[pop] = '1|1'
         split[7] = info[2]
         #write each line passing the filtering into the new VCF
         outVCF.write('\t'.join(split[:8])+'\tGT\t'+'\t'.join(popDict.values())+'\n')
