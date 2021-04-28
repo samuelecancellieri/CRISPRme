@@ -199,10 +199,16 @@ def alignRefFromVar(line, ref_seq):#chr_fake, start_pos, len_guide, bulge):
     sequence = ''.join(list_t)
     t[2] = sequence
     if t[0] == 'DNA':
-        cfd_score = calc_cfd(t[1][int(line[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
+        if do_scores:
+            cfd_score = calc_cfd(t[1][int(line[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
+        else:
+            cfd_score = 0
         cfd = "{:.3f}".format(cfd_score) #str(cfd_score)
     else:
-        cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
+        if do_scores:
+            cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
+        else:
+            cfd_score = 0
         cfd = "{:.3f}".format(cfd_score) #str(cfd_score)
     return [sequence, cfd]
 
@@ -314,10 +320,11 @@ with open (sys.argv[5]) as pam:
         pam_end = None
 
 do_scores = True
-if guide_len != 20:
+if guide_len != 20 or len_pam != 3 or pam_at_beginning:
+    sys.stderr.write('CFD SCORE IS NOT CALCULATED WITH GUIDES LENGTH != 20 OR PAM LENGTH !=3 OR UPSTREAM PAM')
+    do_scores = False
     with open(outputFile + '.acfd.txt', 'w+') as result:
         result.write('NO SCORES')
-        do_scores = False
 
 iupac_code_set = {
           "R":{"A", "G"},
@@ -696,14 +703,17 @@ for line in inResult:
         #Calcolo lo score per ogni target nel cluster
         #print(len(cluster_to_save))
         for t in cluster_to_save:
-           
             if t[0] == 'DNA':
-                cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
-                #t.append(str(cfd_score))
+                if do_scores:
+                    cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
+                else:
+                    cfd_score = 0
                 t.append("{:.3f}".format(cfd_score))
             else:
-                cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
-                #t.append(str(cfd_score))
+                if do_scores:
+                    cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
+                else:
+                    cfd_score = 0
                 t.append("{:.3f}".format(cfd_score))
 
         cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse = True)
@@ -939,12 +949,16 @@ for line in inResult:
 #LAST CLUSTER
 for t in cluster_to_save:
     if t[0] == 'DNA':
-        cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
-        #t.append(str(cfd_score))
+        if do_scores:
+            cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
+        else:
+            cfd_score = 0
         t.append("{:.3f}".format(cfd_score))
     else:
-        cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
-        #t.append(str(cfd_score))
+        if do_scores:
+            cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
+        else:
+            cfd_score = 0
         t.append("{:.3f}".format(cfd_score))
 
 
