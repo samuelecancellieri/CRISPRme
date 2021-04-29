@@ -981,7 +981,7 @@ def gnomAD_converter():
 def web_interface():
     if "--help" in input_args:
         print("This function must be launched without input, it starts a local server to use the web interface.")
-        print("Open your web-browser and write 127.0.0.1:8080 in the search bar if you are executing locally, if you are executing on an extern server write <yourserverip>:8080 in the search bar")
+        print("Open your web-browser and write 127.0.0.1:8080 in the search bar if you are executing locally, if you are executing on an external server write <yourserverip>:8080 in search bar")
         exit(0)
     # print(corrected_web_path)
     subprocess.run(corrected_web_path+'/./index.py')
