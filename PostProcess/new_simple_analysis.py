@@ -157,7 +157,7 @@ def get_mm_pam_scores():
 
 def retrieveFromDict(chr_pos):
     entry = mydict[current_chr+','+str(chr_pos+1)]
-    multi_entry = entry.split('/')
+    multi_entry = entry.split('$')
     snp_list = []
     sample_list = []
     AF_list = []
@@ -221,7 +221,8 @@ mmblg_best.write(header + '\tCFD\n')  # Write header
 mm_scores, pam_scores = get_mm_pam_scores()
 
 do_scores = True
-if len_pam != 3:
+if len_pam != 3 or guide_len != 20 or pam_at_beginning:
+    sys.stderr.write('CFD SCORE IS NOT CALCULATED WITH GUIDES LENGTH != 20 OR PAM LENGTH !=3 OR UPSTREAM PAM')
     do_scores = False
 
 allowed_mms = int(sys.argv[6])
@@ -336,8 +337,7 @@ for line in inTarget:
         if c in iupac_code:
             # print(c)
             countIUPAC += 1
-            snpToReplace, sampleSet, rsID, AF_var, snpInfo = retrieveFromDict(
-                pos_c+int(split[4]))
+            snpToReplace, sampleSet, rsID, AF_var, snpInfo = retrieveFromDict(pos_c+int(split[4]))
             for i, elem in enumerate(snpToReplace):
                 listReplaceTarget = list(refSeq)
                 listReplaceTarget[pos_c] = elem
