@@ -25,6 +25,7 @@ try:
             break
         elif '/' in mydict[entry]:
             break
+    print('haplo check', haplotype_check)
 except:
     print("No dict found for", current_chr)
 
@@ -388,30 +389,15 @@ for line in inTarget:
                                 # add new snp to preceding target seq with snp
                                 replaceTarget1 = totalDict[count][0][newkey][0].copy()
                                 replaceTarget2 = totalDict[count][size][key][0].copy()
-                                replaceTarget2[newkey[0]
-                                            ] = replaceTarget1[newkey[0]]  # dioboia
+                                replaceTarget2[newkey[0]] = replaceTarget1[newkey[0]]  # dioboia
                                 listInfo2 = totalDict[count][size][key][2].copy()
                                 listInfo2.extend(totalDict[count][0][newkey][2])
                                 # add to next level the modified seq and set of samples and info of snp
                                 combinedKey = key + newkey
-                                totalDict[count][size+1][combinedKey] = [
-                                    replaceTarget2, resultSet, listInfo2]
+                                totalDict[count][size+1][combinedKey] = [replaceTarget2, resultSet, listInfo2]
                                 # remove the new generated sample set from all lower levels
-                                totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
-                                    totalDict[count][size+1][combinedKey][1]
-                                totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
-                                    totalDict[count][size+1][combinedKey][1]
-
-                                # if len(totalDict[count][size][key][1]) == 0:
-                                #     totalDict[count][size].pop(key, 'None')
-                                # if len(totalDict[count][0][newkey][1]) == 0:
-                                #     totalDict[count][0].pop(newkey, 'None')
-
-            # remove empty set of SNPs without samples associated
-            # for count in totalDict[count]:
-            #     for key in list(totalDict[count][count]):
-            #         if len(totalDict[count][count][key][1]) == 0:
-            #             del totalDict[count][count][key]
+                                totalDict[count][size][key][1] = totalDict[count][size][key][1] - totalDict[count][size+1][combinedKey][1]
+                                totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - totalDict[count][size+1][combinedKey][1]
 
             if revert:
                 refSeq = reverse_complement_table(refSeq)
