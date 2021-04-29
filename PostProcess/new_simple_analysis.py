@@ -370,6 +370,8 @@ for line in inTarget:
                     totalDict[0][0][(pos_c, elem)] = [listReplaceTarget, set(sampleSet[i]), listInfo]
     
     if countIUPAC > 0:
+        if revert:
+            refSeq = reverse_complement_table(refSeq)
         for count in totalDict:
             createdNewLayer = True
             for size in range(countIUPAC):  # the time of the universe
@@ -399,8 +401,6 @@ for line in inTarget:
                                 totalDict[count][size][key][1] = totalDict[count][size][key][1] - totalDict[count][size+1][combinedKey][1]
                                 totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - totalDict[count][size+1][combinedKey][1]
 
-            if revert:
-                refSeq = reverse_complement_table(refSeq)
             refSeq_with_bulges = list(refSeq)
             for pos, char in enumerate(realTarget):
                 if char == '-':
