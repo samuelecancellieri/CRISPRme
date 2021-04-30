@@ -2616,8 +2616,11 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         # copy header from integrated results into sample files
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
         os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
+        #grep guide and then sample into personal card data
         os.system(f"LC_ALL=C fgrep {guide} {integrated_to_grep} | fgrep {sample} >> {integrated_personal}")
+        #grep private targets from personal targets
         os.system(f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
+        #grep private targets to generate table and file
         os.system(f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
 
         # plot for images in personal card
