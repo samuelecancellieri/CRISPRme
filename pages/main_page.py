@@ -1220,8 +1220,8 @@ def indexPage():
     
     job_name_content = html.Div(
         [
-            dcc.Checklist(options=[{'label': ' Insert a personalized name for the job', 'value': 'job_name', 'disabled': False}],
-                          id='checklist-job-name', value=['']),
+            dcc.Checklist(options=[{'label': ' Personalized job name', 'value': 'job_name', 'disabled': False}],
+                          id='checklist-job-name', value=[]),
             dcc.Textarea(id='text-job-name', placeholder='my-job', disabled=True, style={'width': '300px', 'height': '30px'})
         ]
     )
