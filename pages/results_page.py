@@ -1701,10 +1701,13 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides['Nuclease'] = nuclease
         data_general_count_copy = data_general_count
         count_bulges= list()
-        for the_bulge in range(max_bulges):
+        for the_bulge in range(max_bulges+1):
             count_bulges.append(the_bulge)
         
-        count_bulges_concat = count_bulges+count_bulges
+        if genome_type == 'both':
+            count_bulges_concat = count_bulges+count_bulges
+        else:
+            count_bulges_concat = count_bulges
         print(count_bulges_concat)
         
         data_general_count_copy.insert(1,'Bulges', count_bulges_concat,True)
