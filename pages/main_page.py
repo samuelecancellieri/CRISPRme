@@ -1287,7 +1287,9 @@ def indexPage():
                                                  'margin-left': '30%'}),
                                         # personal_data_management_content,
                                         html.Br(),
-                                        mail_content
+                                        mail_content,
+                                        html.Br(),
+                                        job_name_content
                                     ],
                                     id='column-three-step-3',
                                     # style={'flex': '0 0 30%', 'tex-align': 'center'}
