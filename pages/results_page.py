@@ -1708,14 +1708,6 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
                 # data_guides['Enriched'] = doench_enr[x]
             else:
                 data_guides['Doench 2016'] = doench[x]
-        
-        table_to_file.append(data_general_count.head())
-        count_bulge = 0
-        for row in data_general_count.iterrows():
-            if count_bulge > max_bulges:
-                count_bulge = 0
-            table_to_file.append(row)
-            count_bulge += 1
     
         if genome_type == 'both':
             # data_guides['Samples in Class 0 - 0+ - 1 - 1+'] = column_sample_class
@@ -1795,11 +1787,19 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         df.append(data_guides)
     dff = pd.DataFrame(df)
     
+    table_to_file.append(data_general_count.head())
+    count_bulge = 0
+    for row in data_general_count.iterrows():
+        if count_bulge > max_bulges:
+            count_bulge = 0
+        table_to_file.append(row)
+        count_bulge += 1
+    
     table_to_file_save_dest = current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt'
-    os.system(f"rm -f {table_to_file_save_dest}")
+    # os.system(f"rm -f {table_to_file_save_dest}")
     for elem in table_to_file:
         print(elem)
-        os.system(f"echo {elem} >> {table_to_file_save_dest}")
+        # os.system(f"echo {elem} >> {table_to_file_save_dest}")
 
     if 'NO SCORES' not in all_scores:
         try:
