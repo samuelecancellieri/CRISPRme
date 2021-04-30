@@ -222,7 +222,7 @@ def resultPage(job_id):
                         [
                             html.P('Generating download link, Please wait...', id='download-link-general-table'),
                             dcc.Interval(interval=1*1000, id='interval-general-table'),
-                            html.Div(job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
+                            html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
                         ]
                     )
                 )
