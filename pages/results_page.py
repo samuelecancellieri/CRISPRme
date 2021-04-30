@@ -1737,19 +1737,25 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides['Nuclease'] = nuclease
         data_general_count_copy = data_general_count.copy()
         count_bulges= list()
+        origin_ref = list()
+        origin_var = list()
         for the_bulge in range(max_bulges+1):
+            origin_ref.append('REF')
+            origin_var.append('VAR')
             count_bulges.append(the_bulge)
         
         count_bulges_concat = count_bulges+count_bulges
+        origin_concat = origin_ref+origin_var
         
-        data_general_count_copy.insert(0,'Bulges', count_bulges_concat,True)
+        data_general_count_copy.insert(0,'Genome', origin_concat,True)
+        data_general_count_copy.insert(1,'Bulges', count_bulges_concat,True)
         
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
             table_to_file.append('\t\tMismatches')
             
-            table_to_file.append('IN THE FOLLOWING MATRIX, THE FIRST GROUP OF '+str(max_bulges)+' LINES, ARE REFERED TO REFERENCE TARGET, THE SECOND GROUP OF '+str(max_bulges)+' LINES ARE REFERED TO VARIANT GENOME')
+            # table_to_file.append('IN THE FOLLOWING MATRIX, THE FIRST GROUP OF '+str(max_bulges)+' LINES, ARE REFERED TO REFERENCE TARGET, THE SECOND GROUP OF '+str(max_bulges)+' LINES ARE REFERED TO VARIANT GENOME')
             
             table_to_file.append(data_general_count_copy.to_string(index=False))
             
