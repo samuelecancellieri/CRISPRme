@@ -1,4 +1,5 @@
 from sqlite3.dbapi2 import Row
+import sys
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
 from app import URL, app
@@ -86,6 +87,8 @@ def resultPage(job_id):
             '\n') if 'Ref_comp' in s)).split('\t')[-1]
         max_bulges = (next(s for s in all_params.split('\n')
                            if 'Max_bulges' in s)).split('\t')[-1]
+        pam_name = (next(s for s in all_params.split('\n')
+                           if 'Pam' in s)).split('\t')[-1]
 
     genome_name = genome_type_f
     if '+' in real_genome_name:
@@ -127,7 +130,7 @@ def resultPage(job_id):
     columns_profile_table = [
         {'name': ['', 'gRNA (protospacer+PAM)'], 'id':'Guide', 'type':'text'},
         {'name': ['', 'Nuclease', ''], 'id':'Nuclease', 'type':'text'},
-        {'name': ['', 'CFD'], 'id':'CFD', 'type':'text'},
+        {'name': ['', 'CFD (0-100)'], 'id':'CFD', 'type':'text'},
         # {'name': ['', 'Doench 2016'], 'id':'Doench 2016',
         #    'type':'text'},  # Doench, only for REF or VAR
         # {'name': ['', 'Doench 2016', ''], 'id':'Doench 2016',
@@ -180,7 +183,7 @@ def resultPage(job_id):
                 ], color='warning')
         )
     final_list.append(
-        html.H3('Result Summary - ' + genome_name + ' - Mismatches ' +
+        html.H3('Result Summary - ' + genome_name + ' - ' + pam_name +' - Mismatches ' +
                 str(mms) + ' - DNA bulges ' + bulge_dna + ' - RNA bulges ' + bulge_rna)
     )
 
@@ -214,9 +217,23 @@ def resultPage(job_id):
     final_list.append(add_to_description)
     final_list.append(
         html.Div(
+            dbc.Row(
+                dbc.Col(
+                    html.Div(
+                        [
+                            html.P('Generating download link, Please wait...', id='download-link-general-table'),
+                            dcc.Interval(interval=1*1000, id='interval-general-table'),
+                            html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
+                        ]
+                    )
+                )
+            )
+        )
+    )
+    final_list.append(
+        html.Div(
             html.Div(
                 dash_table.DataTable(
-                    export_format='csv',
                     id='general-profile-table',
                     # page_size=PAGE_SIZE,
                     columns=columns_profile_table,
@@ -346,7 +363,6 @@ def resultPage(job_id):
     result_page = html.Div(final_list, style={'margin': '1%'})
     return result_page
 
-
 # Generate download link summary_by_sample
 @app.callback(
     [Output('download-link-summary_by_sample', 'children'),
@@ -367,22 +383,20 @@ def downloadLinkSample(n, file_to_load, search):  # file to load =
         return html.A('Download file', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
     return 'Generating download link, Please wait...', False
-
-# Generate download link sumbyposition
-@app.callback(
-    [Output('download-link-sumbyposition', 'children'),
-     Output('interval-sumbyposition', 'disabled')],
-    [Input('interval-sumbyposition', 'n_intervals')],
-    [State('div-info-sumbyposition-targets', 'children'),
+    [Output('download-link-general-table', 'children'),
+     Output('interval-general-table', 'disabled')],
+    [Input('interval-general-table', 'n_intervals')],
+    [State('div-info-general-table', 'children'),
      State('url', 'search')]
 )
-def downloadLinkPosition(n, file_to_load, search):  # file to load =
+def downloadGeneralTable(n, file_to_load, search):  # file to load =
     if n is None:
         raise PreventUpdate
     job_id = search.split('=')[-1]
-    file_to_load = file_to_load + '.zip'
+    file_to_load = file_to_load.split('/')[-1]
+    # print(file_to_load)
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
-        return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
+        return html.A('Download General Table', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
     return 'Generating download link, Please wait...', False
 
@@ -1554,7 +1568,7 @@ def loadDistributionPopulations(sel_cel, all_guides, job_id):
             '\n') if 'Max_bulges' in s)).split('\t')[-1])
 
     distributions = [dbc.Row(html.P(
-        'On- and Off-Targets distributions in the Reference and Variant Genome. For the Variant Genome, the targets are divided into 5 SuperPopulations (EAS, EUR, AFR, AMR, SAS).', style={'margin-left': '0.75rem'}))]
+        'On- and Off-Targets distributions in the Reference and Variant Genome. For the Variant Genome, the targets are divided into SuperPopulations.', style={'margin-left': '0.75rem'}))]
 
     for i in range(math.ceil((mms + max_bulges + 1) / BARPLOT_LEN)):
         all_images = []
@@ -1678,7 +1692,8 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         if genome_type == 'both':
             doench_enr = [a.split('\t')[3] for a in all_scores if a.split('\t')[
                 0] not in list_error_guides]
-        acfd = [int(round((100/(100 + x))*100)) for x in acfd]
+        #acfd = [int(round((100/(100 + x))*100)) for x in acfd]
+        acfd = [float("{:.3f}".format(x*100)) for x in acfd]
 
     # Get target counting from summary by guide
     column_on_target = []
@@ -1687,21 +1702,46 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     column_total = []
 
     df = []
+    table_to_file = list()
     for x, g in enumerate(guides):
+        table_to_file.append(g) #append guide to table
+        table_to_file.append('Nuclease: '+str(nuclease)) #append nuclease to table
         data_general_count = pd.read_csv(current_working_directory + 'Results/' +
                                          job_id + '/' + job_id + '.general_target_count.'+g+".txt", sep='\t')
 
         data_guides = dict()
         data_guides['Guide'] = g
         data_guides['Nuclease'] = nuclease
+        data_general_count_copy = data_general_count.copy()
+        count_bulges= list()
+        origin_ref = list()
+        origin_var = list()
+        for the_bulge in range(max_bulges+1):
+            origin_ref.append('REF')
+            origin_var.append('VAR')
+            count_bulges.append(the_bulge)
+        
+        count_bulges_concat = count_bulges+count_bulges
+        origin_concat = origin_ref+origin_var
+        
+        data_general_count_copy.insert(0,'Genome', origin_concat,True)
+        data_general_count_copy.insert(1,'Bulges', count_bulges_concat,True)
+        
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
+            table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
+            table_to_file.append('\t\t\t\tMismatches')
+            
+            # table_to_file.append('IN THE FOLLOWING MATRIX, THE FIRST GROUP OF '+str(max_bulges)+' LINES, ARE REFERED TO REFERENCE TARGET, THE SECOND GROUP OF '+str(max_bulges)+' LINES ARE REFERED TO VARIANT GENOME')
+            
+            table_to_file.append(data_general_count_copy.to_string(index=False))
+            
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
                 # data_guides['Enriched'] = doench_enr[x]
             else:
                 data_guides['Doench 2016'] = doench[x]
-
+    
         if genome_type == 'both':
             # data_guides['Samples in Class 0 - 0+ - 1 - 1+'] = column_sample_class
             # data_guides['Genome'] = '\nREFERENCE\n-----------\nENRICHED\n'
@@ -1779,6 +1819,13 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
 
         df.append(data_guides)
     dff = pd.DataFrame(df)
+    
+    table_to_file_save_dest = current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt'
+    
+    outfile = open(table_to_file_save_dest,'w')
+    for elem in table_to_file:
+        outfile.write(elem+'\n')
+    outfile.close()
 
     if 'NO SCORES' not in all_scores:
         try:
@@ -2030,10 +2077,10 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
 
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     if genome_type == 'both':
-        col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
+        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
                             'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
     else:
-        col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
+        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
                             'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
     # Last button pressed is filtering, return the first page of the filtered table
     if max(btn_sample_section) == n:
@@ -2551,10 +2598,13 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         # copy header from integrated results into sample files
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
         os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
+        #grep guide and then sample into personal card data
         os.system(f"LC_ALL=C fgrep {guide} {integrated_to_grep} | fgrep {sample} >> {integrated_personal}")
+        #grep private targets from personal targets
         os.system(f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
+        #grep private targets to generate table and file
         os.system(f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
-
+        
         # plot for images in personal card
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
@@ -2617,13 +2667,14 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 ans.columns = c.split('\t')[:23]
 
     # image for personal and private
-    image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.personal.png', 'rb').read()).decode())
-    image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.private.png', 'rb').read()).decode())
+    try:
+        image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.personal.png', 'rb').read()).decode())
+        image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.private.png', 'rb').read()).decode())
+    except:
+        sys.stderr.write('PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED')
 
-    # os.system(
-    #     f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
         ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
@@ -2775,16 +2826,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             html.P('Summary table counting the number of targets found in the Variant Genome for each sample. Filter the table by selecting the Population or Superpopulation desired from the dropdowns.')
         )
         if genome_type == 'both':
-            # col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
-            col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
+            # col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
+            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
             df = df.sort_values('Targets in Variant', ascending=False)
             df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
-            # col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
-            col_names_sample = ['Sample', 'Gender', 'Population', 'Super Population',  'Targets in Reference',
+            # col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
+            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
@@ -2999,12 +3050,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     'Bulge_Size', 'PAM_gen', 'SNP',
                                     'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                                     'AF', 'Annotation_Type'])  # pd.read_sql_query("SELECT * FROM final_table LIMIT 0",conn) #to define column names in the first empty table
-        all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score', 'Highest_CFD_Absolute_Risk_Score'],
-                     'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score', 'CFD_Absolute_Risk_Score']}
+        all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'], #, 'Highest_CFD_Absolute_Risk_Score'
+                     'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']} #, 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-        all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score'],
-                       'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score']}
+        all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'], #, ' Absolute Risk Score'
+                       'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']} #, ' Absolute Risk Score'
     # target_o
 
         # all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD'],
@@ -3174,6 +3225,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 # html.Br(),
                                 # html.Hr(),
                                 html.Div(dash_table.DataTable(
+                                    export_format="csv",
                                     id='live_table',
                                     columns=[{"name": i, "id": i}
                                              for i in dff.columns],
@@ -3183,13 +3235,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                         backgroundColor="white"),
                                     # , 'overflowX': 'auto'
                                     style_table={
-                                        'overflowX': 'scroll'},  # 'min-width': '2000px', 'max-width': '2000px', 'max-height': '1000px',
+                                        'overflowX': 'scroll','overflowY':'scroll','max-height': '300px'},
                                     style_cell=[{
                                         # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                                         # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
                                         'width': '{}%'.format(len(dff.columns)),
                                         'whiteSpace': 'normal'
                                     }],
+                                    style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
+                                                             'maxWidth': 100,
+                                                           }],
                                     # style_cell_conditional=[{'if': {'column_id': 'Annotation_Type'},
                                     #                          'textAlign': 'left',
                                     #                        }],
@@ -3213,7 +3268,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #                        },
                                     #                        ],
                                     page_current=0,
-                                    page_size=10,
+                                    page_size=10000,
                                     page_action='custom'
                                 )
                                 ),
@@ -3348,7 +3403,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 ), width=4
             )
         ]
-        # DA SPOSTARE DOPO BARPLOT E RADCHART TOTAL
         sample_buttons = [
             dbc.Col(
                 html.Div(
@@ -3419,7 +3473,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(populations_barplots),
                             dbc.Col(radar_chart_total_content)
                         ]
-                    ),
+                    )
+                ]
+            )
+        )
+        fl.append(
+            html.Div(
+                [
                     html.Br(),
                     dbc.Row(
                         sample_buttons
@@ -3762,12 +3822,12 @@ def reset_pagenumber(n):
     Output('order', 'options'),
     [Input('target', 'value')])
 def set_columns_options(selected_target):
-    all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score', 'Highest_CFD_Absolute_Risk_Score'],
-                 'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score', 'CFD_Absolute_Risk_Score']}
+    all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'], #, 'Highest_CFD_Absolute_Risk_Score'
+                 'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']} #, 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score'],
-                   'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score', ' Absolute Risk Score']}
+    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'], #, ' Absolute Risk Score'
+                   'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']} #, ' Absolute Risk Score'
     # target_options = {' Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], ' Bulges': [' Mismatches', ' Mismatch+Bulges', ' CFD'], ' Mismatch+Bulges': [' Mismatches', ' Bulges', ' CFD'], ' CFD': [
     #     ' Mismatches', ' Bulges', ' Mismatch+Bulges'], ' Risk_Score': [], ' Absolute_Risk_Score': [], ' Risk_Score': [], ' Risk_Score': []}
     # main_order_dict = dict()

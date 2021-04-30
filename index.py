@@ -55,7 +55,7 @@ def changePage(href, path, search, hash_guide):
     Controllo della pagina da mostrare in base all'url
     '''
     if path == '/load':
-        print("CHANGING TO LOAD PAGE")
+        # print("CHANGING TO LOAD PAGE")
         return load_page.load_page(), URL + '/load' + search
     if path == '/result':
         job_id = search.split('=')[-1]

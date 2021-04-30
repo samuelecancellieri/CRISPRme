@@ -141,20 +141,23 @@ def refreshSearch(n, dir_name):
                 elif 'Merging Close Targets\tStart' in current_log:
                     merge_status = html.P(
                         'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
-
+                
+                if 'Annotating results\tStart' in current_log:
+                    images_status = html.P('Annotating... Step[1/2]', style={'color': 'orange'})
+                    
                 if 'Creating images\tEnd' in current_log:
                     images_status = html.P('Done', style={'color': 'green'})
                     all_done = all_done + 1
                 elif 'Creating images\tStart' in current_log:
                     images_status = html.P(
-                        'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
+                        'Generating images...' + ' ' + 'Step [2/2]', style={'color': 'orange'})
 
                 if 'Creating database\tEnd' in current_log:
                     database_status = html.P('Done', style={'color': 'green'})
                     all_done = all_done + 1
                 elif 'Creating database\tStart' in current_log:
                     database_status = html.P(
-                        'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
+                        'Inserting data...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
                 
                 if 'Integrating results\tEnd' in current_log:
                     integrate_status = html.P('Done', style={'color': 'green'})
@@ -280,11 +283,11 @@ def load_page():
                         html.Div(
                             html.Ul(
                                 [
-                                    html.Li('Indexing Genome(s)'),
+                                    html.Li('Indexing genome(s)'),
                                     html.Li('Searching crRNA'),
                                     html.Li('Post processing'),
-                                    html.Li('Merge Targets'),
-                                    html.Li('Generating images'),
+                                    html.Li('Merge targets'),
+                                    html.Li('Annotating and generating images'),
                                     html.Li('Populating database'),
                                     html.Li('Integrating results'),
                                     #html.Li('Annotating result'),
