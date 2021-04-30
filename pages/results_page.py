@@ -1710,7 +1710,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             count_bulges_concat = count_bulges
         print(count_bulges_concat)
         
-        data_general_count_copy.insert(1,'Bulges', count_bulges_concat,True)
+        data_general_count_copy.insert(0,'Bulges', count_bulges_concat,True)
         # general_target_dict = data_general_count.to_dict(orient='dict')
         # print('target dict',general_target_dict)
         if 'NO SCORES' not in all_scores:
