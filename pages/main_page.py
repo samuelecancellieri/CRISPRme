@@ -203,7 +203,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             if len_id > 20:
                 break
     if job_name.strip():
-        job_id = str(job_name)+job_id
+        job_id = str(job_name)+'_'+job_id
     result_dir = current_working_directory + 'Results/' + job_id
     subprocess.run(['mkdir ' + result_dir], shell=True)
     # NOTE test command per queue
@@ -793,7 +793,7 @@ def disabled_mail(checklist_value):
     [Input('checklist-job-name', 'value')]
 )
 def disable_job_name(checklist_value):
-    print('value', checklist_value)
+    # print('value', checklist_value)
     if 'job_name' not in checklist_value:
         return True
     elif 'job_name' in checklist_value:
