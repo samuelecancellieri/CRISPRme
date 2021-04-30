@@ -1804,10 +1804,11 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     dff = pd.DataFrame(df)
     
     table_to_file_save_dest = current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt'
-    os.system(f"rm -f {table_to_file_save_dest}")
+    # os.system(f"rm -f {table_to_file_save_dest}")
+    outfile = open(table_to_file_save_dest,'w')
     for elem in table_to_file:
-        print(elem)
-        os.system(f"echo {elem} >> {table_to_file_save_dest}")
+        outfile.write(elem)
+    outfile.close()
 
     if 'NO SCORES' not in all_scores:
         try:
