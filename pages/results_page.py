@@ -1699,13 +1699,13 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides = dict()
         data_guides['Guide'] = g
         data_guides['Nuclease'] = nuclease
-        general_target_dict = data_general_count.to_dict()
+        general_target_dict = data_general_count.to_dict(orient='dict')
         print('target dict',general_target_dict)
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
             
-            table_to_file.append(' '+''.join(list(general_target_dict)))
+            table_to_file.append(' '+' '.join(list(general_target_dict)))
             # print(data_general_count.head())
             count_bulge = 0
             for key in general_target_dict:
