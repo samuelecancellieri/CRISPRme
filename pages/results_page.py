@@ -1702,7 +1702,6 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append(acfd[x]) #append CFD to table
-            table_to_file.append('\n')
             
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
@@ -1789,8 +1788,8 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         df.append(data_guides)
     dff = pd.DataFrame(df)
     
-    print(table_to_file)
-
+    for elem in table_to_file:
+        print(elem)
 
     if 'NO SCORES' not in all_scores:
         try:
