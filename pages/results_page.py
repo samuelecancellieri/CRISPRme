@@ -1711,7 +1711,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             for key in general_target_dict:
                 if count_bulge > max_bulges:
                     count_bulge = 0
-                table_to_file.append(count_bulge, general_target_dict[key])
+                table_to_file.append([count_bulge, general_target_dict[key]])
                 # print(row,count_bulge)
                 count_bulge += 1
             
