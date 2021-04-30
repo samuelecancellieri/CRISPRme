@@ -176,6 +176,10 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         text_guides = text_guides.strip()
         if (not all(len(elem) == len(text_guides.split('\n')[0]) for elem in text_guides.split('\n'))):
             text_guides = selectSameLenGuides(text_guides)
+    temp_guide = ''
+    for elem in text_guides.split('\n'):
+        temp_guide += elem.replace('N','')+'\n'
+    text_guides = temp_guide
     # if (len_guide_sequence is None or str(len_guide_sequence) == '') and ('sequence-tab' in active_tab):
     #    len_guide_sequence = 20
     # print('guide len', len_guide_sequence)
