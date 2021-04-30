@@ -1699,18 +1699,18 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides = dict()
         data_guides['Guide'] = g
         data_guides['Nuclease'] = nuclease
-        data_general_count_copy = data_general_count
-        count_bulges= list()
-        for the_bulge in range(max_bulges+1):
-            count_bulges.append(the_bulge)
+        # data_general_count_copy = data_general_count
+        # count_bulges= list()
+        # for the_bulge in range(max_bulges+1):
+        #     count_bulges.append(the_bulge)
         
-        if genome_type == 'both':
-            count_bulges_concat = count_bulges+count_bulges
-        else:
-            count_bulges_concat = count_bulges
+        # if genome_type == 'both':
+        #     count_bulges_concat = count_bulges+count_bulges
+        # else:
+        #     count_bulges_concat = count_bulges
         # print(count_bulges_concat)
         
-        data_general_count_copy.insert(0,'Bulges', count_bulges_concat,True)
+        # data_general_count_copy.insert(0,'Bulges', count_bulges_concat,True)
         # general_target_dict = data_general_count.to_dict(orient='dict')
         # print('target dict',general_target_dict)
         if 'NO SCORES' not in all_scores:
@@ -1718,7 +1718,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
             table_to_file.append('\tMismatches')
             
-            table_to_file.append(data_general_count_copy.to_string(index=False))
+            # table_to_file.append(data_general_count_copy.to_string(index=False))
             
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
