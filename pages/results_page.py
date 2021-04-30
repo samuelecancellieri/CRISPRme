@@ -1700,20 +1700,20 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides['Guide'] = g
         data_guides['Nuclease'] = nuclease
         general_target_dict = data_general_count.to_dict()
-        print(general_target_dict)
+        # print(general_target_dict)
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
             
-            # table_to_file.append(data_general_count.head())
+            table_to_file.append(list(general_target_dict))
             # print(data_general_count.head())
-            # count_bulge = 0
-            # for row in data_general_count.iterrows():
-            #     if count_bulge > max_bulges:
-            #         count_bulge = 0
-            #     # table_to_file.append(row)
-            #     print(row,count_bulge)
-            #     count_bulge += 1
+            count_bulge = 0
+            for key in general_target_dict:
+                if count_bulge > max_bulges:
+                    count_bulge = 0
+                table_to_file.append(count_bulge, general_target_dict[key])
+                # print(row,count_bulge)
+                count_bulge += 1
             
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
