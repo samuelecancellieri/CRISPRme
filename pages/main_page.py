@@ -784,6 +784,17 @@ def disabled_mail(checklist_value):
         return True
     elif 'email' in checklist_value:
         return False
+    
+@app.callback(
+    Output('text-job-name', 'disabled'),
+    [Input('checklist-job-name', 'value')]
+)
+def disable_job_name(checklist_value):
+    # print('value', checklist_ value)
+    if 'job' not in checklist_value:
+        return True
+    elif 'job' in checklist_value:
+        return False
 
     # @app.callback(
     #     [Output("fade", "is_in"),
@@ -1204,6 +1215,14 @@ def indexPage():
             #     # id='fade', is_in=False, appear=False
             #     id='fade', is_in=False, appear=True
             # )
+        ]
+    )
+    
+    job_name_content = html.Div(
+        [
+            dcc.Checklist(options=[{'label': ' Insert a personalized name for the job', 'value': 'job_name', 'disabled': False}],
+                          id='checklist-job-name', value=['']),
+            dcc.Textarea(id='text-job-name', placeholder='my-job', disabled=True, style={'width': '300px', 'height': '30px'})
         ]
     )
 
