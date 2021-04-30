@@ -790,7 +790,7 @@ def disabled_mail(checklist_value):
     [Input('checklist-job-name', 'value')]
 )
 def disable_job_name(checklist_value):
-    # print('value', checklist_ value)
+    print('value', checklist_value)
     if 'job' not in checklist_value:
         return True
     elif 'job' in checklist_value:
@@ -1217,8 +1217,7 @@ def indexPage():
     
     job_name_content = html.Div(
         [
-            dcc.Checklist(options=[{'label': ' Personalized job name', 'value': 'job_name', 'disabled': False}],
-                          id='checklist-job-name', value=[]),
+            dcc.Checklist(options=[{'label': ' Personalized job name', 'value': 'job_name', 'disabled': False}], id='checklist-job-name', value=[]),
             dbc.FormGroup(dbc.Input(type="text", id="job-name",placeholder="my_job", className='jobName', disabled=True, style={'width': '300px'}))
         ]
     )
@@ -1285,7 +1284,6 @@ def indexPage():
                                         # personal_data_management_content,
                                         html.Br(),
                                         mail_content,
-                                        html.Br(),
                                         job_name_content
                                     ],
                                     id='column-three-step-3',
