@@ -1708,14 +1708,14 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             count_bulges_concat = count_bulges+count_bulges
         else:
             count_bulges_concat = count_bulges
-        print(count_bulges_concat)
+        # print(count_bulges_concat)
         
         data_general_count_copy.insert(0,'Bulges', count_bulges_concat,True)
         
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
-            table_to_file.append('\tMismatches')
+            table_to_file.append('\t Mismatches')
             
             table_to_file.append(data_general_count_copy.to_string(index=False))
             
