@@ -3500,18 +3500,17 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 ]
             )
         )
-        if genome_type == 'both':
-            fl.append(
-                html.Div(
-                    [
-                        html.Br(),
-                        dbc.Row(
-                            sample_buttons
-                        ),
-                        dbc.Row(radar_chart_sample_content)
-                    ]
-                )
+        fl.append(
+            html.Div(
+                [
+                    html.Br(),
+                    dbc.Row(
+                        sample_buttons
+                    ),
+                    dbc.Row(radar_chart_sample_content)
+                ]
             )
+        )
         # fl.append(
         #     dbc.Row(
         #         dbc.Col(radar_chart_content)
