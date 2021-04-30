@@ -157,7 +157,7 @@ def refreshSearch(n, dir_name):
                     all_done = all_done + 1
                 elif 'Creating database\tStart' in current_log:
                     database_status = html.P(
-                        'Interting data...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
+                        'Inserting data...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
                 
                 if 'Integrating results\tEnd' in current_log:
                     integrate_status = html.P('Done', style={'color': 'green'})

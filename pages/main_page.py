@@ -202,7 +202,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             len_id += 1
             if len_id > 20:
                 break
-    if None not in job_name or job_name != '':
+    if job_name and job_name != '' and job_name != 'None':
         job_id = str(job_name)+'_'+job_id
     result_dir = current_working_directory + 'Results/' + job_id
     subprocess.run(['mkdir ' + result_dir], shell=True)
