@@ -1750,7 +1750,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
-            table_to_file.append('\t Mismatches')
+            table_to_file.append('\t\tMismatches')
             
             table_to_file.append(data_general_count_copy.to_string(index=False))
             
