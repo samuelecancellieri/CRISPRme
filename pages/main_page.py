@@ -102,11 +102,12 @@ def split_filter_part(filter_part):
      State('dna', 'value'),
      State('rna', 'value'),
      State('checklist-mail', 'value'),
-     State('example-email', 'value')
+     State('example-email', 'value'),
+     State('job-name', 'value')
      ]
 )
 # , active_tab, len_guide_sequence, dest_email, text_sequence
-def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_input, annotation_input, pam, guide_type, text_guides, mms, dna, rna, adv_opts, dest_email):
+def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_input, annotation_input, pam, guide_type, text_guides, mms, dna, rna, adv_opts, dest_email, job_name):
     '''
     Main function that generates the inputs for the Post/Process/submit_job.final.sh script and launches the search analysis.
 
@@ -201,6 +202,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             len_id += 1
             if len_id > 20:
                 break
+    job_id = str(job_name)+job_id
     result_dir = current_working_directory + 'Results/' + job_id
     subprocess.run(['mkdir ' + result_dir], shell=True)
     # NOTE test command per queue
