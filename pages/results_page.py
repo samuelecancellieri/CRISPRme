@@ -1699,21 +1699,29 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides = dict()
         data_guides['Guide'] = g
         data_guides['Nuclease'] = nuclease
-        general_target_dict = data_general_count.to_dict(orient='dict')
-        print('target dict',general_target_dict)
+        data_general_count_copy = data_general_count
+        count_bulges= list()
+        for the_bulge in range(max_bulges):
+            count_bulges.append(the_bulge)
+        
+        count_bulges = count_bulges+count_bulges
+        
+        data_general_count_copy.insert(1,'Bulges',count_bulges,True)
+        # general_target_dict = data_general_count.to_dict(orient='dict')
+        # print('target dict',general_target_dict)
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
             
-            table_to_file.append(' '+' '.join(list(general_target_dict)))
-            # print(data_general_count.head())
-            count_bulge = 0
-            for key in general_target_dict:
-                if count_bulge > max_bulges:
-                    count_bulge = 0
-                table_to_file.append([count_bulge, general_target_dict[key]])
-                # print(row,count_bulge)
-                count_bulge += 1
+            table_to_file.append(data_general_count_copy)
+            # # print(data_general_count.head())
+            # count_bulge = 0
+            # for key in general_target_dict:
+            #     if count_bulge > max_bulges:
+            #         count_bulge = 0
+            #     table_to_file.append([count_bulge, data_general_count.iloc[i, :]])
+            #     # print(row,count_bulge)
+            #     count_bulge += 1
             
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
