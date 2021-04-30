@@ -791,7 +791,7 @@ def disabled_mail(checklist_value):
 )
 def disable_job_name(checklist_value):
     print('value', checklist_value)
-    if 'job' not in checklist_value:
+    if 'job_name' not in checklist_value:
         return True
     elif 'job_name' in checklist_value:
         return False
