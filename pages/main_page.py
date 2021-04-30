@@ -202,7 +202,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             len_id += 1
             if len_id > 20:
                 break
-    job_id = str(job_name)+job_id
+    if job_name.strip():
+        job_id = str(job_name)+job_id
     result_dir = current_working_directory + 'Results/' + job_id
     subprocess.run(['mkdir ' + result_dir], shell=True)
     # NOTE test command per queue
