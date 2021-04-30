@@ -1799,7 +1799,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     os.system(f"rm -f {table_to_file_save_dest}")
     for elem in table_to_file:
         print(elem)
-        os.system(f"cat {elem} >> {table_to_file_save_dest}")
+        os.system(f"echo {elem} >> {table_to_file_save_dest}")
 
     if 'NO SCORES' not in all_scores:
         try:
