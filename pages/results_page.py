@@ -1703,6 +1703,16 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             data_guides['CFD'] = acfd[x]
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
             
+            table_to_file.append(data_general_count.head())
+            print(data_general_count.head())
+            count_bulge = 0
+            for row in data_general_count.iterrows():
+                if count_bulge > max_bulges:
+                    count_bulge = 0
+                table_to_file.append(row)
+                print(row)
+                count_bulge += 1
+            
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
                 # data_guides['Enriched'] = doench_enr[x]
@@ -1786,14 +1796,6 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
 
         df.append(data_guides)
     dff = pd.DataFrame(df)
-    
-    table_to_file.append(data_general_count.head())
-    count_bulge = 0
-    for row in data_general_count.iterrows():
-        if count_bulge > max_bulges:
-            count_bulge = 0
-        table_to_file.append(row)
-        count_bulge += 1
     
     table_to_file_save_dest = current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt'
     # os.system(f"rm -f {table_to_file_save_dest}")
