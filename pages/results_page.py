@@ -1749,7 +1749,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
             table_to_file.append('\t\tMismatches')
             
-            table_to_file.append('IN THE FOLLOWING MATRIX, THE FIRST GROUP OF'+str(max_bulges)+' LINES, ARE REFERED TO REFERENCE TARGET, THE SECOND GROUP OF '+str(max_bulges)+' LINES ARE REFERED TO VARIANT GENOME')
+            table_to_file.append('IN THE FOLLOWING MATRIX, THE FIRST GROUP OF '+str(max_bulges)+' LINES, ARE REFERED TO REFERENCE TARGET, THE SECOND GROUP OF '+str(max_bulges)+' LINES ARE REFERED TO VARIANT GENOME')
             
             table_to_file.append(data_general_count_copy.to_string(index=False))
             
