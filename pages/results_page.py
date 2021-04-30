@@ -218,7 +218,6 @@ def resultPage(job_id):
         html.Div(
             html.Div(
                 dash_table.DataTable(
-                    export_format='csv',
                     id='general-profile-table',
                     # page_size=PAGE_SIZE,
                     columns=columns_profile_table,
@@ -1556,7 +1555,7 @@ def loadDistributionPopulations(sel_cel, all_guides, job_id):
             '\n') if 'Max_bulges' in s)).split('\t')[-1])
 
     distributions = [dbc.Row(html.P(
-        'On- and Off-Targets distributions in the Reference and Variant Genome. For the Variant Genome, the targets are divided into 5 SuperPopulations (EAS, EUR, AFR, AMR, SAS).', style={'margin-left': '0.75rem'}))]
+        'On- and Off-Targets distributions in the Reference and Variant Genome. For the Variant Genome, the targets are divided into SuperPopulations.', style={'margin-left': '0.75rem'}))]
 
     for i in range(math.ceil((mms + max_bulges + 1) / BARPLOT_LEN)):
         all_images = []
@@ -1690,7 +1689,10 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     column_total = []
 
     df = []
+    table_to_file = list()
     for x, g in enumerate(guides):
+        table_to_file.append(g) #append guide to table
+        table_to_file.append(nuclease) #append nuclease to table
         data_general_count = pd.read_csv(current_working_directory + 'Results/' +
                                          job_id + '/' + job_id + '.general_target_count.'+g+".txt", sep='\t')
 
@@ -1699,11 +1701,17 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides['Nuclease'] = nuclease
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
+            table_to_file.append(acfd[x]) #append CFD to table
+            
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
                 # data_guides['Enriched'] = doench_enr[x]
             else:
                 data_guides['Doench 2016'] = doench[x]
+                
+        table_to_file.append(data_general_count)
+        
+        print(table_to_file)
 
         if genome_type == 'both':
             # data_guides['Samples in Class 0 - 0+ - 1 - 1+'] = column_sample_class
