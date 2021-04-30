@@ -1705,12 +1705,12 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             
             # table_to_file.append(data_general_count.head())
             # print(data_general_count.head())
-            # count_bulge = 0
+            count_bulge = 0
             for row in data_general_count.iterrows():
                 if count_bulge > max_bulges:
                     count_bulge = 0
                 # table_to_file.append(row)
-                print(row)
+                print(row,count_bulge)
                 count_bulge += 1
             
             if genome_type == 'both':
