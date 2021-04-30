@@ -1753,7 +1753,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
-            table_to_file.append('\t\tMismatches')
+            table_to_file.append('\t\t\t\tMismatches')
             
             # table_to_file.append('IN THE FOLLOWING MATRIX, THE FIRST GROUP OF '+str(max_bulges)+' LINES, ARE REFERED TO REFERENCE TARGET, THE SECOND GROUP OF '+str(max_bulges)+' LINES ARE REFERED TO VARIANT GENOME')
             
