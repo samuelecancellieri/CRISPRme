@@ -793,7 +793,7 @@ def disable_job_name(checklist_value):
     print('value', checklist_value)
     if 'job' not in checklist_value:
         return True
-    elif 'job' in checklist_value:
+    elif 'job_name' in checklist_value:
         return False
 
     # @app.callback(
@@ -1218,7 +1218,7 @@ def indexPage():
     job_name_content = html.Div(
         [
             dcc.Checklist(options=[{'label': ' Personalized job name', 'value': 'job_name', 'disabled': False}], id='checklist-job-name', value=[]),
-            dbc.FormGroup(dbc.Input(type="text", id="job-name",placeholder="my_job", className='jobName', disabled=True, style={'width': '300px'}))
+            dbc.FormGroup(dbc.Input(type="text", id="job-name", placeholder="my_job", className='jobName', disabled=True, style={'width': '300px'}))
         ]
     )
 
