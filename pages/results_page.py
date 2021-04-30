@@ -3422,7 +3422,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 ), width=4
             )
         ]
-        # DA SPOSTARE DOPO BARPLOT E RADCHART TOTAL
         sample_buttons = [
             dbc.Col(
                 html.Div(
@@ -3493,15 +3492,22 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(populations_barplots),
                             dbc.Col(radar_chart_total_content)
                         ]
-                    ),
-                    html.Br(),
-                    dbc.Row(
-                        sample_buttons
-                    ),
-                    dbc.Row(radar_chart_sample_content)
+                    )
                 ]
             )
         )
+        if genome_type == 'both':
+            fl.append(
+                html.Div(
+                    [
+                        html.Br(),
+                        dbc.Row(
+                            sample_buttons
+                        ),
+                        dbc.Row(radar_chart_sample_content)
+                    ]
+                )
+            )
         # fl.append(
         #     dbc.Row(
         #         dbc.Col(radar_chart_content)
