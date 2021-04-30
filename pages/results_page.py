@@ -1702,17 +1702,15 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
             table_to_file.append(acfd[x]) #append CFD to table
+            table_to_file.append('\n')
             
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
                 # data_guides['Enriched'] = doench_enr[x]
             else:
                 data_guides['Doench 2016'] = doench[x]
-                
         table_to_file.append(data_general_count)
-        
-        print(table_to_file)
-
+    
         if genome_type == 'both':
             # data_guides['Samples in Class 0 - 0+ - 1 - 1+'] = column_sample_class
             # data_guides['Genome'] = '\nREFERENCE\n-----------\nENRICHED\n'
@@ -1790,6 +1788,9 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
 
         df.append(data_guides)
     dff = pd.DataFrame(df)
+    
+    print(table_to_file)
+
 
     if 'NO SCORES' not in all_scores:
         try:
