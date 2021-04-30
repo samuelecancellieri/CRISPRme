@@ -1740,7 +1740,8 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         for the_bulge in range(max_bulges+1):
             count_bulges.append(the_bulge)
         
-        if genome_type == 'both':
+        count_bulges_concat = list()
+        if genome_type != 'ref':
             count_bulges_concat = count_bulges+count_bulges
         else:
             count_bulges_concat = count_bulges
