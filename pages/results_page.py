@@ -1692,7 +1692,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     table_to_file = list()
     for x, g in enumerate(guides):
         table_to_file.append(g) #append guide to table
-        table_to_file.append(nuclease) #append nuclease to table
+        table_to_file.append('Nuclease: '+str(nuclease)) #append nuclease to table
         data_general_count = pd.read_csv(current_working_directory + 'Results/' +
                                          job_id + '/' + job_id + '.general_target_count.'+g+".txt", sep='\t')
 
@@ -1701,14 +1701,21 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides['Nuclease'] = nuclease
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
-            table_to_file.append(acfd[x]) #append CFD to table
+            table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
             
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
                 # data_guides['Enriched'] = doench_enr[x]
             else:
                 data_guides['Doench 2016'] = doench[x]
-        table_to_file.append(data_general_count)
+        
+        table_to_file.append(data_general_count.head())
+        count_bulge = 0
+        for row in data_general_count.iterrows():
+            if count_bulge > max_bulges:
+                count_bulge = 0
+            table_to_file.append(row)
+            count_bulge += 1
     
         if genome_type == 'both':
             # data_guides['Samples in Class 0 - 0+ - 1 - 1+'] = column_sample_class
@@ -1788,8 +1795,11 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         df.append(data_guides)
     dff = pd.DataFrame(df)
     
+    table_to_file_save_dest = current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt'
+    os.system(f"rm -f {table_to_file_save_dest}")
     for elem in table_to_file:
         print(elem)
+        os.system(f"cat {elem} >> {table_to_file_save_dest}")
 
     if 'NO SCORES' not in all_scores:
         try:
