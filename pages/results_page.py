@@ -1,4 +1,5 @@
 from sqlite3.dbapi2 import Row
+import sys
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
 from app import URL, app
@@ -2596,7 +2597,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     file_to_grep = job_directory + job_id + '.bestMerge.txt'
-    if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
+    # if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
+    if True:
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                          guide+'.txt', sep='\t', skiprows=1, index_col=0, header=None)
         personal = df.loc[sample, 4]
@@ -2623,14 +2625,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         #grep private targets to generate table and file
         os.system(f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
         
-        print('faccio personal cards')
-
         # plot for images in personal card
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
-        # os.system(f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
+        os.system(f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
 
         private = 0
         for line in open(sample_grep_result):
@@ -2687,13 +2687,14 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 ans.columns = c.split('\t')[:23]
 
     # image for personal and private
-    image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.personal.png', 'rb').read()).decode())
-    image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-        current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.private.png', 'rb').read()).decode())
+    try:
+        image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.personal.png', 'rb').read()).decode())
+        image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.private.png', 'rb').read()).decode())
+    except:
+        sys.stderr.write('PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED')
 
-    # os.system(
-    #     f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
         ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
