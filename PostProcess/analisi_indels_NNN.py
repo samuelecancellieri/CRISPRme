@@ -174,6 +174,7 @@ def alignRefFromVar(line, ref_seq):#chr_fake, start_pos, len_guide, bulge):
     true_chr = t[3]
     good_chr_fake = true_chr+':'+str(start_pos)+'-'+str(start_pos+len_guide)
     sequence = ref_seq.upper()#dict_ref_seq[good_chr_fake].upper() #file_fasta.readline().strip().upper()
+    # print(sequence, len(sequence), len_guide)
     if t[6] == '-':
         target = t[2][::-1]
     else:
@@ -182,12 +183,14 @@ def alignRefFromVar(line, ref_seq):#chr_fake, start_pos, len_guide, bulge):
         tmp_gap_position = [g.start() for g in re.finditer('-', target)]
         sequence = list(sequence)
         for tmp_g_p in tmp_gap_position:
-            sequence.insert(tmp_g_p, '-')
-        if t[6] == '+':
-            sequence = sequence[0:len_guide]
-        else:
+            sequence[tmp_g_p] = '-'
+        if t[6] == '-':
             sequence = reverse_complement_table(''.join(sequence))
-            sequence = sequence[len(tmp_gap_position):]
+        # if t[6] == '+':
+        #     sequence = sequence[0:len_guide]
+        # else:
+        #     sequence = reverse_complement_table(''.join(sequence))
+        #     sequence = sequence[len(tmp_gap_position):]
     elif t[6] == '-':
         sequence = reverse_complement_table(sequence)
     guide_no_pam = t[1][pos_beg:pos_end]  
@@ -614,11 +617,20 @@ for line in inResult:
             final_result[15] = indel_data[2]
             final_result[16] = indel_data[3]
             final_result[17] = indel_data[4]
-            fake_start_target = int(line[4]) - int(indel_data[5])
+            if pam_at_beginning:
+                if line[0] == 'RNA' and line[6] == '-':
+                    fake_start_target = int(line[5]) - int(indel_data[5])
+                else:
+                    fake_start_target = int(line[4]) - int(indel_data[5])
+            else:
+                if line[0] == 'RNA' and line[6] == '+':
+                    fake_start_target = int(line[5]) - int(indel_data[5])
+                else:
+                    fake_start_target = int(line[4]) - int(indel_data[5])
             true_start_target = int(indel_data[0].split('_')[1].split('-')[0]) + fake_start_target
             diff_pos_clus = int(line[4]) - int(line[5])
             final_result[4] = str(true_start_target)
-            final_result[5] = str(true_start_target + diff_pos_clus)
+            final_result[5] = str(true_start_target - diff_pos_clus)
 
             #print(int(indel_data[5]), int(line[4]))
 
@@ -669,6 +681,21 @@ for line in inResult:
             last_INDpos = cluster_class[clusterkey]['lastINDpos']
             #last_haplotype = cluster_class[clusterkey]['lastHaplotype']
             t = line[2]
+            indel_data = sorted(INDELS_tree[int(line[4])])[0].data
+            if pam_at_beginning:
+                if line[0] == 'RNA' and line[6] == '-':
+                    fake_start_target = int(line[5]) - int(indel_data[5])
+                else:
+                    fake_start_target = int(line[4]) - int(indel_data[5])
+            else:
+                if line[0] == 'RNA' and line[6] == '+':
+                    fake_start_target = int(line[5]) - int(indel_data[5])
+                else:
+                    fake_start_target = int(line[4]) - int(indel_data[5])
+            true_start_target = int(indel_data[0].split('_')[1].split('-')[0]) + fake_start_target
+            diff_pos_clus = int(line[4]) - int(line[5])
+            line[4] = str(true_start_target)
+            line[5] = str(true_start_target - diff_pos_clus)
             #if line[6] == '-':
             #    t = t[::-1]
             mm_new_t = 0
@@ -740,6 +767,7 @@ for line in inResult:
                 cfd_ref = ref_generated[1]
                 reference_pam = ref_this_clus[pam_begin:pam_end]
                 found_creation = False
+                # print(ref_generated, c[2:8])
                 for pos_pam_ref, pam_char_ref in enumerate(reference_pam):
                     if not iupac_code_set[pam[pos_pam_ref]] & iupac_code_set[pam_char_ref]:     #ref char not in set of general pam char
                         found_creation = True
@@ -771,6 +799,7 @@ for line in inResult:
                     reference_pam = ref_this_clus[pam_begin:pam_end]
                     cfd_ref = ref_generated[1]
                     found_creation = False
+                    # print(ref_generated, c[2:8])
                     for pos_pam_ref, pam_char_ref in enumerate(reference_pam):
                         if not iupac_code_set[pam[pos_pam_ref]] & iupac_code_set[pam_char_ref]:     #ref char not in set of general pam char
                             found_creation = True
@@ -880,11 +909,20 @@ for line in inResult:
         final_result[15] = indel_data[2]
         final_result[16] = indel_data[3]
         final_result[17] = indel_data[4]
-        fake_start_target = int(line[4]) - int(indel_data[5])
+        if pam_at_beginning:
+            if line[0] == 'RNA' and line[6] == '-':
+                fake_start_target = int(line[5]) - int(indel_data[5])
+            else:
+                fake_start_target = int(line[4]) - int(indel_data[5])
+        else:
+            if line[0] == 'RNA' and line[6] == '+':
+                fake_start_target = int(line[5]) - int(indel_data[5])
+            else:
+                fake_start_target = int(line[4]) - int(indel_data[5])
         true_start_target = int(indel_data[0].split('_')[1].split('-')[0]) + fake_start_target
         diff_pos_clus = int(line[4]) - int(line[5])
         final_result[4] = str(true_start_target)
-        final_result[5] = str(true_start_target + diff_pos_clus)
+        final_result[5] = str(true_start_target - diff_pos_clus)
 
         #print(int(indel_data[5]), int(line[4]))
         # if line[10] != "n":
