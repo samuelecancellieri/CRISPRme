@@ -2622,6 +2622,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         os.system(f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
         #grep private targets to generate table and file
         os.system(f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
+        
+        print('faccio personal cards')
 
         # plot for images in personal card
         os.system(
