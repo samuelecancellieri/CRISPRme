@@ -786,7 +786,7 @@ def disabled_mail(checklist_value):
         return False
     
 @app.callback(
-    Output('text-job-name', 'disabled'),
+    Output('job-name', 'disabled'),
     [Input('checklist-job-name', 'value')]
 )
 def disable_job_name(checklist_value):
@@ -1208,10 +1208,7 @@ def indexPage():
             dcc.Checklist(options=[{'label': ' Notify me by email', 'value': 'email', 'disabled': False}],
                           id='checklist-mail', value=[]),
             # dbc.Fade(
-            dbc.FormGroup(
-                dbc.Input(type="email", id="example-email",
-                          placeholder="name@mail.com", className='exampleEmail', disabled=True, style={'width': '300px'})
-            )
+            dbc.FormGroup(dbc.Input(type="email", id="example-email",placeholder="name@mail.com", className='exampleEmail', disabled=True, style={'width': '300px'}))
             #     # id='fade', is_in=False, appear=False
             #     id='fade', is_in=False, appear=True
             # )
@@ -1222,7 +1219,7 @@ def indexPage():
         [
             dcc.Checklist(options=[{'label': ' Personalized job name', 'value': 'job_name', 'disabled': False}],
                           id='checklist-job-name', value=[]),
-            dcc.Textarea(id='text-job-name', placeholder='my-job', disabled=True, style={'width': '300px', 'height': '30px'})
+            dbc.FormGroup(dbc.Input(type="text", id="job-name",placeholder="my_job", className='jobName', disabled=True, style={'width': '300px'}))
         ]
     )
 
