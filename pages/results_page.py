@@ -216,6 +216,21 @@ def resultPage(job_id):
     final_list.append(add_to_description)
     final_list.append(
         html.Div(
+            dbc.Row(
+                dbc.Col(
+                    html.Div(
+                        [
+                            html.P('Generating download link, Please wait...', id='download-link-general-table'),
+                            dcc.Interval(interval=1*1000, id='interval-general-table'),
+                            html.Div(job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
+                        ]
+                    )
+                )
+            )
+        )
+    )
+    final_list.append(
+        html.Div(
             html.Div(
                 dash_table.DataTable(
                     id='general-profile-table',
@@ -382,6 +397,25 @@ def downloadLinkPosition(n, file_to_load, search):  # file to load =
         raise PreventUpdate
     job_id = search.split('=')[-1]
     file_to_load = file_to_load + '.zip'
+    if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
+        return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
+
+    return 'Generating download link, Please wait...', False
+
+
+# Generate download link general_table
+@app.callback(
+    [Output('download-link-general-table', 'children'),
+     Output('interval-general-table', 'disabled')],
+    [Input('interval-general-table', 'n_intervals')],
+    [State('div-info-general-table', 'children'),
+     State('url', 'search')]
+)
+def downloadGeneralTable(n, file_to_load, search):  # file to load =
+    if n is None:
+        raise PreventUpdate
+    job_id = search.split('=')[-1]
+    file_to_load = file_to_load + '.txt'
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download zip', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
@@ -1804,7 +1838,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     dff = pd.DataFrame(df)
     
     table_to_file_save_dest = current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt'
-    # os.system(f"rm -f {table_to_file_save_dest}")
+    
     outfile = open(table_to_file_save_dest,'w')
     for elem in table_to_file:
         outfile.write(elem+'\n')
