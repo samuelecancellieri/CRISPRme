@@ -3239,6 +3239,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 # html.Br(),
                                 # html.Hr(),
                                 html.Div(dash_table.DataTable(
+                                    export_format="csv",
                                     id='live_table',
                                     columns=[{"name": i, "id": i}
                                              for i in dff.columns],
