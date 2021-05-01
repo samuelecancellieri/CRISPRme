@@ -383,6 +383,8 @@ def downloadLinkSample(n, file_to_load, search):  # file to load =
         return html.A('Download file', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
     return 'Generating download link, Please wait...', False
+
+@app.callback(
     [Output('download-link-general-table', 'children'),
      Output('interval-general-table', 'disabled')],
     [Input('interval-general-table', 'n_intervals')],
