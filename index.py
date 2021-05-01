@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output, State
 # SYSTEM IMPORT
 import os
 import concurrent
+import sys
 # APP IMPORT
 from app import app, URL, current_working_directory, cache
 # PAGES IMPORT
@@ -24,6 +25,11 @@ from pages import help_page
 from pages import personalization_page
 from pages import contacts_page
 from pages import genome_database
+
+if '--no_history' in sys.argv[1:]:
+    DISPLAY_HISTORY = 'none'
+else:
+    DISPLAY_HISTORY = ''
 
 navbar = navbar_creation.Navbar()
 # For multipage
