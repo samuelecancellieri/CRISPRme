@@ -2734,9 +2734,17 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             # ),
             html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
-            False,
-            [],
-            [],
+            True,
+            html.A(
+                html.Img(src=image_personal_top, id='sample-personal-top',
+                         width="100%", height="auto"),
+                target="_blank"
+            ),
+            html.A(
+                html.Img(src=image_private_top, id='sample-private-top',
+                         width="100%", height="auto"),
+                target="_blank"
+            ),
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
