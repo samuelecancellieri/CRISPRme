@@ -365,9 +365,10 @@ for line in inTarget:
                     totalDict[0][0][(pos_c, elem)] = [listReplaceTarget, set(haploSamples[0]), listInfo]                                 
                     totalDict[1][0][(pos_c, elem)] = [listReplaceTarget, set(haploSamples[1]), listInfo]                                 
                 else:
+                    sampleList = list()
                     for count, sample in enumerate(sampleSet[i]):
-                        sampleSet[count] = sample.split(':')[0]
-                    totalDict[0][0][(pos_c, elem)] = [listReplaceTarget, set(sampleSet[i]), listInfo]
+                        sampleList.append(sample.split(':')[0])
+                    totalDict[0][0][(pos_c, elem)] = [listReplaceTarget, set(sampleList), listInfo]
     
     if countIUPAC > 0:
         if revert:
