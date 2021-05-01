@@ -3232,10 +3232,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     id='live_table',
                                     columns=[{"name": i, "id": i}
                                              for i in dff.columns],
+                                    # tooltip_data=[
+                                    #     {
+                                    #         column: {'value': str(value), 'type': 'markdown'}
+                                    #         for column, value in row.items()
+                                    #     } for row in dff.to_dict('records')
+                                    # ],
+
                                     # style_cell=dict(textAlign='left'),
                                     # style_header=dict(backgroundColor="white"),
-                                    style_data=dict(
-                                        backgroundColor="white"),
+                                    style_data={
+                                        'backgroundColor': "white",
+                                        #'whiteSpace': 'normal',
+                                        #'height': 'auto'
+                                    },
                                     # , 'overflowX': 'auto'
                                     style_table={
                                         'overflowX': 'scroll','overflowY':'scroll','max-height': '300px'},
@@ -3243,13 +3253,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                         # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                                         # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
                                         'width': '{}%'.format(len(dff.columns)),
-                                        'whiteSpace': 'normal'
+                                        #'whiteSpace': 'normal'
                                     }],
                                     style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
                                                              'maxWidth': 100,
-                                                           }],
-                                    # style_cell_conditional=[{'if': {'column_id': 'Annotation_Type'},
-                                    #                          'textAlign': 'left',
+                                                           },
+                                                           {'if': {'column_id': 'SNP'},
+                                                             #'overflow': 'hidden',
+                                                              'textOverflow': 'ellipsis',
+                                                              'maxWidth': 200,
+                                                           }
+                                                        ],
+                                    # style_cell_conditional=[{'if': {'column_id': 'SNP'},
+                                    #                          'overflow': 'hidden',
+                                    #                           'textOverflow': 'ellipsis'
                                     #                        }],
                                     #                        {'if': {'column_id':'MMBLG_Samples_2'},
                                     #                          'textAlign': 'left',
@@ -3272,9 +3289,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #                        ],
                                     page_current=0,
                                     page_size=10000,
-                                    page_action='custom'
+                                    page_action='custom',
+                                    tooltip_delay=0,
+                                    tooltip_duration=None
                                 )
-                                ),
+                                , id='div-query-table'),
                             ],
                         ),
                     ],
@@ -3747,13 +3766,15 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
 
 # Return the table with the result of the query
 @ app.callback(
+    #[Output('live_table', 'data'),
     [Output('live_table', 'data'),
+     Output('live_table', 'tooltip_data'),
      Output("message-alert", "is_open"), ],
     [Input('submit-val', 'n_clicks'),
-     Input('live_table', "page_current"),
-     Input('live_table', "page_size"),
-     Input('general-profile-table', 'selected_cells')],
-    [State('target', 'value'),
+     Input('live_table', "page_current")],
+    [State('live_table', "page_size"),
+     State('general-profile-table', 'selected_cells'),
+     State('target', 'value'),
      State('order', 'value'),
      State('general-profile-table', 'data'),
      State('multiorder', 'value'),
@@ -3777,7 +3798,8 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
     if n_clicks > 0:
         if radio_order == None:
             data = []
-            return data, not alert
+            tooltip_data = []
+            return data, tooltip_data, not alert
         else:
             if sholddrop != None:
                 alert = False
@@ -3801,11 +3823,16 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
                 data_cols.remove(' ')
                 data_cols.insert(0, ' ')
 
+            snps = pd.DataFrame(data['SNP']).to_dict('records')
             data = data.to_dict('records')
+            tooltip_data = [{
+                            column: {'value': str(value), 'type': 'markdown'}
+                            for column, value in row.items()
+                        } for row in snps]
     else:
         raise PreventUpdate
-
-    return data, alert
+            
+    return data, tooltip_data, alert
 
 
 # to get correct number of page
