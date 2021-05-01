@@ -3424,7 +3424,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select a Population"),
+                        html.P("Select a Population",style=samp_style),
                         html.Div(dcc.Dropdown(
                             options=populations,
                             id='dropdown-population-sample',
@@ -3437,7 +3437,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select a Sample"),
+                        html.P("Select a Sample",style=samp_style),
                         html.Div(dcc.Dropdown(
                             id='dropdown-sample',
                             placeholder='Sample',
