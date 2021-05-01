@@ -31,15 +31,15 @@ operators = [['ge ', '>='],
              ['eq ', '='],
              ['contains ']]  # for filtering
 
-# ONLINE = False  # NOTE change to True for online version, False for offline
-# DISPLAY_OFFLINE = ''
-# DISPLAY_ONLINE = ''
-# if ONLINE:
-#     DISPLAY_OFFLINE = 'none'
-#     DISPLAY_ONLINE = ''
-# else:
-#     DISPLAY_OFFLINE = ''
-#     DISPLAY_ONLINE = 'none'
+ONLINE = False  # NOTE change to True for online version, False for offline
+DISPLAY_OFFLINE = ''
+DISPLAY_ONLINE = ''
+if ONLINE:
+    DISPLAY_OFFLINE = 'none'
+    DISPLAY_ONLINE = ''
+else:
+    DISPLAY_OFFLINE = ''
+    DISPLAY_ONLINE = 'none'
 
 exeggutor = concurrent.futures.ProcessPoolExecutor(max_workers=2)
 
