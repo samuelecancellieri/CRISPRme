@@ -2622,7 +2622,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         # print(personal, pam_creation, private)
         results_table = pd.DataFrame([[personal, pam_creation, private]], columns=[
             'Personal', 'PAM Creation', 'Private']).astype(str)
-        if int(private) > 0:
+        if int(private) >= 0:
             tmp_file = current_working_directory + 'Results/' + \
                 job_id + '/' + job_id + '.' + sample + ".tmp_card.txt"
             tmp_file_2 = current_working_directory + 'Results/' + \
