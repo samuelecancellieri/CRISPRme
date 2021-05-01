@@ -790,6 +790,7 @@ def complete_search():
         p.write('Ref_comp\t' + str(ref_comparison) + '\n')
         p.close()
     os.system(f'cp {guidefile} {outputfolder}/guides.txt')
+    print(f"Launching job {outputfolder}. The stdout is redirected in log_verbose.txt and stderr is redirected in log_error.txt")
     if variant:
         with open(f"{outputfolder}/log_verbose.txt", 'w') as log_verbose:
             with open(f"{outputfolder}/log_error.txt", 'w') as log_error:

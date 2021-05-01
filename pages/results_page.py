@@ -3226,7 +3226,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         dbc.Col(
                             [
                                 # html.Br(),
-                                html.P('Export will download 10000 lines contained in the current view of the table'),
+                                html.P('Export will download 1000 lines contained in the current view of the table'),
                                 html.Div(dash_table.DataTable(
                                     export_format="csv",
                                     id='live_table',
@@ -3288,7 +3288,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #                        },
                                     #                        ],
                                     page_current=0,
-                                    page_size=10000,
+                                    page_size=1000,
                                     page_action='custom',
                                     tooltip_delay=0,
                                     tooltip_duration=None
