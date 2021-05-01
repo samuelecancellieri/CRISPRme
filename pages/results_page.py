@@ -2470,8 +2470,9 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
             current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
         img_found = True
     except:
-        radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-            current_working_directory+'assets/placeholder.png', 'rb').read()).decode())
+        pass
+        # radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+        #     current_working_directory+'assets/placeholder.png', 'rb').read()).decode())
     try:
         radar_href = '/Results/' + job_id + '/' + radar_img
     except:
@@ -2511,8 +2512,9 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     base64.b64encode(open(current_img, 'rb').read()).decode())
                 img_found = True
             except:
-                first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
-                    open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
+                pass
+                # first_img_source = 'data:image/png;base64,{}'.format(base64.b64encode(
+                #     open(current_working_directory+'/assets/placeholder.png', 'rb').read()).decode())
             try:
                 first_img_href = 'Results/' + job_id + '/imgs/summary_single_guide_' +\
                     guide + '_' + str(mm) + "." + str(bulge) +\
