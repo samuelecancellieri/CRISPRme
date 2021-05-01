@@ -3410,8 +3410,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.Div(
-                        html.P("Select a Superpopulation"),style={samp_style}),
+                        html.P("Select a Superpopulation",style=samp_style),
                         html.Div(
                             dcc.Dropdown(
                                 options=super_populations,
