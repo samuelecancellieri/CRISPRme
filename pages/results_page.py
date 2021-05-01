@@ -2653,7 +2653,6 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
         # os.system(f"{app_main_directory}/PostProcess/personal_cards.py {current_working_directory}/Results/{job_id}/{job_id}.{sample}.{guide}.sample_card.txt {current_working_directory}/Results/{job_id}")
         os.system(f"rm {sample_grep_result}")
-
     else:
         with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "r") as file_in:
             infos = file_in.readline().strip().split('\t')
