@@ -1,8 +1,8 @@
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 import dash_core_components as dcc
-from app import URL, DISPLAY_OFFLINE
-from index import DISPLAY_HISTORY
+from app import URL, DISPLAY_HISTORY
+# from index import DISPLAY_HISTORY
 PLOTLY_LOGO = 'assets/favicon.png'
 
 # DISPLAY_OFFLINE = ''

@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 import os
 import concurrent.futures  # For workers and queue
 from flask_caching import Cache  # for cache of .targets or .scores
+from index import DISPLAY_HISTORY
 
 URL = ''
 external_stylesheets = [
@@ -30,15 +31,15 @@ operators = [['ge ', '>='],
              ['eq ', '='],
              ['contains ']]  # for filtering
 
-ONLINE = False  # NOTE change to True for online version, False for offline
-DISPLAY_OFFLINE = ''
-DISPLAY_ONLINE = ''
-if ONLINE:
-    DISPLAY_OFFLINE = 'none'
-    DISPLAY_ONLINE = ''
-else:
-    DISPLAY_OFFLINE = ''
-    DISPLAY_ONLINE = 'none'
+# ONLINE = False  # NOTE change to True for online version, False for offline
+# DISPLAY_OFFLINE = ''
+# DISPLAY_ONLINE = ''
+# if ONLINE:
+#     DISPLAY_OFFLINE = 'none'
+#     DISPLAY_ONLINE = ''
+# else:
+#     DISPLAY_OFFLINE = ''
+#     DISPLAY_ONLINE = 'none'
 
 exeggutor = concurrent.futures.ProcessPoolExecutor(max_workers=2)
 
