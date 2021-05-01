@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 import dash_core_components as dcc
-from app import URL, DISPLAY_HISTORY
+from app import URL
 # from index import DISPLAY_HISTORY
 PLOTLY_LOGO = 'assets/favicon.png'
 
@@ -34,7 +34,7 @@ search_bar = dbc.Row(
             html.A('HISTORY', href=URL + '/history', target='',
                    style={'text-decoration': 'none', 'color': 'white'}),
             active=True,
-            className='testHover', style={'text-decoration': 'none', 'color': 'white', 'font-size': '1.5rem', 'display': DISPLAY_HISTORY}))
+            className='testHover', style={'text-decoration': 'none', 'color': 'white', 'font-size': '1.5rem', 'display': ''}))
     ],
     no_gutters=True,
     className="ml-auto flex-nowrap mt-3 mt-md-0",
