@@ -2396,10 +2396,10 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     # search for getting job id
     # get guide with sel_cel and all_data
-    radar_chart_images = []
-    population_barplots = []
-    guide_images = []
-    sample_images = []
+    radar_chart_images = list()
+    population_barplots = list()
+    guide_images = list()
+    sample_images = list()
 
     try:
         population_barplots.extend(
@@ -2543,7 +2543,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                         )
                     )
                 )
-    return radar_chart_images, population_barplots, guide_images, sample_images
+    return radar_chart_images, population_barplots, guide_images, sample_images.reverse()
 # Open in browser the result directory
 
 
