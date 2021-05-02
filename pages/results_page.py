@@ -2543,13 +2543,12 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                         )
                     )
                 )
-    # print(sample_images)
+    # reverse list to print plots in correct order since they are append in reverse order into main sample_images list
     reversed_sample_images = sample_images[::-1]
-    # print(reversed_sample_images)
     return radar_chart_images, population_barplots, guide_images, reversed_sample_images
+
+
 # Open in browser the result directory
-
-
 # @app.callback(
 #     Output('div-open-result-directory', 'children'),
 #     [Input('button-open-result-directory', 'n_clicks')],
