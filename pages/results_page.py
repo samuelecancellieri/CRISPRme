@@ -3488,7 +3488,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             )
         )
         radar_chart_total_content = html.Div(id='div-radar-chart-total')
-        populations_barplots = html.Div(id='div-population-barplot')
+        populations_barplots = html.Div(id='div-population-barplot', style=samp_style)
         radar_chart_sample_content = html.Div(id='div-radar-chart-sample')
         sample_image_content = html.Div(id='div-sample-image')
         # [Output('div-radar-chart-total', 'children'),
