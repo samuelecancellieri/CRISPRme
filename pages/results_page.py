@@ -2545,8 +2545,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                 )
     # print(sample_images)
     reversed_sample_images = sample_images[::-1]
-    print(reversed_sample_images)
-    return radar_chart_images, population_barplots, guide_images, sample_images
+    # print(reversed_sample_images)
+    return radar_chart_images, population_barplots, guide_images, reversed_sample_images
 # Open in browser the result directory
 
 
