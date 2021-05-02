@@ -2543,7 +2543,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                         )
                     )
                 )
-    print(sample_images)
+    # print(sample_images)
     print(sample_images.reverse())
     return radar_chart_images, population_barplots, guide_images, sample_images
 # Open in browser the result directory
