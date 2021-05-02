@@ -3500,14 +3500,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         if genome_type != 'ref':
             graph_summary_both = [dbc.Col(populations_barplots),dbc.Col(radar_chart_total_content)]
         else:
-            graph_summary_both = dbc.Col(html.Div(radar_chart_total_content,style={'width': '80%'}))
+            graph_summary_both = dbc.Col(radar_chart_total_content, width={"size": 6, "offset": 3})
             
         fl.append(
             html.Div(
                 [
-                    dbc.Row(
-                        graph_summary_both
-                    )
+                    dbc.Row(graph_summary_both)
                 ]
             )
         )
@@ -3515,106 +3513,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             html.Div(
                 [
                     html.Br(),
-                    dbc.Row(
-                        sample_buttons
-                    ),
-                    # dbc.Row(radar_chart_sample_content)
+                    dbc.Row(sample_buttons),
                     radar_chart_sample_content
                 ]
             )
         )
-        # fl.append(
-        #     dbc.Row(
-        #         dbc.Col(radar_chart_content)
-        #     )
-        # )
-        # fl.append(html.Hr())
-        # if img_found:
-        #     fl.append(
-        #         html.Div(
-        #             [
-        #                 dbc.Row(
-        #                     [
-        #                         dbc.Col([  # Guide part
-        #                                 html.Div(
-        #                                     [
-
-        #                                         # dbc.Row(html.Br()),
-        #                                         dbc.Row(
-        #                                             [
-        #                                                 dbc.Col(
-        #                                                     html.A(
-        #                                                         html.Img(
-        #                                                             src=radar_src, id='barplot-img-guide', width="100%", height="auto"),
-        #                                                         target="_blank",
-        #                                                         href=radar_href
-        #                                                     ),
-        #                                                     # width=10
-        #                                                 )
-        #                                             ]
-        #                                         ),
-        #                                     ],
-        #                                     id='div-guide-image'
-        #                                 )
-        #                                 ]),
-        #                         # dbc.Col(
-        #                         #     [  # Sample part
-        #                         #         html.Div(
-        #                         #             [
-
-        #                         #             ],
-        #                         #             id='div-sample-image'
-        #                         #         )
-        #                         #         ]
-        #                         #         )
-        #                     ]
-        #                 )
-        #             ]
-
-        #         )
-        #     )
-        # else:
-        #     fl.append(
-        #         html.Div(
-        #             [
-        #                 dbc.Row(
-        #                     [
-        #                         dbc.Col([  # Guide part
-        #                                 html.Div(
-        #                                     [
-
-        #                                         dbc.Row(html.Br()),
-        #                                         dbc.Row(
-        #                                             [
-        #                                                 dbc.Col(
-        #                                                     html.H2(
-        #                                                         "No result found for this combination of mismatches and bulges"
-        #                                                     ),
-        #                                                     # width=10
-        #                                                 )
-        #                                             ]
-        #                                         ),
-        #                                     ],
-        #                                     id='div-guide-image'
-        #                                 )
-        #                                 ]),
-        #                         dbc.Col([  # Sample part
-        #                                 html.Div(
-        #                                     [
-
-        #                                     ],
-        #                                     id='div-sample-image'
-        #                                 )
-        #                                 ])
-        #                     ]
-        #                 )
-        #             ]
-
-        #         )
-        #     )
-
-        # fl.append(html.Br())
-        # fl.append(html.Br())
 
         # TODO codice per l'integrazione del CFD graph. When .CFDGraph.txt will be integrated, remove the try/except
 
