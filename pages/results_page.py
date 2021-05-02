@@ -3493,7 +3493,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         radar_chart_sample_content = html.Div(id='div-radar-chart-sample')
         sample_image_content = html.Div(id='div-sample-image')
         if genome_type != 'ref':
-            print('entro in non ref')
             graph_summary_both = [dbc.Col(populations_barplots),dbc.Col(radar_chart_total_content)]
         else:
             graph_summary_both = dbc.Col(radar_chart_total_content)
