@@ -3500,7 +3500,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         if genome_type != 'ref':
             graph_summary_both = [dbc.Col(populations_barplots),dbc.Col(radar_chart_total_content)]
         else:
-            graph_summary_both = dbc.Col(radar_chart_total_content, width={"size": 6, "offset": 3})
+            graph_summary_both = dbc.Col(radar_chart_total_content, width={"size": 8, "offset": 2})
             
         fl.append(
             html.Div(
