@@ -974,7 +974,7 @@ def changeVariantsChecklistState(genome_value):
         checklist_variants_options.append({'label': ' plus HGDP variants',
                                            'value': 'HGDP', 'disabled': False})
         checklist_variants_options.append({'label': ' plus Personal Variants',
-                                           'value': 'PV', 'disabled': False})
+                                           'value': 'PV', 'disabled': True})
     personal_vcf = get_more_VCF(genome_value)
     return [checklist_variants_options, personal_vcf]
 
@@ -1193,7 +1193,7 @@ def indexPage():
                     {'label': ' ENCODE cCREs + GENCODE gene',
                      'value': 'EN'},
                     {'label': ' Personal annotations',
-                     'value': 'MA'},
+                     'value': 'MA', 'disabled': True},
                 ],
                     id='checklist-annotations', value=['EN'])
             ),
