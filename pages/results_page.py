@@ -2695,7 +2695,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                    job_id + '/' + file_to_load, target='_blank'),
             False,
             [
-                html.P('Top 100 Personal Targets per CFD score'),
+                html.Div(html.P('Top 100 Personal Targets per CFD score')),
                 html.A(
                 html.Img(src=image_personal_top, id='sample-personal-top',
                          width="100%", height="auto"),
@@ -3050,8 +3050,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 html.Br(),
                 dbc.Row(
                     [
-                        dbc.Col(html.Div('', id='div-personal-plot'),width={"size": 6, "offset": 3}),
-                        dbc.Col(html.Div('', id='div-private-plot'),width={"size": 6, "offset": 3})
+                        dbc.Col(html.Div('', id='div-personal-plot')),
+                        dbc.Col(html.Div('', id='div-private-plot'))
                     ]
                 )
             ]
