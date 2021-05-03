@@ -60,7 +60,8 @@ def changePage(href, path, search, hash_guide):
     print(href)
     if path == '/load':
         # print("CHANGING TO LOAD PAGE")
-        return load_page.load_page(), href.strip().split('/')[0] + '/load' + search
+        # return load_page.load_page(), href.strip().split('/')[0] + '/load' + search
+        return load_page.load_page(), href
     if path == '/result':
         job_id = search.split('=')[-1]
         if hash_guide is None or hash_guide == '':
