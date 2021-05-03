@@ -2695,7 +2695,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                    job_id + '/' + file_to_load, target='_blank'),
             False,
             [
-                html.Div(html.P('Top 100 Personal Targets per CFD score'),style={'margin': '0 auto'}),
+                html.Div(html.P('Top 100 Personal Targets per CFD score'),style={'text-align:center'}),
                 html.A(
                 html.Img(src=image_personal_top, id='sample-personal-top',
                          width="100%", height="auto"),
