@@ -3050,12 +3050,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 html.Br(),
                 dbc.Row(
                     [
-                        dbc.Col(html.P('test')),
-                        dbc.Col(html.P('test'))
-                    ]
-                    ),
-                dbc.Row(
-                    [
                         dbc.Col(html.Div('', id='div-personal-plot')),
                         dbc.Col(html.Div('', id='div-private-plot'))
                     ]
