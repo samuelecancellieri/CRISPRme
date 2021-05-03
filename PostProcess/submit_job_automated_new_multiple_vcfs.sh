@@ -63,7 +63,7 @@ do
 	annotation_name=$(basename $5)
 
 
-	echo -e 'Job\tStart\t'$(date) >> $log
+	echo -e 'Job\tStart\t'$(date) > $log
 	# echo -e 'Job\tStart\t'$(date) >&2 
 
 	unset real_chroms
