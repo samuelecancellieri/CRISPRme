@@ -3035,6 +3035,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
         fl.append(html.Div(
             [
+                dbc.Row(dbc.Col(html.P('Top 100 Personal Targets per CFD score'))),
+                dbc.Row(dbc.Col(html.P('Top 100 Private Targets per CFD score'))),
                 dbc.Row(
                     [
                         dbc.Col(html.Div('', id='div-personal-plot')),
