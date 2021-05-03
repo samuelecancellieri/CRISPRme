@@ -26,10 +26,6 @@ from pages import personalization_page
 from pages import contacts_page
 from pages import genome_database
 
-if '--no_history' in sys.argv[1:]:
-    DISPLAY_HISTORY = 'none'
-else:
-    DISPLAY_HISTORY = ''
 
 navbar = navbar_creation.Navbar()
 # For multipage
@@ -60,6 +56,8 @@ def changePage(href, path, search, hash_guide):
     '''
     Controllo della pagina da mostrare in base all'url
     '''
+    
+    print(href)
     if path == '/load':
         # print("CHANGING TO LOAD PAGE")
         return load_page.load_page(), URL + '/load' + search
