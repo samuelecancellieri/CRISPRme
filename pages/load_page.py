@@ -258,8 +258,7 @@ def load_page():
                         html.P(
                             'Job submitted. Copy this link to view the status and the result page '),
                         html.Div(
-                            html.P(
-                                'link', id='job-link', style={'margin-top': '0.75rem', 'font-size': 'large'}),
+                            html.P(URL+'link', id='job-link', style={'margin-top': '0.75rem', 'font-size': 'large'}),
                             style={'border-radius': '5px', 'border': '2px solid', 'border-color': 'blue',
                                    'width': '100%', 'display': 'inline-block', 'margin': '5px'}
                         ),
