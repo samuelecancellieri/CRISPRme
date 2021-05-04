@@ -238,7 +238,7 @@ def refreshSearch(n, dir_name):
                     return {'visibility':'hidden'},  search_status, report_status, post_process_status,'', ''
                 '''
                 if all_done == 7 or 'Job\tDone' in current_log:
-                    return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, '/result?job=' + dir_name.split('=')[-1], ''
+                    return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, URL+'/result?job=' + dir_name.split('=')[-1], ''
                 else:
                     return {'visibility': 'hidden'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, '', ''
         elif 'queue.txt' in onlyfile:
@@ -258,12 +258,11 @@ def load_page():
                         html.P(
                             'Job submitted. Copy this link to view the status and the result page '),
                         html.Div(
-                            html.P(
-                                'link', id='job-link', style={'margin-top': '0.75rem', 'font-size': 'large'}),
+                            html.P('link', id='job-link', style={'margin-top': '0.75rem', 'font-size': 'large'}),
                             style={'border-radius': '5px', 'border': '2px solid', 'border-color': 'blue',
                                    'width': '100%', 'display': 'inline-block', 'margin': '5px'}
                         ),
-                        html.P('Results will be kept available for 3 days')
+                        # html.P('Results will be kept available for 3 days')
                     ],
                     style={'display': 'inline-block'}
                 ),

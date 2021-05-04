@@ -2694,16 +2694,22 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
             False,
-            html.A(
+            [
+                html.P('Top 100 Personal Targets per CFD score'),
+                html.A(
                 html.Img(src=image_personal_top, id='sample-personal-top',
                          width="100%", height="auto"),
                 target="_blank"
-            ),
-            html.A(
+            )
+            ],
+            [
+                html.P('Top 100 Private Targets per CFD score'),
+                html.A(
                 html.Img(src=image_private_top, id='sample-private-top',
                          width="100%", height="auto"),
                 target="_blank"
-            ),
+            )
+            ],
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
@@ -2738,16 +2744,22 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
             True,
-            html.A(
+            [
+                html.P('Top 100 Personal Targets per CFD score'),
+                html.A(
                 html.Img(src=image_personal_top, id='sample-personal-top',
                          width="100%", height="auto"),
                 target="_blank"
-            ),
-            html.A(
+            )
+            ],
+            [
+                html.P('Top 100 Private Targets per CFD score'),
+                html.A(
                 html.Img(src=image_private_top, id='sample-private-top',
                          width="100%", height="auto"),
                 target="_blank"
-            ),
+            )
+            ],
             dash_table.DataTable(
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
@@ -3035,6 +3047,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
         fl.append(html.Div(
             [
+                html.Br(),
                 dbc.Row(
                     [
                         dbc.Col(html.Div('', id='div-personal-plot')),
