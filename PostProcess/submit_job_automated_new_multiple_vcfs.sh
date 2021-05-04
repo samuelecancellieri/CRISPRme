@@ -32,6 +32,7 @@ echo -e "CPU used: $ncpus"
 
 log=$output_folder/log.txt
 touch $log
+echo -e 'Job\tStart\t'$(date) > $log
 
 # output=$output_folder/output.txt
 # touch $output
@@ -63,7 +64,7 @@ do
 	annotation_name=$(basename $5)
 
 
-	echo -e 'Job\tStart\t'$(date) > $log
+	# echo -e 'Job\tStart\t'$(date) > $log
 	# echo -e 'Job\tStart\t'$(date) >&2 
 
 	unset real_chroms
