@@ -226,7 +226,7 @@ def resultPage(job_id):
                             dcc.Interval(interval=1*1000, id='interval-general-table'),
                             html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
                         ]
-                    ),
+                    ), width=4
                 ),
                 dbc.Col(
                     html.Div(
@@ -235,7 +235,7 @@ def resultPage(job_id):
                             dcc.Interval(interval=1*1000, id='interval-integrated-results'),
                             html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
                         ]
-                    )
+                    ), width=4
                 )
                 ],justify="start"
             )
