@@ -135,10 +135,10 @@ def refreshSearch(n, dir_name):
                         post_process_status = html.P(
                             'Post-analysis...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
 
-                if 'Merging Close Targets\tEnd' in current_log:
+                if 'Merging Targets\tEnd' in current_log:
                     merge_status = html.P('Done', style={'color': 'green'})
                     all_done = all_done + 1
-                elif 'Merging Close Targets\tStart' in current_log:
+                elif 'Merging Targets\tStart' in current_log:
                     merge_status = html.P(
                         'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
                 

@@ -32,7 +32,8 @@ echo -e "CPU used: $ncpus"
 
 log=$output_folder/log.txt
 touch $log
-echo -e 'Job\tStart\t'$(date) > $log
+#echo -e 'Job\tStart\t'$(date) > $log
+start_time='Job\tStart\t'$(date)
 
 # output=$output_folder/output.txt
 # touch $output
@@ -63,7 +64,7 @@ do
 	pam_name=$(basename $4)
 	annotation_name=$(basename $5)
 
-
+	echo -e $start_time > $log
 	# echo -e 'Job\tStart\t'$(date) > $log
 	# echo -e 'Job\tStart\t'$(date) >&2 
 
@@ -350,7 +351,7 @@ do
 		
 		./pool_post_analisi_snp.py $output_folder $ref_folder $vcf_name $guide_file $mm $bDNA $bRNA $annotation_file $pam_file $dict_folder $final_res $final_res_alt $ncpus
 		
-		echo -e 'Post-analysis SNPs\tEnd\t'$(date) >> $log	
+			
 		# echo -e 'Post-analysis SNPs\tEnd\t'$(date) >&2	
 		for key in "${real_chroms[@]}"
 		do
@@ -360,6 +361,9 @@ do
 			rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt"
 			# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"
 		done
+
+		echo -e 'Post-analysis SNPs\tEnd\t'$(date) >> $log
+
 	else
 		echo -e 'Post-analysis\tStart\t'$(date) >> $log	
 		# echo -e 'Post-analysis\tStart\t'$(date) >&2	
@@ -393,7 +397,7 @@ do
 		echo -e 'Post-analysis INDELs\tStart\t'$(date) >> $log	
 		# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2	
 		./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
-		echo -e 'Post-analysis INDELs\tEnd\t'$(date) >> $log	
+			
 		# echo -e 'Post-analysis INDELs\tEnd\t'$(date) >&2	
 		for key in "${array_fake_chroms[@]}"
 		do	
@@ -403,6 +407,8 @@ do
 			rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
 			rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
 		done
+
+		echo -e 'Post-analysis INDELs\tEnd\t'$(date) >> $log
 
 	fi
 done < $vcf_list
@@ -423,21 +429,22 @@ sampleID=$output_folder/sampleID.txt
 
 
 # echo -e 'Merging targets' >  $output
-echo -e 'Merging Close Targets\tStart\t'$(date) >> $log	
-# echo -e 'Merging Close Targets\tStart\t'$(date) >&2	
+echo -e 'Merging Targets\tStart\t'$(date) >> $log
+#echo -e 'Merging Close Targets\tStart\t'$(date) >> $log	
 ./merge_close_targets_cfd.sh $final_res $final_res.trimmed $merge_t
 mv $final_res.trimmed $final_res
 mv $final_res.trimmed.discarded_samples $final_res_alt
 
-echo -e 'Merging Close Targets\tEnd\t'$(date) >> $log	
+# echo -e 'Merging Close Targets\tEnd\t'$(date) >> $log	
 # echo -e 'Merging Close Targets\tEnd\t'$(date) >&2	
 
-echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >> $log	
+# echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >> $log	
 # echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >&2	
 ./merge_alt_chr.sh $final_res $final_res.chr_merged
 
-echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >> $log	
+# echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >> $log	
 # echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >&2	
+echo -e 'Merging Targets\tEnd\t'$(date) >> $log
 
 mv $final_res.chr_merged $final_res
 
