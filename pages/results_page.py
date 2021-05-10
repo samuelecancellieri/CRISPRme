@@ -218,26 +218,24 @@ def resultPage(job_id):
     final_list.append(
         html.Div(
             dbc.Row(
-                [
                 dbc.Col(
+                    [
                     html.Div(
                         [
                             html.P('Generating download link, Please wait...', id='download-link-general-table'),
                             dcc.Interval(interval=1*1000, id='interval-general-table'),
                             html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
                         ]
-                    ), width=3
-                ),
-                dbc.Col(
+                    ),
                     html.Div(
                         [
                             html.P('Generating download link, Please wait...', id='download-link-integrated-results'),
                             dcc.Interval(interval=1*1000, id='interval-integrated-results'),
                             html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
                         ]
-                    ), width=3
+                    )
+                    ]
                 )
-                ],justify="start"
             )
         )
     )
@@ -428,7 +426,7 @@ def downloadGeneralTable(n, file_to_load, search):  # file to load =
     file_to_load = file_to_load.split('/')[-1]
     # print(file_to_load)
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
-        return html.A('Download Integrated Results Table', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
+        return html.A('Download Integrated Results', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
     return 'Generating download link, Please wait...', False
 
