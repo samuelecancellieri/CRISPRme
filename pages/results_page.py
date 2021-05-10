@@ -218,6 +218,7 @@ def resultPage(job_id):
     final_list.append(
         html.Div(
             dbc.Row(
+                [
                 dbc.Col(
                     html.Div(
                         [
@@ -236,6 +237,7 @@ def resultPage(job_id):
                         ]
                     )
                 )
+                ]
             )
         )
     )
