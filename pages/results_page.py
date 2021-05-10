@@ -219,7 +219,6 @@ def resultPage(job_id):
         html.Div(
             dbc.Row(
                 dbc.Col(
-                    [
                     html.Div(
                         [
                             html.P('Generating download link, Please wait...', id='download-link-general-table'),
@@ -227,14 +226,15 @@ def resultPage(job_id):
                             html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
                         ]
                     ),
+                ),
+                dbc.Col(
                     html.Div(
                         [
                             html.P('Generating download link, Please wait...', id='download-link-integrated-results'),
                             dcc.Interval(interval=1*1000, id='interval-integrated-results'),
                             html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
                         ]
-                    ),
-                    ]
+                    )
                 )
             )
         )
