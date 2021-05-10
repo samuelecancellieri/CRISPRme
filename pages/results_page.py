@@ -237,7 +237,7 @@ def resultPage(job_id):
                         ]
                     )
                 )
-                ]
+                ],justify="start"
             )
         )
     )
