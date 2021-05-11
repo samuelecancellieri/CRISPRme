@@ -219,13 +219,22 @@ def resultPage(job_id):
         html.Div(
             dbc.Row(
                 dbc.Col(
+                    [
                     html.Div(
                         [
                             html.P('Generating download link, Please wait...', id='download-link-general-table'),
                             dcc.Interval(interval=1*1000, id='interval-general-table'),
                             html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
                         ]
+                    ),
+                    html.Div(
+                        [
+                            html.P('Generating download link, Please wait...', id='download-link-integrated-results'),
+                            dcc.Interval(interval=1*1000, id='interval-integrated-results'),
+                            html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
+                        ]
                     )
+                    ]
                 )
             )
         )
@@ -402,6 +411,24 @@ def downloadGeneralTable(n, file_to_load, search):  # file to load =
 
     return 'Generating download link, Please wait...', False
 
+#downalod integrated results
+@app.callback(
+    [Output('download-link-integrated-results', 'children'),
+     Output('interval-integrated-results', 'disabled')],
+    [Input('interval-integrated-results', 'n_intervals')],
+    [State('div-info-integrated-results', 'children'),
+     State('url', 'search')]
+)
+def downloadGeneralTable(n, file_to_load, search):  # file to load =
+    if n is None:
+        raise PreventUpdate
+    job_id = search.split('=')[-1]
+    file_to_load = file_to_load.split('/')[-1]
+    # print(file_to_load)
+    if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
+        return html.A('Download Integrated Results', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
+
+    return 'Generating download link, Please wait...', False
 
 # Generate download link sumbysample
 @app.callback(
@@ -1828,6 +1855,11 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     for elem in table_to_file:
         outfile.write(elem+'\n')
     outfile.close()
+    
+    #zip integrated results
+    integrated_file = current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
+    integrated_to_zip = current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip'
+    os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
 
     if 'NO SCORES' not in all_scores:
         try:

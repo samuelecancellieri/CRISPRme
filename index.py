@@ -49,8 +49,10 @@ def directoryCheck():
 @app.callback(
     [Output('page-content', 'children'),
      Output('job-link', 'children')],
-    [Input('url', 'href'), Input('url', 'pathname'),
-     Input('url', 'search')], [State('url', 'hash')]
+    [Input('url', 'href'), 
+     Input('url', 'pathname'),
+     Input('url', 'search')], 
+    [State('url', 'hash')]
 )
 def changePage(href, path, search, hash_guide):
     '''
@@ -61,7 +63,7 @@ def changePage(href, path, search, hash_guide):
     if path == '/load':
         # print("CHANGING TO LOAD PAGE")
         # return load_page.load_page(), href.strip().split('/')[0] + '/load' + search
-        return load_page.load_page(), href
+        return load_page.load_page(), ''.join(href.split('/')[:-1]) + '/load' + search
     if path == '/result':
         job_id = search.split('=')[-1]
         if hash_guide is None or hash_guide == '':
