@@ -17,6 +17,7 @@ def sendMail():
     with open(sys.argv[1] + '/email.txt', 'r') as e:
         # message building
         all_content = e.read().strip().split('--OTHEREMAIL--')
+        print(all_content)
         for em in all_content:
 
             msg = EmailMessage()
@@ -62,3 +63,5 @@ def sendMail():
             # server.send_message(msg)
             # #close connection
             # server.quit()
+
+sendMail()
