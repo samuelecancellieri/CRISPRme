@@ -310,7 +310,7 @@ def complete_search():
     total_pam_len = 0
     with open(pamfile, 'r') as pam_file:
         pam_char = pam_file.readline()
-        total_pam_len = len(pam_char.split[' '][0])
+        total_pam_len = len(pam_char.split(' ')[0])
         index_pam_value = pam_char.split(' ')[-1]
         if int(pam_char.split(' ')[-1]) < 0:
             end_idx = int(pam_char.split(' ')[-1]) * (-1)
@@ -400,6 +400,8 @@ def complete_search():
             # print('extracted seq', extracted_seq)
             # guides.extend(convert_pam.getGuides(
             #     extracted_seq, pam_char, len_guide_sequence, pam_begin))
+    print(guides)
+    exit(0)
     os.system(f'cp {guidefile} {outputfolder}/guides.txt')
     print(f"Launching job {outputfolder}. The stdout is redirected in log_verbose.txt and stderr is redirected in log_error.txt")
     if variant:
