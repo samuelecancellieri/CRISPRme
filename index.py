@@ -17,7 +17,7 @@ from pages import GUImessage
 from pages import creazione_dizionari
 from pages import ChooseFiles
 from pages import annotations
-from pages import send_mail
+# from pages import send_mail
 from pages import results_page
 from pages import load_page
 from pages import history_page
