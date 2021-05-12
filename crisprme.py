@@ -84,7 +84,7 @@ def complete_search():
     directoryCheck()
     
     if '--guide' not in input_args and '--sequence' not in input_args:
-        print('Please input a guide file or a sequence')
+        print('Please input a guide file or a sequence file')
         exit(1)
     if '--guide' in input_args and '--sequence' in input_args:
         print('Please selecet only ONE input type, either --guide or --sequence')
