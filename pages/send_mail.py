@@ -53,11 +53,12 @@ def sendMail():
             # server = smtplib.SMTP('smtp-mail.outlook.com', 587)
 
             server = smtplib.SMTP(host="smtp.gmail.com",port=587)
+            server.starttls(context=context)
             # for example:
             #server = smtplib.SMTP_SSL("smtp.libero.it", port=465)
             # #start connection
-            server.ehlo_or_helo_if_needed()
-            # server.starttls(context=context)
+            # server.ehlo_or_helo_if_needed()
+            
             # server.ehlo()
             # #login and send message
             server.login("crisprme.job@gmail.com", "crisprme.server")
