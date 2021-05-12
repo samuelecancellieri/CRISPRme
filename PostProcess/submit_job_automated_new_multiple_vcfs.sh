@@ -27,6 +27,7 @@ current_working_directory=$(realpath ${15})
 gene_proximity=$(realpath ${16})
 
 email=${17}
+echo -e "MAIL: $email" 
 echo -e "CPU used: $ncpus" 
 
 

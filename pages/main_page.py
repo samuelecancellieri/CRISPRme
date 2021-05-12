@@ -532,8 +532,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                                     e.write(datetime.utcnow().strftime(
                                         "%m/%d/%Y, %H:%M:%S") + '\n')
                                 # Send mail with file in job_id dir with link to job already done, note that job_id directory will be deleted
-                                subprocess.call(['python ' + app_main_directory + 'send_mail.py ' +
-                                                 current_working_directory + 'Results/' + job_id], shell=True)
+                                # subprocess.call(['python ' + app_main_directory + 'send_mail.py ' +
+                                #                  current_working_directory + 'Results/' + job_id], shell=True)
 
                         elif send_email:
                             # Job is not finished, add this user email to email.txt and when job is done send to both
