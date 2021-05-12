@@ -35,7 +35,7 @@ def sendMail():
             
             print('send mail')
             
-            print(msg)
+            # print(msg)
 
             # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
         
@@ -45,7 +45,7 @@ def sendMail():
             server.ehlo_or_helo_if_needed()
             server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
             
-            server.set_debuglevel(1)
+            # server.set_debuglevel(1)
             server.quit()
 
 
