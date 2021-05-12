@@ -34,7 +34,7 @@ def sendMail():
             # TODO add Parameters section with date and other parameters
             msg.set_content(content_email)
             
-            print('send mail')
+            print('EMAIL SENT')
             
             #univr settings
             # server = smtplib.SMTP(host="smtp.univr.it", port=25)
@@ -42,13 +42,10 @@ def sendMail():
             # server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
             # server.quit()
             
-            
+            #gmail settings
             port = 465  # For SSL
-            # password = input("Type your password and press enter: ")
-
             # Create a secure SSL context
             context = ssl.create_default_context()
-
             with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
                 server.login("crisprme.job@gmail.com", 'crisprme.server')
                 server.send_message(msg)
