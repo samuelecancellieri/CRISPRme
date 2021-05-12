@@ -420,25 +420,6 @@ def complete_search():
                 extracted_seq = seq.strip()
                 guides.extend(convert_pam.getGuides(
                     extracted_seq, pam_char, len_guide_sequence, pam_begin))
-            text_guides = text_guides.upper()
-        for g in text_guides.split('\n'):
-            for c in g:
-                if c not in VALID_CHARS:
-                    text_guides = text_guides.replace(c, '')
-        if len(text_guides.split('\n')) > 1000:
-            text_guides = '\n'.join(text_guides.split('\n')[:1000]).strip()
-        len_guides = len(text_guides.split('\n')[0])
-        guides_file = result_dir + '/guides.txt'
-        if text_guides is not None and text_guides != '':
-            save_guides_file = open(result_dir + '/guides.txt', 'w')
-            if (pam_begin):
-                text_guides = 'N' * pam_len + \
-                    text_guides.replace('\n', '\n' + 'N' * pam_len)
-            else:
-                text_guides = text_guides.replace(
-                    '\n', 'N' * pam_len + '\n') + 'N' * pam_len
-            save_guides_file.write(text_guides)
-            save_guides_file.close()
     print(guides)
     exit(0)
     os.system(f'cp {guidefile} {outputfolder}/guides.txt')
