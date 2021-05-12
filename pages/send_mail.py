@@ -21,7 +21,7 @@ def sendMail():
 
             msg = EmailMessage()
             em = em.strip().split('\n')
-            msg['to'] = em[0]
+            msg['To'] = em[0]
             job_link = em[1]
             date_submission = em[2]
             msg['Subject'] = 'CRISPRme - Job completed'
