@@ -35,8 +35,8 @@ def sendMail():
 
             context = ssl.SSLContext(ssl.PROTOCOL_TLS)
 
-            server = smtplib.SMTP("smtp.univr.it")
-            server.send_message(msg, from_addr='admin@crispritz.di.univr.it')
+            server = smtplib.SMTP(host="smtp.univr.it",port=25)
+            server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
 
             # server = smtplib.SMTP('smtp.univr.it',25)
             # server = smtplib.SMTP('smtp-mail.outlook.com', 587)
