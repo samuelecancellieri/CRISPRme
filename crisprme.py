@@ -420,6 +420,16 @@ def complete_search():
                 extracted_seq = seq.strip()
                 guides.extend(convert_pam.getGuides(
                     extracted_seq, pam_char, len_guide_sequence, pam_begin))
+    temp_guides = list()
+    for guide in guides:
+        addN = 'N'*pam_len
+        if pam_begin:
+            temp_guides.append(addN+guide)
+        else:
+            temp_guides.append(guide+addN)
+    if len(temp_guides)>1000:
+        temp_guides = temp_guides[:1000]
+    guides = temp_guides   
     print(guides)
     exit(0)
     os.system(f'cp {guidefile} {outputfolder}/guides.txt')
