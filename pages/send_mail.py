@@ -42,12 +42,16 @@ def sendMail():
             # server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
             # server.quit()
             
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.ehlo()
-            server.starttls()
-            server.login("crisprme.job@gmail.com", "crisprme.server")
-            server.send_message(msg)
-            server.quit()
+            
+            port = 465  # For SSL
+            # password = input("Type your password and press enter: ")
+
+            # Create a secure SSL context
+            context = ssl.create_default_context()
+
+            with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+                server.login("crisprme.job@gmail.com", 'crisprme.server')
+                server.send_message(msg)
             
 #function call            
 sendMail()
