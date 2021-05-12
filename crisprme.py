@@ -367,8 +367,9 @@ def complete_search():
     if sequence_use:
         guides = list()
         text_sequence = str()
-        for line in sequence_file:
+        for line in open(sequence_file,'r'):
             text_sequence+=line
+            # print
         for name_and_seq in text_sequence.split('>'):
             if '' == name_and_seq:
                 continue
