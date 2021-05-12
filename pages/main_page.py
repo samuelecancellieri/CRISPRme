@@ -564,7 +564,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                                     with open(current_working_directory + 'Results/' + check_param_dir + '/email.txt', 'a+') as e:
                                         e.write('--OTHEREMAIL--')
                                         e.write(dest_email + '\n')
-                                        e.write(URL + '/load?job=' +
+                                        e.write('crisprme.di.univr.it' + '/load?job=' +
                                                 check_param_dir + '\n')
                                         e.write(datetime.utcnow().strftime(
                                             "%m/%d/%Y, %H:%M:%S") + '\n')
