@@ -420,19 +420,24 @@ def complete_search():
                 extracted_seq = seq.strip()
                 guides.extend(convert_pam.getGuides(
                     extracted_seq, pam_char, len_guide_sequence, pam_begin))
-    temp_guides = list()
-    for guide in guides:
-        addN = 'N'*pam_len
-        if pam_begin:
-            temp_guides.append(addN+guide)
-        else:
-            temp_guides.append(guide+addN)
-    if len(temp_guides)>1000:
-        temp_guides = temp_guides[:1000]
-    guides = temp_guides   
-    print(guides)
-    exit(0)
-    os.system(f'cp {guidefile} {outputfolder}/guides.txt')
+        temp_guides = list()
+        for guide in guides:
+            addN = 'N'*pam_len
+            if pam_begin:
+                temp_guides.append(addN+guide)
+            else:
+                temp_guides.append(guide+addN)
+        if len(temp_guides)>1000:
+            temp_guides = temp_guides[:1000]
+        guides = temp_guides
+        extracted_guides_file = open(outputfolder+'/guides.txt','w')
+        for guide in guides:
+            extracted_guides_file.write(guide+'\n')
+        extracted_guides_file.close()
+    # print(guides)
+    # exit(0)
+    if sequence_use == False:
+        os.system(f'cp {guidefile} {outputfolder}/guides.txt')
     print(f"Launching job {outputfolder}. The stdout is redirected in log_verbose.txt and stderr is redirected in log_error.txt")
     if variant:
         with open(f"{outputfolder}/log_verbose.txt", 'w') as log_verbose:
