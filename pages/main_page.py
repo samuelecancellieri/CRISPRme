@@ -314,7 +314,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         send_email = True
         with open(result_dir + '/email.txt', 'w') as e:
             e.write(dest_email + '\n')
-            e.write(URL + '/load?job=' + job_id + '\n')
+            # e.write(URL + '/load?job=' + job_id + '\n')
+            e.write(''.join(href.split('/')[:-1]) + '/load?job=' + job_id + '\n')
             e.write(datetime.utcnow().strftime("%m/%d/%Y, %H:%M:%S") + '\n')
             # e.write('Job done. Parameters: etc etc')
             e.close()
@@ -527,8 +528,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                             if send_email:
                                 with open(current_working_directory + 'Results/' + job_id + '/email.txt', 'w+') as e:
                                     e.write(dest_email + '\n')
-                                    e.write(URL + '/load?job=' +
-                                            check_param_dir + '\n')
+                                    e.write(''.join(href.split('/')[:-1]) + '/load?job=' + job_id + '\n')
                                     e.write(datetime.utcnow().strftime(
                                         "%m/%d/%Y, %H:%M:%S") + '\n')
                                 # Send mail with file in job_id dir with link to job already done, note that job_id directory will be deleted
@@ -541,15 +541,13 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                                 with open(current_working_directory + 'Results/' + check_param_dir + '/email.txt', 'a+') as e:
                                     e.write('--OTHEREMAIL--')
                                     e.write(dest_email + '\n')
-                                    e.write(URL + '/load?job=' +
-                                            check_param_dir + '\n')
+                                    e.write(''.join(href.split('/')[:-1]) + '/load?job=' + job_id + '\n')
                                     e.write(datetime.utcnow().strftime(
                                         "%m/%d/%Y, %H:%M:%S") + '\n')
                             else:
                                 with open(current_working_directory + 'Results/' + check_param_dir + '/email.txt', 'w+') as e:
                                     e.write(dest_email + '\n')
-                                    e.write(URL + '/load?job=' +
-                                            check_param_dir + '\n')
+                                    e.write(''.join(href.split('/')[:-1]) + '/load?job=' + job_id + '\n')
                                     e.write(datetime.utcnow().strftime(
                                         "%m/%d/%Y, %H:%M:%S") + '\n')
 
@@ -564,15 +562,13 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                                     with open(current_working_directory + 'Results/' + check_param_dir + '/email.txt', 'a+') as e:
                                         e.write('--OTHEREMAIL--')
                                         e.write(dest_email + '\n')
-                                        e.write('crisprme.di.univr.it' + '/load?job=' +
-                                                check_param_dir + '\n')
+                                        e.write(''.join(href.split('/')[:-1]) + '/load?job=' + job_id + '\n')
                                         e.write(datetime.utcnow().strftime(
                                             "%m/%d/%Y, %H:%M:%S") + '\n')
                                 else:
                                     with open(current_working_directory + 'Results/' + check_param_dir + '/email.txt', 'w+') as e:
                                         e.write(dest_email + '\n')
-                                        e.write(URL + '/load?job=' +
-                                                check_param_dir + '\n')
+                                        e.write(''.join(href.split('/')[:-1]) + '/load?job=' + job_id + '\n')
                                         e.write(datetime.utcnow().strftime(
                                             "%m/%d/%Y, %H:%M:%S") + '\n')
                             return '/load', '?job=' + check_param_dir

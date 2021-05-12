@@ -33,7 +33,7 @@ def sendMail():
             # TODO add Parameters section with date and other parameters
             msg.set_content(content_email)
             
-            print(msg)
+            # print(msg)
 
             # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
         
@@ -64,5 +64,3 @@ def sendMail():
             # server.send_message(msg)
             # #close connection
             # server.quit()
-
-sendMail()
