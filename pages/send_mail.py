@@ -24,16 +24,16 @@ def sendMail():
             msg['to'] = em[0]
             job_link = em[1]
             date_submission = em[2]
-            msg['Subject'] = 'CRISPRitz - Job completed'
+            msg['Subject'] = 'CRISPRme - Job completed'
 
-            msg['From'] = 'admin@crispritz.di.univr.it'
+            msg['From'] = 'crisprme-job@crisprme.di.univr.it'
             content_email = 'The requested job is completed, visit the following link ' + \
                 job_link + ' to view the report.'
 
             # TODO add Parameters section with date and other parameters
             msg.set_content(content_email)
 
-            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
 
             server = smtplib.SMTP(host="smtp.univr.it",port=25)
             server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
