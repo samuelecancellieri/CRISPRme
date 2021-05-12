@@ -64,3 +64,4 @@ def sendMail():
             # server.send_message(msg)
             # #close connection
             # server.quit()
+sendMail()
