@@ -56,8 +56,8 @@ def sendMail():
             # for example:
             #server = smtplib.SMTP_SSL("smtp.libero.it", port=465)
             # #start connection
-            server.ehlo()
-            server.starttls(context=context)
+            server.ehlo_or_helo_if_needed()
+            # server.starttls(context=context)
             # server.ehlo()
             # #login and send message
             server.login("crisprme.job@gmail.com", "crisprme.server")
