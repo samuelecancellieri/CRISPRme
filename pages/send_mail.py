@@ -34,6 +34,8 @@ def sendMail():
             msg.set_content(content_email)
 
             # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            
+            print(msg)
 
             server = smtplib.SMTP(host="smtp.univr.it", port=25)
             server.set_debuglevel(1)
