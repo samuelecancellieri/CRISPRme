@@ -26,7 +26,8 @@ def sendMail():
             date_submission = em[2]
             msg['Subject'] = 'CRISPRme - Job completed'
 
-            msg['From'] = 'crisprme-job@crisprme.di.univr.it'
+            # msg['From'] = 'crisprme-job@crisprme.di.univr.it'
+            msg['From'] = 'crisprme.job@gmail.com'
             content_email = 'The requested job is completed, visit the following link ' + \
                 job_link + ' to view the report.'
 
@@ -35,36 +36,18 @@ def sendMail():
             
             print('send mail')
             
-            # print(msg)
-
-            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-        
-
+            #univr settings
             # server = smtplib.SMTP(host="smtp.univr.it", port=25)
-            
             # server.ehlo_or_helo_if_needed()
             # server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
-            
-            # # server.set_debuglevel(1)
             # server.quit()
-
-
-            # server = smtplib.SMTP('smtp.univr.it',25)
-            # server = smtplib.SMTP('smtp-mail.outlook.com', 587)
-
-            server = smtplib.SMTP(host="smtp.gmail.com",port=587)
-            server.starttls(context=context)
-            # for example:
-            #server = smtplib.SMTP_SSL("smtp.libero.it", port=465)
-            # #start connection
-            # server.ehlo_or_helo_if_needed()
             
-            # server.ehlo()
-            # #login and send message
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.ehlo()
+            server.starttls()
             server.login("crisprme.job@gmail.com", "crisprme.server")
-            # server.login('admin@crispritz.di.univr.it')
-
             server.send_message(msg)
-            # #close connection
             server.quit()
+            
+#function call            
 sendMail()
