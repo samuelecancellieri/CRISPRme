@@ -22,6 +22,9 @@ current_working_directory = os.getcwd() + '/'
 
 input_args = sys.argv
 
+if '--debug' in input_args:
+    script_path = current_working_directory+'PostProcess/'
+
 
 def directoryCheck():
     # function to check the main directory status, if some directory is missing, create it
