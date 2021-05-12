@@ -34,6 +34,8 @@ def sendMail():
             msg.set_content(content_email)
             
             print('send mail')
+            
+            print(msg)
 
             # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
         
