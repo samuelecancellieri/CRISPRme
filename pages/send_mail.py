@@ -21,22 +21,27 @@ def sendMail():
 
             msg = EmailMessage()
             em = em.strip().split('\n')
-            msg['to'] = em[0]
+            msg['To'] = em[0]
             job_link = em[1]
             date_submission = em[2]
             msg['Subject'] = 'CRISPRme - Job completed'
 
             msg['From'] = 'crisprme-job@crisprme.di.univr.it'
             content_email = 'The requested job is completed, visit the following link ' + \
-                job_link + ' to view the report.'
+                job_link + ' to view the report.'+ 'sumbitted in date' + date_submission
 
             # TODO add Parameters section with date and other parameters
             msg.set_content(content_email)
 
-            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
 
-            server = smtplib.SMTP(host="smtp.univr.it",port=25,source_address='crisprme-job@crisprme.di.univr.it')
-            server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
+            server = smtplib.SMTP(host="smtp.univr.it", port=25)
+            server.set_debuglevel(1)
+            server.send_message(msg)
+            # server.sendmail('crisprme-job@crisprme.di.univr.it', em[0], msg)
+            server.quit()
+
+            
 
             # server = smtplib.SMTP('smtp.univr.it',25)
             # server = smtplib.SMTP('smtp-mail.outlook.com', 587)
