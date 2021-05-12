@@ -33,7 +33,7 @@ def sendMail():
             # TODO add Parameters section with date and other parameters
             msg.set_content(content_email)
 
-            # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
 
             server = smtplib.SMTP(host="smtp.univr.it",port=25,source_address='crisprme-job@crisprme.di.univr.it')
             server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
