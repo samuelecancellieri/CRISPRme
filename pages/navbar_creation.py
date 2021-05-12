@@ -6,7 +6,7 @@ from app import URL
 PLOTLY_LOGO = 'assets/favicon.png'
 
 # DISPLAY_OFFLINE = ''
-DISPLAY_HISTORY='none'
+DISPLAY_HISTORY=''
 search_bar = dbc.Row(
     [
         #dbc.Col(dbc.Input(type="search", placeholder="Search")),
