@@ -37,33 +37,33 @@ def sendMail():
             
             # print(msg)
 
-            # context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
         
 
-            server = smtplib.SMTP(host="smtp.univr.it", port=25)
+            # server = smtplib.SMTP(host="smtp.univr.it", port=25)
             
-            server.ehlo_or_helo_if_needed()
-            server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
+            # server.ehlo_or_helo_if_needed()
+            # server.send_message(msg, from_addr='crisprme-job@crisprme.di.univr.it')
             
-            # server.set_debuglevel(1)
-            server.quit()
+            # # server.set_debuglevel(1)
+            # server.quit()
 
 
             # server = smtplib.SMTP('smtp.univr.it',25)
             # server = smtplib.SMTP('smtp-mail.outlook.com', 587)
 
-            #server = smtplib.SMTP_SSL("smtp.live.com",587)
+            server = smtplib.SMTP_SSL("smtp.gmail.com",587)
             # for example:
             #server = smtplib.SMTP_SSL("smtp.libero.it", port=465)
             # #start connection
-            # server.ehlo()
-            # server.starttls(context=context)
+            server.ehlo()
+            server.starttls(context=context)
             # server.ehlo()
             # #login and send message
-            # # server.login("test.cri@hotmail.com", "univrCrispritz")
+            server.login("crisprme.job@gmail.com", "crisprme.server")
             # server.login('admin@crispritz.di.univr.it')
 
-            # server.send_message(msg)
+            server.send_message(msg)
             # #close connection
-            # server.quit()
+            server.quit()
 sendMail()
