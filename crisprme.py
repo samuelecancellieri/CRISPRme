@@ -3,7 +3,11 @@
 import sys
 import os
 import subprocess
-from seq_script import extract_seq, convert_pam
+import itertools
+from Bio.Seq import Seq
+import re
+from os.path import isfile, isdir,join      #for getting lst of chr to know file extension and if enriched
+from os import listdir
 
 script_path = os.path.dirname(os.path.abspath(__file__))
 origin_path = os.path.dirname(os.path.abspath(__file__))
@@ -48,6 +52,107 @@ VALID_CHARS = {'a', 'A', 't', 'T', 'c', 'C', 'g', 'G',
                "v"
                }
 
+
+
+#Input chr1:11,130,540-11,130,751
+def extractSequence(name, input_range, genome_selected):
+    name = '_'.join(name.split())
+    current_working_directory = os.getcwd() + '/'
+    chrom = input_range.split(':')[0]
+    start_position = input_range.split(':')[1].split('-')[0].replace(',','').replace('.','').replace(' ','')
+    end_position = input_range.split(':')[1].split('-')[1].replace(',','').replace('.','').replace(' ','')
+
+    list_chr = [f for f in listdir(current_working_directory + 'Genomes/' + genome_selected) if isfile(join(current_working_directory + 'Genomes/' + genome_selected, f)) and not f.endswith('.fai')]
+    add_ext = '.fa'
+    if '.fasta' in list_chr[0]:
+        add_ext = '.fasta'
+    with open(current_working_directory + name + '.bed','w') as b:
+        b.write(chrom + '\t' + start_position + '\t' + end_position)
+
+    output_extract = subprocess.check_output(['bedtools getfasta -fi ' + current_working_directory + 'Genomes/' + genome_selected + '/' + chrom + add_ext + ' -bed ' + current_working_directory + name + '.bed'], shell=True).decode("utf-8") 
+    try:
+        os.remove(current_working_directory + 'Genomes/' + genome_selected + '/' + chrom + '.fa.fai')
+    except:
+        pass
+    try:
+        os.remove(current_working_directory + name + '.bed')
+    except:
+        pass
+    ret_string = output_extract.split('\n')[1].strip() 
+    return ret_string
+
+def getGuides(extracted_seq, pam, len_guide, pam_begin):
+    len_pam = len(pam)
+    #dict
+    len_guide = int(len_guide)
+    pam_dict = {
+        'A':  "ARWMDHV",
+        'C':  "CYSMBHV",
+        'G':  "GRSKBDV",
+        'T':  "TYWKBDH",
+        'R':  "ARWMDHVSKBG",
+        'Y':  "CYSMBHVWKDT",
+        'S':  "CYSMBHVKDRG",
+        'W':  "ARWMDHVYKBT",
+        'K':  "GRSKBDVYWHT",
+        'M':  "ARWMDHVYSBC",
+        'B':  "CYSMBHVRKDGWT",
+        'D':  "ARWMDHVSKBGYT",
+        'H':  "ARWMDHVYSBCKT",
+        'V':  "ARWMDHVYSBCKG",
+        'N':  "ACGTRYSWKMBDHV",
+    }
+    list_prod = []
+    for char in pam:
+        list_prod.append(pam_dict[char])
+
+    iupac_pam = []          #NNNNNNN NGG
+    for element in itertools.product(*list_prod):
+        iupac_pam.append(''.join(element))
+
+    rev_pam = str(Seq(pam).reverse_complement())
+    list_prod = []
+    for char in rev_pam:
+        list_prod.append(pam_dict[char])
+
+    iupac_pam_reverse = []        #CCN NNNNNNN  -> results found with this pam must be reverse complemented
+    for element in itertools.product(*list_prod):
+        iupac_pam_reverse.append(''.join(element))
+
+    
+    extracted_seq = extracted_seq.upper()
+    len_sequence = len(extracted_seq)    
+    guides = []
+    for pam in iupac_pam:
+        pos = ([m.start() for m in re.finditer('(?=' + pam + ')', extracted_seq)])
+        if pos:
+            for i in pos:
+                if pam_begin:
+                    if i > (len_sequence - len_guide - len_pam):
+                        continue
+                    guides.append(extracted_seq[i + len_pam : i +len_pam + len_guide])
+                else:
+                    if i < len_guide:
+                        continue
+                    #guides.append(extracted_seq[i-len_guide:i+len_pam])           # i is position where first char of pam is found, eg the N char in NNNNNN NGG
+                    #print('1 for:' , extracted_seq[i-len_guide:i])
+                    guides.append(extracted_seq[i-len_guide:i])
+    for pam in iupac_pam_reverse:       #Negative strand
+        pos = ([m.start() for m in re.finditer('(?=' + pam + ')', extracted_seq)])
+        if pos:
+            for i in pos:
+                if pam_begin:
+                    if i < len_guide:
+                        continue
+                    guides.append(str(Seq(extracted_seq[i-len_guide:i]).reverse_complement()))
+                else:
+                    if i > (len_sequence - len_guide - len_pam):
+                        continue
+                    #guides.append(str(Seq(extracted_seq[i:i+len_pam+len_guide]).reverse_complement()))         # i is position where first char of pam is found, eg the first C char in CCN NNNNNN
+                    #print('2 for:', str(Seq(extracted_seq[i + len_pam : i + len_guide + len_pam]).reverse_complement()))
+                    guides.append(str(Seq(extracted_seq[i + len_pam : i + len_guide + len_pam]).reverse_complement()))
+    return guides
+    #return guides for when adding to app.py
 
 def directoryCheck():
     # function to check the main directory status, if some directory is missing, create it
@@ -410,15 +515,15 @@ def complete_search():
                     pieces_of_row = single_row.strip().split()
                     seq_to_extract = pieces_of_row[0]+":" + \
                         pieces_of_row[1]+"-"+pieces_of_row[2]
-                    extracted_seq = extract_seq.extractSequence(
+                    extracted_seq = extractSequence(
                         name, seq_to_extract, genome_ref.replace(' ', '_'))
-                    guides.extend(convert_pam.getGuides(
+                    guides.extend(getGuides(
                         extracted_seq, pam_char, len_guide_sequence, pam_begin))
             else:
                 seq = seq.split()
                 seq = ''.join(seq)
                 extracted_seq = seq.strip()
-                guides.extend(convert_pam.getGuides(
+                guides.extend(getGuides(
                     extracted_seq, pam_char, len_guide_sequence, pam_begin))
         temp_guides = list()
         for guide in guides:
