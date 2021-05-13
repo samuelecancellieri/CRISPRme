@@ -424,7 +424,9 @@ do
 	# tail -n +2 $samples >> "$output_folder/sampleID.txt"
 	grep -v '#' "${current_working_directory}/samplesIDs/$samples" >> "$output_folder/sampleID.txt"
 done < $sampleID
-sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tGENDER" "$output_folder/sampleID.txt"
+if [ -f "$output_folder/sampleID.txt" ]; then
+	sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tGENDER" "$output_folder/sampleID.txt"
+fi
 
 sampleID=$output_folder/sampleID.txt
 
@@ -469,7 +471,9 @@ if ! [ -d "$output_folder/cfd_graphs" ]; then
 fi
 ./assemble_cfd_graphs.py $output_folder
 mv $output_folder/snps.CFDGraph.txt $output_folder/cfd_graphs
-mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
+if [ -f "$output_folder/indels.CFDGraph.txt" ]; then
+	mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
+fi
 
 # echo -e 'Creating images' >  $output
 echo -e 'Creating images\tStart\t'$(date) >> $log	
