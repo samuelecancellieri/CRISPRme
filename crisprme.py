@@ -87,7 +87,7 @@ def complete_search():
         print('Please input a guide file or a sequence file')
         exit(1)
     if '--guide' in input_args and '--sequence' in input_args:
-        print('Please selecet only ONE input type, either --guide or --sequence')
+        print('Please select only ONE input type, either --guide or --sequence')
         exit(1)
     #guide check
     if "--guide" in input_args:
