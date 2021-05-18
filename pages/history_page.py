@@ -122,8 +122,10 @@ def get_results():
                 resultParamDataframe = resultParamDataframe.append({'Job': job, 'Genome_Selected': genome_selected, 'Variant_Selected': genome_idx, 'Mismatches': mms, 'DNA_bulge': dna,
                                                                     'RNA_bulge': rna, 'PAM': pam, 'Number_Guides': n_guides, 'Start': job_start}, ignore_index=True)
     try:
-        resultParamDataframe['Start'] = pd.to_datetime(resultParamDataframe['Start'])
-        resultParamDataframe.sort_values(by=['Start'], inplace=True, ascending=False)
+        resultParamDataframe['Start'] = pd.to_datetime(
+            resultParamDataframe['Start'])
+        resultParamDataframe.sort_values(
+            by=['Start'], inplace=True, ascending=False)
     except:
         pass
     # resultParamDataframe = resultParamDataframe.sort_values(
@@ -280,6 +282,7 @@ def generate_table_results(dataframe, page, max_rows=10):
     '''
     fl = []
     rows_remaining = len(dataframe) - (page - 1) * max_rows
+    print('remaining', rows_remaining)
     header = html.Thead(
         html.Tr([html.Th(col, style={'vertical-align': 'middle', 'text-align': 'center'}) if col != 'Load' and col !=
                  'Delete' else html.Th('', style={'vertical-align': 'middle', 'text-align': 'center'}) for col in dataframe.columns])
@@ -287,6 +290,7 @@ def generate_table_results(dataframe, page, max_rows=10):
     body_history = []
     add_button = 0
     for i in range(min(rows_remaining, max_rows)):
+        print('counter', i)
         add_button += 1
         row_hist = []
         for col in dataframe.columns:
