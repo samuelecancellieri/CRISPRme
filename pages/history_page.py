@@ -122,8 +122,10 @@ def get_results():
                 resultParamDataframe = resultParamDataframe.append({'Job': job, 'Genome_Selected': genome_selected, 'Variant_Selected': genome_idx, 'Mismatches': mms, 'DNA_bulge': dna,
                                                                     'RNA_bulge': rna, 'PAM': pam, 'Number_Guides': n_guides, 'Start': job_start}, ignore_index=True)
     try:
-        resultParamDataframe['Start'] = pd.to_datetime(resultParamDataframe['Start'])
-        resultParamDataframe.sort_values(by=['Start'], inplace=True, ascending=False)
+        resultParamDataframe['Start'] = pd.to_datetime(
+            resultParamDataframe['Start'])
+        resultParamDataframe.sort_values(
+            by=['Start'], inplace=True, ascending=False)
     except:
         pass
     # resultParamDataframe = resultParamDataframe.sort_values(
@@ -352,7 +354,7 @@ def historyPage():
 
     final_list.append(
         html.Div(
-            generate_table_results(results, 1),
+            generate_table_results(results, math.floor(len(results)/10)),
             id='div-history-table',
             style={'text-align': 'center'}
         ),
