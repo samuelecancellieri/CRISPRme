@@ -913,7 +913,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
 
     filtering_expressions = filter.split(' && ')
     dff = global_store_general(current_working_directory + 'Results/' +
-                               job_id + '/' + job_id + '.' + sample + '.' + guide + '.txt')
+                               job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.txt')
     if dff is None:
         raise PreventUpdate
 
@@ -1013,13 +1013,13 @@ def samplePage(job_id, hash):
     file_to_grep = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.bestMerge.txt'
     sample_grep_result = current_working_directory + 'Results/' + \
-        job_id + '/' + job_id + '.' + sample + '.' + guide + '.txt'
+        job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.txt'
     final_list.append(
-        html.Div(job_id + '.' + sample + '.' + guide,
+        html.Div(job_id + '.' + str(sample) + '.' + guide,
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
     os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
-              ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
+              ' | awk \'$14~\"' + str(sample) + '\"\' > ' + sample_grep_result)
 
     os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
                                                   '.zip') + ' ' + sample_grep_result + " &")
@@ -2617,7 +2617,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     file_to_grep = job_directory + job_id + '.bestMerge.txt'
-    if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
+    if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.sample_card.txt'):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                          guide+'.txt', sep='\t', skiprows=1, index_col=0, header=None)
         personal = df.loc[sample, 4]
@@ -2627,12 +2627,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         integrated_to_grep = job_directory+job_id + \
             '.bestMerge.txt.integrated_results.tsv'
         integrated_personal = job_directory + job_id + '.' + \
-            sample + '.' + guide + '.integrated.personal.txt'
+            str(sample) + '.' + guide + '.integrated.personal.txt'
         integrated_private = job_directory + job_id + '.' + \
-            sample + '.' + guide + '.integrated.private.txt'
+            str(sample) + '.' + guide + '.integrated.private.txt'
         # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
         sample_grep_result = current_working_directory + 'Results/' + \
-            job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
+            job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.private.txt'
 
         # copy header from integrated results into sample files
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
@@ -2659,9 +2659,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             'Personal', 'PAM Creation', 'Private']).astype(str)
         if int(private) > 0:
             tmp_file = current_working_directory + 'Results/' + \
-                job_id + '/' + job_id + '.' + sample + ".tmp_card.txt"
+                job_id + '/' + job_id + '.' + str(sample) + ".tmp_card.txt"
             tmp_file_2 = current_working_directory + 'Results/' + \
-                job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
+                job_id + '/' + job_id + '.' + str(sample) + ".tmp_card_2.txt"
             os.system(
                 f"LC_ALL=C sort -k21,21rg \"{sample_grep_result}\" > \"{tmp_file}\" ; head -5 {tmp_file} > \"{tmp_file_2}\"")
             ans = pd.read_csv(tmp_file_2, sep='\t',
@@ -2677,7 +2677,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             # do not delete temp file until zip is created
             os.system(f"rm {tmp_file} &")
 
-        with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "w") as file_out:
+        with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.sample_card.txt', "w") as file_out:
             file_out.write(
                 '\t'.join(results_table.iloc[0, :].values.tolist()) + '\n')
             if int(private) > 0:
@@ -2689,7 +2689,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         # os.system(f"{app_main_directory}/PostProcess/personal_cards.py {current_working_directory}/Results/{job_id}/{job_id}.{sample}.{guide}.sample_card.txt {current_working_directory}/Results/{job_id}")
         os.system(f"rm {sample_grep_result}")
     else:
-        with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "r") as file_in:
+        with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.sample_card.txt', "r") as file_in:
             infos = file_in.readline().strip().split('\t')
             results_table = pd.DataFrame([[infos[0], infos[1], infos[2]]], columns=[
                 'Personal', 'PAM Creation', 'Private'])
@@ -2714,7 +2714,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         sys.stderr.write('PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED')
 
     try:
-        file_to_load = job_id + '.' + sample + '.tmp_card.zip'
+        file_to_load = job_id + '.' + str(sample) + '.tmp_card.zip'
         ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
         ans_cols = ans.columns.tolist()
         ans_cols.remove('Samples')
