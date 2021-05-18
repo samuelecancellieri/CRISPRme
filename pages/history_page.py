@@ -276,13 +276,12 @@ def get_results():
 #     return generate_table_results(results, 1), '1/' + str(max_page)
 
 
-def generate_table_results(dataframe, page, max_rows=10):
+def generate_table_results(dataframe, page, max_rows=1000000):
     '''
     Generate table for History page
     '''
     fl = []
     rows_remaining = len(dataframe) - (page - 1) * max_rows
-    print('remaining', rows_remaining)
     header = html.Thead(
         html.Tr([html.Th(col, style={'vertical-align': 'middle', 'text-align': 'center'}) if col != 'Load' and col !=
                  'Delete' else html.Th('', style={'vertical-align': 'middle', 'text-align': 'center'}) for col in dataframe.columns])
@@ -290,7 +289,6 @@ def generate_table_results(dataframe, page, max_rows=10):
     body_history = []
     add_button = 0
     for i in range(min(rows_remaining, max_rows)):
-        print('counter', i)
         add_button += 1
         row_hist = []
         for col in dataframe.columns:
