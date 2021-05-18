@@ -366,8 +366,8 @@ def historyPage():
         html.Div(
             [
                 html.Br(),
-                # html.Button('Prev', id='prev-page-history'),
-                # html.Button('Next', id='next-page-history')
+                html.Button('Prev', id='prev-page-history'),
+                html.Button('Next', id='next-page-history')
             ],
             style={'text-align': 'center'}
         )
