@@ -28,6 +28,7 @@ input_args = sys.argv
 
 if '--debug' in input_args:
     script_path = current_working_directory+'PostProcess/'
+    corrected_web_path = current_working_directory
     
 VALID_CHARS = {'a', 'A', 't', 'T', 'c', 'C', 'g', 'G',
                "R",
