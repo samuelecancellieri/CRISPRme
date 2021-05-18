@@ -41,7 +41,7 @@ def supportFilterHistory(result_df, genome_f, pam_f):
         result_df.drop(labels=keep_values, inplace=True)
 
     max_page = len(result_df.index)
-    max_page = math.floor(max_page / 10) + 1
+    max_page = math.floor(max_page / 1000000) + 1
     return result_df, max_page
 
 
@@ -366,15 +366,15 @@ def historyPage():
         html.Div(
             [
                 html.Br(),
-                html.Button('Prev', id='prev-page-history'),
-                html.Button('Next', id='next-page-history')
+                # html.Button('Prev', id='prev-page-history'),
+                # html.Button('Next', id='next-page-history')
             ],
             style={'text-align': 'center'}
         )
     )
     max_page = len(results.index)
-    max_page = math.floor(max_page / 10) + 1
-    final_list.append(html.Div('1/' + str(max_page),
-                               id='div-current-page-history'))
+    max_page = math.floor(max_page / 1000000) + 1
+    # final_list.append(html.Div('1/' + str(max_page),
+    #                            id='div-current-page-history'))
     page = html.Div(final_list, style={'margin': '1%'})
     return page
