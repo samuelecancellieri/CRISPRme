@@ -3136,12 +3136,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        dff_view_names = [' ', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
+        dff_view_names = ['Bulge_type', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
                           'Position', 'Direction', 'Mismatches',
                           'Bulge_Size', 'PAM_gen', 'SNP',
                           'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                           'AF', 'Annotation_Type']
-        dff = pd.DataFrame(columns=[' ', 'crRNA', 'Reference', 'DNA', 'Chromosome',
+        dff = pd.DataFrame(columns=['Bulge_type', 'crRNA', 'Reference', 'DNA', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
                                     'Bulge_Size', 'PAM_gen', 'SNP',
                                     'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
