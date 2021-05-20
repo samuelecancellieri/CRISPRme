@@ -122,7 +122,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.yticks([0, 25, 50, 75], ["0", "25", "50", "75"],
                color="black", size=12)
     # plt.ylim(0, 1)
-    plt.ylim(0, 1)
+    plt.ylim(0, 100)
 
     # Fill area
     ax.fill(angles, values, 'b', alpha=0.1)
