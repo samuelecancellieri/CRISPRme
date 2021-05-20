@@ -2020,6 +2020,8 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     #     f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
     os.system(
         f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
+    pos_grep_result_zip = pos_grep_result.replace('txt', 'zip')
+    os.system(f'zip -j {pos_grep_result_zip} {pos_grep_result}')
 
     with open(file_to_grep, 'r') as ftg:
         header = ftg.readline().split('\t')[:24]
@@ -2756,7 +2758,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         ans_cols.remove('Samples')
         ans_cols.append('Samples')
         ans_cols.remove('')
-        ans_cols.insert(0, '')
+        # ans_cols.insert(0, '')
         ans = ans[ans_cols]
         out_1 = [
             html.A('Download private targets', href=URL+'/Results/' +
