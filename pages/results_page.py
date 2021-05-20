@@ -812,8 +812,6 @@ def clusterPage(job_id, hash):
     final_list.append(
         html.Div(
             dash_table.DataTable(
-                css=[{'selector': '.row',
-                      'rule': 'margin: 0'}],
                 # TABLE that represent scomposition of iupac of selected target, take rows from top_1.samples.txt
                 id='table-scomposition-cluster',
                 columns=cols_for_scomposition,
@@ -842,7 +840,8 @@ def clusterPage(job_id, hash):
 
                     }
                 ],
-                css=[{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
 
             ),
