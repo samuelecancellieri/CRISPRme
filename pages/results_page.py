@@ -42,7 +42,7 @@ COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Ch
 COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
                  'numeric', 'text', 'numeric', 'numeric', 'numeric', 'text', 'text', 'text', 'text', 'text', 'numeric', 'text', 'numeric', 'numeric', 'numeric', 'numeric', 'numeric', 'numeric']
 COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Reference_sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
-                   8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM Creation', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Correct Guide',
+                   8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM Creation', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real_Guide',
                    16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq_in_cluster', 20: 'CFD', 21: 'CFD_ref', 22: 'MMBLG_#Bulge_type', 23: 'MMBLG_crRNA', 24: 'MMBLG_DNA', 25: 'MMBLG_Reference',
                    26: 'MMBLG_Chromosome', 27: 'MMBLG_Position', 28: 'MMBLG_Cluster_Position', 29: 'MMBLG_Direction', 30: 'MMBLG_Mismatches', 31: 'MMBLG_Bulge_Size', 32: 'MMBLG_Total', 33: 'MMBLG_PAM_gen',
                    34: 'MMBLG_Var_uniq', 35: 'MMBLG_Samples', 36: 'MMBLG_Annotation_Type', 37: 'MMBLG_Real_Guide', 38: 'MMBLG_rsID', 39: 'MMBLG_AF', 40: 'MMBLG_SNP', 41: 'MMBLG_#Seq_in_cluster', 42: 'MMBLG_CFD', 43: 'MMBLG_CFD_ref'}
@@ -1589,7 +1589,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 16))  # , skiprows = 1)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 24))  # , skiprows = 1)
     return df
 
 # Load barplot of population distribution for selected guide
