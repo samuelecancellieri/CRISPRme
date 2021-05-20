@@ -3348,17 +3348,17 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #     'width': '{}%'.format(len(dff.columns)),
                                     #     # 'whiteSpace': 'normal'
                                     # }],
-                                    style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
-                                                             'maxWidth': 200,
-                                                             },
-                                                            {'if': {'column_id': 'Bulge_type'},
-                                                             'maxWidth': 150},
-                                                            {'if': {'column_id': 'SNP'},
-                                                             # 'overflow': 'hidden',
-                                                             'textOverflow': 'ellipsis',
-                                                             'maxWidth': 200,
-                                                             }
-                                                            ],
+                                    # style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
+                                    #                          'maxWidth': 200,
+                                    #                          },
+                                    #                         {'if': {'column_id': 'Bulge_type'},
+                                    #                          'maxWidth': 150},
+                                    #                         {'if': {'column_id': 'SNP'},
+                                    #                          # 'overflow': 'hidden',
+                                    #                          'textOverflow': 'ellipsis',
+                                    #                          'maxWidth': 200,
+                                    #                          }
+                                    #                         ],
                                     # style_cell_conditional=[{'if': {'column_id': 'SNP'},
                                     #                          'overflow': 'hidden',
                                     #                           'textOverflow': 'ellipsis'
