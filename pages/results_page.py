@@ -1389,6 +1389,8 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     except:  # For REF
         pass
 
+    print(dff)
+
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
         if col_name == 'Samples Summary':
