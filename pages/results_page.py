@@ -69,7 +69,7 @@ def resultPage(job_id):
     with open(current_working_directory + 'Results/' + value + '/guides.txt') as g:
         for line in g:
             count_guides += 1
-        
+
     # Load mismatches
     with open(current_working_directory + 'Results/' + value + '/Params.txt') as p:
         all_params = p.read()
@@ -88,7 +88,7 @@ def resultPage(job_id):
         max_bulges = (next(s for s in all_params.split('\n')
                            if 'Max_bulges' in s)).split('\t')[-1]
         pam_name = (next(s for s in all_params.split('\n')
-                           if 'Pam' in s)).split('\t')[-1]
+                         if 'Pam' in s)).split('\t')[-1]
 
     genome_name = genome_type_f
     if '+' in real_genome_name:
@@ -183,7 +183,7 @@ def resultPage(job_id):
                 ], color='warning')
         )
     final_list.append(
-        html.H3('Result Summary - ' + genome_name + ' - ' + pam_name +' - Mismatches ' +
+        html.H3('Result Summary - ' + genome_name + ' - ' + pam_name + ' - Mismatches ' +
                 str(mms) + ' - DNA bulges ' + bulge_dna + ' - RNA bulges ' + bulge_rna)
     )
 
@@ -220,20 +220,26 @@ def resultPage(job_id):
             dbc.Row(
                 dbc.Col(
                     [
-                    html.Div(
-                        [
-                            html.P('Generating download link, Please wait...', id='download-link-general-table'),
-                            dcc.Interval(interval=1*1000, id='interval-general-table'),
-                            html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
-                        ]
-                    ),
-                    html.Div(
-                        [
-                            html.P('Generating download link, Please wait...', id='download-link-integrated-results'),
-                            dcc.Interval(interval=1*1000, id='interval-integrated-results'),
-                            html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
-                        ]
-                    )
+                        html.Div(
+                            [
+                                html.P('Generating download link, Please wait...',
+                                       id='download-link-general-table'),
+                                dcc.Interval(interval=1*1000,
+                                             id='interval-general-table'),
+                                html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id +
+                                         '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
+                            ]
+                        ),
+                        html.Div(
+                            [
+                                html.P('Generating download link, Please wait...',
+                                       id='download-link-integrated-results'),
+                                dcc.Interval(interval=1*1000,
+                                             id='interval-integrated-results'),
+                                html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id +
+                                         '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
+                            ]
+                        )
                     ]
                 )
             )
@@ -373,6 +379,8 @@ def resultPage(job_id):
     return result_page
 
 # Generate download link summary_by_sample
+
+
 @app.callback(
     [Output('download-link-summary_by_sample', 'children'),
      Output('interval-summary_by_sample', 'disabled')],
@@ -393,6 +401,7 @@ def downloadLinkSample(n, file_to_load, search):  # file to load =
 
     return 'Generating download link, Please wait...', False
 
+
 @app.callback(
     [Output('download-link-general-table', 'children'),
      Output('interval-general-table', 'disabled')],
@@ -411,7 +420,9 @@ def downloadGeneralTable(n, file_to_load, search):  # file to load =
 
     return 'Generating download link, Please wait...', False
 
-#downalod integrated results
+# downalod integrated results
+
+
 @app.callback(
     [Output('download-link-integrated-results', 'children'),
      Output('interval-integrated-results', 'disabled')],
@@ -431,6 +442,8 @@ def downloadGeneralTable(n, file_to_load, search):  # file to load =
     return 'Generating download link, Please wait...', False
 
 # Generate download link sumbysample
+
+
 @app.callback(
     [Output('download-link-sumbysample', 'children'),
      Output('interval-sumbysample', 'disabled')],
@@ -449,6 +462,8 @@ def downloadLinkSample(n, file_to_load, search):  # file to load = job_id.HG001.
     return 'Generating download link, Please wait...', False
 
 # Generate download link sumbyguide
+
+
 @app.callback(
     [Output('download-link-sumbyguide', 'children'),
      Output('interval-sumbyguide', 'disabled')],
@@ -752,7 +767,7 @@ def clusterPage(job_id, hash):
             os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
                      '\"\' > ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
         os.system('zip '+'-j ' + cluster_grep_result.replace('.txt',
-                                                       '.zip') + ' ' + cluster_grep_result+" &")
+                                                             '.zip') + ' ' + cluster_grep_result+" &")
     final_list.append(
         html.Div(job_id + '.' + chromosome + '_' + position + '.' + guide,
                  style={'display': 'none'}, id='div-info-sumbyposition-targets')
@@ -1022,7 +1037,7 @@ def samplePage(job_id, hash):
               ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
 
     os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
-                                                  '.zip') + ' ' + sample_grep_result + " &")
+                                                        '.zip') + ' ' + sample_grep_result + " &")
 
     cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
             for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
@@ -1733,8 +1748,9 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     df = []
     table_to_file = list()
     for x, g in enumerate(guides):
-        table_to_file.append(g) #append guide to table
-        table_to_file.append('Nuclease: '+str(nuclease)) #append nuclease to table
+        table_to_file.append(g)  # append guide to table
+        # append nuclease to table
+        table_to_file.append('Nuclease: '+str(nuclease))
         data_general_count = pd.read_csv(current_working_directory + 'Results/' +
                                          job_id + '/' + job_id + '.general_target_count.'+g+".txt", sep='\t')
 
@@ -1742,35 +1758,36 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         data_guides['Guide'] = g
         data_guides['Nuclease'] = nuclease
         data_general_count_copy = data_general_count.copy()
-        count_bulges= list()
+        count_bulges = list()
         origin_ref = list()
         origin_var = list()
         for the_bulge in range(max_bulges+1):
             origin_ref.append('REF')
             origin_var.append('VAR')
             count_bulges.append(the_bulge)
-        
+
         count_bulges_concat = count_bulges+count_bulges
         origin_concat = origin_ref+origin_var
-        
-        data_general_count_copy.insert(0,'Genome', origin_concat,True)
-        data_general_count_copy.insert(1,'Bulges', count_bulges_concat,True)
-        
+
+        data_general_count_copy.insert(0, 'Genome', origin_concat, True)
+        data_general_count_copy.insert(1, 'Bulges', count_bulges_concat, True)
+
         if 'NO SCORES' not in all_scores:
             data_guides['CFD'] = acfd[x]
-            table_to_file.append('CFD: '+str(acfd[x])) #append CFD to table
+            table_to_file.append('CFD: '+str(acfd[x]))  # append CFD to table
             table_to_file.append('\t\t\t\tMismatches')
-            
+
             # table_to_file.append('IN THE FOLLOWING MATRIX, THE FIRST GROUP OF '+str(max_bulges)+' LINES, ARE REFERED TO REFERENCE TARGET, THE SECOND GROUP OF '+str(max_bulges)+' LINES ARE REFERED TO VARIANT GENOME')
-            
-            table_to_file.append(data_general_count_copy.to_string(index=False))
-            
+
+            table_to_file.append(
+                data_general_count_copy.to_string(index=False))
+
             if genome_type == 'both':
                 data_guides['Doench 2016'] = doench[x]
                 # data_guides['Enriched'] = doench_enr[x]
             else:
                 data_guides['Doench 2016'] = doench[x]
-    
+
         if genome_type == 'both':
             # data_guides['Samples in Class 0 - 0+ - 1 - 1+'] = column_sample_class
             # data_guides['Genome'] = '\nREFERENCE\n-----------\nENRICHED\n'
@@ -1848,17 +1865,20 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
 
         df.append(data_guides)
     dff = pd.DataFrame(df)
-    
-    table_to_file_save_dest = current_working_directory + 'Results/' + job_id + '/' + job_id + '.general_table.txt'
-    
-    outfile = open(table_to_file_save_dest,'w')
+
+    table_to_file_save_dest = current_working_directory + \
+        'Results/' + job_id + '/' + job_id + '.general_table.txt'
+
+    outfile = open(table_to_file_save_dest, 'w')
     for elem in table_to_file:
         outfile.write(elem+'\n')
     outfile.close()
-    
-    #zip integrated results
-    integrated_file = current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
-    integrated_to_zip = current_working_directory + 'Results/' + job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip'
+
+    # zip integrated results
+    integrated_file = current_working_directory + 'Results/' + \
+        job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
+    integrated_to_zip = current_working_directory + 'Results/' + \
+        job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip'
     if not os.path.exists(integrated_to_zip):
         os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
 
@@ -2408,7 +2428,7 @@ def check_existance_sample(job_directory, job_id, sample):
     [Output('div-radar-chart-total', 'children'),
      Output('div-population-barplot', 'children'),
      Output('div-sample-image', 'children'),
-    #  Output('div-radar-chart-sample', 'children')],
+     #  Output('div-radar-chart-sample', 'children')],
      Output('row-radar-chart-sample', 'children')],
     [Input('mm-dropdown', 'value'),
      Input('blg-dropdown', 'value'),
@@ -2638,19 +2658,23 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         # copy header from integrated results into sample files
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
         os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
-        #grep guide and then sample into personal card data
-        os.system(f"LC_ALL=C fgrep {guide} {integrated_to_grep} | fgrep {sample} >> {integrated_personal}")
-        #grep private targets from personal targets
-        os.system(f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
-        #grep private targets to generate table and file
-        os.system(f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
-        
+        # grep guide and then sample into personal card data
+        os.system(
+            f"LC_ALL=C fgrep {guide} {integrated_to_grep} | fgrep {sample} >> {integrated_personal}")
+        # grep private targets from personal targets
+        os.system(
+            f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
+        # grep private targets to generate table and file
+        os.system(
+            f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
+
         # plot for images in personal card
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
-        os.system(f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
+        os.system(
+            f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
 
         private = 0
         for line in open(sample_grep_result):
@@ -2674,7 +2698,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
-            os.system('zip '+'-j ' + tmp_file.replace('.txt','.zip') + ' ' + tmp_file)
+            os.system('zip '+'-j ' + tmp_file.replace('.txt',
+                                                      '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
             os.system(f"rm {tmp_file} &")
 
@@ -2730,18 +2755,18 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             [
                 html.P('Top 100 Personal Targets per CFD score'),
                 html.A(
-                html.Img(src=image_personal_top, id='sample-personal-top',
-                         width="100%", height="auto"),
-                target="_blank"
-            )
+                    html.Img(src=image_personal_top, id='sample-personal-top',
+                             width="100%", height="auto"),
+                    target="_blank"
+                )
             ],
             [
                 html.P('Top 100 Private Targets per CFD score'),
                 html.A(
-                html.Img(src=image_private_top, id='sample-private-top',
-                         width="100%", height="auto"),
-                target="_blank"
-            )
+                    html.Img(src=image_private_top, id='sample-private-top',
+                             width="100%", height="auto"),
+                    target="_blank"
+                )
             ],
             dash_table.DataTable(
                 id="results-table",
@@ -2780,18 +2805,18 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             [
                 html.P('Top 100 Personal Targets per CFD score'),
                 html.A(
-                html.Img(src=image_personal_top, id='sample-personal-top',
-                         width="100%", height="auto"),
-                target="_blank"
-            )
+                    html.Img(src=image_personal_top, id='sample-personal-top',
+                             width="100%", height="auto"),
+                    target="_blank"
+                )
             ],
             [
                 html.P('Top 100 Private Targets per CFD score'),
                 html.A(
-                html.Img(src=image_private_top, id='sample-private-top',
-                         width="100%", height="auto"),
-                target="_blank"
-            )
+                    html.Img(src=image_private_top, id='sample-private-top',
+                             width="100%", height="auto"),
+                    target="_blank"
+                )
             ],
             dash_table.DataTable(
                 id="results-table",
@@ -2919,7 +2944,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             (
                 [
                     html.Div(job_directory + job_id + '.summary_by_samples.' + guide,
-                                        style={'display': 'none'}, id='div-info-summary_by_sample'),
+                             style={'display': 'none'}, id='div-info-summary_by_sample'),
                     dbc.Row(
                         [
                             dbc.Col(html.Div(dcc.Dropdown(
@@ -2937,8 +2962,10 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         dbc.Col(
                             html.Div(
                                 [
-                                    html.P('Generating download link, Please wait...', id='download-link-summary_by_sample'),
-                                    dcc.Interval(interval=1*1000, id='interval-summary_by_sample'),
+                                    html.P('Generating download link, Please wait...',
+                                           id='download-link-summary_by_sample'),
+                                    dcc.Interval(
+                                        interval=1*1000, id='interval-summary_by_sample'),
                                 ]
                             )
                         )
@@ -3105,17 +3132,17 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        dff = pd.DataFrame(columns=[' ', 'crRNA', 'Reference', 'DNA', 'Chromosome',
+        dff = pd.DataFrame(columns=[' ', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
                                     'Bulge_Size', 'PAM_gen', 'SNP',
                                     'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                                     'AF', 'Annotation_Type'])  # pd.read_sql_query("SELECT * FROM final_table LIMIT 0",conn) #to define column names in the first empty table
-        all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'], #, 'Highest_CFD_Absolute_Risk_Score'
-                     'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']} #, 'CFD_Absolute_Risk_Score'
+        all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
+                     'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-        all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'], #, ' Absolute Risk Score'
-                       'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']} #, ' Absolute Risk Score'
+        all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'],  # , ' Absolute Risk Score'
+                       'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']}  # , ' Absolute Risk Score'
     # target_o
 
         # all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD'],
@@ -3283,7 +3310,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         dbc.Col(
                             [
                                 # html.Br(),
-                                html.P('Export will download 1000 lines contained in the current view of the table'),
+                                html.P(
+                                    'Export will download 1000 lines contained in the current view of the table'),
                                 html.Div(dash_table.DataTable(
                                     export_format="csv",
                                     id='live_table',
@@ -3300,27 +3328,27 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     # style_header=dict(backgroundColor="white"),
                                     style_data={
                                         'backgroundColor': "white",
-                                        #'whiteSpace': 'normal',
-                                        #'height': 'auto'
+                                        # 'whiteSpace': 'normal',
+                                        # 'height': 'auto'
                                     },
                                     # , 'overflowX': 'auto'
                                     style_table={
-                                        'overflowX': 'scroll','overflowY':'scroll','max-height': '300px'},
+                                        'overflowX': 'scroll', 'overflowY': 'scroll', 'max-height': '300px'},
                                     style_cell=[{
                                         # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                                         # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
                                         'width': '{}%'.format(len(dff.columns)),
-                                        #'whiteSpace': 'normal'
+                                        # 'whiteSpace': 'normal'
                                     }],
                                     style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
                                                              'maxWidth': 100,
-                                                           },
-                                                           {'if': {'column_id': 'SNP'},
-                                                             #'overflow': 'hidden',
-                                                              'textOverflow': 'ellipsis',
-                                                              'maxWidth': 200,
-                                                           }
-                                                        ],
+                                                             },
+                                                            {'if': {'column_id': 'SNP'},
+                                                             # 'overflow': 'hidden',
+                                                             'textOverflow': 'ellipsis',
+                                                             'maxWidth': 200,
+                                                             }
+                                                            ],
                                     # style_cell_conditional=[{'if': {'column_id': 'SNP'},
                                     #                          'overflow': 'hidden',
                                     #                           'textOverflow': 'ellipsis'
@@ -3349,8 +3377,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     page_action='custom',
                                     tooltip_delay=0,
                                     tooltip_duration=None
-                                )
-                                , id='div-query-table'),
+                                ), id='div-query-table'),
                             ],
                         ),
                     ],
@@ -3486,7 +3513,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select a Superpopulation",style=samp_style),
+                        html.P("Select a Superpopulation", style=samp_style),
                         html.Div(
                             dcc.Dropdown(
                                 options=super_populations,
@@ -3500,7 +3527,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select a Population",style=samp_style),
+                        html.P("Select a Population", style=samp_style),
                         html.Div(dcc.Dropdown(
                             options=populations,
                             id='dropdown-population-sample',
@@ -3513,7 +3540,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select a Sample",style=samp_style),
+                        html.P("Select a Sample", style=samp_style),
                         html.Div(dcc.Dropdown(
                             id='dropdown-sample',
                             placeholder='Sample',
@@ -3536,18 +3563,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 ]
             )
         )
-        
+
         radar_chart_total_content = html.Div(id='div-radar-chart-total')
         populations_barplots = html.Div(id='div-population-barplot')
         # radar_chart_sample_content = html.Div(id='div-radar-chart-sample')
         radar_chart_sample_content = dbc.Row(id='row-radar-chart-sample')
         sample_image_content = html.Div(id='div-sample-image')
-        
+
         if genome_type != 'ref':
-            graph_summary_both = [dbc.Col(populations_barplots),dbc.Col(radar_chart_total_content)]
+            graph_summary_both = [
+                dbc.Col(populations_barplots), dbc.Col(radar_chart_total_content)]
         else:
-            graph_summary_both = dbc.Col(radar_chart_total_content, width={"size": 8, "offset": 2})
-            
+            graph_summary_both = dbc.Col(radar_chart_total_content, width={
+                                         "size": 8, "offset": 2})
+
         fl.append(
             html.Div(
                 [
@@ -3728,7 +3757,7 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
 
 # Return the table with the result of the query
 @ app.callback(
-    #[Output('live_table', 'data'),
+    # [Output('live_table', 'data'),
     [Output('live_table', 'data'),
      Output('live_table', 'tooltip_data'),
      Output("message-alert", "is_open"), ],
@@ -3790,10 +3819,10 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
                             for column, value in row.items()
-                        } for row in snps]
+                            } for row in snps]
     else:
         raise PreventUpdate
-            
+
     return data, tooltip_data, alert
 
 
@@ -3814,12 +3843,12 @@ def reset_pagenumber(n):
     Output('order', 'options'),
     [Input('target', 'value')])
 def set_columns_options(selected_target):
-    all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'], #, 'Highest_CFD_Absolute_Risk_Score'
-                 'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']} #, 'CFD_Absolute_Risk_Score'
+    all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
+                 'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'], #, ' Absolute Risk Score'
-                   'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']} #, ' Absolute Risk Score'
+    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'],  # , ' Absolute Risk Score'
+                   'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']}  # , ' Absolute Risk Score'
     # target_options = {' Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], ' Bulges': [' Mismatches', ' Mismatch+Bulges', ' CFD'], ' Mismatch+Bulges': [' Mismatches', ' Bulges', ' CFD'], ' CFD': [
     #     ' Mismatches', ' Bulges', ' Mismatch+Bulges'], ' Risk_Score': [], ' Absolute_Risk_Score': [], ' Risk_Score': [], ' Risk_Score': []}
     # main_order_dict = dict()
