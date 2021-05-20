@@ -72,6 +72,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
     for count, elem in enumerate(percentage_list):  # correct to 100 based scale
+        print(elem)
         if elem != 0:
             elem = elem*100
         else:
