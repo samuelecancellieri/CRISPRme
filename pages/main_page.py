@@ -386,8 +386,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         for c in g:
             if c not in VALID_CHARS:
                 text_guides = text_guides.replace(c, '')
-    if len(text_guides.split('\n')) > 1000:
-        text_guides = '\n'.join(text_guides.split('\n')[:1000]).strip()
+    if len(text_guides.split('\n')) > 1000000000:
+        text_guides = '\n'.join(text_guides.split('\n')[:1000000000]).strip()
     len_guides = len(text_guides.split('\n')[0])
 
     # Adjust guides by adding Ns to make compatible with Crispritz
