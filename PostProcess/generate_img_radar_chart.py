@@ -71,8 +71,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             percentage_list.append(float(0))
 
     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
-    guideDataFrame['Percentage'] = percentage_list
-    guideDataFrame.columns = ['Total', 'Percentage']
+    guideDataFrame['Proportion'] = percentage_list
+    guideDataFrame.columns = ['Total', 'Proportion']
     # convert to int total column
     # print('prima', guideDataFrame)
     # guideDataFrame['Total'] = guideDataFrame['Total'].astype('int32')
@@ -84,7 +84,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     # We are going to plot the first line of the data frame.
     # But we need to repeat the first value to close the circular graph:
-    values = guideDataFrame.loc['Percentage'].values.flatten().tolist()
+    values = guideDataFrame.loc['Proportion'].values.flatten().tolist()
     values += values[:1]
 
     # What will be the angle of each axis in the plot? (we divide the plot / number of variable)
@@ -142,7 +142,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     transpose_list = templist
 
     plt.axis('off')
-    table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
+    table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Proportion'],
                       loc='best', colWidths=[0.25, 0.25])
     table.auto_set_font_size(False)
     table.set_fontsize(13)
