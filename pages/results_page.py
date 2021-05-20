@@ -88,7 +88,7 @@ def resultPage(job_id):
         max_bulges = (next(s for s in all_params.split('\n')
                            if 'Max_bulges' in s)).split('\t')[-1]
         pam_name = (next(s for s in all_params.split('\n')
-                           if 'Pam' in s)).split('\t')[-1]
+                         if 'Pam' in s)).split('\t')[-1]
 
     genome_name = genome_type_f
     if '+' in real_genome_name:
@@ -220,26 +220,26 @@ def resultPage(job_id):
             dbc.Row(
                 dbc.Col(
                     [
-                    html.Div(
-                        [
-                            html.P('Generating download link, Please wait...',
-                                   id='download-link-general-table'),
-                            dcc.Interval(interval=1*1000,
-                                         id='interval-general-table'),
-                            html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id +
-                                     '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
-                        ]
-                    ),
-                    html.Div(
-                        [
-                            html.P('Generating download link, Please wait...',
-                                   id='download-link-integrated-results'),
-                            dcc.Interval(interval=1*1000,
-                                         id='interval-integrated-results'),
-                            html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id +
-                                     '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
-                        ]
-                    )
+                        html.Div(
+                            [
+                                html.P('Generating download link, Please wait...',
+                                       id='download-link-general-table'),
+                                dcc.Interval(interval=1*1000,
+                                             id='interval-general-table'),
+                                html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id +
+                                         '.general_table.txt', style={'display': 'none'}, id='div-info-general-table')
+                            ]
+                        ),
+                        html.Div(
+                            [
+                                html.P('Generating download link, Please wait...',
+                                       id='download-link-integrated-results'),
+                                dcc.Interval(interval=1*1000,
+                                             id='interval-integrated-results'),
+                                html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id +
+                                         '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
+                            ]
+                        )
                     ]
                 )
             )
@@ -767,7 +767,7 @@ def clusterPage(job_id, hash):
             os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
                      '\"\' > ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
         os.system('zip '+'-j ' + cluster_grep_result.replace('.txt',
-                                                       '.zip') + ' ' + cluster_grep_result+" &")
+                                                             '.zip') + ' ' + cluster_grep_result+" &")
     final_list.append(
         html.Div(job_id + '.' + chromosome + '_' + position + '.' + guide,
                  style={'display': 'none'}, id='div-info-sumbyposition-targets')
@@ -1037,7 +1037,7 @@ def samplePage(job_id, hash):
               ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
 
     os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
-                                                  '.zip') + ' ' + sample_grep_result + " &")
+                                                        '.zip') + ' ' + sample_grep_result + " &")
 
     cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
             for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
@@ -2428,7 +2428,7 @@ def check_existance_sample(job_directory, job_id, sample):
     [Output('div-radar-chart-total', 'children'),
      Output('div-population-barplot', 'children'),
      Output('div-sample-image', 'children'),
-    #  Output('div-radar-chart-sample', 'children')],
+     #  Output('div-radar-chart-sample', 'children')],
      Output('row-radar-chart-sample', 'children')],
     [Input('mm-dropdown', 'value'),
      Input('blg-dropdown', 'value'),
@@ -2699,7 +2699,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             os.system(f"rm {tmp_file_2} &")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
             os.system('zip '+'-j ' + tmp_file.replace('.txt',
-                      '.zip') + ' ' + tmp_file)
+                                                      '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
             os.system(f"rm {tmp_file} &")
 
@@ -2755,18 +2755,18 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             [
                 html.P('Top 100 Personal Targets per CFD score'),
                 html.A(
-                html.Img(src=image_personal_top, id='sample-personal-top',
-                         width="100%", height="auto"),
-                target="_blank"
-            )
+                    html.Img(src=image_personal_top, id='sample-personal-top',
+                             width="100%", height="auto"),
+                    target="_blank"
+                )
             ],
             [
                 html.P('Top 100 Private Targets per CFD score'),
                 html.A(
-                html.Img(src=image_private_top, id='sample-private-top',
-                         width="100%", height="auto"),
-                target="_blank"
-            )
+                    html.Img(src=image_private_top, id='sample-private-top',
+                             width="100%", height="auto"),
+                    target="_blank"
+                )
             ],
             dash_table.DataTable(
                 id="results-table",
@@ -2805,18 +2805,18 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             [
                 html.P('Top 100 Personal Targets per CFD score'),
                 html.A(
-                html.Img(src=image_personal_top, id='sample-personal-top',
-                         width="100%", height="auto"),
-                target="_blank"
-            )
+                    html.Img(src=image_personal_top, id='sample-personal-top',
+                             width="100%", height="auto"),
+                    target="_blank"
+                )
             ],
             [
                 html.P('Top 100 Private Targets per CFD score'),
                 html.A(
-                html.Img(src=image_private_top, id='sample-private-top',
-                         width="100%", height="auto"),
-                target="_blank"
-            )
+                    html.Img(src=image_private_top, id='sample-private-top',
+                             width="100%", height="auto"),
+                    target="_blank"
+                )
             ],
             dash_table.DataTable(
                 id="results-table",
@@ -2944,7 +2944,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             (
                 [
                     html.Div(job_directory + job_id + '.summary_by_samples.' + guide,
-                                        style={'display': 'none'}, id='div-info-summary_by_sample'),
+                             style={'display': 'none'}, id='div-info-summary_by_sample'),
                     dbc.Row(
                         [
                             dbc.Col(html.Div(dcc.Dropdown(
@@ -3133,16 +3133,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         conn = sqlite3.connect(path)
         c = conn.cursor()
         dff_view_names = [' ', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
-                                    'Position', 'Direction', 'Mismatches',
-                                    'Bulge_Size', 'PAM_gen', 'SNP',
-                                    'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-                                    'AF', 'Annotation_Type']]
+                          'Position', 'Direction', 'Mismatches',
+                          'Bulge_Size', 'PAM_gen', 'SNP',
+                          'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
+                          'AF', 'Annotation_Type']
         dff = pd.DataFrame(columns=[' ', 'crRNA', 'Reference', 'DNA', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
                                     'Bulge_Size', 'PAM_gen', 'SNP',
                                     'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                                     'AF', 'Annotation_Type'])  # pd.read_sql_query("SELECT * FROM final_table LIMIT 0",conn) #to define column names in the first empty table
-        all_value= {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
+        all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
                      'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
@@ -3315,7 +3315,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                         dbc.Col(
                             [
                                 # html.Br(),
-                                html.P('Export will download 1000 lines contained in the current view of the table'),
+                                html.P(
+                                    'Export will download 1000 lines contained in the current view of the table'),
                                 html.Div(dash_table.DataTable(
                                     export_format="csv",
                                     id='live_table',
@@ -3337,7 +3338,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     },
                                     # , 'overflowX': 'auto'
                                     style_table={
-                                        'overflowX': 'scroll','overflowY':'scroll','max-height': '300px'},
+                                        'overflowX': 'scroll', 'overflowY': 'scroll', 'max-height': '300px'},
                                     style_cell=[{
                                         # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                                         # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
@@ -3346,13 +3347,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     }],
                                     style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
                                                              'maxWidth': 100,
-                                                           },
-                                                           {'if': {'column_id': 'SNP'},
+                                                             },
+                                                            {'if': {'column_id': 'SNP'},
                                                              # 'overflow': 'hidden',
-                                                              'textOverflow': 'ellipsis',
-                                                              'maxWidth': 200,
-                                                           }
-                                                        ],
+                                                             'textOverflow': 'ellipsis',
+                                                             'maxWidth': 200,
+                                                             }
+                                                            ],
                                     # style_cell_conditional=[{'if': {'column_id': 'SNP'},
                                     #                          'overflow': 'hidden',
                                     #                           'textOverflow': 'ellipsis'
@@ -3381,8 +3382,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     page_action='custom',
                                     tooltip_delay=0,
                                     tooltip_duration=None
-                                )
-                                , id='div-query-table'),
+                                ), id='div-query-table'),
                             ],
                         ),
                     ],
@@ -3518,7 +3518,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select a Superpopulation",style=samp_style),
+                        html.P("Select a Superpopulation", style=samp_style),
                         html.Div(
                             dcc.Dropdown(
                                 options=super_populations,
@@ -3532,7 +3532,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select a Population",style=samp_style),
+                        html.P("Select a Population", style=samp_style),
                         html.Div(dcc.Dropdown(
                             options=populations,
                             id='dropdown-population-sample',
@@ -3545,7 +3545,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select a Sample",style=samp_style),
+                        html.P("Select a Sample", style=samp_style),
                         html.Div(dcc.Dropdown(
                             id='dropdown-sample',
                             placeholder='Sample',
@@ -3568,18 +3568,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 ]
             )
         )
-        
+
         radar_chart_total_content = html.Div(id='div-radar-chart-total')
         populations_barplots = html.Div(id='div-population-barplot')
         # radar_chart_sample_content = html.Div(id='div-radar-chart-sample')
         radar_chart_sample_content = dbc.Row(id='row-radar-chart-sample')
         sample_image_content = html.Div(id='div-sample-image')
-        
+
         if genome_type != 'ref':
-            graph_summary_both = [dbc.Col(populations_barplots),dbc.Col(radar_chart_total_content)]
+            graph_summary_both = [
+                dbc.Col(populations_barplots), dbc.Col(radar_chart_total_content)]
         else:
-            graph_summary_both = dbc.Col(radar_chart_total_content, width={"size": 8, "offset": 2})
-            
+            graph_summary_both = dbc.Col(radar_chart_total_content, width={
+                                         "size": 8, "offset": 2})
+
         fl.append(
             html.Div(
                 [
@@ -3822,10 +3824,10 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
                             for column, value in row.items()
-                        } for row in snps]
+                            } for row in snps]
     else:
         raise PreventUpdate
-            
+
     return data, tooltip_data, alert
 
 
@@ -3846,12 +3848,12 @@ def reset_pagenumber(n):
     Output('order', 'options'),
     [Input('target', 'value')])
 def set_columns_options(selected_target):
-    all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'], #, 'Highest_CFD_Absolute_Risk_Score'
-                 'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']} #, 'CFD_Absolute_Risk_Score'
+    all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
+                 'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'], #, ' Absolute Risk Score'
-                   'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']} #, ' Absolute Risk Score'
+    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'],  # , ' Absolute Risk Score'
+                   'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']}  # , ' Absolute Risk Score'
     # target_options = {' Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], ' Bulges': [' Mismatches', ' Mismatch+Bulges', ' CFD'], ' Mismatch+Bulges': [' Mismatches', ' Bulges', ' CFD'], ' CFD': [
     #     ' Mismatches', ' Bulges', ' Mismatch+Bulges'], ' Risk_Score': [], ' Absolute_Risk_Score': [], ' Risk_Score': [], ' Risk_Score': []}
     # main_order_dict = dict()
