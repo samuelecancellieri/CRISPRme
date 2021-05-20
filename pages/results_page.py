@@ -3182,7 +3182,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #             )
         #         ]
         #     )
-        print(dff)
         query_tab_content = html.Div(
             [
                 # img_panel,
@@ -3352,6 +3351,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
                                                              'maxWidth': 100,
                                                              },
+                                                            {'if': {'column_id': 'Bulge_type'},
+                                                             'maxWidth': 150},
                                                             {'if': {'column_id': 'SNP'},
                                                              # 'overflow': 'hidden',
                                                              'textOverflow': 'ellipsis',
@@ -3810,7 +3811,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
                                              radio_order, orderdrop, asc1, url, guide, current_working_directory)
             if target[-1] == '1':
 
-                sub_cols = ['crRNA_1', 'Reference_1', 'DNA_1', 'Chromosome_1',
+                sub_cols = ['Bulge_type', 'crRNA_1', 'Reference_1', 'DNA_1', 'Chromosome_1',
                             'Position_1', 'Direction_1', 'Mismatches_1',
                             'Bulge_Size_1', 'PAM_gen_1', 'SNP_1',
                             'CFD_1', 'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
