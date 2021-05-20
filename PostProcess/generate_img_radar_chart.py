@@ -118,8 +118,10 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # Draw ylabels
     # # # Draw ylabels
     ax.set_rlabel_position(0)
-    plt.yticks([0, 0.25, 0.50, 0.75], ["0", "0.25",
-                                       "0.50", "0.75"], color="black", size=12)
+    # plt.yticks([0, 0.25, 0.50, 0.75], ["0", "0.25", "0.50", "0.75"], color="black", size=12)
+    plt.yticks([0, 25, 50, 75], ["0", "25", "50", "75"],
+               color="black", size=12)
+    # plt.ylim(0, 1)
     plt.ylim(0, 1)
 
     # Fill area
