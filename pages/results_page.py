@@ -1076,7 +1076,7 @@ def samplePage(job_id, hash):
                     }
                 ],
                 css=[{'selector': '.row',
-                      'rule': 'margin: 0'},{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
+                      'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
             ),
             id='div-result-table',
@@ -1301,7 +1301,7 @@ def loadFullSubsetTable(active_cel, data, cols, search, style_data, sel_cell):
                     }
                 ],
                 css=[{'selector': '.row',
-                      'rule': 'margin: 0'},{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
+                      'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
                 style_data_conditional=[
                     {
@@ -1559,7 +1559,7 @@ def guidePagev3(job_id, hash):
                     }
                 ],
                 css=[{'selector': '.row',
-                      'rule': 'margin: 0'},{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
+                      'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
                 style_data_conditional=[
                     {
@@ -3363,17 +3363,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #     'width': '{}%'.format(len(dff.columns)),
                                     #     # 'whiteSpace': 'normal'
                                     # }],
-                                    # style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
-                                    #                          'maxWidth': 200,
-                                    #                          },
-                                    #                         {'if': {'column_id': 'Bulge_type'},
-                                    #                          'maxWidth': 150},
-                                    #                         {'if': {'column_id': 'SNP'},
-                                    #                          # 'overflow': 'hidden',
-                                    #                          'textOverflow': 'ellipsis',
-                                    #                          'maxWidth': 200,
-                                    #                          }
-                                    #                         ],
+                                    style_cell_conditional=[
+                                        {'if': {'column_id': 'SNP'},
+                                         # 'overflow': 'hidden',
+                                         'textOverflow': 'ellipsis',
+                                         'maxWidth': 200,
+                                         }
+                                    ],
                                     # style_cell_conditional=[{'if': {'column_id': 'SNP'},
                                     #                          'overflow': 'hidden',
                                     #                           'textOverflow': 'ellipsis'
