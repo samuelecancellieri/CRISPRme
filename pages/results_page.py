@@ -249,6 +249,8 @@ def resultPage(job_id):
         html.Div(
             html.Div(
                 dash_table.DataTable(
+                    css=[{'selector': '.row',
+                          'rule': 'margin: 0'}],
                     id='general-profile-table',
                     # page_size=PAGE_SIZE,
                     columns=columns_profile_table,
@@ -812,6 +814,8 @@ def clusterPage(job_id, hash):
     final_list.append(
         html.Div(
             dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
                 # TABLE that represent scomposition of iupac of selected target, take rows from top_1.samples.txt
                 id='table-scomposition-cluster',
                 columns=cols_for_scomposition,
@@ -858,6 +862,8 @@ def clusterPage(job_id, hash):
     final_list.append(
         html.Div(
             dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
                 id='table-position-target',
                 columns=cols,
                 # data = df.to_dict('records'),
@@ -1045,6 +1051,8 @@ def samplePage(job_id, hash):
     final_list.append(
         html.Div(
             dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
                 id='table-sample-target',
                 columns=cols,
                 # data = df.to_dict('records'),
@@ -1275,6 +1283,8 @@ def loadFullSubsetTable(active_cel, data, cols, search, style_data, sel_cell):
     fl.append(
         html.Div(
             dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
                 id='second-table-subset-targets',
                 columns=cols,
                 virtualization=True,
@@ -1529,6 +1539,8 @@ def guidePagev3(job_id, hash):
     final_list.append(
         html.Div(
             dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
                 id='table-subset-target',
                 columns=cols,
                 # data = subset_targets.to_dict('records'),
@@ -2034,6 +2046,8 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
 
     out_1 = [
         dash_table.DataTable(
+            css=[{'selector': '.row',
+                  'rule': 'margin: 0'}],
             id="table-position",
             export_format="csv",
             columns=[{"name": i, "id": i} for i in df.columns],
@@ -2772,6 +2786,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 )
             ],
             dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
                 data=results_table.to_dict('records'),
@@ -2780,6 +2796,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 # }
             ),
             dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
                 id="results-table-risk",
                 columns=[{"name": i, "id": i} for i in ans.columns],
                 data=ans.to_dict('records'),
@@ -2822,6 +2840,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 )
             ],
             dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
                 data=results_table.to_dict('records')
