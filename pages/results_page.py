@@ -3342,14 +3342,14 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     # , 'overflowX': 'auto'
                                     style_table={
                                         'overflowX': 'scroll', 'overflowY': 'scroll', 'max-height': '300px'},
-                                    style_cell=[{
-                                        # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
-                                        # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
-                                        'width': '{}%'.format(len(dff.columns)),
-                                        # 'whiteSpace': 'normal'
-                                    }],
+                                    # style_cell=[{
+                                    #     # 'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                                    #     # 'minWidth': f'{1./len(dff.columns)*100}%', 'width': f'{1./len(dff.columns)*100}%', 'maxWidth': f'{1./len(dff.columns)*100}%'
+                                    #     'width': '{}%'.format(len(dff.columns)),
+                                    #     # 'whiteSpace': 'normal'
+                                    # }],
                                     style_cell_conditional=[{'if': {'column_id': 'Highest_CFD_Risk_Score'},
-                                                             'maxWidth': 100,
+                                                             'maxWidth': 200,
                                                              },
                                                             {'if': {'column_id': 'Bulge_type'},
                                                              'maxWidth': 150},
