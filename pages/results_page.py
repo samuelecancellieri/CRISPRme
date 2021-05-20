@@ -3086,6 +3086,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         fl.append(html.Div('None,None,None',
                            id='div-position-filter-query', style={'display': 'none'}))
         # start_time = time.time()
+        fl.append(html.Br())
         fl.append(html.Div(
             style={'text-align': 'center'}, id='div-table-position'
         )
