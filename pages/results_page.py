@@ -1047,8 +1047,6 @@ def samplePage(job_id, hash):
     final_list.append(
         html.Div(
             dash_table.DataTable(
-                css=[{'selector': '.row',
-                      'rule': 'margin: 0'}],
                 id='table-sample-target',
                 columns=cols,
                 # data = df.to_dict('records'),
@@ -1077,7 +1075,8 @@ def samplePage(job_id, hash):
 
                     }
                 ],
-                css=[{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'},{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
             ),
             id='div-result-table',
@@ -1279,8 +1278,6 @@ def loadFullSubsetTable(active_cel, data, cols, search, style_data, sel_cell):
     fl.append(
         html.Div(
             dash_table.DataTable(
-                css=[{'selector': '.row',
-                      'rule': 'margin: 0'}],
                 id='second-table-subset-targets',
                 columns=cols,
                 virtualization=True,
@@ -1303,7 +1300,8 @@ def loadFullSubsetTable(active_cel, data, cols, search, style_data, sel_cell):
                         'textAlign': 'left'
                     }
                 ],
-                css=[{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'},{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
                 style_data_conditional=[
                     {
@@ -1535,8 +1533,6 @@ def guidePagev3(job_id, hash):
     final_list.append(
         html.Div(
             dash_table.DataTable(
-                css=[{'selector': '.row',
-                      'rule': 'margin: 0'}],
                 id='table-subset-target',
                 columns=cols,
                 # data = subset_targets.to_dict('records'),
@@ -1562,7 +1558,8 @@ def guidePagev3(job_id, hash):
                         'textAlign': 'left'
                     }
                 ],
-                css=[{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'},{'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
                 style_data_conditional=[
                     {
