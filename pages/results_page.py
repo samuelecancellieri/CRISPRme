@@ -3057,7 +3057,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                             dbc.Col(
                                 html.Div(dcc.Input(placeholder='End Position', id='input-position-end'))),
                             dbc.Col(html.Div(html.Button(
-                                    'Filter', id='button-filter-position')))
+                                    'Filter', id='button-filter-position'))),
+                            html.Br()
                             # )
                         ]
                     ),
