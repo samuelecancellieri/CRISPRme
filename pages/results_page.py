@@ -3182,7 +3182,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #             )
         #         ]
         #     )
-
+        print(dff)
         query_tab_content = html.Div(
             [
                 # img_panel,
