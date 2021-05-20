@@ -66,18 +66,18 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     for elem in guideDict:
         if float(guideDict['General']) != 0:
             percentage_list.append(
-                float(str(float(guideDict[elem])/float(guideDict['General']))[0:5]))
+                float(str(float(guideDict[elem])*100/float(guideDict['General']))[0:5]))
         else:
             percentage_list.append(float(0))
 
     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
-    for count, elem in enumerate(percentage_list):  # correct to 100 based scale
-        print(elem)
-        if elem != 0:
-            elem = elem*100
-        else:
-            elem = 0
-        percentage_list[count] = elem
+    # for count, elem in enumerate(percentage_list):  # correct to 100 based scale
+    #     print(elem)
+    #     if elem != 0:
+    #         elem = elem*100
+    #     else:
+    #         elem = 0
+    #     percentage_list[count] = elem
 
     guideDataFrame['Proportion'] = percentage_list
     guideDataFrame.columns = ['Total', 'Proportion']
