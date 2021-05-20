@@ -2034,7 +2034,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     df_cols.remove('Samples')
     df_cols.remove('')
     df_cols.append('Samples')
-    df_cols.insert(0, '')
+    # df_cols.insert(0, '')
     df = df[df_cols]
 
     out_1 = [
