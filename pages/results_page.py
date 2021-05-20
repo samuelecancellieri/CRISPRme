@@ -1389,7 +1389,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     except:  # For REF
         pass
 
-    print(dff)
+    # print(dff)
 
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
@@ -1589,7 +1589,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 24))  # , skiprows = 1)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 22))  # , skiprows = 1)
     return df
 
 # Load barplot of population distribution for selected guide
