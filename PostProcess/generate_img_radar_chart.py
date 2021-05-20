@@ -71,6 +71,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             percentage_list.append(float(0))
 
     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
+    for count, elem in enumerate(percentage_list):
+        percentage_list[count] = elem*100
     guideDataFrame['Proportion'] = percentage_list
     guideDataFrame.columns = ['Total', 'Proportion']
     # convert to int total column
