@@ -935,7 +935,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
         raise PreventUpdate
 
     dff.rename(columns=COL_BOTH_RENAME, inplace=True)
-    del dff['Correct Guide']  # NOTE Drop the Correct Guide column
+    del dff['Real_Guide']  # NOTE Drop the Correct Guide column
     del dff['Variant Unique']
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
