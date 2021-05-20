@@ -30,18 +30,18 @@ import flask
 PAGE_SIZE = 10  # number of entries in each page of the table in view report
 BARPLOT_LEN = 4  # number of barplots in each row of Populations Distributions
 # Columns for dash datatable in REF search
-COL_REF = ['Bulge Type', 'crRNA', 'DNA', 'Chromosome', 'Position', 'Cluster Position',
+COL_REF = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Chromosome', 'Position', 'Cluster Position',
            'Direction', 'Mismatches', 'Bulge Size', 'Total', 'Annotation Type']
 COL_REF_TYPE = ['text', 'text', 'text', 'text', 'numeric',
                 'numeric', 'text', 'numeric', 'numeric', 'numeric', 'text']
-COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'DNA', 3: 'Chromosome', 4: 'Position', 5: 'Cluster Position', 6: 'Direction',
+COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Chromosome', 4: 'Position', 5: 'Cluster Position', 6: 'Direction',
                   7: 'Mismatches', 8: 'Bulge Size', 9: 'Total', 10: 'Correct Guide', 11: 'Annotation Type'}
 # Columns for dash datatable in VAR and BOTH search
-COL_BOTH = ['Bulge Type', 'crRNA', 'DNA', 'Reference', 'Chromosome', 'Position', 'Cluster Position',
+COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome', 'Position', 'Cluster Position',
             'Direction', 'Mismatches', 'Bulge Size', 'Total', 'PAM Creation', 'Samples Summary', 'Annotation Type']
 COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
                  'numeric', 'text', 'numeric', 'numeric', 'numeric', 'text', 'text', 'text']
-COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'DNA', 3: 'Reference', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
+COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Reference_sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
                    8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM Creation', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Correct Guide',
                    16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq_in_cluster', 20: 'CFD', 21: 'CFD_ref', 22: 'MMBLG_#Bulge_type', 23: 'MMBLG_crRNA', 24: 'MMBLG_DNA', 25: 'MMBLG_Reference',
                    26: 'MMBLG_Chromosome', 27: 'MMBLG_Position', 28: 'MMBLG_Cluster_Position', 29: 'MMBLG_Direction', 30: 'MMBLG_Mismatches', 31: 'MMBLG_Bulge_Size', 32: 'MMBLG_Total', 33: 'MMBLG_PAM_gen',
