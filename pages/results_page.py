@@ -637,8 +637,6 @@ def update_table_cluster(page_current, page_size, sort_by, filter, hide_referenc
     else:
         dff.rename(columns=COL_BOTH_RENAME, inplace=True)
 
-    print(dff)
-
     if genome_type != 'ref':
         # add_samples = [dff['Samples'][0]] * dff.shape[0]
         # check_minmms = dff['Min Mismatches']
