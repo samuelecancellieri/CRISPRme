@@ -3320,8 +3320,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 html.Div(dash_table.DataTable(
                                     export_format="csv",
                                     id='live_table',
-                                    columns=[{"name": dff_view_names, "id": i}
-                                             for i in dff.columns],
+                                    columns=[{"name": dff_view_names[count], "id": i}
+                                             for count, i in enumerate(dff.columns)],
                                     # tooltip_data=[
                                     #     {
                                     #         column: {'value': str(value), 'type': 'markdown'}
