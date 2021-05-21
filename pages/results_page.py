@@ -3159,7 +3159,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                           'AF', 'Annotation_Type']
         dff = pd.DataFrame(columns=['Bulge_type', 'crRNA', 'Reference', 'DNA', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
-                                    'Bulge_Size', 'PAM_gen', 'SNP',
+                                    'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
                                     'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                                     'AF', 'Annotation_Type'])  # pd.read_sql_query("SELECT * FROM final_table LIMIT 0",conn) #to define column names in the first empty table
         all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
