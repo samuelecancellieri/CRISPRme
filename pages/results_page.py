@@ -3381,6 +3381,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                          # 'overflow': 'hidden',
                                          'textOverflow': 'ellipsis',
                                          'maxWidth': 200,
+                                         },
+                                         {'if': {'column_id': 'Samples'},
+                                         # 'overflow': 'hidden',
+                                         'textOverflow': 'ellipsis',
+                                         'maxWidth': 300,
                                          }
                                     ],
                                     # style_cell_conditional=[{'if': {'column_id': 'SNP'},
