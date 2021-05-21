@@ -41,7 +41,7 @@ BARPLOT_LEN = 4  # number of barplots in each row of Populations Distributions
 #                 'numeric', 'text', 'numeric', 'numeric', 'numeric', 'text']
 COL_REF = ['Bulge type', 'crRNA', 'Off target_motif', 'Reference sequence', 'Chromosome',
            'Position', 'Direction', 'Mismatches',
-           'Bulge Size', 'PAM gen', 'Samples', 'SNP',
+           'Bulge Size', 'PAM gen', 'Samples', 'Variant',
            'CFD', 'CFD ref', 'Highest CFD Risk Score',
            'AF', 'Annotation Type']
 COL_REF_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
@@ -51,12 +51,12 @@ COL_REF_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
 #                   7: 'Mismatches', 8: 'Bulge Size', 9: 'Total', 10: 'Correct Guide', 11: 'Annotation Type'}
 COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
                   8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
-                  16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
+                  16: 'rsID', 17: 'AF', 18: 'Variant', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
 # Columns for dash datatable in VAR and BOTH search
 # COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome', 'Position', 'Cluster Position','Direction', 'Mismatches', 'Bulge Size', 'Total', 'PAM Creation', 'Samples Summary', 'Annotation Type', 'Real_Guide', 'rsID', 'AF', 'SNP', '#Seq_in_cluster', 'CFD', 'CFD_ref']
 COL_BOTH = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
                           'Position', 'Direction', 'Mismatches',
-                          'Bulge Size', 'PAM gen', 'Samples', 'SNP',
+                          'Bulge Size', 'PAM gen', 'Samples', 'Variant',
                           'CFD', 'CFD ref', 'Highest CFD Risk Score',
                           'AF', 'Annotation Type']
 COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
@@ -64,7 +64,7 @@ COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
                  'numeric', 'numeric', 'numeric', 'numeric', 'text']
 COL_BOTH_RENAME = {0: 'Bulge type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
                    8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
-                   16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
+                   16: 'rsID', 17: 'AF', 18: 'Variant', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
 GENOME_DATABASE = ['Reference', 'Enriched',
                    'Samples', 'Dictionary', 'Annotation']
 
@@ -2054,7 +2054,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         df = pd.DataFrame(columns=header)
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
     # df.columns = header
-    print(df, 'line 2057')
+    # print(df, 'line 2057')
 
     df = df[COL_BOTH]
     # df.columns = COL_BOTH
@@ -2065,7 +2065,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # df_cols.append('Samples')
     # # df_cols.insert(0, '')
     # df = df[df_cols]
-    print(df, 'position df line 2065')
+    # print(df, 'position df line 2065')
 
     out_1 = [
         dash_table.DataTable(
@@ -2073,7 +2073,9 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                   'rule': 'margin: 0'}],
             id="table-position",
             export_format="csv",
-            columns=[{"name": i, "id": i} for i in df.columns],
+            columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
+                     for count, i in enumerate(df.columns)],
+            # columns=[{"name": i, "id": i} for i in df.columns],
             data=df.to_dict('records'),
             style_cell_conditional=[{
                 'if': {'column_id': 'Samples'},
