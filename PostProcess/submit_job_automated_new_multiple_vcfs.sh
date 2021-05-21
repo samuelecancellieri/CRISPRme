@@ -475,9 +475,9 @@ mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
 echo -e 'Creating images\tStart\t'$(date) >> $log	
 # echo -e 'Creating images\tStart\t'$(date) >&2	
 echo -e "Adding risk score"
-./add_risk_score.py $final_res $final_res.risk
+./add_risk_score.py $final_res $final_res.risk "False"
 mv "$final_res.risk" "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
-./add_risk_score.py $final_res_alt $final_res_alt.risk
+./add_risk_score.py $final_res_alt $final_res_alt.risk "True"
 mv "$final_res_alt.risk" "${output_folder}/$(basename ${output_folder}).altMerge.txt"
 echo -e "Risk score added"
 
