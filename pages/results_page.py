@@ -54,7 +54,7 @@ COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Refere
                   16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
 # Columns for dash datatable in VAR and BOTH search
 # COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome', 'Position', 'Cluster Position','Direction', 'Mismatches', 'Bulge Size', 'Total', 'PAM Creation', 'Samples Summary', 'Annotation Type', 'Real_Guide', 'rsID', 'AF', 'SNP', '#Seq_in_cluster', 'CFD', 'CFD_ref']
-COL_BOTH = ['Bulge type', 'crRNA', 'Off target_motif', 'Reference sequence', 'Chromosome',
+COL_BOTH = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
                           'Position', 'Direction', 'Mismatches',
                           'Bulge Size', 'PAM gen', 'Samples', 'SNP',
                           'CFD', 'CFD ref', 'Highest CFD Risk Score',
