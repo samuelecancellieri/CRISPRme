@@ -2049,12 +2049,14 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         header = ftg.readline().split('\t')[:24]
     try:
         df = pd.read_csv(pos_grep_result, sep='\t',
-                         header=None, usecols=range(0, 17))
+                         header=None, usecols=range(0, 24))
     except:
         df = pd.DataFrame(columns=header)
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
     # df.columns = header
     print(df, 'line 2057')
+
+    df = df[COL_BOTH]
     # df.columns = COL_BOTH
     # df[''] = [''] * df.shape[0]
     # df_cols = df.columns.tolist()
