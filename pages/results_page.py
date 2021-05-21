@@ -3341,7 +3341,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                           'rule': 'margin: 0'}],
                                     export_format="csv",
                                     id='live_table',
-                                    columns=[{"name": dff_view_names[count], "id": i}
+                                    columns=[{"name": dff_view_names[count], "id": i, 'hideable':True}
                                              for count, i in enumerate(dff.columns)],
                                     # tooltip_data=[
                                     #     {
