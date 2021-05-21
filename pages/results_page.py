@@ -2057,8 +2057,9 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # print(df, 'line 2057')
     try:
         df = df[COL_BOTH]
+        df_check = True
     except:
-        df = 'no_elements'
+        df_check = False #skip df parsing and report no results found
     # df.columns = COL_BOTH
     # df[''] = [''] * df.shape[0]
     # df_cols = df.columns.tolist()
@@ -2068,7 +2069,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # # df_cols.insert(0, '')
     # df = df[df_cols]
     # print(df, 'position df line 2065')
-    if df != 'no_elements':
+    if df_check:
         out_1 = [
             dash_table.DataTable(
                 css=[{'selector': '.row',
