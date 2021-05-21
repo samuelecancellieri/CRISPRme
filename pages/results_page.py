@@ -954,7 +954,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
         raise PreventUpdate
 
     dff.rename(columns=COL_BOTH_RENAME, inplace=True)
-    del dff['Real_Guide']  # NOTE Drop the Correct Guide column
+    # del dff['Real_Guide']  # NOTE Drop the Correct Guide column
     del dff['Variant Unique']
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
@@ -2052,14 +2052,17 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                          header=None, usecols=range(0, 24))
     except:
         df = pd.DataFrame(columns=header)
-    df.columns = header
-    df[''] = [''] * df.shape[0]
-    df_cols = df.columns.tolist()
-    df_cols.remove('Samples')
-    df_cols.remove('')
-    df_cols.append('Samples')
-    # df_cols.insert(0, '')
-    df = df[df_cols]
+    df.rename(columns=COL_BOTH_RENAME, inplace=True)
+    # df.columns = header
+    df.columns = COL_BOTH
+    # df[''] = [''] * df.shape[0]
+    # df_cols = df.columns.tolist()
+    # df_cols.remove('Samples')
+    # df_cols.remove('')
+    # df_cols.append('Samples')
+    # # df_cols.insert(0, '')
+    # df = df[df_cols]
+    print(df, 'position df line 2065')
 
     out_1 = [
         dash_table.DataTable(
