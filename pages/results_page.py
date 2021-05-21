@@ -2783,13 +2783,15 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
-        ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
-        ans_cols = ans.columns.tolist()
-        ans_cols.remove('Samples')
-        ans_cols.append('Samples')
-        ans_cols.remove('')
-        # ans_cols.insert(0, '')
-        ans = ans[ans_cols]
+        ans.rename(COL_BOTH_RENAME, inplace=True)
+        ans = ans[COL_BOTH]
+        # ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
+        # ans_cols = ans.columns.tolist()
+        # ans_cols.remove('Samples')
+        # ans_cols.append('Samples')
+        # ans_cols.remove('')
+        # # ans_cols.insert(0, '')
+        # ans = ans[ans_cols]
         out_1 = [
             html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
@@ -2824,7 +2826,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}],
                 id="results-table-risk",
-                columns=[{"name": i, "id": i} for i in ans.columns],
+                columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
+                         for count, i in enumerate(ans.columns)],
                 data=ans.to_dict('records'),
                 # style_cell_conditional=[
                 #     {'if': {'column_id': 'Bulge_type'},
