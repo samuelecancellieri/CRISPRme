@@ -2781,7 +2781,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     except:
         sys.stderr.write('PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED')
 
-    print(ans, 'table sample line 2784')
+    # print(ans, 'table sample line 2784')
     # ans.columns(COL_BOTH_RENAME, inplace=True)
     # print(ans, 'table sample post rename line 2786')
     ans = ans[['#Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
@@ -2789,7 +2789,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
                'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                'AF', 'Annotation_Type']]
-    print(ans, 'table sample line 2792')
+    # print(ans, 'table sample line 2792')
 
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
