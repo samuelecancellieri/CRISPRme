@@ -51,11 +51,10 @@ COL_BOTH = ['Bulge_type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Ch
 COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
                  'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
                  'numeric', 'numeric', 'numeric', 'numeric', 'text']
-COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Reference_sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
-                   8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM Creation', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real_Guide',
-                   16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq_in_cluster', 20: 'CFD', 21: 'CFD_ref', 22: 'MMBLG_#Bulge_type', 23: 'MMBLG_crRNA', 24: 'MMBLG_DNA', 25: 'MMBLG_Reference',
-                   26: 'MMBLG_Chromosome', 27: 'MMBLG_Position', 28: 'MMBLG_Cluster_Position', 29: 'MMBLG_Direction', 30: 'MMBLG_Mismatches', 31: 'MMBLG_Bulge_Size', 32: 'MMBLG_Total', 33: 'MMBLG_PAM_gen',
-                   34: 'MMBLG_Var_uniq', 35: 'MMBLG_Samples', 36: 'MMBLG_Annotation_Type', 37: 'MMBLG_Real_Guide', 38: 'MMBLG_rsID', 39: 'MMBLG_AF', 40: 'MMBLG_SNP', 41: 'MMBLG_#Seq_in_cluster', 42: 'MMBLG_CFD', 43: 'MMBLG_CFD_ref'}
+# COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Reference_sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
+#                    8: 'Mismatches', 9: 'Bulge_Size', 10: 'Total', 11: 'PAM_gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real_Guide',
+#                    16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq_in_cluster', 20: 'CFD', 21: 'CFD_ref', 22: 'Highest_CFD_Risk_Score'}
+COL_BOTH_RENAME = {2: 'Off_target_motif', 3: 'Reference_sequence'}
 GENOME_DATABASE = ['Reference', 'Enriched',
                    'Samples', 'Dictionary', 'Annotation']
 
@@ -1390,10 +1389,13 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
         bulge_t = 'X'
     df = global_store_subset(value, bulge_t, bulge_s, mms, guide)
     dff = df
+
+    print(dff, 'line 1392')
     # if genome_type == 'ref':
     #    dff.rename(columns = COL_REF_RENAME, inplace = True)
     # else:
     dff.rename(columns=COL_BOTH_RENAME, inplace=True)
+    print(dff, 'line 1397')
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
         dff.drop(df[(df['Samples'] == 'n')].index, inplace=True)
