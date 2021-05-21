@@ -2785,6 +2785,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
         ans.rename(COL_BOTH_RENAME, inplace=True)
         ans = ans[COL_BOTH]
+        print(ans, 'table sample line 2788')
         # ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
         # ans_cols = ans.columns.tolist()
         # ans_cols.remove('Samples')
