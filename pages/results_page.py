@@ -35,12 +35,23 @@ BARPLOT_LEN = 4  # number of barplots in each row of Populations Distributions
 #                           'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
 #                           'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
 #                           'AF', 'Annotation_Type']
-COL_REF = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Chromosome', 'Position', 'Cluster Position',
-           'Direction', 'Mismatches', 'Bulge Size', 'Total', 'Annotation Type']
-COL_REF_TYPE = ['text', 'text', 'text', 'text', 'numeric',
-                'numeric', 'text', 'numeric', 'numeric', 'numeric', 'text']
-COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Chromosome', 4: 'Position', 5: 'Cluster Position', 6: 'Direction',
-                  7: 'Mismatches', 8: 'Bulge Size', 9: 'Total', 10: 'Correct Guide', 11: 'Annotation Type'}
+# COL_REF = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Chromosome', 'Position', 'Cluster Position',
+#            'Direction', 'Mismatches', 'Bulge Size', 'Total', 'Annotation Type']
+# COL_REF_TYPE = ['text', 'text', 'text', 'text', 'numeric',
+#                 'numeric', 'text', 'numeric', 'numeric', 'numeric', 'text']
+COL_REF = ['Bulge type', 'crRNA', 'Off target_motif', 'Reference sequence', 'Chromosome',
+           'Position', 'Direction', 'Mismatches',
+           'Bulge Size', 'PAM gen', 'Samples', 'SNP',
+           'CFD', 'CFD ref', 'Highest CFD Risk Score',
+           'AF', 'Annotation Type']
+COL_REF_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
+                'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
+                'numeric', 'numeric', 'numeric', 'numeric', 'text']
+# COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Chromosome', 4: 'Position', 5: 'Cluster Position', 6: 'Direction',
+#                   7: 'Mismatches', 8: 'Bulge Size', 9: 'Total', 10: 'Correct Guide', 11: 'Annotation Type'}
+COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
+                  8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
+                  16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
 # Columns for dash datatable in VAR and BOTH search
 # COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome', 'Position', 'Cluster Position','Direction', 'Mismatches', 'Bulge Size', 'Total', 'PAM Creation', 'Samples Summary', 'Annotation Type', 'Real_Guide', 'rsID', 'AF', 'SNP', '#Seq_in_cluster', 'CFD', 'CFD_ref']
 COL_BOTH = ['Bulge type', 'crRNA', 'Off target_motif', 'Reference sequence', 'Chromosome',
@@ -3704,8 +3715,8 @@ def global_store(value):
             join(current_working_directory + 'Results/'+value, f)) and f.endswith('targets.txt')]
 
     df = pd.read_csv(current_working_directory + 'Results/' +
-                     value + '/' + target[0], sep='\t', usecols=range(0, 22))
-    df.rename(columns={"#Bulge type": 'Bulge type', '#Bulge_type': 'Bulge type', 'Bulge Size': 'BulgeSize',
+                     value + '/' + target[0], sep='\t', usecols=range(0, 16))
+    df.rename(columns={"#Bulge type": 'BulgeType', '#Bulge_type': 'BulgeType', 'Bulge Size': 'BulgeSize',
                        'Bulge_Size': 'BulgeSize', 'Doench 2016': 'Doench2016', 'Doench_2016': 'Doench2016'}, inplace=True)
     return df
 
