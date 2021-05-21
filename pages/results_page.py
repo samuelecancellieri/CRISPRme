@@ -3154,7 +3154,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         c = conn.cursor()
         dff_view_names = ['Bulge_type', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
                           'Position', 'Direction', 'Mismatches',
-                          'Bulge_Size', 'PAM_gen', 'SNP',
+                          'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
                           'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                           'AF', 'Annotation_Type']
         dff = pd.DataFrame(columns=['Bulge_type', 'crRNA', 'Reference', 'DNA', 'Chromosome',
@@ -3827,7 +3827,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
 
                 sub_cols = ['Bulge_type_1', 'crRNA_1', 'Reference_1', 'DNA_1', 'Chromosome_1',
                             'Position_1', 'Direction_1', 'Mismatches_1',
-                            'Bulge_Size_1', 'PAM_gen_1', 'SNP_1',
+                            'Bulge_Size_1', 'PAM_gen_1', 'Samples_1', 'SNP_1',
                             'CFD_1', 'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
                             'AF_1', 'Annotation_Type_1']
 
