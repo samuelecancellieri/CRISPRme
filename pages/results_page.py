@@ -955,7 +955,8 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
 
     dff.rename(columns=COL_BOTH_RENAME, inplace=True)
     # del dff['Real_Guide']  # NOTE Drop the Correct Guide column
-    del dff['Variant Unique']
+    # del dff['Variant Unique']
+    dff = dff[COL_BOTH]
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
 
@@ -969,37 +970,36 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
             # only works with complete fields in standard format
             dff = dff.loc[dff[col_name].str.startswith(filter_value)]
 
-    if len(sort_by):
-        dff = dff.sort_values(
-            ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
-                for col in sort_by],
-            ascending=[
-                col['direction'] == 'asc'
-                for col in sort_by
-            ],
-            inplace=False
-        )
+    # if len(sort_by):
+    #     dff = dff.sort_values(
+    #         ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
+    #             for col in sort_by],
+    #         ascending=[
+    #             col['direction'] == 'asc'
+    #             for col in sort_by
+    #         ],
+    #         inplace=False
+    #     )
 
     # Calculate sample count
-    dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-        job_directory + 'sampleID.txt')[:2]
-    data_to_send = dff.iloc[
-        page_current*page_size:(page_current + 1)*page_size
-    ].to_dict('records')
-    for row in data_to_send:
-        summarized_sample_cell = dict()
-        for s in row['Samples'].split(','):
-            if s == 'n':
-                break
-            try:
-                summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
-            except:
-                summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
-        if summarized_sample_cell:
-            row['Samples Summary'] = ', '.join(
-                [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
-        else:
-            row['Samples Summary'] = 'n'
+    # dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
+    #     job_directory + 'sampleID.txt')[:2]
+    data_to_send = dff.iloc[page_current *
+                            page_size:(page_current + 1)*page_size].to_dict('records')
+    # for row in data_to_send:
+    #     summarized_sample_cell = dict()
+    #     for s in row['Samples'].split(','):
+    #         if s == 'n':
+    #             break
+    #         try:
+    #             summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
+    #         except:
+    #             summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
+    #     if summarized_sample_cell:
+    #         row['Samples Summary'] = ', '.join(
+    #             [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
+    #     else:
+    #         row['Samples Summary'] = 'n'
     return data_to_send
 # Return the targets found for the selected sample
 
