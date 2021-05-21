@@ -555,6 +555,7 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
                'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
                'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                'AF', 'Annotation_Type']]
+    print(dff)
     # #Grep annotation
     # file_to_grep = '.Annotation.targets.txt'
     # get_annotation = subprocess.Popen(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep + ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\"\''], shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -662,6 +663,8 @@ def update_table_cluster(page_current, page_size, sort_by, filter, hide_referenc
                'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
                'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                'AF', 'Annotation_Type']]
+    print(dff)
+
     # if genome_type == 'ref':
     #     dff.rename(columns=COL_REF_RENAME, inplace=True)
     # else:
@@ -969,6 +972,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
                'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
                'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                'AF', 'Annotation_Type']]
+    print(dff)
 
     # dff.rename(columns=COL_BOTH_RENAME, inplace=True)
     # del dff['Real_Guide']  # NOTE Drop the Correct Guide column
