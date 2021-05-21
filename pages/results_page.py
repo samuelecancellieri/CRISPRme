@@ -49,7 +49,7 @@ COL_REF_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
                 'numeric', 'numeric', 'numeric', 'numeric', 'text']
 # COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Chromosome', 4: 'Position', 5: 'Cluster Position', 6: 'Direction',
 #                   7: 'Mismatches', 8: 'Bulge Size', 9: 'Total', 10: 'Correct Guide', 11: 'Annotation Type'}
-COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
+COL_REF_RENAME = {0: 'Bulge type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
                   8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
                   16: 'rsID', 17: 'AF', 18: 'Variant', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
 # Columns for dash datatable in VAR and BOTH search
@@ -1165,7 +1165,7 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
         raise PreventUpdate
 
     filtering_expressions = filter.split(' && ')
-    bulge_t = data[active_cel['row']]['Bulge Type']
+    bulge_t = data[active_cel['row']]['Bulge type']
     bulge_s = str(data[active_cel['row']]['Bulge Size'])
     mms = str(data[active_cel['row']]['Mismatches'])
     chrom = str(data[active_cel['row']]['Chromosome'])
@@ -2423,7 +2423,7 @@ def generate_table(dataframe, id_table, genome_type, guide='', job_id='', max_ro
     '''
     # if genome_type == 'both':
     header = [html.Tr([
-        html.Th('Bulge Type', rowSpan='2', style={
+        html.Th('Bulge type', rowSpan='2', style={
                 'vertical-align': 'middle', 'text-align': 'center'}),
         html.Th('Mismatches', rowSpan='2', style={
                 'vertical-align': 'middle', 'text-align': 'center'}),
@@ -2446,7 +2446,7 @@ def generate_table(dataframe, id_table, genome_type, guide='', job_id='', max_ro
         header +
         # Body
         [html.Tr([
-            html.Td(html.A(dataframe.iloc[i][col],  href='result?job=' + job_id + '#' + guide + 'new' + dataframe.iloc[i]['Bulge Type'] + str(dataframe.iloc[i]['Bulge Size']) + str(dataframe.iloc[i]['Mismatches']), target='_blank'), style={'vertical-align': 'middle', 'text-align': 'center'}) if col == '' else html.Td(dataframe.iloc[i][col], style={'vertical-align': 'middle', 'text-align': 'center'}) for col in dataframe.columns
+            html.Td(html.A(dataframe.iloc[i][col],  href='result?job=' + job_id + '#' + guide + 'new' + dataframe.iloc[i]['Bulge type'] + str(dataframe.iloc[i]['Bulge Size']) + str(dataframe.iloc[i]['Mismatches']), target='_blank'), style={'vertical-align': 'middle', 'text-align': 'center'}) if col == '' else html.Td(dataframe.iloc[i][col], style={'vertical-align': 'middle', 'text-align': 'center'}) for col in dataframe.columns
         ]) for i in range(min(len(dataframe), max_rows))],
         style={'display': 'inline-block'},
         id=id_table
@@ -3182,11 +3182,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
-                          'Position', 'Direction', 'Mismatches',
-                          'Bulge Size', 'PAM gen', 'Samples', 'SNP',
-                          'CFD', 'CFD ref', 'Highest CFD Risk Score',
-                          'AF', 'Annotation Type']
+        dff_view_names = COL_BOTH
+        # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
+        #                   'Position', 'Direction', 'Mismatches',
+        #                   'Bulge Size', 'PAM gen', 'Samples', 'SNP',
+        #                   'CFD', 'CFD ref', 'Highest CFD Risk Score',
+        #                   'AF', 'Annotation Type']
         dff = pd.DataFrame(columns=['Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
                                     'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
