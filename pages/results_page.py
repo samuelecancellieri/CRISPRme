@@ -1400,12 +1400,12 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     df = global_store_subset(value, bulge_t, bulge_s, mms, guide)
     dff = df
 
-    print(dff, 'line 1392')
+    # print(dff, 'line 1392')
     # if genome_type == 'ref':
     #    dff.rename(columns = COL_REF_RENAME, inplace = True)
     # else:
     dff.rename(columns=COL_BOTH_RENAME, inplace=True)
-    print(dff, 'line 1397')
+    # print(dff, 'line 1397')
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
         dff.drop(df[(df['Samples'] == 'n')].index, inplace=True)
