@@ -30,7 +30,7 @@ import flask
 PAGE_SIZE = 10  # number of entries in each page of the table in view report
 BARPLOT_LEN = 4  # number of barplots in each row of Populations Distributions
 # Columns for dash datatable in REF search
-# dff_view_names = ['Bulge_type', 'crRNA', 'Off_target_motif','Reference_sequence', 'Chromosome',
+# dff_view_names = ['Bulge_type', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
 #                           'Position', 'Direction', 'Mismatches',
 #                           'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
 #                           'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
@@ -1425,21 +1425,16 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # if genome_type == 'ref':
     #    dff.rename(columns = COL_REF_RENAME, inplace = True)
     # else:
-    # dff.rename(columns=COL_BOTH_RENAME, inplace=True)
+    dff.rename(columns=COL_BOTH_RENAME, inplace=True)
 
-    # if 'hide-ref' in hide_reference or genome_type == 'var':
-    #     dff.drop(df[(df['Samples'] == 'n')].index, inplace=True)
+    if 'hide-ref' in hide_reference or genome_type == 'var':
+        dff.drop(df[(df['Samples'] == 'n')].index, inplace=True)
 
-    # try:  # For VAR and BOTH
-    #     del dff['Variant Unique']
-    # except:  # For REF
-    #     pass
+    try:  # For VAR and BOTH
+        del dff['Variant Unique']
+    except:  # For REF
+        pass
 
-    dff = dff[['Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
-               'Position', 'Direction', 'Mismatches',
-               'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
-               'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-               'AF', 'Annotation_Type']]
     print(dff, 'row 1438')
 
     for filter_part in filtering_expressions:
@@ -1486,24 +1481,23 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     data_to_send = dff.iloc[
         page_current*page_size:(page_current + 1)*page_size
     ].to_dict('records')
-    # if genome_type != 'ref':
-    #     dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-    #         job_directory + 'sampleID.txt')[:2]
-    #     for row in data_to_send:
-    #         summarized_sample_cell = dict()
-    #         for s in row['Samples'].split(','):
-    #             if s == 'n':
-    #                 break
-    #             try:
-    #                 summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
-    #             except:
-    #                 summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
-    #         if summarized_sample_cell:
-    #             row['Samples Summary'] = ', '.join(
-    #                 [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
-    #         else:
-    #             row['Samples Summary'] = 'n'
-
+    if genome_type != 'ref':
+        dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
+            job_directory + 'sampleID.txt')[:2]
+        for row in data_to_send:
+            summarized_sample_cell = dict()
+            for s in row['Samples'].split(','):
+                if s == 'n':
+                    break
+                try:
+                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
+                except:
+                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
+            if summarized_sample_cell:
+                row['Samples Summary'] = ', '.join(
+                    [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
+            else:
+                row['Samples Summary'] = 'n'
     return data_to_send  # , cells_style + style_data_table
 
 
@@ -1642,7 +1636,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 17))  # , skiprows = 1)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 22))  # , skiprows = 1)
     return df
 
 # Load barplot of population distribution for selected guide
