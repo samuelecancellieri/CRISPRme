@@ -2055,7 +2055,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
     # df.columns = header
     print(df, 'line 2057')
-    df.columns = COL_BOTH
+    # df.columns = COL_BOTH
     # df[''] = [''] * df.shape[0]
     # df_cols = df.columns.tolist()
     # df_cols.remove('Samples')
