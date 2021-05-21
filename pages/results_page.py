@@ -1165,7 +1165,7 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
         raise PreventUpdate
 
     filtering_expressions = filter.split(' && ')
-    bulge_t = data[active_cel['row']]['Bulge type']
+    bulge_t = data[active_cel['row']]['Bulge Type']
     bulge_s = str(data[active_cel['row']]['Bulge Size'])
     mms = str(data[active_cel['row']]['Mismatches'])
     chrom = str(data[active_cel['row']]['Chromosome'])
