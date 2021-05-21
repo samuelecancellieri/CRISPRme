@@ -251,8 +251,7 @@ def resultPage(job_id):
                 dash_table.DataTable(
                     id='general-profile-table',
                     # page_size=PAGE_SIZE,
-                    columns={columns_profile_table, 'hideable': True},
-                    # columns={[columns_profile_table, 'hideable': True]},
+                    columns=columns_profile_table,
                     merge_duplicate_headers=True,
                     # fixed_rows={ 'headers': True, 'data': 0 },
                     # data = profile.to_dict('records'),
