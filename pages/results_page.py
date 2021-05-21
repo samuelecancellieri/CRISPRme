@@ -43,18 +43,17 @@ COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Chromo
                   7: 'Mismatches', 8: 'Bulge Size', 9: 'Total', 10: 'Correct Guide', 11: 'Annotation Type'}
 # Columns for dash datatable in VAR and BOTH search
 # COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome', 'Position', 'Cluster Position','Direction', 'Mismatches', 'Bulge Size', 'Total', 'PAM Creation', 'Samples Summary', 'Annotation Type', 'Real_Guide', 'rsID', 'AF', 'SNP', '#Seq_in_cluster', 'CFD', 'CFD_ref']
-COL_BOTH = ['Bulge_type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome',
+COL_BOTH = ['Bulge type', 'crRNA', 'Off target_motif', 'Reference sequence', 'Chromosome',
                           'Position', 'Direction', 'Mismatches',
-                          'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
-                          'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-                          'AF', 'Annotation_Type']
+                          'Bulge Size', 'PAM gen', 'Samples', 'SNP',
+                          'CFD', 'CFD ref', 'Highest CFD Risk Score',
+                          'AF', 'Annotation Type']
 COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
                  'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
                  'numeric', 'numeric', 'numeric', 'numeric', 'text']
-COL_BOTH_RENAME = {0: 'Bulge_Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Reference_sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
-                   8: 'Mismatches', 9: 'Bulge_Size', 10: 'Total', 11: 'PAM_gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation_Type', 15: 'Real_Guide',
-                   16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq_in_cluster', 20: 'CFD', 21: 'CFD_ref', 22: 'Highest_CFD_Risk_Score'}
-# COL_BOTH_RENAME = {2: 'Off_target_motif', 3: 'Reference_sequence'}
+COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
+                   8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
+                   16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
 GENOME_DATABASE = ['Reference', 'Enriched',
                    'Samples', 'Dictionary', 'Annotation']
 
@@ -111,7 +110,7 @@ def resultPage(job_id):
     # genome_type = 'ref'
     # if '+' in genome_type_f:
     #     genome_type = 'var'
-    #     genome_name = genome_name.split('_')[0] + ' Variants'
+    #     genome_name = genome_name.split('')[0] + ' Variants'
     # else:
     #     genome_name = genome_name.split('_')[0] + ' Reference'
     if 'True' in ref_comp:
@@ -3164,11 +3163,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        dff_view_names = ['Bulge_type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome',
+        dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
                           'Position', 'Direction', 'Mismatches',
-                          'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
-                          'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-                          'AF', 'Annotation_Type']
+                          'Bulge Size', 'PAM gen', 'Samples', 'SNP',
+                          'CFD', 'CFD ref', 'Highest CFD Risk Score',
+                          'AF', 'Annotation Type']
         dff = pd.DataFrame(columns=['Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
                                     'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
