@@ -2783,6 +2783,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
     print(ans, 'table sample line 2784')
     ans.rename(COL_BOTH_RENAME, inplace=True)
+    print(ans, 'table sample post rename line 2784')
     ans = ans[COL_BOTH]
     print(ans, 'table sample line 2787')
 
