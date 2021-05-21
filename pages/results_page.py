@@ -2055,8 +2055,10 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
     # df.columns = header
     # print(df, 'line 2057')
-
-    df = df[COL_BOTH]
+    try:
+        df = df[COL_BOTH]
+    except:
+        df = 'no_elements'
     # df.columns = COL_BOTH
     # df[''] = [''] * df.shape[0]
     # df_cols = df.columns.tolist()
@@ -2066,28 +2068,30 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # # df_cols.insert(0, '')
     # df = df[df_cols]
     # print(df, 'position df line 2065')
+    if df != 'no_elements':
+        out_1 = [
+            dash_table.DataTable(
+                css=[{'selector': '.row',
+                      'rule': 'margin: 0'}],
+                id="table-position",
+                export_format="csv",
+                columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
+                         for count, i in enumerate(df.columns)],
+                # columns=[{"name": i, "id": i} for i in df.columns],
+                data=df.to_dict('records'),
+                style_cell_conditional=[{
+                    'if': {'column_id': 'Samples'},
+                    'textAlign': 'left'
+                }],
+                style_table={
+                    'overflowX': 'scroll',
+                },
+                page_size=10,
 
-    out_1 = [
-        dash_table.DataTable(
-            css=[{'selector': '.row',
-                  'rule': 'margin: 0'}],
-            id="table-position",
-            export_format="csv",
-            columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
-                     for count, i in enumerate(df.columns)],
-            # columns=[{"name": i, "id": i} for i in df.columns],
-            data=df.to_dict('records'),
-            style_cell_conditional=[{
-                'if': {'column_id': 'Samples'},
-                'textAlign': 'left'
-            }],
-            style_table={
-                'overflowX': 'scroll',
-            },
-            page_size=10,
-
-        )
-    ]
+            )
+        ]
+    else:
+        out_1 = [html.P('No results found with this genomic coordinates')]
     os.system(f"rm {pos_grep_result}")
     return out_1, '1/' + str(1)
 
