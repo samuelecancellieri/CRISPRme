@@ -1606,7 +1606,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 22))  # , skiprows = 1)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25))  # , skiprows = 1)
     return df
 
 # Load barplot of population distribution for selected guide
