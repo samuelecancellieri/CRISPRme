@@ -540,21 +540,6 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
     if dff is None:
         raise PreventUpdate
 
-    # dff_view_names = ['Bulge_type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome',
-    #                       'Position', 'Direction', 'Mismatches',
-    #                       'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
-    #                       'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-    #                       'AF', 'Annotation_Type']
-    # dff = pd.DataFrame(columns=['Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
-    #                             'Position', 'Direction', 'Mismatches',
-    #                             'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
-    #                             'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-    #                             'AF', 'Annotation_Type'])
-    dff = dff[['Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
-                                'Position', 'Direction', 'Mismatches',
-                                'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
-                                'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-                                'AF', 'Annotation_Type']]
     # #Grep annotation
     # file_to_grep = '.Annotation.targets.txt'
     # get_annotation = subprocess.Popen(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep + ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\"\''], shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -565,11 +550,11 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
     #     dff.rename(columns = {0:'Bulge Type', 1:'crRNA', 2:'DNA', 3:'Chromosome', 4:'Position', 5:'Cluster Position', 6:'Direction',
     #     7:'Mismatches', 8:'Bulge Size', 9:'Total', 10:'Min Mismatches', 11:'Max Mismatches', 12:'Samples', 13:'Correct Guide', 14:'Annotation Type',15:'Top Subcluster'}, inplace = True)
     # else:
-    # dff.rename(columns=COL_BOTH_RENAME, inplace=True)
-    # # dff.drop(dff.columns[[-1,]], axis=1, inplace=True)         #NOTE Drop the Correct Guide column
-    # del dff['Correct Guide']
-    # # dff['Annotation Type'] = annotation_type
-    # del dff['Variant Unique']
+    dff.rename(columns=COL_BOTH_RENAME, inplace=True)
+    # dff.drop(dff.columns[[-1,]], axis=1, inplace=True)         #NOTE Drop the Correct Guide column
+    del dff['Correct Guide']
+    # dff['Annotation Type'] = annotation_type
+    del dff['Variant Unique']
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
 
@@ -583,39 +568,39 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
             # only works with complete fields in standard format
             dff = dff.loc[dff[col_name].str.startswith(filter_value)]
 
-    # if len(sort_by):
-    #     dff = dff.sort_values(
-    #         ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
-    #             for col in sort_by],
-    #         ascending=[
-    #             col['direction'] == 'asc'
-    #             for col in sort_by
-    #         ],
-    #         inplace=False
-    #     )
+    if len(sort_by):
+        dff = dff.sort_values(
+            ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
+                for col in sort_by],
+            ascending=[
+                col['direction'] == 'asc'
+                for col in sort_by
+            ],
+            inplace=False
+        )
 
     # Calculate sample count
 
-    data_to_send = dff.iloc[page_current *
-                            page_size:(page_current + 1)*page_size].to_dict('records')
-    # if genome_type != 'ref':
-    #     dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-    #         job_directory + 'sampleID.txt')[:2]
-    #     for row in data_to_send:
-    #         summarized_sample_cell = dict()
-    #         for s in row['Samples'].split(','):
-    #             if s == 'n':
-    #                 break  # If a target have n, it means it's REF, because either all have samples or the single target is REF
-    #             try:
-    #                 summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
-    #             except:
-    #                 summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
-    #         if summarized_sample_cell:
-    #             row['Samples Summary'] = ', '.join(
-    #                 [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
-    #         else:
-    #             row['Samples Summary'] = 'n'
-
+    data_to_send = dff.iloc[
+        page_current*page_size:(page_current + 1)*page_size
+    ].to_dict('records')
+    if genome_type != 'ref':
+        dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
+            job_directory + 'sampleID.txt')[:2]
+        for row in data_to_send:
+            summarized_sample_cell = dict()
+            for s in row['Samples'].split(','):
+                if s == 'n':
+                    break  # If a target have n, it means it's REF, because either all have samples or the single target is REF
+                try:
+                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
+                except:
+                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
+            if summarized_sample_cell:
+                row['Samples Summary'] = ', '.join(
+                    [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
+            else:
+                row['Samples Summary'] = 'n'
     return data_to_send
 
 
