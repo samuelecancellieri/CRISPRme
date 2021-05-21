@@ -1084,8 +1084,8 @@ def indexPage():
                            ),
             dcc.Textarea(id='text-guides', placeholder='GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC', style={
                          'width': '300px', 'height': '30px'}),
-            dbc.FormText(
-                'Note: a maximum number of 100 guides can be provided, protospacer must be provided without PAM. If using the sequence extraction features only the first 100 guides extracted will be processed', color='secondary')
+            # dbc.FormText(
+            #     'Note: a maximum number of 100 guides can be provided, protospacer must be provided without PAM. If using the sequence extraction features only the first 100 guides extracted will be processed', color='secondary')
         ],
         style={'width': '300px'}  # NOTE same as text-area
     )
