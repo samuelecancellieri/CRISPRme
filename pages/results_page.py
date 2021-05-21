@@ -62,7 +62,7 @@ COL_BOTH = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Ch
 COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
                  'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
                  'numeric', 'numeric', 'numeric', 'numeric', 'text']
-COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
+COL_BOTH_RENAME = {0: 'Bulge type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
                    8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
                    16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
 GENOME_DATABASE = ['Reference', 'Enriched',
