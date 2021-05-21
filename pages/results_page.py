@@ -3382,7 +3382,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                          'textOverflow': 'ellipsis',
                                          'maxWidth': 200,
                                          },
-                                         {'if': {'column_id': 'Samples'},
+                                        {'if': {'column_id': 'Samples'},
                                          # 'overflow': 'hidden',
                                          'textOverflow': 'ellipsis',
                                          'maxWidth': 300,
