@@ -2782,10 +2782,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         sys.stderr.write('PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED')
 
     print(ans, 'table sample line 2784')
-    ans.rename(COL_BOTH_RENAME, inplace=True)
-    print(ans, 'table sample post rename line 2784')
+    ans.columns(COL_BOTH_RENAME, inplace=True)
+    print(ans, 'table sample post rename line 2786')
     ans = ans[COL_BOTH]
-    print(ans, 'table sample line 2787')
+    print(ans, 'table sample line 2788')
 
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
