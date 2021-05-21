@@ -30,6 +30,11 @@ import flask
 PAGE_SIZE = 10  # number of entries in each page of the table in view report
 BARPLOT_LEN = 4  # number of barplots in each row of Populations Distributions
 # Columns for dash datatable in REF search
+# dff_view_names = ['Bulge_type', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
+#                           'Position', 'Direction', 'Mismatches',
+#                           'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
+#                           'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
+#                           'AF', 'Annotation_Type']
 COL_REF = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Chromosome', 'Position', 'Cluster Position',
            'Direction', 'Mismatches', 'Bulge Size', 'Total', 'Annotation Type']
 COL_REF_TYPE = ['text', 'text', 'text', 'text', 'numeric',
@@ -37,10 +42,15 @@ COL_REF_TYPE = ['text', 'text', 'text', 'text', 'numeric',
 COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Chromosome', 4: 'Position', 5: 'Cluster Position', 6: 'Direction',
                   7: 'Mismatches', 8: 'Bulge Size', 9: 'Total', 10: 'Correct Guide', 11: 'Annotation Type'}
 # Columns for dash datatable in VAR and BOTH search
-COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome', 'Position', 'Cluster Position',
-            'Direction', 'Mismatches', 'Bulge Size', 'Total', 'PAM Creation', 'Samples Summary', 'Annotation Type', 'Real_Guide', 'rsID', 'AF', 'SNP', '#Seq_in_cluster', 'CFD', 'CFD_ref']
+# COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome', 'Position', 'Cluster Position','Direction', 'Mismatches', 'Bulge Size', 'Total', 'PAM Creation', 'Samples Summary', 'Annotation Type', 'Real_Guide', 'rsID', 'AF', 'SNP', '#Seq_in_cluster', 'CFD', 'CFD_ref']
+COL_BOTH = ['Bulge_type', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
+                          'Position', 'Direction', 'Mismatches',
+                          'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
+                          'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
+                          'AF', 'Annotation_Type']
 COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
-                 'numeric', 'text', 'numeric', 'numeric', 'numeric', 'text', 'text', 'text', 'text', 'text', 'numeric', 'text', 'numeric', 'numeric', 'numeric', 'numeric']
+                 'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
+                 'numeric', 'numeric', 'numeric', 'numeric', 'text']
 COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off_target_motif', 3: 'Reference_sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
                    8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM Creation', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real_Guide',
                    16: 'rsID', 17: 'AF', 18: 'SNP', 19: '#Seq_in_cluster', 20: 'CFD', 21: 'CFD_ref', 22: 'MMBLG_#Bulge_type', 23: 'MMBLG_crRNA', 24: 'MMBLG_DNA', 25: 'MMBLG_Reference',
@@ -1099,7 +1109,7 @@ def global_store_general(path_file_to_load):
     if os.path.getsize(path_file_to_load) > 0:
         # df = pd.read_csv(path_file_to_load, sep='\t', header=None, skiprows=rows_to_skip, usecols=range(0, 16))
         df = pd.read_csv(path_file_to_load, sep='\t', header=None,
-                         skiprows=rows_to_skip, usecols=range(0, 24))
+                         skiprows=rows_to_skip, usecols=range(0, 17))
     else:
         df = None
     return df
@@ -3152,12 +3162,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        dff_view_names = ['Bulge_type', 'crRNA', 'Reference_sequence', 'Off_target_motif', 'Chromosome',
+        dff_view_names = ['Bulge_type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome',
                           'Position', 'Direction', 'Mismatches',
                           'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
                           'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
                           'AF', 'Annotation_Type']
-        dff = pd.DataFrame(columns=['Bulge_type', 'crRNA', 'Reference', 'DNA', 'Chromosome',
+        dff = pd.DataFrame(columns=['Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
                                     'Position', 'Direction', 'Mismatches',
                                     'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
                                     'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
@@ -3825,7 +3835,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
                                              radio_order, orderdrop, asc1, url, guide, current_working_directory)
             if target[-1] == '1':
 
-                sub_cols = ['Bulge_type_1', 'crRNA_1', 'Reference_1', 'DNA_1', 'Chromosome_1',
+                sub_cols = ['Bulge_type_1', 'crRNA_1', 'DNA_1', 'Reference_1', 'Chromosome_1',
                             'Position_1', 'Direction_1', 'Mismatches_1',
                             'Bulge_Size_1', 'PAM_gen_1', 'Samples_1', 'SNP_1',
                             'CFD_1', 'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
