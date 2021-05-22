@@ -1042,10 +1042,7 @@ def indexPage():
     introduction_content = html.Div(
         [
             html.Div(
-                'CRISPRme  performs  predictive analysis and result assessment on population and individual specific CRISPR/Cas experiments.' +
-                ' CRISPRme enumerates on- and off-target accounting simultaneously for  substitutions, DNA/RNA bulges and common genetic variants from the 1000 genomes project.' +
-                ' CRISPRme is based on CRISPRitz [1] a software tool for population target analyses.'
-                + ' CRISPRme is devoted to individual specific on- and off-target analyses.'),
+                'CRISPRme  performs  predictive analysis and result assessment on population and individual specific CRISPR/Cas experiments.' + ' CRISPRme enumerates on- and off-target accounting simultaneously for  substitutions, DNA/RNA bulges and common genetic variants from the 1000 genomes project.' + ' CRISPRme is devoted to individual specific on- and off-target analyses.'),
             html.Br()
         ]
     )
