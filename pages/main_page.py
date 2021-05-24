@@ -1237,10 +1237,11 @@ def indexPage():
             html.Button('Submit', id='check-job',
                         style={'background-color': '#E6E6E6'}),
             html.Button('', id='submit-job', style={'display': 'none'}),
-            html.Div(['By clicking submit you are agreeing to the ', html.A(
-                'Terms and Conditions!', target='_blank', href='https://github.com/pinellolab/CRISPRme/blob/main/LICENSE')])
         ]
     )
+
+    terms_and_conditions_content = html.Div(['By clicking submit you are agreeing to the ', html.A(
+        'Terms and Conditions!', target='_blank', href='https://github.com/pinellolab/CRISPRme/blob/main/LICENSE')])
 
     # insert introduction in the layout
     final_list.append(introduction_content)
@@ -1293,6 +1294,7 @@ def indexPage():
                                         html.Br(),
                                         html.Div(submit_content, style={
                                                  'margin-left': '30%'}),
+                                        terms_and_conditions_content,
                                         # personal_data_management_content,
                                         html.Br(),
                                         mail_content,
