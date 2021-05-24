@@ -1236,7 +1236,9 @@ def indexPage():
         [
             html.Button('Submit', id='check-job',
                         style={'background-color': '#E6E6E6'}),
-            html.Button('', id='submit-job', style={'display': 'none'})
+            html.Button('', id='submit-job', style={'display': 'none'}),
+            html.Div(['By clicking submit you are agreeing to the ', html.A(
+                'Terms and Conditions!', target='_blank', href='https://github.com/pinellolab/CRISPRme/blob/main/LICENSE')])
         ]
     )
 
