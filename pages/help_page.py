@@ -11,6 +11,7 @@ import base64  # for decoding upload content
 import io  # for decoding upload content
 from app import app_main_directory
 
+
 def helpPage():
     final_list = []
     final_list.append(
@@ -18,9 +19,9 @@ def helpPage():
             html.H3('About'),
             html.P([
                 'CRISPRme  performs  predictive analysis and result assessment on population and individual specific CRISPR/Cas experiments.' +
-                ' CRISPRme enumerates on- and off-target accounting simultaneously for  substitutions, DNA/RNA bulges and common genetic variants from the 1000 genomes project.'
+                ' CRISPRme enumerates on- and off-target accounting simultaneously for substitutions, DNA/RNA bulges and common genetic variants from the 1000 genomes project.'
             ]),
-            html.P(['Open this ', html.A('example', href='http://crisprme.di.univr.it/load?job=6FDKYQS472',
+            html.P(['Open this ', html.A('example', href='http://crisprme.di.univr.it/load?job=36B28DI06M',
                                          target='_blank'), ' to navigate the results we show in this page'])
 
         ])
@@ -49,7 +50,7 @@ def helpPage():
                                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
                                         open(app_main_directory+'/assets/helpPage/sequence.png', 'rb').read()).decode()), width='40%'),
                                     html.Li('Genomic sequence(s): one or more genetic sequences (max 1000 characters), each sequence MUST BE separated with the header \'>name\'. The sequence can be also submitted with a ' +
-                                            'chromosome range, also provided with an header. The region will be extracted from the Genome selected in STEP 1'),                                    
+                                            'chromosome range, also provided with an header. The region will be extracted from the Genome selected in STEP 1'),
                                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
                                         open(app_main_directory+'/assets/helpPage/nuclease.png', 'rb').read()).decode()), width='30%'),
                                     html.Li(
@@ -202,8 +203,8 @@ def helpPage():
         html.P(
             [
                 'At the top of the page, you find a table with the list of gRNAs used during the search phase. This table summarizes the results obtained for each input guide.',
-                html.P(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+
-                    '/assets/resultPage/resultsSummary.png', 'rb').read()).decode()), width='100%')),
+                html.P(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                            '/assets/resultPage/resultsSummary.png', 'rb').read()).decode()), width='100%')),
                 html.Ul(
                     [
                         html.Li('CFD: Off-Target Cutting Frequency Determination Score, calculates how much is the affinity of the guides with the off-targets, basically tells you the likelihood of the guide to perform cut in off-target regions.'),
@@ -234,14 +235,14 @@ def helpPage():
                     [
                         html.Li([html.Span('Custom ranking: ', style={
                                 'color': 'red'}), 'This page allows the user to sort the results based on various values like number of mismatches, bulges, CFD, etc...']),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+
-                            '/assets/resultPage/customRanking.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/customRanking.png', 'rb').read()).decode()), width='100%'),
 
 
                         html.Li([html.Span('Summary by Mismatches/Bulges: ', style={
                                 'color': 'red'}), 'This table collects all the possible On-/Off- Targets grouped by mismatch/bulge couples.']),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+
-                            '/assets/resultPage/summaryByGuide.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/summaryByGuide.png', 'rb').read()).decode()), width='100%'),
                         html.Ul(
                             [
                                 html.Li(
@@ -264,8 +265,8 @@ def helpPage():
 
                         html.Li([html.Span('Summary by Sample: ', style={
                                 'color': 'red'}), 'This table collects all the possible On-/Off- Targets grouped by sample ID.']),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+
-                            '/assets/resultPage/summaryBySamples.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/summaryBySamples.png', 'rb').read()).decode()), width='100%'),
                         html.Ul(
                             [
                                 html.Li(
@@ -291,8 +292,8 @@ def helpPage():
 
                         html.Li([html.Span('Query Genomic Region: ', style={
                                 'color': 'red'}), 'This table collects all the possible On-/Off- Targets grouped by position in the genome (composed by chromosome and relative position)']),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+
-                            '/assets/resultPage/summaryByPosition.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/summaryByPosition.png', 'rb').read()).decode()), width='100%'),
                         # html.Ul(
                         #     [
                         #         html.Li(
@@ -312,19 +313,19 @@ def helpPage():
                         # ),
                         html.Li([html.Span('Graphical Reports: ', style={
                                 'color': 'red'}), 'This page shows graphics about a specific guide, including genomic annotation and motif logos. The main feature introduced is the possibility to visualize graphical reports at individual level.']),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+
-                            '/assets/resultPage/summaryByGraphic_population.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/summaryByGraphic_population.png', 'rb').read()).decode()), width='100%'),
                         html.Li(
                             'Select a Mismatch and Bulge Value: generate graphics with the specified mismatch+bulge value'),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+
-                            '/assets/resultPage/summaryByGraphic_sample.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/summaryByGraphic_sample.png', 'rb').read()).decode()), width='100%'),
                         html.Li(
-                                    'Select Individual Data: generate individual data, by selecting Super Population, Population and Sample'),
+                            'Select Individual Data: generate individual data, by selecting Super Population, Population and Sample'),
 
                         html.Li([html.Span('Personal Risk Cards: ', style={
                                 'color': 'red'}), 'This page shows at individual level the most important data for a given sample.']),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+
-                            '/assets/resultPage/personalCard.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/personalCard.png', 'rb').read()).decode()), width='100%'),
                         html.Ul(
                             [
                                 html.Li(

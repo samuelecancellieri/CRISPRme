@@ -1041,11 +1041,9 @@ def indexPage():
 
     introduction_content = html.Div(
         [
-            html.Div(
-                'CRISPRme  performs  predictive analysis and result assessment on population and individual specific CRISPR/Cas experiments.' +
-                ' CRISPRme enumerates on- and off-target accounting simultaneously for  substitutions, DNA/RNA bulges and common genetic variants from the 1000 genomes project.' +
-                ' CRISPRme is based on CRISPRitz [1] a software tool for population target analyses.'
-                + ' CRISPRme is devoted to individual specific on- and off-target analyses.'),
+            html.Div('CRISPRme is a web application, also available offline or command-line, for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:protospacer mismatches and bulges, and is suitable for population and personal genome analyses.'),
+            html.Div(['Check out our manuscript on bioRxiv ', html.A(
+                'here!', target='_blank', href='https://www.biorxiv.org/content/10.1101/2021.05.20.445054v1')]),
             html.Br()
         ]
     )
@@ -1238,10 +1236,17 @@ def indexPage():
         [
             html.Button('Submit', id='check-job',
                         style={'background-color': '#E6E6E6'}),
-            html.Button('', id='submit-job', style={'display': 'none'})
+            html.Button('', id='submit-job', style={'display': 'none'}),
         ]
     )
 
+    terms_and_conditions_content = html.Div(
+        [
+            html.Div('By clicking submit you are agreeing to the'),
+            html.Div(html.A('Terms and Conditions!', target='_blank',
+                            href='https://github.com/pinellolab/CRISPRme/blob/main/LICENSE'))
+        ]
+    )
     # insert introduction in the layout
     final_list.append(introduction_content)
     final_list.append(
@@ -1293,6 +1298,7 @@ def indexPage():
                                         html.Br(),
                                         html.Div(submit_content, style={
                                                  'margin-left': '30%'}),
+                                        terms_and_conditions_content,
                                         # personal_data_management_content,
                                         html.Br(),
                                         mail_content,

@@ -21,7 +21,7 @@ def contactPage():
                     [
                         html.Li(
                             [
-                                ('Elia Dirupo, Samuele Cancellieri, Nicola Bombieri and Rosalba Giugno in the Department of Computer Science, University of Verona, Italy, InfOmics Lab ('),
+                                ('Elia Dirupo, Samuele Cancellieri, Francesco Masillo, Nicola Bombieri and Rosalba Giugno in the Department of Computer Science, University of Verona, Italy, InfOmics Lab ('),
                                 html.A('https://infomics.github.io/InfOmics/index.html',
                                        href='https://infomics.github.io/InfOmics/index.html', target='_blank'),
                                 ')'
@@ -46,7 +46,7 @@ def contactPage():
                             'rosalba DOT giugno AT univr DOT it'
                         ),
                         html.Li(
-                            'lpinello AT jimmy DOT harvard DOT edu'
+                            'lpinello AT mgh DOT harvard DOT edu'
                         )
                     ], style={'padding': '15px'}
                 )

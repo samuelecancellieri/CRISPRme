@@ -2059,7 +2059,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         df = df[COL_BOTH]
         df_check = True
     except:
-        df_check = False #skip df parsing and report no results found
+        df_check = False  # skip df parsing and report no results found
     # df.columns = COL_BOTH
     # df[''] = [''] * df.shape[0]
     # df_cols = df.columns.tolist()
@@ -2681,6 +2681,9 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 def generate_sample_card(n, sample, sel_cel, all_guides, search):
     if n is None:
         raise PreventUpdate
+
+    # convert sample to str to avoid concatenation errrors
+    sample = str(sample)
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
@@ -2789,7 +2792,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # print(ans, 'table sample line 2784')
     # ans.columns(COL_BOTH_RENAME, inplace=True)
     # print(ans, 'table sample post rename line 2786')
-    
+
     # print(ans, 'table sample line 2792')
 
     try:
