@@ -562,6 +562,6 @@ echo -e 'Job\tDone\t'$(date) >>$log
 # echo -e 'Job End' >  $output
 echo -e "JOB END"
 
-if [ "$email" != "" ]; then
+if [ "$email" != "_" ]; then
 	python $starting_dir/../pages/send_mail.py $output_folder
 fi

@@ -320,6 +320,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             e.write(datetime.utcnow().strftime("%m/%d/%Y, %H:%M:%S") + '\n')
             # e.write('Job done. Parameters: etc etc')
             e.close()
+    else:
+        dest_email = "_"
 
     pam_len = 0
     with open(current_working_directory + 'PAMs/' + pam + '.txt') as pam_file:
