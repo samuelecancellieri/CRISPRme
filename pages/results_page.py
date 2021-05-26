@@ -934,7 +934,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     hash = hash.split('#')[1]
     guide = hash[:hash.find('-Sample-')]
-    sample = hash[hash.rfind('-') + 1:]
+    sample = str(hash[hash.rfind('-') + 1:])
     with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
@@ -1008,7 +1008,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
 def samplePage(job_id, hash):
     # print("SAMPLE PAGE LOADED FOR", job_id, hash)
     guide = hash[:hash.find('-Sample-')]
-    sample = hash[hash.rfind('-') + 1:]
+    sample = str(hash[hash.rfind('-') + 1:])
     if (not isdir(current_working_directory + 'Results/' + job_id)):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
 
@@ -1058,7 +1058,7 @@ def samplePage(job_id, hash):
     if not os.path.exists(sample_grep_result):
         os.system(f"head -1 {file_to_grep} > {sample_grep_result}")
         os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
-                ' | awk \'$14~\"' + sample + '\"\' >> ' + sample_grep_result)
+                  ' | awk \'$14~\"' + sample + '\"\' >> ' + sample_grep_result)
 
         os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
                                                             '.zip') + ' ' + sample_grep_result + " &")
@@ -1183,7 +1183,7 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
     if not os.path.exists(scomposition_file):
         os.system(f'head -1 {file_to_grep} > {scomposition_file}')
         os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
-                '\' >> ' + scomposition_file)  # , shell = True)
+                  '\' >> ' + scomposition_file)  # , shell = True)
     # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
     # Check if result grep has at least 1 result
     if os.path.getsize(scomposition_file) > 0:
@@ -1554,9 +1554,9 @@ def guidePagev3(job_id, hash):
     if not os.path.exists(guide_grep_result):
         os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
         os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
-                bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
+                  bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
         os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
-                ' ' + guide_grep_result + " &")  # , shell = True)
+                  ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
     final_list.append(
@@ -1623,7 +1623,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25) , skiprows = 1)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25), skiprows=1)
     return df
 
 # Load barplot of population distribution for selected guide
@@ -2155,7 +2155,7 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
 
     sup_pop = filter_q.split(',')[0]
     pop = filter_q.split(',')[1]
-    samp = filter_q.split(',')[2]
+    samp = str(filter_q.split(',')[2])
     if sup_pop == 'None':
         sup_pop = None
     if pop == 'None':
@@ -2187,11 +2187,11 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
 
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     if genome_type == 'both':
-        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  #'Targets in Reference',
-                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']#, 'Class']
+        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
+                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']  # , 'Class']
     else:
-        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  #'Targets in Reference',
-                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']#, 'Class']
+        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
+                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']  # , 'Class']
     # Last button pressed is filtering, return the first page of the filtered table
     if max(btn_sample_section) == n:
         if genome_type == 'both':
@@ -2498,6 +2498,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     # if sel_cel is None:
     #     raise PreventUpdate
     # print('entro update tab')
+    sample = str(sample)
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
@@ -2987,7 +2988,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
         if genome_type == 'both':
             # col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
-            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  #'Targets in Reference',
+            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
@@ -2995,7 +2996,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             #df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             # col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
-            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  #'Targets in Reference',
+            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
