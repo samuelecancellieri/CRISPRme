@@ -116,7 +116,7 @@ for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
     current_bar = [x[i] for x in barplot_values.values()]
     # all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
     all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(
-        x, 1 + i*0.3) for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black', hatch=hatches))
+        x, 1 + i*0.3) for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black', hatch=hatches[i]))
     previous_bar = [x + previous_bar[k] for k, x in enumerate(current_bar)]
 
 # p1 = plt.bar(ind, barplot_values.values(), width, color=population_color, align='edge')       #color = '#67a9cf'
