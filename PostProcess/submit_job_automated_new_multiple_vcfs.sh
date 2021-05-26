@@ -380,28 +380,25 @@ while read vcf_f; do
 	fi
 
 	if [ "$vcf_name" != "_" ]; then
+		echo -e "SNPs analysis ended. Starting INDELs analysis"
 		cd "$starting_dir"
 
-		if [ $(wc -l "$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" | awk -F" " '{print $1}') -gt 1 ]; then
-			echo -e "SNPs analysis ended. Starting INDELs analysis"
-			echo -e 'Post-analysis INDELs\tStart\t'$(date) >>$log
-			# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
-			./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
+		echo -e 'Post-analysis INDELs\tStart\t'$(date) >>$log
+		# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
+		./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
 
-			# echo -e 'Post-analysis INDELs\tEnd\t'$(date) >&2
-			for key in "${array_fake_chroms[@]}"; do
-				echo "Concatenating $key"
-				tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt" >>"$final_res"    #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-				tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt" >>"$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
-				rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
-				rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
-			done
+		# echo -e 'Post-analysis INDELs\tEnd\t'$(date) >&2
+		for key in "${array_fake_chroms[@]}"; do
+			echo "Concatenating $key"
+			tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt" >>"$final_res"    #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+			tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt" >>"$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+			rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
+			rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
+		done
 
-		fi
 		echo -e 'Post-analysis INDELs\tEnd\t'$(date) >>$log
 
 	fi
-
 done <$vcf_list
 echo -e "Adding header to files"
 sed -i 1i"#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref" "$final_res"
@@ -457,9 +454,7 @@ if ! [ -d "$output_folder/cfd_graphs" ]; then
 fi
 ./assemble_cfd_graphs.py $output_folder
 mv $output_folder/snps.CFDGraph.txt $output_folder/cfd_graphs
-if [ -f "$output_folder/indels.CFDGraph.txt" ]; then
-	mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
-fi
+mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
 
 # echo -e 'Creating images' >  $output
 echo -e 'Creating images\tStart\t'$(date) >>$log
@@ -474,7 +469,7 @@ echo -e "Risk score added"
 cd $output_folder
 rm -r "cfd_graphs"
 rm -r "crispritz_prof"
-# rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
+rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
 rm $final_res
 rm $final_res_alt
 
