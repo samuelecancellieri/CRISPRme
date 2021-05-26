@@ -2701,7 +2701,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                          guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None)
         personal = df.loc[sample, 4]
-        pam_creation = df.loc[sample, 8]
+        pam_creation = df.loc[sample, 7]
 
         file_to_grep = job_directory + job_id + '.bestMerge.txt'
         integrated_to_grep = job_directory+job_id + \
@@ -2712,7 +2712,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             str(sample) + '.' + guide + '.integrated.private.txt'
         # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
         sample_grep_result = current_working_directory + 'Results/' + \
-            job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.private.txt'
+            job_id + '/' + job_id + '.' + \
+            str(sample) + '.' + guide + '.private.txt'
 
         # copy header from integrated results into sample files
         os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
