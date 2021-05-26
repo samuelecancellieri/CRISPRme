@@ -410,7 +410,7 @@ while read samples; do
 	# tail -n +2 $samples >> "$output_folder/sampleID.txt"
 	grep -v '#' "${current_working_directory}/samplesIDs/$samples" >>"$output_folder/sampleID.txt"
 done <$sampleID
-sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tGENDER" "$output_folder/sampleID.txt"
+sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tSEX" "$output_folder/sampleID.txt"
 
 sampleID=$output_folder/sampleID.txt
 
