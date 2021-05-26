@@ -1043,9 +1043,9 @@ def indexPage():
 
     introduction_content = html.Div(
         [
-            html.Div(['CRISPRme is a web application, also available offline or command-line ', html.A(
-                '(on Github)', target='_blank', href='https://github.com/pinellolab/CRISPRme'), html.Div(' for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:protospacer mismatches and bulges, and is suitable for population and personal genome analyses.')]),
-            html.Div(['Check out our manuscript on bioRxiv ', html.A(
+            html.Div([html.P('CRISPRme is a web application, also available offline or command-line '), html.A(
+                '(on Github)', target='_blank', href='https://github.com/pinellolab/CRISPRme'), html.P(' for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:protospacer mismatches and bulges, and is suitable for population and personal genome analyses.')]),
+            html.Div([html.P('Check out our manuscript on bioRxiv '), html.A(
                 'here!', target='_blank', href='https://www.biorxiv.org/content/10.1101/2021.05.20.445054v1')]),
             html.Br()
         ]
