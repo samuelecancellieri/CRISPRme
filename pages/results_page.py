@@ -3161,7 +3161,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         return fl
     elif value == 'tab-graphical-sample-card':
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                         guide+'.txt', skiprows=1, sep='\t', header=None)
+                         guide+'.txt', skiprows=2, sep='\t', header=None)
         samples = df.iloc[:, 0]
         fl.append(
             html.P(
