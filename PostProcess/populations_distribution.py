@@ -99,6 +99,7 @@ except:
 width = 0.5
 
 population_color = ['purple', 'orange', 'green', 'blue', 'red']
+hatches = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*']
 if 'REF' in barplot_values.keys():
     population_color.insert(0, 'grey')
 # If i have more than 5 superpopulations + ref
@@ -113,8 +114,9 @@ elif len(barplot_values.keys()) < len(population_color):
 all_bar = []
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
     current_bar = [x[i] for x in barplot_values.values()]
+    # all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
     all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(
-        x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
+        x, 1 + i*0.3) for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black', hatch=hatches))
     previous_bar = [x + previous_bar[k] for k, x in enumerate(current_bar)]
 
 # p1 = plt.bar(ind, barplot_values.values(), width, color=population_color, align='edge')       #color = '#67a9cf'
@@ -156,7 +158,7 @@ size_y_ticks = 22
 digits = int(math.log10(max_value))+1
 if digits > 5:  # Reduce dimension of y label because it can exceed plot size
     size_y_ticks = max(16, size_y_ticks - (2*(digits-5)))
-plt.yticks(y_range) #, size=size_y_ticks)
+plt.yticks(y_range)  # , size=size_y_ticks)
 
 sf = ScalarFormatter(useOffset=False)
 sf.set_scientific(False)
