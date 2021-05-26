@@ -2701,7 +2701,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                          guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None)
         personal = df.loc[sample, 4]
-        pam_creation = df.loc[sample, 8]
+        pam_creation = df.loc[sample, 7]
 
         file_to_grep = job_directory + job_id + '.bestMerge.txt'
         integrated_to_grep = job_directory+job_id + \
@@ -3160,7 +3160,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         return fl
     elif value == 'tab-graphical-sample-card':
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                         guide+'.txt', skiprows=1, sep='\t', header=None)
+                         guide+'.txt', skiprows=2, sep='\t', header=None)
         samples = df.iloc[:, 0]
         fl.append(
             html.P(
