@@ -147,10 +147,11 @@ for guide in guides:
     if genome_type == "var":
         with open(f"{path_output}.summary_by_samples.{guide}.txt", "w") as summary_by_samples:
             summary_by_samples.write(guide+"\n")
+            summary_by_samples.write("Sample\tSex\tPopulation\tSuper Population\tTargets in Variant\tTargets in Population\tTargets in Super Population\tPAM Creation\n")
             for key in dict_samples.keys():
                 entry = dict_samples[key]
                 summary_by_samples.write(
-                    f"{key}\t{entry[0]}\t{entry[1]}\t{entry[2]}\t{entry[3]}\t{entry[3]}\t{entry[4]}\t{entry[5]}\t{entry[6]}\n")
+                    f"{key}\t{entry[0]}\t{entry[1]}\t{entry[2]}\t{entry[3]}\t{entry[4]}\t{entry[5]}\t{entry[6]}\n") #\t{entry[3]}
 
     with open(f"{path_output}.acfd.txt", "a") as acfd:
         if sum_cfds == 0:

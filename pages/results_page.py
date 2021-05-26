@@ -774,17 +774,18 @@ def clusterPage(job_id, hash):
     # Example    job_id.chr3_100.guide.txt
     if not os.path.exists(cluster_grep_result):
         # Grep annotation for ref
+        os.system(f'head -1 {file_to_grep} > {cluster_grep_result}')
         if genome_type == 'ref':  # NOTE HEADER NON SALVATO
             get_annotation = subprocess.Popen(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + '.Annotation.targets.txt' +
                                                ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\"\''], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = get_annotation.communicate()
             annotation_type = out.decode('UTF-8').strip().split('\t')[-1]
             os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep +
-                     ' | awk \'$6==' + position + ' && $4==\"' + chromosome + '\" {print $0\"\\t' + annotation_type + '\"}\' > ' + cluster_grep_result).read()
+                     ' | awk \'$6==' + position + ' && $4==\"' + chromosome + '\" {print $0\"\\t' + annotation_type + '\"}\' >> ' + cluster_grep_result).read()
         else:
             # print('qui cluster in grep')     #NOTE HEADER NON SALVATO
             os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
-                     '\"\' > ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
+                     '\"\' >> ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
         os.system('zip '+'-j ' + cluster_grep_result.replace('.txt',
                                                              '.zip') + ' ' + cluster_grep_result+" &")
     final_list.append(
@@ -1054,11 +1055,13 @@ def samplePage(job_id, hash):
         html.Div(job_id + '.' + str(sample) + '.' + guide,
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
-    os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
-              ' | awk \'$14~\"' + str(sample) + '\"\' > ' + sample_grep_result)
+    if not os.path.exists(sample_grep_result):
+        os.system(f"head -1 {file_to_grep} > {sample_grep_result}")
+        os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
+                ' | awk \'$14~\"' + sample + '\"\' >> ' + sample_grep_result)
 
-    os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
-                                                        '.zip') + ' ' + sample_grep_result + " &")
+        os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
+                                                            '.zip') + ' ' + sample_grep_result + " &")
 
     cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
             for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
@@ -1110,9 +1113,9 @@ def global_store_general(path_file_to_load):
     Caching dei file targets per una miglior performance di visualizzazione
     '''
     if 'scomposition' in path_file_to_load:
-        rows_to_skip = 0
+        rows_to_skip = 1
     else:
-        rows_to_skip = 0  # Skip header
+        rows_to_skip = 1  # Skip header
     if path_file_to_load is None:
         return ''
     if os.path.getsize(path_file_to_load) > 0:
@@ -1177,12 +1180,14 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
     file_to_grep = job_directory + job_id + '.' + bulge_t + \
         '.' + bulge_s + '.' + mms + '.' + guide + '.txt'
     # file_to_grep_alt = '.altMerge.txt'
-    os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
-              '\' > ' + scomposition_file)  # , shell = True)
+    if not os.path.exists(scomposition_file):
+        os.system(f'head -1 {file_to_grep} > {scomposition_file}')
+        os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
+                '\' >> ' + scomposition_file)  # , shell = True)
     # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
     # Check if result grep has at least 1 result
     if os.path.getsize(scomposition_file) > 0:
-        df = pd.read_csv(scomposition_file, header=None, sep='\t')
+        df = pd.read_csv(scomposition_file, header=None, sep='\t', skiprows=1)
         # df['Annotation Type'] = annotation_type
     else:
         raise PreventUpdate
@@ -1546,10 +1551,12 @@ def guidePagev3(job_id, hash):
                  guide, style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
 
-    os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
-              bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\'> ' + guide_grep_result)
-    os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
-              ' ' + guide_grep_result + " &")  # , shell = True)
+    if not os.path.exists(guide_grep_result):
+        os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
+        os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
+                bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
+        os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
+                ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
     final_list.append(
@@ -1616,7 +1623,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25))  # , skiprows = 1)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25) , skiprows = 1)
     return df
 
 # Load barplot of population distribution for selected guide
@@ -2040,8 +2047,9 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     #    f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
     # os.system(
     #     f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
-    os.system(
-        f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
+    if not os.path.exists(pos_grep_result):
+        os.system(
+            f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n >> {pos_grep_result}')
     # pos_grep_result_zip = pos_grep_result.replace('txt', 'zip')
     # os.system(f'zip -j {pos_grep_result_zip} {pos_grep_result}')
 
@@ -2179,24 +2187,24 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
 
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     if genome_type == 'both':
-        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
-                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
+        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  #'Targets in Reference',
+                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']#, 'Class']
     else:
-        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
-                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
+        col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  #'Targets in Reference',
+                            'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']#, 'Class']
     # Last button pressed is filtering, return the first page of the filtered table
     if max(btn_sample_section) == n:
         if genome_type == 'both':
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
+                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
             df = df.sort_values('Targets in Variant', ascending=False)
-            df.drop(['Targets in Reference'], axis=1, inplace=True)
+            #df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
-            df = df.sort_values('Targets in Reference', ascending=False)
-            df.drop(['Targets in Reference'], axis=1, inplace=True)
-            df.drop(['Class'], axis=1, inplace=True)
+                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+            df = df.sort_values('Targets in Variant', ascending=False)
+            #df.drop(['Targets in Reference'], axis=1, inplace=True)
+            #df.drop(['Class'], axis=1, inplace=True)
         more_info_col = []
         for i in range(df.shape[0]):
             more_info_col.append('Show Targets')
@@ -2221,12 +2229,12 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
             current_page = current_page + 1
             if genome_type == 'both':
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
+                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
                 df = df.sort_values('Targets in Variant', ascending=False)
                 df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
+                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
                 df = df.sort_values('Targets in Reference', ascending=False)
                 df.drop(['Targets in Reference'], axis=1, inplace=True)
                 df.drop(['Class'], axis=1, inplace=True)
@@ -2260,13 +2268,13 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
                 current_page = 1
             if genome_type == 'both':
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
+                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
                 df = df.sort_values('Targets in Variant', ascending=False)
                 df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
-                df = df.sort_values('Targets in Reference', ascending=False)
+                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                df = df.sort_values('Targets in Variant', ascending=False)
                 df.drop(['Targets in Reference'], axis=1, inplace=True)
                 df.drop(['Class'], axis=1, inplace=True)
             more_info_col = []
@@ -2690,7 +2698,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     file_to_grep = job_directory + job_id + '.bestMerge.txt'
     if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.sample_card.txt'):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                         guide+'.txt', sep='\t', skiprows=1, index_col=0, header=None)
+                         guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None)
         personal = df.loc[sample, 4]
         pam_creation = df.loc[sample, 8]
 
@@ -2738,9 +2746,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             tmp_file_2 = current_working_directory + 'Results/' + \
                 job_id + '/' + job_id + '.' + str(sample) + ".tmp_card_2.txt"
             os.system(
-                f"LC_ALL=C sort -k21,21rg \"{sample_grep_result}\" > \"{tmp_file}\" ; head -5 {tmp_file} > \"{tmp_file_2}\"")
+                f"head -1 {file_to_grep} > \"{tmp_file}\"; LC_ALL=C sort -k21,21rg \"{sample_grep_result}\" >> \"{tmp_file}\" ; head -6 {tmp_file} > \"{tmp_file_2}\"")
             ans = pd.read_csv(tmp_file_2, sep='\t',
-                              header=None, usecols=range(0, 23))
+                              header=None, usecols=range(0, 23), skiprows=1)
             with open(file_to_grep) as f_:
                 c = f_.readline().strip()
             ans.columns = c.split('\t')[:23]
@@ -2979,21 +2987,21 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
         if genome_type == 'both':
             # col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
-            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
+            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  #'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
+                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
             df = df.sort_values('Targets in Variant', ascending=False)
-            df.drop(['Targets in Reference'], axis=1, inplace=True)
+            #df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             # col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
-            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference',
+            col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  #'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=1)
+                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
             df = df.sort_values('Targets in Variant', ascending=False)
-            df.drop(['Targets in Reference'], axis=1, inplace=True)
-            df.drop(['Class'], axis=1, inplace=True)
+            #df.drop(['Targets in Reference'], axis=1, inplace=True)
+            #df.drop(['Class'], axis=1, inplace=True)
         more_info_col = []
         for i in range(df.shape[0]):
             more_info_col.append('Show Targets')

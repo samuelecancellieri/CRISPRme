@@ -324,7 +324,7 @@ with open (sys.argv[5]) as pam:
 
 do_scores = True
 if guide_len != 20 or len_pam != 3 or pam_at_beginning:
-    sys.stderr.write('CFD SCORE IS NOT CALCULATED WITH GUIDES LENGTH != 20 OR PAM LENGTH !=3 OR UPSTREAM PAM')
+    # sys.stderr.write('CFD SCORE IS NOT CALCULATED WITH GUIDES LENGTH != 20 OR PAM LENGTH !=3 OR UPSTREAM PAM')
     do_scores = False
     with open(outputFile + '.acfd.txt', 'w+') as result:
         result.write('NO SCORES')
