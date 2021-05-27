@@ -322,10 +322,12 @@ for nline, line in enumerate(inCrispritzResults):
                 count_N_in_guide += 1
                 if count == 0:  # if N is at start of the guide, pam_at_start = true
                     pam_at_start = True
+        print('guide', saveDict['real_guide'], 'pam', pam_at_start)
         if pam_at_start:  # save pam sequence extracting directly from the
             saveDict['pam'] = str(x[3])[count_N_in_guide:]
         else:
             saveDict['pam'] = str(x[3])[-count_N_in_guide:]
+        print('pam', saveDict['pam'])
 
         saveDict['fewest_mm+bulge_alignment(alt)'] = 'n'
         saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[27])
