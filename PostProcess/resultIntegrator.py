@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from operator import truediv
 from intervaltree import IntervalTree
 import sys
 import time
@@ -312,7 +313,20 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['prim_AF'] = 'n'
         saveDict['prim_samples'] = 'n'
         saveDict['prim_SNP_ID(positive_strand)'] = 'n'
-        saveDict['pam'] = str(x[3])[-3:]
+
+        count_N_in_guide = 0  # check how long is the pam counting Ns in the guide
+        pam_at_start = False  # check if pam is at start of the sequence
+        # counr number of Ns in the guide
+        for count, elem in enumerate(saveDict['real_guide']):
+            if 'N' in elem:
+                count_N_in_guide += 1
+                if count == 0:  # if N is at start of the guide, pam_at_start = true
+                    pam_at_start = True
+        if pam_at_start:  # save pam sequence extracting directly from the
+            saveDict['pam'] = str(x[3])[count_N_in_guide:]
+        else:
+            saveDict['pam'] = str(x[3])[-count_N_in_guide:]
+
         saveDict['fewest_mm+bulge_alignment(alt)'] = 'n'
         saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[27])
         saveDict['fewest_mm+bulge_CFD_score(alt)'] = 'n'
