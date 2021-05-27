@@ -57,7 +57,7 @@ def adjust_lightness(color, amount=0.5):
 
 
 plt.rcParams["figure.dpi"] = 600
-plt.rcParams["figure.figsize"] = 10, 3
+plt.figure.rcParams["figure.figsize"] = 10, 3
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
 plt.style.use('seaborn-poster')
