@@ -267,7 +267,7 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['highest_CFD_alignment(ref)'] = str(x[3])
     saveDict['ref_seq_length'] = str(len(str(x[3])))
     saveDict['ref_pos_alt(aligned_strand)'] = ','.join(variantList)
-    saveDict['pam'] = str(x[2])[-3:]
+    # saveDict['pam'] = str(x[2])[-3:]
     saveDict['annotation'] = str(x[14])
     saveDict['highest_CFD_score(alt)'] = str(x[20])
     saveDict['highest_CFD_score(ref)'] = str(x[21])
