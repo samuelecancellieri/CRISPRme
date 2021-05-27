@@ -1774,7 +1774,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             doench_enr = [a.split('\t')[3] for a in all_scores if a.split('\t')[
                 0] not in list_error_guides]
         # acfd = [int(round((100/(100 + x))*100)) for x in acfd]
-        acfd = [float("{:.3f}".format(x*100)) for x in acfd]
+        acfd = [float("{:.3f}".format(x*100)) if x < 1 else 'CFD score not available' for x in acfd]
 
     # Get target counting from summary by guide
     column_on_target = []
