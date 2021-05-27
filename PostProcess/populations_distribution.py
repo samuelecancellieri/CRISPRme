@@ -170,7 +170,8 @@ size_y_ticks = 25
 digits = int(math.log10(max_value))+1
 if digits > 5:  # Reduce dimension of y label because it can exceed plot size
     size_y_ticks = max(16, size_y_ticks - (2*(digits-5)))
-plt.yticks(y_range)  # , size=size_y_ticks)
+
+plt.yticks(y_range, size_y_ticks)  # , size=size_y_ticks)
 
 sf = ScalarFormatter(useOffset=False)
 sf.set_scientific(False)
