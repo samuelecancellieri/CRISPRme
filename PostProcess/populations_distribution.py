@@ -112,8 +112,8 @@ width = 0.5
 population_color = ['#a6cee3', '#1f78b4',
                     '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c']
 # hatches = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*']
-if 'REF' in barplot_values.keys():
-    population_color.insert(0, 'grey')
+# if 'REF' in barplot_values.keys():
+#     population_color.insert(0, 'grey')
 # If i have more than 5 superpopulations + ref
 if len(barplot_values.keys()) > len(population_color):
     for i in mc.TABLEAU_COLORS:
