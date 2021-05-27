@@ -63,7 +63,7 @@ plt.rcParams['ps.fonttype'] = 42
 plt.style.use('seaborn-poster')
 
 # matplotlib.rcParams["figure.figsize"] = 7, 5
-ax = plt.figure().gca()
+ax = plt.figure()
 
 ax.set_figheight(5)
 ax.set_figwidth(10)
@@ -181,7 +181,7 @@ plt.yticks(y_range, size=size_y_ticks)  # , size=size_y_ticks)
 
 sf = ScalarFormatter(useOffset=False)
 sf.set_scientific(False)
-ax.yaxis.set_major_formatter(sf)
+# ax.yaxis.set_major_formatter(sf)
 
 plt.tight_layout()
 # plt.subplots_adjust(top=0.95, bottom=0.06, left=0.1, right=0.99)
