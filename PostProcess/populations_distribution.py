@@ -182,11 +182,8 @@ if digits > 5:  # Reduce dimension of y label because it can exceed plot size
 
 plt.yticks(y_range, size=size_y_ticks)  # , size=size_y_ticks)
 
-# sf = ScalarFormatter(useOffset=False)
-# sf.set_scientific(False)
-# ax.yaxis.set_major_formatter(sf)
-# plt.ticklabel_format(useOffset=False)
-plt.ticklabel_format(style='plain')
+ax.get_yaxis().set_major_formatter(
+    matplotlib.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
 
 plt.tight_layout()
 # plt.subplots_adjust(top=0.95, bottom=0.06, left=0.1, right=0.99)
