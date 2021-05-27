@@ -56,7 +56,7 @@ def adjust_lightness(color, amount=0.5):
     return colorsys.hls_to_rgb(c[0], max(0, min(1, amount * c[1])), c[2])
 
 
-plt.rcParams["figure.figsize"] = 2, 10
+matplotlib.rcParams["figure.figsize"] = 2, 10
 plt.style.use('seaborn-poster')
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
