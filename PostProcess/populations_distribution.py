@@ -91,11 +91,8 @@ with open(sys.argv[1]) as summary:
 ind = np.arange(0, len(barplot_values.keys()), 1)
 no_result = False
 try:
-    if max_value == 1:
-        y_range = np.arange(0, 2, 2)
-    else:
-        y_range = np.arange(
-            0, max_value + math.ceil(max_value/10), math.ceil(max_value/5))
+    y_range = np.arange(
+        0, max_value + math.ceil(max_value/10), math.ceil(max_value/5))
 except:
     y_range = np.arange(0, 1, 1)
     no_result = True
@@ -133,17 +130,22 @@ handles_color = []
 # for x in range(min(number_bars, total+1)):
 for x in range(number_bars):
     if x == 0:
-        legend_labels.append(str(total) + ' MM')  # got Total mms and 0 bulges
-        # handles_color.append((all_bar[0][:]))
-        handles_color.append(all_bar[0][0])
+        if barplot_values['REF'][0] != 0:
+            # got Total mms and 0 bulges
+            legend_labels.append(str(total) + ' MM')
+            # handles_color.append((all_bar[0][:]))
+            handles_color.append(all_bar[0][0])
     else:
         if (total - x) < 0:  # To avoid negative numbers on MM values
-            legend_labels.append('0 MM + ' + str(x) + ' B')
+            if barplot_values['REF'][x] != 0:
+                legend_labels.append('0 MM + ' + str(x) + ' B')
             # handles_color.append((all_bar[x][:]))
-            handles_color.append(all_bar[x][0])
+                handles_color.append(all_bar[x][0])
         else:
-            legend_labels.append(str(total - x) + ' MM + ' + str(x) + ' B')
-            handles_color.append(all_bar[x][0])
+            if barplot_values['REF'][x] != 0:
+                legend_labels.append(str(total - x) + ' MM + ' + str(x) + ' B')
+                handles_color.append(all_bar[x][0])
+
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
