@@ -65,8 +65,8 @@ plt.style.use('seaborn-poster')
 # matplotlib.rcParams["figure.figsize"] = 7, 5
 ax = plt.figure()
 
-ax.set_figheight(5)
-ax.set_figwidth(10)
+# ax.set_figheight(5)
+# ax.set_figwidth(10)
 
 titlesize = 18
 fontsize = 17
