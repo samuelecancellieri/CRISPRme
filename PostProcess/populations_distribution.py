@@ -56,6 +56,7 @@ def adjust_lightness(color, amount=0.5):
     return colorsys.hls_to_rgb(c[0], max(0, min(1, amount * c[1])), c[2])
 
 
+plt.rcParams["figure.figsize"] = 4.5, 2.5
 plt.style.use('seaborn-poster')
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
@@ -179,7 +180,6 @@ plt.yticks(y_range, size=size_y_ticks)  # , size=size_y_ticks)
 # ax.yaxis.set_major_formatter(sf)
 
 plt.tight_layout()
-plt.figure(figsize=(7, 4))
 plt.subplots_adjust(top=0.95, bottom=0.06, left=0.1, right=0.99)
 plt.savefig("populations_distribution_" + guide + '_' +
             str(total) + "total" + ".png", format='png')
