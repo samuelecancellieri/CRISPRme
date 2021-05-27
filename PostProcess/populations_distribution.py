@@ -61,7 +61,7 @@ matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
 ax = plt.figure().gca()
 
-matplotlib.rcParams["figure.figsize"] = 2, 7
+matplotlib.rcParams["figure.figsize"] = 7, 2
 
 barplot_values = dict()  # barplot_values -> EAS -> [1,2]
 total = int(sys.argv[2])
