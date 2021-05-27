@@ -127,7 +127,8 @@ for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
 # print('number bars', number_bars)
 legend_labels = []
 handles_color = []
-for x in range(min(number_bars, total+1)):
+# for x in range(min(number_bars, total+1)):
+for x in range(number_bars):
     if x == 0:
         legend_labels.append(str(total) + ' MM')  # got Total mms and 0 bulges
         # handles_color.append((all_bar[0][:]))
