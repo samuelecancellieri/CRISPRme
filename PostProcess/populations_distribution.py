@@ -162,7 +162,7 @@ plt.legend(handles_color, legend_labels, fontsize=22, handlelength=5,
 # first param is for the colored rectangles of legens, second parameter for labels, handlelength is size of rectangles, handlermap is for grouping different colors in single label
 # [(first bar color, second bar color, ...), (first bar light color, second bar light color,...)]
 plt.title('Targets found in each Superpopulation - ' +
-          str(total) + ' (Mismatches(MM) + Bulges(B))', size=22)
+          str(total) + ' (Mismatches(MM) + Bulges(B))')
 
 if no_result:
     plt.annotate('No targets found with ' + str(total) + ' mismatches + bulges',
