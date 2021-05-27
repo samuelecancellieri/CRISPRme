@@ -318,13 +318,14 @@ for nline, line in enumerate(inCrispritzResults):
         pam_at_start = False  # check if pam is at start of the sequence
         # counr number of Ns in the guide
         for count, elem in enumerate(saveDict['real_guide']):
-            if 'N' in elem:
+            if elem == 'N':
                 count_N_in_guide += 1
                 if count == 0:  # if N is at start of the guide, pam_at_start = true
                     pam_at_start = True
-        print('guide', saveDict['real_guide'], 'pam', pam_at_start)
+        print('guide', saveDict['real_guide'], 'pam',
+              pam_at_start, 'count pam len', count_N_in_guide)
         if pam_at_start:  # save pam sequence extracting directly from the
-            saveDict['pam'] = str(x[3])[count_N_in_guide:]
+            saveDict['pam'] = str(x[3])[:count_N_in_guide]
         else:
             saveDict['pam'] = str(x[3])[-count_N_in_guide:]
         print('pam', saveDict['pam'])
