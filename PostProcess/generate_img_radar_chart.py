@@ -219,8 +219,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                  horizontalalignment='center', color='black', size=titlesize)
 
     plt.tight_layout()
-    plt.subplots_adjust(top=0.85, bottom=0.05, left=0.06,
-                        right=0.95, wspace=0.1)
+    # plt.subplots_adjust(top=0.85, bottom=0.05, left=0.06,
+    #                     right=0.95, wspace=0.1)
     plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
                 "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
 
