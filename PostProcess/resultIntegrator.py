@@ -324,14 +324,14 @@ for nline, line in enumerate(inCrispritzResults):
                 pam_at_start = True
     if origin == 'ref':
         if pam_at_start:  # save pam sequence extracting directly from the ref sequence
-            saveDict['pam'] = str(x[2])[:count_N_in_guide]
+            saveDict['pam'] = saveDict['highest_CFD_alignment(ref)'][:count_N_in_guide]
         else:
-            saveDict['pam'] = str(x[2])[-count_N_in_guide:]
+            saveDict['pam'] = saveDict['highest_CFD_alignment(ref)'][-count_N_in_guide:]
     else:
         if pam_at_start:  # save pam sequence extracting directly from the var sequence
-            saveDict['pam'] = str(x[3])[:count_N_in_guide]
+            saveDict['pam'] = saveDict['highest_CFD_alignment(alt)'][:count_N_in_guide]
         else:
-            saveDict['pam'] = str(x[3])[-count_N_in_guide:]
+            saveDict['pam'] = saveDict['highest_CFD_alignment(alt)'][-count_N_in_guide:]
 
     foundEmpirical = sorted(empiricalTree[int(x[6])-4:int(x[6])+4])
 
