@@ -160,6 +160,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                       loc='best', colWidths=[0.25, 0.25])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
+    table.scale(1, 4)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
@@ -218,7 +219,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                  horizontalalignment='center', color='black', size=titlesize)
 
     plt.tight_layout()
-    plt.subplots_adjust(top=0.85, bottom=0.05, left=0.05,
+    plt.subplots_adjust(top=0.85, bottom=0.05, left=0.06,
                         right=0.95, wspace=0.1)
     plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
                 "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
