@@ -149,7 +149,7 @@ for x in range(number_bars):
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
-plt.legend(handles_color, legend_labels, fontsize=15, handlelength=14,
+plt.legend(handles_color, legend_labels, fontsize=15, handlelength=10,
            handler_map={tuple: HandlerTuple(ndivide=None)})
 # first param is for the colored rectangles of legens, second parameter for labels, handlelength is size of rectangles, handlermap is for grouping different colors in single label
 # [(first bar color, second bar color, ...), (first bar light color, second bar light color,...)]
