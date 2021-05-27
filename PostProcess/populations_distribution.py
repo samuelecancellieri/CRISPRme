@@ -61,7 +61,7 @@ matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
 
 # matplotlib.rcParams["figure.figsize"] = 7, 5
-ax = plt.figure().gca()
+# ax = plt.figure().gca()
 
 
 barplot_values = dict()  # barplot_values -> EAS -> [1,2]
@@ -157,7 +157,7 @@ plt.legend(handles_color, legend_labels, fontsize=22, handlelength=5,
 # first param is for the colored rectangles of legens, second parameter for labels, handlelength is size of rectangles, handlermap is for grouping different colors in single label
 # [(first bar color, second bar color, ...), (first bar light color, second bar light color,...)]
 plt.title('Targets found in each Superpopulation - ' +
-          str(total) + ' (Mismatches(MM) + Bulges(B))', size=23)
+          str(total) + ' (Mismatches(MM) + Bulges(B))', size=22)
 
 if no_result:
     plt.annotate('No targets found with ' + str(total) + ' mismatches + bulges',
