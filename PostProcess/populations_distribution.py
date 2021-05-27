@@ -98,7 +98,8 @@ except:
     no_result = True
 width = 0.5
 
-population_color = ['purple', 'orange', 'green', 'blue', 'red']
+# population_color = ['purple', 'orange', 'green', 'blue', 'red']
+population_color = ['red']*100
 hatches = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*']
 if 'REF' in barplot_values.keys():
     population_color.insert(0, 'grey')
@@ -115,28 +116,30 @@ all_bar = []
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
     current_bar = [x[i] for x in barplot_values.values()]
     # all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
-    all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(
-        x, 1 + i*0.3) for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black', hatch=hatches[i]))
+    all_bar.append(plt.bar(ind, current_bar, width,
+                           color=population_color[i], align='edge', bottom=previous_bar, edgecolor='black', hatch=hatches[i]))
     previous_bar = [x + previous_bar[k] for k, x in enumerate(current_bar)]
 
 # p1 = plt.bar(ind, barplot_values.values(), width, color=population_color, align='edge')       #color = '#67a9cf'
 
 # p2 = plt.bar(ind, barplot_values.values() , width, color=[adjust_lightness(x, 1.3) for x in population_color], align='edge', bottom = list(barplot_values.values()))
 
-print('number bars', number_bars)
+# print('number bars', number_bars)
 legend_labels = []
 handles_color = []
 for x in range(min(number_bars, total+1)):
     if x == 0:
         legend_labels.append(str(total) + ' MM')  # got Total mms and 0 bulges
-        handles_color.append((all_bar[0][:]))
+        # handles_color.append((all_bar[0][:]))
+        handles_color.append(all_bar[0][0])
     else:
         if (total - x) < 0:  # To avoid negative numbers on MM values
             legend_labels.append('0 MM + ' + str(x) + ' B')
-            handles_color.append((all_bar[x][:]))
+            # handles_color.append((all_bar[x][:]))
+            handles_color.append(all_bar[x][0])
         else:
             legend_labels.append(str(total - x) + ' MM + ' + str(x) + ' B')
-            handles_color.append((all_bar[x][:]))
+            handles_color.append(all_bar[x][0])
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
