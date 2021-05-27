@@ -184,7 +184,7 @@ plt.yticks(y_range, size=size_y_ticks)  # , size=size_y_ticks)
 
 sf = ScalarFormatter(useOffset=False)
 sf.set_scientific(False)
-# ax.yaxis.set_major_formatter(sf)
+ax.yaxis.set_major_formatter(sf)
 
 plt.tight_layout()
 # plt.subplots_adjust(top=0.95, bottom=0.06, left=0.1, right=0.99)
