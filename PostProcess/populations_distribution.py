@@ -61,6 +61,8 @@ matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
 ax = plt.figure().gca()
 
+plt.rcParams["figure.figsize"] = 4.5, 2.5
+
 barplot_values = dict()  # barplot_values -> EAS -> [1,2]
 total = int(sys.argv[2])
 guide = sys.argv[3]
@@ -98,9 +100,9 @@ except:
     no_result = True
 width = 0.5
 
-# population_color = ['purple', 'orange', 'green', 'blue', 'red']
-population_color = ['red']*100
-hatches = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*']
+population_color = ['#a6cee3', '#1f78b4',
+                    '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c']
+# hatches = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*']
 if 'REF' in barplot_values.keys():
     population_color.insert(0, 'grey')
 # If i have more than 5 superpopulations + ref
@@ -117,7 +119,7 @@ for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
     current_bar = [x[i] for x in barplot_values.values()]
     # all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
     all_bar.append(plt.bar(ind, current_bar, width,
-                           color=population_color[i], align='edge', bottom=previous_bar, edgecolor='black', hatch=hatches[i]))
+                           color=population_color[i], align='edge', bottom=previous_bar, edgecolor='black'))
     previous_bar = [x + previous_bar[k] for k, x in enumerate(current_bar)]
 
 # p1 = plt.bar(ind, barplot_values.values(), width, color=population_color, align='edge')       #color = '#67a9cf'
@@ -149,7 +151,7 @@ for x in range(number_bars):
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
-plt.legend(handles_color, legend_labels, fontsize=15, handlelength=5,
+plt.legend(handles_color, legend_labels, fontsize=25, handlelength=5,
            handler_map={tuple: HandlerTuple(ndivide=None)})
 # first param is for the colored rectangles of legens, second parameter for labels, handlelength is size of rectangles, handlermap is for grouping different colors in single label
 # [(first bar color, second bar color, ...), (first bar light color, second bar light color,...)]
@@ -164,7 +166,7 @@ if no_result:
 
 plt.xticks(ind+0.25, barplot_values.keys(), size=25)
 
-size_y_ticks = 22
+size_y_ticks = 25
 digits = int(math.log10(max_value))+1
 if digits > 5:  # Reduce dimension of y label because it can exceed plot size
     size_y_ticks = max(16, size_y_ticks - (2*(digits-5)))
