@@ -2524,8 +2524,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     guide + '_' +
                     str(int(mm)+int(bulge)) + 'total.png'
                 ),
-                html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
-                    'display': 'inline-block'}), style={'text-align': 'center'})
+                # html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+                #     'display': 'inline-block'}), style={'text-align': 'center'})
             ]
         )
     except:
