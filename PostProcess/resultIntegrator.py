@@ -287,7 +287,7 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['fewest_mm+bulge_CFD_score(ref)'] = str(x[45])
     if 'ref' in origin:
         saveDict['fewest_mm+bulge_alignment(alt)'] = 'n'
-        saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[27])
+        saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[26])
         saveDict['fewest_mm+bulge_CFD_score(alt)'] = 'n'
 
     saveDict['risk_score'] = str(float(x[20])-float(x[21]))
