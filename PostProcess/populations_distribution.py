@@ -123,6 +123,7 @@ for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
 
 # p2 = plt.bar(ind, barplot_values.values() , width, color=[adjust_lightness(x, 1.3) for x in population_color], align='edge', bottom = list(barplot_values.values()))
 
+print('number bars', number_bars)
 legend_labels = []
 handles_color = []
 for x in range(min(number_bars, total+1)):
