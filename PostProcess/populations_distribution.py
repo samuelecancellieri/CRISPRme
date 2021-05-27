@@ -68,8 +68,8 @@ ax = plt.figure()
 ax.set_figheight(5)
 ax.set_figwidth(10)
 
-titlesize = 19
-fontsize = 18
+titlesize = 18
+fontsize = 17
 
 
 barplot_values = dict()  # barplot_values -> EAS -> [1,2]
