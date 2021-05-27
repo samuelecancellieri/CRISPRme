@@ -65,6 +65,14 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     titlesize = 18
     fontsize = 17
+    plt.rcParams["figure.dpi"] = 400
+    # matplotlib.rcParams["figure.figsize"] = 10, 3
+    plt.rcParams['pdf.fonttype'] = 42
+    plt.rcParams['ps.fonttype'] = 42
+    plt.style.use('seaborn-poster')
+
+    plt.set_figheight(5)
+    plt.set_figwidth(10)
 
     percentage_list = []
     for elem in guideDict:
