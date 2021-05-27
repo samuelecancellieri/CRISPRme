@@ -138,7 +138,7 @@ for guide in guides:
 
     with open(f"{path_output}.summary_by_guide.{guide}.txt", "w") as summary_by_guide:
         summary_by_guide.write(
-            "Bulge Type\tMismatches\tBulge Size\tReference\tEnriched\tCombined\tPAM Creation\n")
+            "Bulge Type\tMismatches\tBulge Size\tReference\tVariant\tCombined\tPAM Creation\n")
         for key in dict_summary_by_guide.keys():
             entry = dict_summary_by_guide[key]
             summary_by_guide.write(
