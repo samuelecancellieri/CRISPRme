@@ -62,18 +62,6 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # check if no targets are found for that combination source/totalcount and skip the execution
     if guideDict['General'] == 0:
         return
-
-    titlesize = 18
-    fontsize = 17
-    plt.rcParams["figure.dpi"] = 400
-    matplotlib.rcParams["figure.figsize"] = 10, 5
-    plt.rcParams['pdf.fonttype'] = 42
-    plt.rcParams['ps.fonttype'] = 42
-    plt.style.use('seaborn-poster')
-
-    # plt.set_figheight(5)
-    # plt.set_figwidth(10)
-
     percentage_list = []
     for elem in guideDict:
         if float(guideDict['General']) != 0:
@@ -125,14 +113,14 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             label.set_horizontalalignment("right")
 
     # Draw one axe per variable + add labels labels yet
-    plt.xticks(angles[:-1], categories, color='black', size=fontsize)
+    plt.xticks(angles[:-1], categories, color='black', size=14)
 
     # Draw ylabels
     # # # Draw ylabels
     ax.set_rlabel_position(0)
     # plt.yticks([0, 0.25, 0.50, 0.75], ["0", "0.25", "0.50", "0.75"], color="black", size=12)
     plt.yticks([0, 25, 50, 75], ["0", "25", "50", "75"],
-               color="black", size=fontsize-2)
+               color="black", size=12)
     # plt.ylim(0, 1)
     plt.ylim(0, 100)
 
@@ -164,12 +152,10 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     transpose_list = templist
 
     plt.axis('off')
-    # table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Proportion'],
-    #                   loc='best', colWidths=[0.25, 0.25])
-    table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=[
-                      'Total', 'Proportion'], loc='best')
+    table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Proportion'],
+                      loc='best', colWidths=[0.25, 0.25])
     table.auto_set_font_size(False)
-    table.set_fontsize(fontsize)
+    table.set_fontsize(13)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
@@ -208,10 +194,10 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     # plt.xlim(0, len(guide))
     # strArray = np.array([list(guide)])
-    plt.xticks(ticks=ind, labels=list(guide), size=fontsize)
+    plt.xticks(ticks=ind, labels=list(guide))
 
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
-               ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=fontsize, loc='upper left', ncol=6)
+               ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=13, loc='upper left', ncol=6)
 
     # strArray = np.array([list(guide)])
     # table = plt.table(cellText=strArray, loc='bottom',
@@ -224,12 +210,11 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # plt.xticks
 
     plt.suptitle(str(mismatch)+" Mismatches + "+str(bulge)+" Bulge "+str(source),
-                 horizontalalignment='center', color='black', size=titlesize)
+                 horizontalalignment='center', color='black', size=25)
 
     plt.tight_layout()
-    # plt.subplots_adjust(top=0.85, bottom=0.05, left=0.05,
-    #                     right=0.95, wspace=0.1)
-    plt.subplots_adjust(wspace=0.1, left=0.05)
+    plt.subplots_adjust(top=0.85, bottom=0.05, left=0.05,
+                        right=0.95, wspace=0.1)
     plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
                 "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
 
