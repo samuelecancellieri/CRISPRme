@@ -56,7 +56,7 @@ def adjust_lightness(color, amount=0.5):
     return colorsys.hls_to_rgb(c[0], max(0, min(1, amount * c[1])), c[2])
 
 
-# plt.rcParams["figure.dpi"] = 200
+plt.rcParams["figure.dpi"] = 400
 # matplotlib.rcParams["figure.figsize"] = 10, 3
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
@@ -68,7 +68,7 @@ ax = plt.figure()
 ax.set_figheight(5)
 ax.set_figwidth(10)
 
-titlesize = 20
+titlesize = 19
 fontsize = 18
 
 
