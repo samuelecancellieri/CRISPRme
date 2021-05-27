@@ -91,8 +91,11 @@ with open(sys.argv[1]) as summary:
 ind = np.arange(0, len(barplot_values.keys()), 1)
 no_result = False
 try:
-    y_range = np.arange(
-        0, max_value + math.ceil(max_value/10), math.ceil(max_value/5))
+    if max_value == 1:
+        y_range = 2
+    else:
+        y_range = np.arange(
+            0, max_value + math.ceil(max_value/10), math.ceil(max_value/5))
 except:
     y_range = np.arange(0, 1, 1)
     no_result = True
