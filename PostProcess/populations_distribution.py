@@ -187,9 +187,6 @@ plt.yticks(y_range, size=size_y_ticks)  # , size=size_y_ticks)
 # ax.yaxis.set_major_formatter(sf)
 # plt.ticklabel_format(useOffset=False)
 
-plt.ticklabel_format(style='plain')
-
-
 plt.tight_layout()
 # plt.subplots_adjust(top=0.95, bottom=0.06, left=0.1, right=0.99)
 plt.savefig("populations_distribution_" + guide + '_' +
