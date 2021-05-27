@@ -152,12 +152,12 @@ for x in range(number_bars):
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
-plt.legend(handles_color, legend_labels, fontsize=25, handlelength=5,
+plt.legend(handles_color, legend_labels, fontsize=22, handlelength=5,
            handler_map={tuple: HandlerTuple(ndivide=None)})
 # first param is for the colored rectangles of legens, second parameter for labels, handlelength is size of rectangles, handlermap is for grouping different colors in single label
 # [(first bar color, second bar color, ...), (first bar light color, second bar light color,...)]
 plt.title('Targets found in each Superpopulation - ' +
-          str(total) + ' Mismatches(MM) + Bulges(B)', size=25)
+          str(total) + ' Mismatches(MM) + Bulges(B)', size=23)
 
 if no_result:
     plt.annotate('No targets found with ' + str(total) + ' mismatches + bulges',
@@ -165,9 +165,9 @@ if no_result:
     sys.exit()
 
 
-plt.xticks(ind+0.25, barplot_values.keys(), size=25)
+plt.xticks(ind+0.25, barplot_values.keys(), size=22)
 
-size_y_ticks = 25
+size_y_ticks = 22
 digits = int(math.log10(max_value))+1
 if digits > 5:  # Reduce dimension of y label because it can exceed plot size
     size_y_ticks = max(16, size_y_ticks - (2*(digits-5)))
