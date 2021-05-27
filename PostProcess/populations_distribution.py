@@ -63,7 +63,7 @@ plt.rcParams['ps.fonttype'] = 42
 plt.style.use('seaborn-poster')
 
 # matplotlib.rcParams["figure.figsize"] = 7, 5
-ax = plt.figure()
+ax = plt.figure().gca()
 
 ax.set_figheight(5)
 ax.set_figwidth(10)
