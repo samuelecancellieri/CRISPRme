@@ -1774,7 +1774,8 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             doench_enr = [a.split('\t')[3] for a in all_scores if a.split('\t')[
                 0] not in list_error_guides]
         # acfd = [int(round((100/(100 + x))*100)) for x in acfd]
-        acfd = [float("{:.3f}".format(x*100)) if x < 1 else 'CFD score not available' for x in acfd]
+        acfd = [float("{:.3f}".format(x*100)) if x < 1 and x >=
+                0 else 'CFD score not available' for x in acfd]
 
     # Get target counting from summary by guide
     column_on_target = []
@@ -2935,10 +2936,27 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
         max_bulges = (next(s for s in all_params.split('\n')
                            if 'Max_bulges' in s)).split('\t')[-1]
+        pam = (next(s for s in all_params.split(
+            '\n') if 'Pam' in s)).split('\t')[-1]
+        nuclease = (next(s for s in all_params.split(
+            '\n') if 'Nuclease' in s)).split('\t')[-1]
 
     fl = []
     fl.append(html.Br())
-    fl.append(html.H5('Focus on: ' + guide))
+
+    if nuclease != 'SpCas9':
+        CFD_notification = html.Div(
+            'CFD score is not calculated if the used nuclease is not SpCas9')
+    else:
+        CFD_notification = html.Div('', hidden=True)
+
+    pam_at_start = False
+    if str(guide)[0] == 'N':
+        pam_at_start = True
+    if pam_at_start:
+        fl.append(html.H5('Focus on: ' + str(pam)+str(guide).replace('N', '')))
+    else:
+        fl.append(html.H5('Focus on: ' + str(guide).replace('N', '')+str(pam)))
 
     if value == 'tab-summary-by-guide':  # BUG se cambio guida selezionata due volte mi cambia il mms mettendo a 0, provare con un div nascosto
         # Show Summary by Guide table
@@ -3394,6 +3412,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     [
                         dbc.Col(
                             [
+                                CFD_notification,
                                 # html.Br(),
                                 html.P(
                                     'Export will download 1000 lines contained in the current view of the table'),
@@ -3643,6 +3662,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         fl.append(
             html.Div(
                 [
+                    CFD_notification,
                     dbc.Row(
                         dbc.Col(top1000_image, width={"size": 10, "offset": 2})
                     ),

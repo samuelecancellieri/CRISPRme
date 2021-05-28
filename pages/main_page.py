@@ -172,7 +172,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             if 'bp' in elem:
                 len_guide_sequence = int(elem.replace('bp', ''))
     if text_guides is None or text_guides == '':
-        text_guides = 'GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC'
+        text_guides = 'A'*len_guide_sequence
+        # text_guides = 'GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC'
     elif guide_type != 'GS':
         text_guides = text_guides.strip()
         if (not all(len(elem) == len(text_guides.split('\n')[0]) for elem in text_guides.split('\n'))):
@@ -378,19 +379,28 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             # print('extracted seq', extracted_seq)
             # guides.extend(convert_pam.getGuides(
             #     extracted_seq, pam_char, len_guide_sequence, pam_begin))
+        guides = list(set(guides))
         if not guides:
-            guides = "GAGTCCGAGCAGAAGAAGAA"
+            guides = 'A'*len_guide_sequence
         text_guides = '\n'.join(guides).strip()
     # print(text_guides, 'and', guides, 'and', pam_char)
     # exit()
     text_guides = text_guides.upper()
+    new_test_guides = list()
+    for guide in text_guides.split('\n'):
+        if len(guide) == len_guide_sequence:
+            new_test_guides.append(guide)
+    if not new_test_guides:
+        new_test_guides.append('A'*len_guide_sequence)
+    text_guides = '\n'.join(new_test_guides)
     for g in text_guides.split('\n'):
         for c in g:
             if c not in VALID_CHARS:
                 text_guides = text_guides.replace(c, '')
     if len(text_guides.split('\n')) > 1000000000:
         text_guides = '\n'.join(text_guides.split('\n')[:1000000000]).strip()
-    len_guides = len(text_guides.split('\n')[0])
+    # len_guides = len(text_guides.split('\n')[0])
+    len_guides = len_guide_sequence
 
     # Adjust guides by adding Ns to make compatible with Crispritz
     if (pam_begin):
@@ -596,12 +606,12 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # log_verbose = open(f"{result_dir}/log_verbose.txt", 'w')
     # , stdout=log_verbose)
     exeggutor.submit(subprocess.run, command, shell=True)
-    #subprocess.run(command, shell=True, stdout=log_verbose)
+    # subprocess.run(command, shell=True, stdout=log_verbose)
     return '/load', '?job=' + job_id
 
 
 # Check input presence
-@app.callback(
+@ app.callback(
     [Output('submit-job', 'n_clicks'),
      Output('modal', 'is_open'),
      Output('available-genome', 'className'),
@@ -729,7 +739,7 @@ def checkInput(n, n_close, genome_selected, pam, text_guides, mms, dna, rna, is_
     return None, not is_open, genome_update, pam_update, text_update, mms_update, dna_update, rna_update, len_guide_update, miss_input
 
 
-@app.callback(
+@ app.callback(
     Output('fade-len-guide', 'is_in'),
     [Input('tabs', 'active_tab')],
     [State('fade-len-guide', 'is_in')]
@@ -757,7 +767,7 @@ def resetTab(current_tab, is_in):
 # Email validity
 
 
-@app.callback(
+@ app.callback(
     Output('example-email', 'style'),
     [Input('example-email', 'value')]
 )
@@ -784,7 +794,7 @@ def checkEmailValidity(val):
 # Fade in/out email
 
 
-@app.callback(
+@ app.callback(
     Output('example-email', 'disabled'),
     [Input('checklist-mail', 'value')]
 )
@@ -796,7 +806,7 @@ def disabled_mail(checklist_value):
         return False
 
 
-@app.callback(
+@ app.callback(
     Output('job-name', 'disabled'),
     [Input('checklist-job-name', 'value')]
 )
@@ -846,7 +856,7 @@ def disable_job_name(checklist_value):
     #         return [{'visibility': 'visible'}]
 
 
-@app.callback(
+@ app.callback(
     [Output('vcf-dropdown', 'disabled'),
      Output('vcf-dropdown', 'value')],
     [Input('checklist-variants', 'value')]
@@ -858,7 +868,7 @@ def change_disabled_vcf_dropdown(checklist_value):
         return True, ""
 
 
-@app.callback(
+@ app.callback(
     [Output('annotation-dropdown', 'disabled'),
      Output('annotation-dropdown', 'value')],
     [Input('checklist-annotations', 'value')]
@@ -882,7 +892,7 @@ def change_disabled_vcf_dropdown(checklist_value):
 #         return [{'visibility': 'visible'}]
 
 
-@app.callback(
+@ app.callback(
     [Output('available-pam', 'options')],
     [Input('available-cas', 'value')]
 )
@@ -896,7 +906,7 @@ def changePlaceholderGuideTextArea(value):
     return [correct_options]
 
 
-@app.callback(
+@ app.callback(
     [Output('text-guides', 'placeholder')],
     [Input('radio-guide', 'value')]
 )
@@ -969,7 +979,7 @@ def availableCAS():
 #     return ['']
 
 
-@app.callback(
+@ app.callback(
     [Output('checklist-variants', 'options'),
      Output('vcf-dropdown', 'options')],
     [Input('available-genome', 'value')]

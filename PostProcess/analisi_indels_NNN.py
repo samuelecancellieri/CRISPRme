@@ -734,13 +734,13 @@ for line in inResult:
                 if do_scores:
                     cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
                 else:
-                    cfd_score = 0
+                    cfd_score = -1
                 t.append("{:.3f}".format(cfd_score))
             else:
                 if do_scores:
                     cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
                 else:
-                    cfd_score = 0
+                    cfd_score = -1
                 t.append("{:.3f}".format(cfd_score))
 
         cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse = True)
@@ -990,13 +990,13 @@ for t in cluster_to_save:
         if do_scores:
             cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
         else:
-            cfd_score = 0
+            cfd_score = -1
         t.append("{:.3f}".format(cfd_score))
     else:
         if do_scores:
             cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
         else:
-            cfd_score = 0
+            cfd_score = -1
         t.append("{:.3f}".format(cfd_score))
 
 
