@@ -379,12 +379,18 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             # print('extracted seq', extracted_seq)
             # guides.extend(convert_pam.getGuides(
             #     extracted_seq, pam_char, len_guide_sequence, pam_begin))
+        guides = list(set(guides))
         if not guides:
             guides = 'A'*len_guide_sequence
         text_guides = '\n'.join(guides).strip()
     # print(text_guides, 'and', guides, 'and', pam_char)
     # exit()
     text_guides = text_guides.upper()
+    new_test_guides = str()
+    for guide in text_guides.split('\n'):
+        if len(guide) == len_guide_sequence:
+            new_test_guides += str(guide)+'\n'
+    text_guides = new_test_guides
     for g in text_guides.split('\n'):
         for c in g:
             if c not in VALID_CHARS:
