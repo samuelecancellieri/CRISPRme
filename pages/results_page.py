@@ -2416,6 +2416,7 @@ def generate_table_samples(dataframe, id_table, page, guide='', job_id='', max_r
     '''
     Per generare una html table. NOTE è diversa da una dash dataTable
     '''
+    dataframe = dataframe.astype(str)
     rows_remaining = len(dataframe) - (page - 1) * max_rows
     return html.Table(
         # Header
