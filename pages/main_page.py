@@ -172,7 +172,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             if 'bp' in elem:
                 len_guide_sequence = int(elem.replace('bp', ''))
     if text_guides is None or text_guides == '':
-        text_guides = 'GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC'
+        text_guides = 'A'*len_guide_sequence
+        # text_guides = 'GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC'
     elif guide_type != 'GS':
         text_guides = text_guides.strip()
         if (not all(len(elem) == len(text_guides.split('\n')[0]) for elem in text_guides.split('\n'))):
@@ -379,7 +380,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             # guides.extend(convert_pam.getGuides(
             #     extracted_seq, pam_char, len_guide_sequence, pam_begin))
         if not guides:
-            guides = "GAGTCCGAGCAGAAGAAGAA"
+            guides = 'A'*len_guide_sequence
         text_guides = '\n'.join(guides).strip()
     # print(text_guides, 'and', guides, 'and', pam_char)
     # exit()
