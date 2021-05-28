@@ -2945,7 +2945,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
     if nuclease != 'SpCas9':
         CFD_notification = html.Div(
-            html.H1('CFD score is not calculated if the used nuclease is not SpCas9'))
+            'CFD score is not calculated if the used nuclease is not SpCas9')
     else:
         CFD_notification = html.Div('', hidden=True)
 
