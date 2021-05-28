@@ -160,7 +160,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                       loc='best', colWidths=[0.25, 0.25])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
-    table.scale(1, 2.1)
+    table.scale(1, 2.3)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
