@@ -2416,6 +2416,7 @@ def generate_table_samples(dataframe, id_table, page, guide='', job_id='', max_r
     '''
     Per generare una html table. NOTE è diversa da una dash dataTable
     '''
+    dataframe = dataframe.astype(str)
     rows_remaining = len(dataframe) - (page - 1) * max_rows
     return html.Table(
         # Header
@@ -2701,8 +2702,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + str(sample) + '.' + guide + '.sample_card.txt'):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                          guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None)
-        personal = df.loc[sample, 4]
-        pam_creation = df.loc[sample, 7]
+        # df = df.astype(str)
+        int_sample = int(sample)
+        # personal = df.loc[sample, 4]
+        # pam_creation = df.loc[sample, 7]
+        personal = df.loc[int_sample, 4]
+        pam_creation = df.loc[int_sample, 7]
 
         file_to_grep = job_directory + job_id + '.bestMerge.txt'
         integrated_to_grep = job_directory+job_id + \

@@ -234,6 +234,8 @@ if __name__ == '__main__':
     # skip creation if no target in global category
     if guideDict[mismatch][bulge]['TOTAL']['General'] == 0:
         sys.exit()
-
-    generatePlot(guide, guideDict[mismatch][bulge][elem],
-                 motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
+    try:
+        generatePlot(guide, guideDict[mismatch][bulge][elem],
+                     motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
+    except:
+        sys.exit()

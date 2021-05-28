@@ -49,16 +49,16 @@ def directoryCheck():
 @app.callback(
     [Output('page-content', 'children'),
      Output('job-link', 'children')],
-    [Input('url', 'href'), 
+    [Input('url', 'href'),
      Input('url', 'pathname'),
-     Input('url', 'search')], 
+     Input('url', 'search')],
     [State('url', 'hash')]
 )
 def changePage(href, path, search, hash_guide):
     '''
     Controllo della pagina da mostrare in base all'url
     '''
-    
+
     # print(href)
     if path == '/load':
         # print("CHANGING TO LOAD PAGE")
