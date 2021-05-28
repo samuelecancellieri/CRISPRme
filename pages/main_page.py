@@ -390,6 +390,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     for guide in text_guides.split('\n'):
         if len(guide) == len_guide_sequence:
             new_test_guides += str(guide)+'\n'
+    if len(new_test_guides) < len_guide_sequence:
+        new_test_guides = 'A'*len_guide_sequence+'\n'
     text_guides = new_test_guides
     for g in text_guides.split('\n'):
         for c in g:
