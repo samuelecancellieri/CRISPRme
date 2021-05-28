@@ -2702,6 +2702,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                          guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None)
+        df = df.astype(str)
         personal = df.loc[sample, 4]
         pam_creation = df.loc[sample, 7]
 
