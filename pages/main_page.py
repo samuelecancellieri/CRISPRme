@@ -399,7 +399,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                 text_guides = text_guides.replace(c, '')
     if len(text_guides.split('\n')) > 100:  # set limit to 100 guides per run in the website
         text_guides = '\n'.join(text_guides.split('\n')[:100]).strip()
-    len_guides = len(text_guides.split('\n')[0])
+    # len_guides = len(text_guides.split('\n')[0])
+    len_guides = len_guide_sequence
 
     # Adjust guides by adding Ns to make compatible with Crispritz
     if (pam_begin):
