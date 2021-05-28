@@ -2726,7 +2726,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
         # grep guide and then sample into personal card data
         os.system(
-            f"LC_ALL=C fgrep {guide} {integrated_to_grep} | fgrep {sample} >> {integrated_personal}")
+            f"LC_ALL=C fgrep {guide} {integrated_to_grep} | awk \'$32~\"{sample}\"\' >> {integrated_personal}")
         # grep private targets from personal targets
         os.system(
             f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
