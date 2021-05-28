@@ -56,10 +56,21 @@ def adjust_lightness(color, amount=0.5):
     return colorsys.hls_to_rgb(c[0], max(0, min(1, amount * c[1])), c[2])
 
 
+plt.rcParams["figure.dpi"] = 400
+# matplotlib.rcParams["figure.figsize"] = 10, 3
+plt.rcParams['pdf.fonttype'] = 42
+plt.rcParams['ps.fonttype'] = 42
 plt.style.use('seaborn-poster')
-matplotlib.rcParams['pdf.fonttype'] = 42
-matplotlib.rcParams['ps.fonttype'] = 42
-ax = plt.figure().gca()
+
+# matplotlib.rcParams["figure.figsize"] = 7, 5
+ax = plt.figure()
+
+# ax.set_figheight(5)
+# ax.set_figwidth(10)
+
+titlesize = 18
+fontsize = 17
+
 
 barplot_values = dict()  # barplot_values -> EAS -> [1,2]
 total = int(sys.argv[2])
@@ -98,10 +109,11 @@ except:
     no_result = True
 width = 0.5
 
-population_color = ['purple', 'orange', 'green', 'blue', 'red']
-hatches = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*']
-if 'REF' in barplot_values.keys():
-    population_color.insert(0, 'grey')
+population_color = ['#a6cee3', '#1f78b4',
+                    '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c']
+# hatches = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*']
+# if 'REF' in barplot_values.keys():
+#     population_color.insert(0, 'grey')
 # If i have more than 5 superpopulations + ref
 if len(barplot_values.keys()) > len(population_color):
     for i in mc.TABLEAU_COLORS:
@@ -115,56 +127,62 @@ all_bar = []
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
     current_bar = [x[i] for x in barplot_values.values()]
     # all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
-    all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(
-        x, 1 + i*0.3) for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black', hatch=hatches[i]))
+    all_bar.append(plt.bar(ind, current_bar, width,
+                           color=population_color[i], align='edge', bottom=previous_bar, edgecolor='black'))
     previous_bar = [x + previous_bar[k] for k, x in enumerate(current_bar)]
 
 # p1 = plt.bar(ind, barplot_values.values(), width, color=population_color, align='edge')       #color = '#67a9cf'
 
 # p2 = plt.bar(ind, barplot_values.values() , width, color=[adjust_lightness(x, 1.3) for x in population_color], align='edge', bottom = list(barplot_values.values()))
 
+# print('number bars', number_bars)
 legend_labels = []
 handles_color = []
-for x in range(min(number_bars, total+1)):
+# for x in range(min(number_bars, total+1)):
+for x in range(number_bars):
     if x == 0:
-        legend_labels.append(str(total) + ' MM')  # got Total mms and 0 bulges
-        handles_color.append((all_bar[0][:]))
+        if barplot_values['REF'][0] != 0:
+            # got Total mms and 0 bulges
+            legend_labels.append(str(total) + ' MM')
+            # handles_color.append((all_bar[0][:]))
+            handles_color.append(all_bar[0][0])
     else:
         if (total - x) < 0:  # To avoid negative numbers on MM values
-            legend_labels.append('0 MM + ' + str(x) + ' B')
-            handles_color.append((all_bar[x][:]))
+            if barplot_values['REF'][x] != 0:
+                legend_labels.append('0 MM + ' + str(x) + ' B')
+            # handles_color.append((all_bar[x][:]))
+                handles_color.append(all_bar[x][0])
         else:
-            legend_labels.append(str(total - x) + ' MM + ' + str(x) + ' B')
-            handles_color.append((all_bar[x][:]))
+            if barplot_values['REF'][x] != 0:
+                legend_labels.append(str(total - x) + ' MM + ' + str(x) + ' B')
+                handles_color.append(all_bar[x][0])
+
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
-plt.legend(handles_color, legend_labels, fontsize=15, handlelength=14,
+plt.legend(handles_color, legend_labels, fontsize=fontsize, handlelength=5,
            handler_map={tuple: HandlerTuple(ndivide=None)})
 # first param is for the colored rectangles of legens, second parameter for labels, handlelength is size of rectangles, handlermap is for grouping different colors in single label
 # [(first bar color, second bar color, ...), (first bar light color, second bar light color,...)]
 plt.title('Targets found in each Superpopulation - ' +
-          str(total) + ' Mismatches(MM) + Bulges(B)', size=23)
+          str(total) + ' (Mismatches(MM) + Bulges(B))', size=titlesize)
 
 if no_result:
     plt.annotate('No targets found with ' + str(total) + ' mismatches + bulges',
-                 (2.5, 0), size=22, ha='center', va='center')  # 2.5 is x position
+                 (2.5, 0), size=fontsize, ha='center', va='center')  # 2.5 is x position
     sys.exit()
 
 
-plt.xticks(ind+0.25, barplot_values.keys(), size=25)
+plt.xticks(ind+0.25, barplot_values.keys(), size=fontsize)
 
-size_y_ticks = 22
+size_y_ticks = fontsize
 digits = int(math.log10(max_value))+1
 if digits > 5:  # Reduce dimension of y label because it can exceed plot size
     size_y_ticks = max(16, size_y_ticks - (2*(digits-5)))
-plt.yticks(y_range)  # , size=size_y_ticks)
 
-sf = ScalarFormatter(useOffset=False)
-sf.set_scientific(False)
-ax.yaxis.set_major_formatter(sf)
+plt.yticks(y_range, size=size_y_ticks)  # , size=size_y_ticks)
 
 plt.tight_layout()
-plt.subplots_adjust(top=0.95, bottom=0.06, left=0.1, right=0.99)
+# plt.subplots_adjust(top=0.95, bottom=0.06, left=0.1, right=0.99)
 plt.savefig("populations_distribution_" + guide + '_' +
             str(total) + "total" + ".png", format='png')

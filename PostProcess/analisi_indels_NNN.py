@@ -205,13 +205,13 @@ def alignRefFromVar(line, ref_seq):#chr_fake, start_pos, len_guide, bulge):
         if do_scores:
             cfd_score = calc_cfd(t[1][int(line[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
         else:
-            cfd_score = 0
+            cfd_score = -1
         cfd = "{:.3f}".format(cfd_score) #str(cfd_score)
     else:
         if do_scores:
             cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
         else:
-            cfd_score = 0
+            cfd_score = -1
         cfd = "{:.3f}".format(cfd_score) #str(cfd_score)
     return [sequence, cfd]
 

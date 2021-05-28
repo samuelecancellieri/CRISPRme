@@ -1774,7 +1774,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
             doench_enr = [a.split('\t')[3] for a in all_scores if a.split('\t')[
                 0] not in list_error_guides]
         # acfd = [int(round((100/(100 + x))*100)) for x in acfd]
-        acfd = [float("{:.3f}".format(x*100)) for x in acfd]
+        acfd = [float("{:.3f}".format(x*100)) if x < 1 else 'CFD score not available' for x in acfd]
 
     # Get target counting from summary by guide
     column_on_target = []
@@ -2231,13 +2231,13 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
                 df = df.sort_values('Targets in Variant', ascending=False)
-                df.drop(['Targets in Reference'], axis=1, inplace=True)
+                #df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
                 df = df.sort_values('Targets in Reference', ascending=False)
-                df.drop(['Targets in Reference'], axis=1, inplace=True)
-                df.drop(['Class'], axis=1, inplace=True)
+                #df.drop(['Targets in Reference'], axis=1, inplace=True)
+                #df.drop(['Class'], axis=1, inplace=True)
             more_info_col = []
             for i in range(df.shape[0]):
                 more_info_col.append('Show Targets')
@@ -2270,13 +2270,13 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
                 df = df.sort_values('Targets in Variant', ascending=False)
-                df.drop(['Targets in Reference'], axis=1, inplace=True)
+                #df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
                 df = df.sort_values('Targets in Variant', ascending=False)
-                df.drop(['Targets in Reference'], axis=1, inplace=True)
-                df.drop(['Class'], axis=1, inplace=True)
+                #df.drop(['Targets in Reference'], axis=1, inplace=True)
+                #df.drop(['Class'], axis=1, inplace=True)
             more_info_col = []
             for i in range(df.shape[0]):
                 more_info_col.append('Show Targets')
@@ -2524,8 +2524,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                     guide + '_' +
                     str(int(mm)+int(bulge)) + 'total.png'
                 ),
-                html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
-                    'display': 'inline-block'}), style={'text-align': 'center'})
+                # html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
+                #     'display': 'inline-block'}), style={'text-align': 'center'})
             ]
         )
     except:

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from operator import truediv
 from intervaltree import IntervalTree
 import sys
 import time
@@ -266,7 +267,7 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['highest_CFD_alignment(ref)'] = str(x[3])
     saveDict['ref_seq_length'] = str(len(str(x[3])))
     saveDict['ref_pos_alt(aligned_strand)'] = ','.join(variantList)
-    saveDict['pam'] = str(x[2])[-3:]
+    # saveDict['pam'] = str(x[2])[-3:]
     saveDict['annotation'] = str(x[14])
     saveDict['highest_CFD_score(alt)'] = str(x[20])
     saveDict['highest_CFD_score(ref)'] = str(x[21])
@@ -277,32 +278,18 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['highest_CFD_alignment(ref)'] = str(x[2])
         saveDict['highest_CFD_score(alt)'] = 'n'
 
-    if str(x[8]) != str(x[30]) or str(x[9]) != str(x[31]):
-        saveDict['fewest_mismatch'] = str(x[30])
-        saveDict['fewest_bulge'] = str(x[31])
-        saveDict['fewest_mismatch+bulge'] = str(x[32])
-        saveDict['fewest_mm+bulge_guide_alignment'] = str(x[23])
-        saveDict['fewest_mm+bulge_alignment(alt)'] = str(x[24])
-        saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[25])
-        saveDict['fewest_mm+bulge_CFD_score(alt)'] = str(x[42])
-        saveDict['fewest_mm+bulge_CFD_score(ref)'] = str(x[43])
-        if 'ref' in origin:
-            saveDict['fewest_mm+bulge_alignment(alt)'] = 'n'
-            saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[24])
-            saveDict['fewest_mm+bulge_CFD_score(alt)'] = 'n'
-    else:
-        saveDict['fewest_mismatch'] = str(x[8])
-        saveDict['fewest_bulge'] = str(x[9])
-        saveDict['fewest_mismatch+bulge'] = str(x[10])
-        saveDict['fewest_mm+bulge_guide_alignment'] = str(x[1])
-        saveDict['fewest_mm+bulge_alignment(alt)'] = str(x[2])
-        saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[3])
-        saveDict['fewest_mm+bulge_CFD_score(alt)'] = str(x[20])
-        saveDict['fewest_mm+bulge_CFD_score(ref)'] = str(x[21])
-        if 'ref' in origin:
-            saveDict['fewest_mm+bulge_alignment(alt)'] = 'n'
-            saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[2])
-            saveDict['fewest_mm+bulge_CFD_score(alt)'] = 'n'
+    saveDict['fewest_mismatch'] = str(x[32])
+    saveDict['fewest_bulge'] = str(x[33])
+    saveDict['fewest_mismatch+bulge'] = str(x[34])
+    saveDict['fewest_mm+bulge_guide_alignment'] = str(x[25])
+    saveDict['fewest_mm+bulge_alignment(alt)'] = str(x[26])
+    saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[27])
+    saveDict['fewest_mm+bulge_CFD_score(alt)'] = str(x[44])
+    saveDict['fewest_mm+bulge_CFD_score(ref)'] = str(x[45])
+    if 'ref' in origin:
+        saveDict['fewest_mm+bulge_alignment(alt)'] = 'n'
+        saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[26])
+        saveDict['fewest_mm+bulge_CFD_score(alt)'] = 'n'
 
     saveDict['risk_score'] = str(float(x[20])-float(x[21]))
     saveDict['absolute_risk_score'] = str(abs(float(x[20])-float(x[21])))
@@ -326,10 +313,25 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['prim_AF'] = 'n'
         saveDict['prim_samples'] = 'n'
         saveDict['prim_SNP_ID(positive_strand)'] = 'n'
-        saveDict['pam'] = str(x[3])[-3:]
-        saveDict['fewest_mm+bulge_alignment(alt)'] = 'n'
-        saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[2])
-        saveDict['fewest_mm+bulge_CFD_score(alt)'] = 'n'
+
+    count_N_in_guide = 0  # check how long is the pam counting Ns in the guide
+    pam_at_start = False  # check if pam is at start of the sequence
+    # count number of Ns in the guide
+    for count, elem in enumerate(saveDict['real_guide']):
+        if elem == 'N':
+            count_N_in_guide += 1
+            if count == 0:  # if N is at start of the guide, pam_at_start = true
+                pam_at_start = True
+    if origin == 'ref':
+        if pam_at_start:  # save pam sequence extracting directly from the ref sequence
+            saveDict['pam'] = saveDict['highest_CFD_alignment(ref)'][:count_N_in_guide]
+        else:
+            saveDict['pam'] = saveDict['highest_CFD_alignment(ref)'][-count_N_in_guide:]
+    else:
+        if pam_at_start:  # save pam sequence extracting directly from the var sequence
+            saveDict['pam'] = saveDict['highest_CFD_alignment(alt)'][:count_N_in_guide]
+        else:
+            saveDict['pam'] = saveDict['highest_CFD_alignment(alt)'][-count_N_in_guide:]
 
     foundEmpirical = sorted(empiricalTree[int(x[6])-4:int(x[6])+4])
 
