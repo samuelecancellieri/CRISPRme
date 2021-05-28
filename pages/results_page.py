@@ -2937,9 +2937,17 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                            if 'Max_bulges' in s)).split('\t')[-1]
         pam = (next(s for s in all_params.split(
             '\n') if 'Pam' in s)).split('\t')[-1]
+        nuclease = (next(s for s in all_params.split(
+            '\n') if 'Nuclease' in s)).split('\t')[-1]
 
     fl = []
     fl.append(html.Br())
+
+    if nuclease != 'SpCas9':
+        CFD_notification = html.Div(
+            'CFD score is not calculated if the used nuclease is not SpCas9')
+    else:
+        CFD_notification = html.Div('', hidden=True)
 
     pam_at_start = False
     if str(guide)[0] == 'N':
@@ -3403,6 +3411,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     [
                         dbc.Col(
                             [
+                                CFD_notification,
                                 # html.Br(),
                                 html.P(
                                     'Export will download 1000 lines contained in the current view of the table'),
@@ -3652,6 +3661,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         fl.append(
             html.Div(
                 [
+                    CFD_notification,
                     dbc.Row(
                         dbc.Col(top1000_image, width={"size": 10, "offset": 2})
                     ),
