@@ -107,10 +107,7 @@ try:
 except:
     y_range = np.arange(0, 1, 1)
     no_result = True
-if len(barplot_values.keys()) >= 5:
-    width = 0.5
-else:
-    width = 0.1
+width = 0.5
 
 population_color = ['#a6cee3', '#1f78b4',
                     '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c']
