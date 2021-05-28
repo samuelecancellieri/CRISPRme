@@ -49,16 +49,16 @@ def directoryCheck():
 @app.callback(
     [Output('page-content', 'children'),
      Output('job-link', 'children')],
-    [Input('url', 'href'), 
+    [Input('url', 'href'),
      Input('url', 'pathname'),
-     Input('url', 'search')], 
+     Input('url', 'search')],
     [State('url', 'hash')]
 )
 def changePage(href, path, search, hash_guide):
     '''
     Controllo della pagina da mostrare in base all'url
     '''
-    
+
     # print(href)
     if path == '/load':
         # print("CHANGING TO LOAD PAGE")
@@ -94,6 +94,10 @@ def changePage(href, path, search, hash_guide):
 
 if __name__ == '__main__':
     directoryCheck()
-    app.run_server(host='0.0.0.0', port=80, debug=False,
-                   dev_tools_ui=False, dev_tools_props_check=False)
+    if '--debug' in sys.argv[1:]:
+        app.run_server(host='0.0.0.0', port=8080, debug=False,
+                       dev_tools_ui=False, dev_tools_props_check=False)
+    else:
+        app.run_server(host='0.0.0.0', port=80, debug=False,
+                       dev_tools_ui=False, dev_tools_props_check=False)
     cache.clear()  # delete cache when server is closed
