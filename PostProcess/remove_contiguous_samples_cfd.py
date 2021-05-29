@@ -108,7 +108,8 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         for ele in final_list:
             ele[cfd-1] = str(n_ele-1)
             ele[2*cfd+1] = str(n_ele-1)
-            fileOut_disc.write(("\t".join(ele)).strip()+"\t"+bestTarget[chrom]+"_"+bestTarget[pos]+"\n")
+            #fileOut_disc.write(("\t".join(ele)).strip()+"\t"+bestTarget[chrom]+"_"+bestTarget[pos]+"\n")
+            fileOut_disc.write(("\t".join(ele)))
     elif n_ele == 1:
         fileOut.write("\t".join(final_list[0]))
 
