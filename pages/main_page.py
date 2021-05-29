@@ -1243,7 +1243,7 @@ def indexPage():
 
     job_name_content = html.Div(
         [
-            dcc.Checklist(options=[{'label': ' Personalized job name', 'value': 'job_name',
+            dcc.Checklist(options=[{'label': 'Job name', 'value': 'job_name',
                                     'disabled': False}], id='checklist-job-name', value=[]),
             dbc.FormGroup(dbc.Input(type="text", id="job-name", placeholder="my_job",
                                     className='jobName', disabled=True, style={'width': '300px'}))
@@ -1314,13 +1314,13 @@ def indexPage():
                                     [
                                         annotation_content,
                                         html.Br(),
-                                        html.Div(submit_content, style={
-                                                 'margin-left': '30%'}),
                                         terms_and_conditions_content,
                                         # personal_data_management_content,
                                         html.Br(),
                                         mail_content,
-                                        job_name_content
+                                        job_name_content,
+                                        html.Div(submit_content, style={
+                                                 'margin-left': '30%'}),
                                     ],
                                     id='column-three-step-3',
                                     # style={'flex': '0 0 30%', 'tex-align': 'center'}
