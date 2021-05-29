@@ -56,14 +56,14 @@ def contactPage():
                         html.Li(
                             'bauer AT bloodgroup DOT tch DOT harvard DOT edu'
                         ),
-                        html.Li(
-                            [
-                                ('Alternatively, please open an issue on GitHub: '),
-                                html.A('https://github.com/pinellolab/CRISPRme/issues',
-                                       href='https://github.com/pinellolab/CRISPRme/issues', target='_blank'),
-                            ]
-                        )
                     ], style={'padding': '15px'}
+                ),
+                html.Div(
+                    [
+                        html.P('Alternatively, please open an issue on GitHub: '),
+                        html.A('https://github.com/pinellolab/CRISPRme/issues',
+                               href='https://github.com/pinellolab/CRISPRme/issues', target='_blank'),
+                    ]
                 )
             ], style={'margin-left': '1%'}
         )
