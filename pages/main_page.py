@@ -214,7 +214,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # 3) Set parameters
 
     # ANNOTATION CHECK
-    annotation_name = current_working_directory+'/PostProcess/vuoto.txt'
+    # annotation_name = current_working_directory+'/PostProcess/vuoto.txt'
+    annotation_name = '.dummy.bed'  # necessary to process without annotation
     if 'EN' in annotation_var:
         # annotation_name = 'hg38_ref.annotations.bed'
         annotation_name = 'gencode_encode.hg38.bed'
@@ -229,6 +230,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                 f"mv {current_working_directory}/Annotations/ann_tmp_{job_id}.bed {current_working_directory}/Annotations/{annotation_name}")
     elif 'MA' in annotation_var:
         annotation_name = annotation_input
+    if annotation_name == '.dummy.bed':
+        os.system(f"touch {current_working_directory}/Annotations/.dummy.bed")
 
     # GENOME TYPE CHECK
     ref_comparison = False
@@ -1021,7 +1024,7 @@ def get_more_annotations():
     annotation_list = []
 
     for elem in annotation_dir:
-        if 'gencode_encode' not in elem and 'None' not in elem:
+        if 'gencode_encode' not in elem and 'None' not in elem and 'dummy' not in elem:
             annotation_list.append({'label': elem.strip().split(
                 '/')[-1], 'value': elem.strip().split('/')[-1]})
 
