@@ -995,7 +995,7 @@ def changeVariantsChecklistState(genome_value):
                                            'value': '1000G', 'disabled': False})
         checklist_variants_options.append({'label': ' plus HGDP variants',
                                            'value': 'HGDP', 'disabled': False})
-        checklist_variants_options.append({'label': ' plus Personal Variants',
+        checklist_variants_options.append({'label': ' plus Personal Variants*',
                                            'value': 'PV', 'disabled': True})
     personal_vcf = get_more_VCF(genome_value)
     return [checklist_variants_options, personal_vcf]
@@ -1214,7 +1214,7 @@ def indexPage():
                 dcc.Checklist(options=[
                     {'label': ' ENCODE cCREs + GENCODE gene',
                      'value': 'EN'},
-                    {'label': ' Personal annotations',
+                    {'label': ' Personal annotations*',
                      'value': 'MA', 'disabled': True},
                 ],
                     id='checklist-annotations', value=['EN'])
@@ -1348,13 +1348,15 @@ def indexPage():
                 # ),
             ],
             style={'background-color': 'rgba(157, 195, 230, 0.39)', 'border-radius': '5px',
-                   'border': '1px solid black', 'margin-left': '5%', 'margin-right': '5%'},
+                   #    'border': '1px solid black', 'margin-left': '5%', 'margin-right': '5%'},
+                   'border': '1px solid black'},
             # style={'background-color': 'rgba(157, 195, 230, 0.39)', 'border-radius': '5px',
             #        'border': '1px solid black'},
             id='steps-background'
         )
     )
-    # final_list.append(html.Br())
+    final_list.append(
+        html.P('*Personal data can be used in the offline version of CRISPRme'))
     # final_list.append(html.P(
     #     '[1] Cancellieri, Samuele, et al. \"Crispritz: rapid, high-throughput, and variant-aware in silico off-target site identification for crispr genome editing.\" Bioinformatics (2019).'))
     # final_list.append(
