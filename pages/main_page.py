@@ -231,6 +231,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     elif 'MA' in annotation_var:
         annotation_name = annotation_input
     if annotation_name == '.dummy.bed':
+        os.system(f"rm -f {current_working_directory}/Annotations/.dummy.bed")
         os.system(f"touch {current_working_directory}/Annotations/.dummy.bed")
 
     # GENOME TYPE CHECK
