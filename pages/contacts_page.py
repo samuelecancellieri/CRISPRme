@@ -21,21 +21,21 @@ def contactPage():
                     [
                         html.Li(
                             [
-                                ('Samuele Cancellieri, Francesco Masillo, Elia Dirupo, Nicola Bombieri, and Rosalba Giugno,  InfOmics Lab, Department of Computer Science, University of Verona, Italy,'),
+                                ('Samuele Cancellieri, Francesco Masillo, Elia Dirupo, Nicola Bombieri, and Rosalba Giugno,  InfOmics Lab, Department of Computer Science, University of Verona, Italy, '),
                                 html.A('(https://infomics.github.io/InfOmics/index.html)',
                                        href='https://infomics.github.io/InfOmics/index.html', target='_blank')
                             ]
                         ),
                         html.Li(
                             [
-                                ('Luca Pinello, Molecular Pathology Unit and Center for Cancer Research, Massachusetts General Hospital, Charlestown, MA, USA. Department of Pathology, Harvard Medical School, Boston, MA, USA. Broad Institute of MIT and Harvard, Cambridge, MA, USA. Pinello Lab'),
+                                ('Luca Pinello, Molecular Pathology Unit and Center for Cancer Research, Massachusetts General Hospital, Charlestown, MA, USA. Department of Pathology, Harvard Medical School, Boston, MA, USA. Broad Institute of MIT and Harvard, Cambridge, MA, USA. Pinello Lab '),
                                 html.A(
                                     '(http://pinellolab.org/)', href='http://pinellolab.org/', target='_blank'),
                             ]
                         ),
                         html.Li(
                             [
-                                ('Linda Yingqi Lin and Daniel E. Bauer, Division of Hematology/Oncology, Boston Children’s Hospital, Department of Pediatric Oncology, Dana-Farber Cancer Institute, Harvard Stem Cell Institute, Broad Institute, Department of Pediatrics, Harvard Medical School, Boston, Massachusetts 02115, USA'),
+                                ('Linda Yingqi Lin and Daniel E. Bauer, Division of Hematology/Oncology, Boston Children’s Hospital, Department of Pediatric Oncology, Dana-Farber Cancer Institute, Harvard Stem Cell Institute, Broad Institute, Department of Pediatrics, Harvard Medical School, Boston, Massachusetts 02115, USA '),
                                 html.A(
                                     '(http://bauerlab.org/)', href='http://bauerlab.org/', target='_blank'),
                             ]
