@@ -149,7 +149,8 @@ def resultPage(job_id):
     columns_profile_table = [
         {'name': ['', 'gRNA (protospacer+PAM)'], 'id':'Guide', 'type':'text'},
         {'name': ['', 'Nuclease', ''], 'id':'Nuclease', 'type':'text'},
-        {'name': ['', 'CFD (0-100)'], 'id':'CFD', 'type':'text'},
+        {'name': [
+            '', 'CFD specificity score (0-100)'], 'id':'CFD', 'type':'text'},
         # {'name': ['', 'Doench 2016'], 'id':'Doench 2016',
         #    'type':'text'},  # Doench, only for REF or VAR
         # {'name': ['', 'Doench 2016', ''], 'id':'Doench 2016',
