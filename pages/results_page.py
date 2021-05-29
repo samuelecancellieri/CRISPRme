@@ -2704,7 +2704,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                          guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None)
         # df = df.astype(str)
-        int_sample = int(sample)
+        try:
+            int_sample = int(sample)
+        except:
+            int_sample = sample
         # personal = df.loc[sample, 4]
         # pam_creation = df.loc[sample, 7]
         personal = df.loc[int_sample, 4]
