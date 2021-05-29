@@ -63,7 +63,7 @@ def contactPage():
                                        href='https://github.com/pinellolab/CRISPRme/issues', target='_blank'),
                             ]
                         )
-                    ], style={'padding': '15px'}
+                    ], style={'padding': '15px', 'margin-left': '1%'}
                 )
             ]
         )
