@@ -1355,6 +1355,7 @@ def indexPage():
             id='steps-background'
         )
     )
+    final_list.append(html.Br())
     final_list.append(
         html.P('*Personal data can be used in the offline version of CRISPRme'))
     # final_list.append(html.P(
