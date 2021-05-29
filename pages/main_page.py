@@ -1314,13 +1314,12 @@ def indexPage():
                                     [
                                         annotation_content,
                                         html.Br(),
-                                        terms_and_conditions_content,
-                                        # personal_data_management_content,
                                         html.Br(),
                                         mail_content,
                                         job_name_content,
                                         html.Div(submit_content, style={
                                                  'margin-left': '30%'}),
+                                        terms_and_conditions_content
                                     ],
                                     id='column-three-step-3',
                                     # style={'flex': '0 0 30%', 'tex-align': 'center'}
