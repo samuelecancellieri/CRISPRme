@@ -46,14 +46,16 @@ with open(f"{path_guides}", "r") as guide_file:
             guides.append(stripped)
 
             general_table[stripped] = dict()
-            general_table[stripped]['ref'] = np.zeros((bulge+1, mms+1), dtype=int)
-            general_table[stripped]['var'] = np.zeros((bulge+1, mms+1), dtype=int)
+            general_table[stripped]['ref'] = np.zeros(
+                (bulge+1, mms+1), dtype=int)
+            general_table[stripped]['var'] = np.zeros(
+                (bulge+1, mms+1), dtype=int)
 
 add_to_general_table = {}
 count_superpop = {}
 # with open(path_output + '.general_target_count.txt', 'w+') as general_count:
 count_for = '(' + ' - '.join([str(tot)
-                                for tot in range(1, mms + bulge + 1)]) + ' Mismatches + Bulges)'
+                              for tot in range(1, mms + bulge + 1)]) + ' Mismatches + Bulges)'
 # general_count.write('#Guide\tOn-Targets (Reference - Enriched)\tOff-Targets Reference ' +
 #                     count_for + '\tOff-Targets Enriched ' + count_for + '\n')
 
@@ -147,15 +149,16 @@ for guide in guides:
     if genome_type == "var":
         with open(f"{path_output}.summary_by_samples.{guide}.txt", "w") as summary_by_samples:
             summary_by_samples.write(guide+"\n")
-            summary_by_samples.write("Sample\tSex\tPopulation\tSuper Population\tTargets in Variant\tTargets in Population\tTargets in Super Population\tPAM Creation\n")
+            summary_by_samples.write(
+                "Sample\tSex\tPopulation\tSuper Population\tTargets in Variant\tTargets in Population\tTargets in Super Population\tPAM Creation\n")
             for key in dict_samples.keys():
                 entry = dict_samples[key]
                 summary_by_samples.write(
-                    f"{key}\t{entry[0]}\t{entry[1]}\t{entry[2]}\t{entry[3]}\t{entry[4]}\t{entry[5]}\t{entry[6]}\n") #\t{entry[3]}
+                    f"{key}\t{entry[0]}\t{entry[1]}\t{entry[2]}\t{entry[3]}\t{entry[4]}\t{entry[5]}\t{entry[6]}\n")  # \t{entry[3]}
 
     with open(f"{path_output}.acfd.txt", "a") as acfd:
         if sum_cfds == 0:
-            acfd.write(guide+"\t0\tNA\tNA\n")
+            acfd.write(guide+"\t1\tNA\tNA\n")
         else:
             acfd.write(guide+"\t"+str(100/(100+sum_cfds))+"\tNA\tNA\n")
 
