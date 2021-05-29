@@ -1151,7 +1151,7 @@ def indexPage():
                      'value': '1000G', 'disabled': True},
                     {'label': ' plus HGDP variants',
                      'value': 'HGDP', 'disabled': True},
-                    {'label': ' plus Personal Variants',
+                    {'label': ' plus Personal Variants*',
                      'value': 'PV', 'disabled': True}
                 ],
                     id='checklist-variants', value=[])
@@ -1243,7 +1243,7 @@ def indexPage():
 
     job_name_content = html.Div(
         [
-            dcc.Checklist(options=[{'label': 'Job name', 'value': 'job_name',
+            dcc.Checklist(options=[{'label': ' Job name', 'value': 'job_name',
                                     'disabled': False}], id='checklist-job-name', value=[]),
             dbc.FormGroup(dbc.Input(type="text", id="job-name", placeholder="my_job",
                                     className='jobName', disabled=True, style={'width': '300px'}))
