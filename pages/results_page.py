@@ -1467,23 +1467,23 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     data_to_send = dff.iloc[
         page_current*page_size:(page_current + 1)*page_size
     ].to_dict('records')
-    if genome_type != 'ref':
-        dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-            job_directory + 'sampleID.txt')[:2]
-        for row in data_to_send:
-            summarized_sample_cell = dict()
-            for s in row['Samples'].split(','):
-                if s == 'n':
-                    break
-                try:
-                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
-                except:
-                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
-            if summarized_sample_cell:
-                row['Samples Summary'] = ', '.join(
-                    [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
-            else:
-                row['Samples Summary'] = 'n'
+    # if genome_type != 'ref':
+    #     dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
+    #         job_directory + 'sampleID.txt')[:2]
+    #     for row in data_to_send:
+    #         summarized_sample_cell = dict()
+    #         for s in row['Samples'].split(','):
+    #             if s == 'n':
+    #                 break
+    #             try:
+    #                 summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
+    #             except:
+    #                 summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
+    #         if summarized_sample_cell:
+    #             row['Samples Summary'] = ', '.join(
+    #                 [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
+    #         else:
+    #             row['Samples Summary'] = 'n'
     return data_to_send  # , cells_style + style_data_table
 
 
