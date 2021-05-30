@@ -183,7 +183,11 @@ saveDict = {
     'Fewest_mm+b_variant_info_genome': 'NA',
     'Fewest_mm+b_variant_MAF': 'NA',
     'Fewest_mm+b_variant_rsID': 'NA',
-    'Fewest_mm+b_variant_samples': 'NA'
+    'Fewest_mm+b_variant_samples': 'NA',
+    'Closest_gene_name': 'NA',
+    'Closest_gene_ID': 'NA',
+    'Closest_gene_annotation': 'NA',
+    'Closest_gene_distance_(kb)': 'NA'
 }
 
 
@@ -259,16 +263,16 @@ for nline, line in enumerate(inCrispritzResults):
                             tipo = "3'UTR"
                     # saveDict['gene_annotation'] = str(annotationLine[11])
                         saveDict['Closest_gene_annotation'] = tipo
-        saveDict['Closest_gene_distance(kb)'] = str(
+        saveDict['Closest_gene_distance_(kb)'] = str(
             float(annotationLine[len(annotationLine)-1])/1000)
         if float(annotationLine[len(annotationLine)-1]) != 0:
             saveDict['Closest_gene_annotation'] = 'intergenic'
 
-    origin = ''
-    if 'n' in str(x[13]):
-        origin = 'ref'
-    else:
-        origin = 'alt'
+    # origin = ''
+    # if 'n' in str(x[13]):
+    #     origin = 'ref'
+    # else:
+    #     origin = 'alt'
 
     variantList = ['NA']
     if str(x[13]) != 'NA' and str(x[13]) != 'n':
