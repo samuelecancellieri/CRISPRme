@@ -9,7 +9,8 @@ Created on Sun May 30 15:49:39 2021
 Script used to replace n and .  with NA in bestMerge
 '''
 
-
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd 
 import sys
 import os

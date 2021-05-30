@@ -9,7 +9,8 @@ Created on Sat May 29 18:02:45 2021
 Script used to convert from old bestMerge format to new alt_results format
 '''
 
-
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd 
 import sys
 import numpy as np
