@@ -422,7 +422,7 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = 'NA'
 
     change_alt_ref_highest_cfd = False
-    if saveDict['Highest_CFD_REF/ALT_origin'] == 'alt' and saveDict['Highest_CFD_score_REF'] == saveDict['Highest_CFD_score_REF']:
+    if saveDict['Highest_CFD_REF/ALT_origin'] == 'alt' and saveDict['Highest_CFD_score_REF'] == saveDict['Highest_CFD_score_ALT']:
         if 'DNA' in saveDict['Highest_CFD_bulge_type']:
             mm = 0
             bulge = 0
@@ -444,7 +444,7 @@ for nline, line in enumerate(inCrispritzResults):
             change_alt_ref_highest_cfd = True
 
     change_alt_ref_fewest_mm_b = False
-    if saveDict['Fewest_mm+b_REF/ALT_origin'] == 'alt' and saveDict['Fewest_mm+b_score_REF'] == saveDict['Fewest_mm+b_score_REF']:
+    if saveDict['Fewest_mm+b_REF/ALT_origin'] == 'alt' and saveDict['Fewest_mm+b_CFD_score_REF'] == saveDict['Fewest_mm+b_CFD_score_ALT']:
         if 'DNA' in saveDict['Fewest_mm+b_bulge_type']:
             mm = 0
             bulge = 0
