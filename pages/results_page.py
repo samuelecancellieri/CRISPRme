@@ -770,7 +770,7 @@ def clusterPage(job_id, hash):
     cluster_grep_result = current_working_directory + 'Results/' + job_id + \
         '/' + job_id + '.' + chromosome + '_' + position + '.' + guide + '.txt'
     put_header = 'head -1 ' + current_working_directory + 'Results/' + job_id + \
-        '/' + job_id + file_to_grep + ' > ' + cluster_grep_result + ' ; '
+        '/.' + job_id + file_to_grep + ' > ' + cluster_grep_result + ' ; '
     # print('esiste cluster?' , str(os.path.exists(cluster_grep_result)) )
     # Example    job_id.chr3_100.guide.txt
     if not os.path.exists(cluster_grep_result):
@@ -787,6 +787,7 @@ def clusterPage(job_id, hash):
             # print('qui cluster in grep')     #NOTE HEADER NON SALVATO
             os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
                      '\"\' >> ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
+        os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {cluster_grep_result} {cluster_grep_result}.tmp ; mv {cluster_grep_result}.tmp {cluster_grep_result}')
         os.system('zip '+'-j ' + cluster_grep_result.replace('.txt',
                                                              '.zip') + ' ' + cluster_grep_result+" &")
     final_list.append(
@@ -803,7 +804,7 @@ def clusterPage(job_id, hash):
         iupac_scomposition_visibility = {}
         # Example    job_id.chr_pos.guide.scomposition.txt
         if not os.path.exists(scomposition_file):
-            os.popen('LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep +
+            os.popen('LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/.' + job_id + file_to_grep +
                      ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\" && $13!=\"n\"\' > ' + scomposition_file).read()
 
     final_list.append(html.P(
@@ -1049,7 +1050,7 @@ def samplePage(job_id, hash):
     )
 
     file_to_grep = current_working_directory + 'Results/' + \
-        job_id + '/' + job_id + '.bestMerge.txt'
+        job_id + '/.' + job_id + '.bestMerge.txt'
     sample_grep_result = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.' + sample + '.' + guide + '.txt'
     final_list.append(
@@ -1061,6 +1062,7 @@ def samplePage(job_id, hash):
         os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
                   ' | awk \'$14~\"' + sample + '\"\' >> ' + sample_grep_result)
 
+        os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp ; mv {sample_grep_result}.tmp {sample_grep_result}')
         os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
                                                             '.zip') + ' ' + sample_grep_result + " &")
 
@@ -1122,7 +1124,7 @@ def global_store_general(path_file_to_load):
     if os.path.getsize(path_file_to_load) > 0:
         # df = pd.read_csv(path_file_to_load, sep='\t', header=None, skiprows=rows_to_skip, usecols=range(0, 16))
         df = pd.read_csv(path_file_to_load, sep='\t', header=None,
-                         skiprows=rows_to_skip, usecols=range(0, 24))
+                         skiprows=rows_to_skip, usecols=range(0, 24), na_filter=False)
     else:
         df = None
     return df
@@ -1188,7 +1190,7 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
     # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
     # Check if result grep has at least 1 result
     if os.path.getsize(scomposition_file) > 0:
-        df = pd.read_csv(scomposition_file, header=None, sep='\t', skiprows=1)
+        df = pd.read_csv(scomposition_file, header=None, sep='\t', skiprows=1, na_filter=False)
         # df['Annotation Type'] = annotation_type
     else:
         raise PreventUpdate
@@ -1541,7 +1543,7 @@ def guidePagev3(job_id, hash):
     )
     cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
             for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
-    file_to_grep = job_directory + job_id + '.bestMerge.txt'
+    file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
     # file_to_grep_alt = job_directory + job_id + '.altMerge.txt'
 
     guide_grep_result = job_directory + job_id + '.' + \
@@ -1556,6 +1558,7 @@ def guidePagev3(job_id, hash):
         os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
         os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
                   bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
+        os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result} {guide_grep_result}.tmp ; mv {guide_grep_result}.tmp {guide_grep_result}')
         os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
                   ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
@@ -1624,7 +1627,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25), skiprows=1)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25), skiprows=1, na_filter=False)
     return df
 
 # Load barplot of population distribution for selected guide
@@ -1791,7 +1794,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         # append nuclease to table
         table_to_file.append('Nuclease: '+str(nuclease))
         data_general_count = pd.read_csv(current_working_directory + 'Results/' +
-                                         job_id + '/' + job_id + '.general_target_count.'+g+".txt", sep='\t')
+                                         job_id + '/' + job_id + '.general_target_count.'+g+".txt", sep='\t', na_filter=False)
 
         data_guides = dict()
         data_guides['Guide'] = g
@@ -2040,7 +2043,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
-    file_to_grep = job_directory + job_id + '.bestMerge.txt'
+    file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
     # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
     pos_grep_result = current_working_directory + \
         'Results/' + job_id + '/' + job_id + '.' + start + "." + end + '.txt'
@@ -2059,7 +2062,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         header = ftg.readline().split('\t')[:24]
     try:
         df = pd.read_csv(pos_grep_result, sep='\t',
-                         header=None, usecols=range(0, 24))
+                         header=None, usecols=range(0, 24), na_filter=False)
     except:
         df = pd.DataFrame(columns=header)
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
@@ -2198,12 +2201,12 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
     if max(btn_sample_section) == n:
         if genome_type == 'both':
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
             #df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
             #df.drop(['Targets in Reference'], axis=1, inplace=True)
             #df.drop(['Class'], axis=1, inplace=True)
@@ -2231,12 +2234,12 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
             current_page = current_page + 1
             if genome_type == 'both':
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
                 df = df.sort_values('Targets in Variant', ascending=False)
                 #df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
                 df = df.sort_values('Targets in Reference', ascending=False)
                 #df.drop(['Targets in Reference'], axis=1, inplace=True)
                 #df.drop(['Class'], axis=1, inplace=True)
@@ -2270,12 +2273,12 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
                 current_page = 1
             if genome_type == 'both':
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
                 df = df.sort_values('Targets in Variant', ascending=False)
                 #df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                                 guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
                 df = df.sort_values('Targets in Variant', ascending=False)
                 #df.drop(['Targets in Reference'], axis=1, inplace=True)
                 #df.drop(['Class'], axis=1, inplace=True)
@@ -2470,7 +2473,7 @@ def generate_table(dataframe, id_table, genome_type, guide='', job_id='', max_ro
 
 
 def check_existance_sample(job_directory, job_id, sample):
-    df = pd.read_csv(job_directory + job_id + 'sampleID.txt', sep='\t')
+    df = pd.read_csv(job_directory + job_id + 'sampleID.txt', sep='\t', na_filter=False)
     samples = df.iloc[:, 0]
     if sample in samples.values:
         return True
@@ -2699,10 +2702,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
-    file_to_grep = job_directory + job_id + '.bestMerge.txt'
+    file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
     if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                         guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None)
+                         guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None, na_filter=False)
         # df = df.astype(str)
         try:
             int_sample = int(sample)
@@ -2713,7 +2716,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         personal = df.loc[int_sample, 4]
         pam_creation = df.loc[int_sample, 7]
 
-        file_to_grep = job_directory + job_id + '.bestMerge.txt'
+        file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
         integrated_to_grep = job_directory+job_id + \
             '.bestMerge.txt.integrated_results.tsv'
         integrated_personal = job_directory + job_id + '.' + \
@@ -2759,7 +2762,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             os.system(
                 f"head -1 {file_to_grep} > \"{tmp_file}\"; LC_ALL=C sort -k21,21rg \"{sample_grep_result}\" >> \"{tmp_file}\" ; head -6 {tmp_file} > \"{tmp_file_2}\"")
             ans = pd.read_csv(tmp_file_2, sep='\t',
-                              header=None, usecols=range(0, 23), skiprows=1)
+                              header=None, usecols=range(0, 23), skiprows=1, na_filter=False)
             with open(file_to_grep) as f_:
                 c = f_.readline().strip()
             ans.columns = c.split('\t')[:23]
@@ -2767,6 +2770,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
+            os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp ; mv {tmp_file}.tmp {tmp_file}')
             os.system('zip '+'-j ' + tmp_file.replace('.txt',
                                                       '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
@@ -2983,7 +2987,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #                    style={'display': 'none'}))
         fl.append(html.Br())
         df = pd.read_csv(job_directory + job_id +
-                         '.summary_by_guide.' + guide + '.txt', sep='\t')
+                         '.summary_by_guide.' + guide + '.txt', sep='\t', na_filter=False)
         more_info_col = []
         total_col = []
         for i in range(df.shape[0]):
@@ -3018,7 +3022,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
             #df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
@@ -3026,7 +3030,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2)
+                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
             #df.drop(['Targets in Reference'], axis=1, inplace=True)
             #df.drop(['Class'], axis=1, inplace=True)
@@ -3187,7 +3191,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         return fl
     elif value == 'tab-graphical-sample-card':
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                         guide+'.txt', skiprows=2, sep='\t', header=None)
+                         guide+'.txt', skiprows=2, sep='\t', header=None, na_filter=False)
         samples = df.iloc[:, 0]
         fl.append(
             html.P(
@@ -3782,7 +3786,7 @@ def global_store(value):
             join(current_working_directory + 'Results/'+value, f)) and f.endswith('targets.txt')]
 
     df = pd.read_csv(current_working_directory + 'Results/' +
-                     value + '/' + target[0], sep='\t', usecols=range(0, 16))
+                     value + '/' + target[0], sep='\t', usecols=range(0, 16), na_filter=False)
     df.rename(columns={"#Bulge type": 'BulgeType', '#Bulge_type': 'BulgeType', 'Bulge Size': 'BulgeSize',
                        'Bulge_Size': 'BulgeSize', 'Doench 2016': 'Doench2016', 'Doench_2016': 'Doench2016'}, inplace=True)
     return df
