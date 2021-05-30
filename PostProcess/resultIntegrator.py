@@ -417,7 +417,7 @@ for nline, line in enumerate(inCrispritzResults):
     if saveDict['Highest_CFD_REF/ALT_origin'] == 'ref':
         saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
         saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = 'NA'
-    if saveDict['Fewest_mm+b__REF/ALT_origin'] == 'ref':
+    if saveDict['Fewest_mm+b_REF/ALT_origin'] == 'ref':
         saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT']
         saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = 'NA'
 
