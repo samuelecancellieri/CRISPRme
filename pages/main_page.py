@@ -214,7 +214,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # 3) Set parameters
 
     # ANNOTATION CHECK
-    annotation_name = current_working_directory+'/PostProcess/vuoto.txt'
+    # annotation_name = current_working_directory+'/PostProcess/vuoto.txt'
+    annotation_name = '.dummy.bed'  # necessary to process without annotation
     if 'EN' in annotation_var:
         # annotation_name = 'hg38_ref.annotations.bed'
         annotation_name = 'gencode_encode.hg38.bed'
@@ -229,6 +230,9 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
                 f"mv {current_working_directory}/Annotations/ann_tmp_{job_id}.bed {current_working_directory}/Annotations/{annotation_name}")
     elif 'MA' in annotation_var:
         annotation_name = annotation_input
+    if annotation_name == '.dummy.bed':
+        os.system(f"rm -f {current_working_directory}/Annotations/.dummy.bed")
+        os.system(f"touch {current_working_directory}/Annotations/.dummy.bed")
 
     # GENOME TYPE CHECK
     ref_comparison = False
@@ -1021,7 +1025,7 @@ def get_more_annotations():
     annotation_list = []
 
     for elem in annotation_dir:
-        if 'gencode_encode' not in elem and 'None' not in elem:
+        if 'gencode_encode' not in elem and 'None' not in elem and 'dummy' not in elem:
             annotation_list.append({'label': elem.strip().split(
                 '/')[-1], 'value': elem.strip().split('/')[-1]})
 
@@ -1056,7 +1060,7 @@ def indexPage():
             html.Div('CRISPRme is a web application, also available offline or command-line for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:protospacer mismatches and bulges, and is suitable for population and personal genome analyses.'),
             html.Div(['Check out our manuscript on bioRxiv ', html.A(
                 'here!', target='_blank', href='https://www.biorxiv.org/content/10.1101/2021.05.20.445054v1')]),
-            html.Div(['CRISPRme is available offline on ', html.A(
+            html.Div(['CRISPRme offline version can be downloaded from ', html.A(
                 'Github', target='_blank', href='https://github.com/pinellolab/CRISPRme')]),
             html.Br()
         ]
@@ -1147,7 +1151,7 @@ def indexPage():
                      'value': '1000G', 'disabled': True},
                     {'label': ' plus HGDP variants',
                      'value': 'HGDP', 'disabled': True},
-                    {'label': ' plus Personal Variants',
+                    {'label': ' plus Personal Variants*',
                      'value': 'PV', 'disabled': True}
                 ],
                     id='checklist-variants', value=[])
@@ -1239,7 +1243,7 @@ def indexPage():
 
     job_name_content = html.Div(
         [
-            dcc.Checklist(options=[{'label': ' Personalized job name', 'value': 'job_name',
+            dcc.Checklist(options=[{'label': ' Job name', 'value': 'job_name',
                                     'disabled': False}], id='checklist-job-name', value=[]),
             dbc.FormGroup(dbc.Input(type="text", id="job-name", placeholder="my_job",
                                     className='jobName', disabled=True, style={'width': '300px'}))
@@ -1310,13 +1314,12 @@ def indexPage():
                                     [
                                         annotation_content,
                                         html.Br(),
-                                        html.Div(submit_content, style={
-                                                 'margin-left': '30%'}),
-                                        terms_and_conditions_content,
-                                        # personal_data_management_content,
                                         html.Br(),
                                         mail_content,
-                                        job_name_content
+                                        job_name_content,
+                                        html.Div(submit_content, style={
+                                                 'margin-left': '30%'}),
+                                        terms_and_conditions_content
                                     ],
                                     id='column-three-step-3',
                                     # style={'flex': '0 0 30%', 'tex-align': 'center'}
@@ -1344,13 +1347,16 @@ def indexPage():
                 # ),
             ],
             style={'background-color': 'rgba(157, 195, 230, 0.39)', 'border-radius': '5px',
-                   'border': '1px solid black', 'margin-left': '5%', 'margin-right': '5%'},
+                   #    'border': '1px solid black', 'margin-left': '5%', 'margin-right': '5%'},
+                   'border': '1px solid black'},
             # style={'background-color': 'rgba(157, 195, 230, 0.39)', 'border-radius': '5px',
             #        'border': '1px solid black'},
             id='steps-background'
         )
     )
-    # final_list.append(html.Br())
+    final_list.append(html.Br())
+    final_list.append(
+        html.P('*Personal data can be used in the offline version of CRISPRme'))
     # final_list.append(html.P(
     #     '[1] Cancellieri, Samuele, et al. \"Crispritz: rapid, high-throughput, and variant-aware in silico off-target site identification for crispr genome editing.\" Bioinformatics (2019).'))
     # final_list.append(

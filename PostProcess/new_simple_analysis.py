@@ -399,7 +399,6 @@ for line in inTarget:
                                 )
                                 replaceTarget2 = totalDict[count][size][key][0].copy(
                                 )
-                                # dioboia
                                 replaceTarget2[newkey[0]
                                                ] = replaceTarget1[newkey[0]]
                                 listInfo2 = totalDict[count][size][key][2].copy(
@@ -411,10 +410,11 @@ for line in inTarget:
                                 totalDict[count][size+1][combinedKey] = [
                                     replaceTarget2, resultSet, listInfo2]
                                 # remove the new generated sample set from all lower levels
-                                totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
-                                    totalDict[count][size+1][combinedKey][1]
-                                totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
-                                    totalDict[count][size+1][combinedKey][1]
+                                # removed to test with unphased genotype, not necessary with phased
+                                # totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
+                                #     totalDict[count][size+1][combinedKey][1]
+                                # totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
+                                #     totalDict[count][size+1][combinedKey][1]
 
             refSeq_with_bulges = list(refSeq)
             for pos, char in enumerate(realTarget):
