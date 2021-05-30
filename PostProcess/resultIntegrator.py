@@ -418,7 +418,7 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
         saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = 'NA'
     if saveDict['Fewest_mm+b__REF/ALT_origin'] == 'ref':
-        saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
+        saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT']
         saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = 'NA'
 
     change_alt_ref_highest_cfd = False
@@ -469,8 +469,7 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
         saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = 'NA'
         saveDict['Highest_CFD_REF/ALT_origin'] = 'ref'
-        saveDict['Highest_CFD_variant_info_spacer+PAM'] = ','.join(
-            variantList_highest_cfd)
+        saveDict['Highest_CFD_variant_info_spacer+PAM'] = 'NA'
         saveDict['Highest_CFD_variant_info_genome'] = 'NA'
         saveDict['Highest_CFD_variant_MAF'] = 'NA'
         saveDict['Highest_CFD_variant_rsID'] = 'NA'
@@ -480,8 +479,7 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT']
         saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = 'NA'
         saveDict['Fewest_mm+b_REF/ALT_origin'] = 'ref'
-        saveDict['Fewest_mm+b_variant_info_spacer+PAM'] = ','.join(
-            variantList_highest_cfd)
+        saveDict['Fewest_mm+b_variant_info_spacer+PAM'] = 'NA'
         saveDict['Fewest_mm+b_variant_info_genome'] = 'NA'
         saveDict['Fewest_mm+b_variant_MAF'] = 'NA'
         saveDict['Fewest_mm+b_variant_rsID'] = 'NA'
