@@ -271,7 +271,7 @@ for nline, line in enumerate(inCrispritzResults):
         origin = 'alt'
 
     variantList = ['NA']
-    if str(x[13]) != 'NA':
+    if str(x[13]) != 'NA' and str(x[13]) != 'n':
         variantList = str(x[18]).strip().split(',')
         if len(variantList) > 1 and checkVCF:
             samples = x[13]
@@ -314,7 +314,7 @@ for nline, line in enumerate(inCrispritzResults):
     variantList_highest_cfd = variantList
 
     variantList = ['NA']
-    if str(x[37]) != 'NA':
+    if str(x[37]) != 'NA' and str(x[37]) != 'n':
         variantList = str(x[42]).strip().split(',')
         if len(variantList) > 1 and checkVCF:
             samples = x[37]
@@ -402,7 +402,8 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Fewest_mm+b_CFD_score_REF'] = str(x[45])
     saveDict['Fewest_mm+b_CFD_score_ALT'] = str(x[44])
     saveDict['Fewest_mm+b_CFD_risk_score'] = str(x[46])
-    saveDict['Fewest_mm+b_variant_info_spacer+PAM'] = variantList_fewest_mm_b
+    saveDict['Fewest_mm+b_variant_info_spacer+PAM'] = ','.join(
+        variantList_fewest_mm_b)
     saveDict['Fewest_mm+b_variant_info_genome'] = str(x[42])
     saveDict['Fewest_mm+b_variant_MAF'] = str(x[41])
     saveDict['Fewest_mm+b_variant_rsID'] = 'NA' if str(
