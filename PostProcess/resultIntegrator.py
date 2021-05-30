@@ -413,65 +413,79 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Fewest_mm+b_variant_rsID'] = 'NA' if str(
         x[40]) == '.' else str(x[40])
     saveDict['Fewest_mm+b_variant_samples'] = str(x[37])
-    # saveDict['real_guide'] = str(realguide[0]).strip()
-    # saveDict['real_guide'] = str(x[15]).strip()
-    # saveDict['genome'] = genomeRelease
-    # saveDict['Strand'] = str(x[7])
-    # saveDict['Chromosome'] = str(x[4])
-    # saveDict['Highest_CFD_start_coordinate'] = str(x[6])
-    # saveDict['Highest_CFD_aligned_spacer+PAM'] = str(x[1])
-    # saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = str(x[3])
-    # saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = str(x[2])
-    # # saveDict['ref_seq_length'] = str(len(str(x[3])))
-    # # saveDict['ref_pos_alt(aligned_strand)'] = ','.join(variantList)
-    # # saveDict['pam'] = str(x[2])[-3:]
-    # saveDict['Highest_CFD_mismatches'] = str(x[8])
-    # saveDict['highest_CFD_bulges'] = str(x[9])
-    # saveDict['Highest_CFD_mismatches+bulges'] = str(x[10])
-    # saveDict['Highest_CFD_PAM_gen'] = str(x[11])
-    # # saveDict['annotation'] = str(x[14])
-    # saveDict['Highest_CFD_bulge_type'] = str(x[0])
-    # saveDict['highest_CFD_score_ALT'] = str(x[20])
-    # saveDict['highest_CFD_score_REF'] = str(x[21])
-    # saveDict['highest_CFD_score'] = str(x[20]) if float(
-    #     x[20]) > float(x[21]) else str(x[21])
-    # if 'ref' in origin:
-    #     saveDict['highest_CFD_alignment(alt)'] = 'n'
-    #     saveDict['highest_CFD_alignment(ref)'] = str(x[2])
-    #     saveDict['highest_CFD_score(alt)'] = 'n'
 
-    # saveDict['fewest_mismatch'] = str(x[32])
-    # saveDict['fewest_bulge'] = str(x[33])
-    # saveDict['fewest_mismatch+bulge'] = str(x[34])
-    # saveDict['fewest_mm+bulge_guide_alignment'] = str(x[25])
-    # saveDict['fewest_mm+bulge_alignment(alt)'] = str(x[26])
-    # saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[27])
-    # saveDict['fewest_mm+bulge_CFD_score(alt)'] = str(x[44])
-    # saveDict['fewest_mm+bulge_CFD_score(ref)'] = str(x[45])
-    # if 'ref' in origin:
-    #     saveDict['fewest_mm+bulge_alignment(alt)'] = 'n'
-    #     saveDict['fewest_mm+bulge_alignment(ref)'] = str(x[26])
-    #     saveDict['fewest_mm+bulge_CFD_score(alt)'] = 'n'
+    if saveDict['Highest_CFD_REF/ALT_origin'] == 'ref':
+        saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
+        saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = 'NA'
+    if saveDict['Fewest_mm+b__REF/ALT_origin'] == 'ref':
+        saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
+        saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = 'NA'
 
-    # saveDict['risk_score'] = str(float(x[20])-float(x[21]))
-    # saveDict['absolute_risk_score'] = str(abs(float(x[20])-float(x[21])))
-    # saveDict['alt_haplotypes'] = str(x[19].strip().split('.')[0])
-    # saveDict['Highest_CFD_REF/ALT_origin'] = origin
-    # saveDict['prim_AF'] = str(x[17])
-    # saveDict['prim_samples'] = str(x[13])
-    # saveDict['prim_SNP_ID(positive_strand)'] = str(x[18])
+    change_alt_ref_highest_cfd = False
+    if saveDict['Highest_CFD_REF/ALT_origin'] == 'alt' and saveDict['Highest_CFD_score_REF'] == saveDict['Highest_CFD_score_REF']:
+        if 'DNA' in saveDict['Highest_CFD_bulge_type']:
+            mm = 0
+            bulge = 0
+            for nt in saveDict['Highest_CFD_aligned_protospacer+PAM_REF']:
+                if nt.islower():
+                    mm += 1
+            for nt in saveDict['Highest_CFD_aligned_spacer+PAM']:
+                if nt == '-':
+                    bulge += 1
+        else:
+            mm = 0
+            bulge = 0
+            for nt in saveDict['Highest_CFD_aligned_protospacer+PAM_REF']:
+                if nt.islower():
+                    mm += 1
+                if nt == '-':
+                    bulge += 1
+        if mm <= int(saveDict['Highest_CFD_mismatches']) and bulge <= int(saveDict['Highest_CFD_bulges']):
+            change_alt_ref_highest_cfd = True
 
-    # if saveDict['highest_CFD_score(ref)'] == saveDict['highest_CFD_score(alt)'] and origin == 'alt':
-    #     saveDict['highest_CFD_alignment(alt)'] = 'n'
-    #     saveDict['highest_CFD_score(alt)'] = 'n'
-    #     saveDict['highest_CFD_score(ref)'] = str(x[21])
-    #     saveDict['ref_seq_length'] = 1
-    #     origin = 'ref'
-    #     saveDict['prim_origin'] = origin
-    #     saveDict['ref_pos_alt(aligned_strand)'] = 'n'
-    #     saveDict['prim_AF'] = 'n'
-    #     saveDict['prim_samples'] = 'n'
-    #     saveDict['prim_SNP_ID(positive_strand)'] = 'n'
+    change_alt_ref_fewest_mm_b = False
+    if saveDict['Fewest_mm+b_REF/ALT_origin'] == 'alt' and saveDict['Fewest_mm+b_score_REF'] == saveDict['Fewest_mm+b_score_REF']:
+        if 'DNA' in saveDict['Fewest_mm+b_bulge_type']:
+            mm = 0
+            bulge = 0
+            for nt in saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF']:
+                if nt.islower():
+                    mm += 1
+            for nt in saveDict['Fewest_mm+b_aligned_spacer+PAM']:
+                if nt == '-':
+                    bulge += 1
+        else:
+            mm = 0
+            bulge = 0
+            for nt in saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF']:
+                if nt.islower():
+                    mm += 1
+                if nt == '-':
+                    bulge += 1
+        if mm <= int(saveDict['Fewest_mm+b_mismatches']) and bulge <= int(saveDict['Fewest_mm+b_bulges']):
+            change_alt_ref_fewest_mm_b = True
+
+    if change_alt_ref_highest_cfd:
+        saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
+        saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = 'NA'
+        saveDict['Highest_CFD_REF/ALT_origin'] = 'ref'
+        saveDict['Highest_CFD_variant_info_spacer+PAM'] = ','.join(
+            variantList_highest_cfd)
+        saveDict['Highest_CFD_variant_info_genome'] = 'NA'
+        saveDict['Highest_CFD_variant_MAF'] = 'NA'
+        saveDict['Highest_CFD_variant_rsID'] = 'NA'
+        saveDict['Highest_CFD_variant_samples'] = 'NA'
+
+    if change_alt_ref_fewest_mm_b:
+        saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT']
+        saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = 'NA'
+        saveDict['Fewest_mm+b_REF/ALT_origin'] = 'ref'
+        saveDict['Fewest_mm+b_variant_info_spacer+PAM'] = ','.join(
+            variantList_highest_cfd)
+        saveDict['Fewest_mm+b_variant_info_genome'] = 'NA'
+        saveDict['Fewest_mm+b_variant_MAF'] = 'NA'
+        saveDict['Fewest_mm+b_variant_rsID'] = 'NA'
+        saveDict['Fewest_mm+b_variant_samples'] = 'NA'
 
     count_N_in_guide = 0  # check how long is the pam counting Ns in the guide
     pam_at_start = False  # check if pam is at start of the sequence
