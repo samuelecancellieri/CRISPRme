@@ -147,7 +147,7 @@ def resultPage(job_id):
     col_targetfor = col_targetfor + ' Mismatches + Bulges)'
 
     columns_profile_table = [
-        {'name': ['', 'gRNA (protospacer+PAM)'], 'id':'Guide', 'type':'text'},
+        {'name': ['', 'gRNA (spacer+PAM)'], 'id':'Guide', 'type':'text'},
         {'name': ['', 'Nuclease', ''], 'id':'Nuclease', 'type':'text'},
         {'name': [
             '', 'CFD specificity score (0-100)'], 'id':'CFD', 'type':'text'},
