@@ -1569,7 +1569,7 @@ def guidePagev3(job_id, hash):
         os.system(
             f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result}.tmp {guide_grep_result}.tmp2')
         os.system(f'mv -f {guide_grep_result}.tmp2 {guide_grep_result}')
-        os.system(f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2')
+        os.system(f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2 {job_directory}/header.txt')
         os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
                   ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)

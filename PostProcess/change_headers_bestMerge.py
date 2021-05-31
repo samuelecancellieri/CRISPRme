@@ -8,7 +8,6 @@ Created on Sat May 29 18:02:45 2021
 '''
 Script used to convert from old bestMerge format to new alt_results format
 '''
-
 import pandas as pd
 import numpy as np
 import sys
@@ -18,8 +17,10 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 in_path = sys.argv[1]
 out_path = sys.argv[2]
 
-chunksize_ = 50000
-chunks = pd.read_csv(in_path, sep='\t', chunksize=chunksize_)
+chunksize_ = 5000000000000
+
+#if not isFileLocked(in_path):
+chunks = pd.read_csv(in_path, sep='\t', chunksize=chunksize_, na_filter=False)
 
 new_order = ['Real_Guide', 'Direction', 'Chromosome', 'Position', 'Cluster_Position', 'crRNA', 'Reference', 'DNA', 'Mismatches', 'Bulge_Size', 'Total',
              '#Bulge_type', 'PAM_gen', 'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score', 'Highest_CFD_Absolute_Risk_Score', 'Var_uniq', 'SNP', 'AF', 'rsID',
@@ -71,7 +72,7 @@ for chunk in chunks:
     chunk.drop('Fewest_mm+b_aligned_protospacer+PAM_REF_corrected',
                axis=1, inplace=True)
 
-    chunk.to_csv(out_path, header=header, mode='a',
+    chunk.to_csv(out_path, header=header, mode='w',
                  sep='\t', index=False, na_rep='NA')
 
     header = False
