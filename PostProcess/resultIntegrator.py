@@ -184,10 +184,12 @@ saveDict = {
     'Fewest_mm+b_variant_MAF': 'NA',
     'Fewest_mm+b_variant_rsID': 'NA',
     'Fewest_mm+b_variant_samples': 'NA',
-    'Closest_gene_name': 'NA',
-    'Closest_gene_ID': 'NA',
-    'Closest_gene_annotation': 'NA',
-    'Closest_gene_distance_(kb)': 'NA'
+    'Annotation_GENCODE': 'NA',
+    'Annotation_closest_gene_name': 'NA',
+    'Annotation_closest_gene_ID': 'NA',
+    'Annotation_closest_gene_distance_(kb)': 'NA',
+    'Annotation_ENCODE': 'NA',
+    'Annotation_personal': 'NA'
 }
 
 
@@ -207,8 +209,8 @@ for count, line in enumerate(inEmpiricalResults):
     valueDict[str(empList[5])] = 'NA'
     # update save dict with user-defined names from empirical data
     saveDict[str(empList[5])] = 'NA'
-    newkey = str(empList[5])+'_mm+bul'
-    saveDict[newkey] = 'NA'
+    # newkey = str(empList[5])+'_mm+bul'
+    # saveDict[newkey] = 'NA'
 
 # writing header in file
 save = '#'
@@ -246,10 +248,10 @@ for nline, line in enumerate(inCrispritzResults):
                 temp = elem.strip().split(';')
                 for name in temp:
                     if 'gene_id' in name:
-                        saveDict['Closest_gene_ID'] = name.strip().split('=')[
+                        saveDict['Annotation_closest_gene_ID'] = name.strip().split('=')[
                             1]
                     if 'gene_name' in name:
-                        saveDict['Closest_gene_name'] = name.strip().split('=')[
+                        saveDict['Annotation_closest_gene_name'] = name.strip().split('=')[
                             1]
                     if 'gene_type' in name:
                         tipo = str(annotationLine[11])
@@ -262,11 +264,11 @@ for nline, line in enumerate(inCrispritzResults):
                         elif 'three_prime_UTR' in tipo:
                             tipo = "3'UTR"
                     # saveDict['gene_annotation'] = str(annotationLine[11])
-                        saveDict['Closest_gene_annotation'] = tipo
-        saveDict['Closest_gene_distance_(kb)'] = str(
+                        saveDict['Annotation_GENCODE'] = tipo
+        saveDict['Annotation_closest_gene_distance_(kb)'] = str(
             float(annotationLine[len(annotationLine)-1])/1000)
         if float(annotationLine[len(annotationLine)-1]) != 0:
-            saveDict['Closest_gene_annotation'] = 'intergenic'
+            saveDict['Annotation_GENCODE'] = 'intergenic'
 
     # origin = ''
     # if 'n' in str(x[13]):
