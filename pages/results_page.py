@@ -1473,16 +1473,16 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
             # only works with complete fields in standard format
             dff = dff.loc[dff[col_name].str.startswith(filter_value)]
 
-    if len(sort_by):
-        dff = dff.sort_values(
-            ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
-                for col in sort_by],
-            ascending=[
-                col['direction'] == 'asc'
-                for col in sort_by
-            ],
-            inplace=False
-        )
+    # if len(sort_by):
+    #     dff = dff.sort_values(
+    #         ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
+    #             for col in sort_by],
+    #         ascending=[
+    #             col['direction'] == 'asc'
+    #             for col in sort_by
+    #         ],
+    #         inplace=False
+    #     )
 
     cells_style = [
         {
@@ -1524,6 +1524,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
 
 
 def guidePagev3(job_id, hash):
+    print('entro nella chiamata')
     guide = hash[:hash.find('new')]
     mms = hash[-1:]
     bulge_s = hash[-2:-1]
