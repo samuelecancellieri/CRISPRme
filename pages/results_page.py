@@ -1524,8 +1524,6 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
 
 
 def guidePagev3(job_id, hash):
-    if not entrato:
-        return
     guide = hash[:hash.find('new')]
     mms = hash[-1:]
     bulge_s = hash[-2:-1]
