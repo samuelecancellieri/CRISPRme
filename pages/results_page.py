@@ -1559,15 +1559,15 @@ def guidePagev3(job_id, hash):
                  guide, style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
 
-    if not os.path.exists(guide_grep_result):
-        os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
-        os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
-                  bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
-        os.system(
-            f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result} {guide_grep_result}.tmp')
-        os.system(f'mv {guide_grep_result}.tmp {guide_grep_result}')
-        os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
-                  ' ' + guide_grep_result + " &")  # , shell = True)
+    # if not os.path.exists(guide_grep_result):
+    os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
+    os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
+              bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
+    os.system(
+        f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result} {guide_grep_result}.tmp')
+    os.system(f'mv {guide_grep_result}.tmp {guide_grep_result}')
+    os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
+              ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
     final_list.append(
