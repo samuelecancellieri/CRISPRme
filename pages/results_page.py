@@ -1561,7 +1561,7 @@ def guidePagev3(job_id, hash):
 
     if not os.path.exists(guide_grep_result):
         # os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
-        os.system(f'head -1 {file_to_grep} > header.txt')
+        os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
         os.system('fgrep ' + guide + ' ' + file_to_grep + ' | fgrep ' +
                   bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' > ' + guide_grep_result)
         os.system(
