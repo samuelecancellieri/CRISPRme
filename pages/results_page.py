@@ -1524,7 +1524,8 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
 
 
 def guidePagev3(job_id, hash):
-    print('entro nella chiamata')
+    if not entrato:
+        return
     guide = hash[:hash.find('new')]
     mms = hash[-1:]
     bulge_s = hash[-2:-1]
@@ -1604,6 +1605,8 @@ def guidePagev3(job_id, hash):
     os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
               ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
+
+    print('table', cols)
 
     final_list.append(
         html.Div(
