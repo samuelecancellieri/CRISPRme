@@ -1602,9 +1602,9 @@ def guidePagev3(job_id, hash):
         f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2 {job_directory}/header.txt')
     os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
               ' ' + guide_grep_result + " &")  # , shell = True)
-    # global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
+    global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
-    print('table', cols)
+    # print('table', cols)
 
     final_list.append(
         html.Div(
@@ -1637,29 +1637,29 @@ def guidePagev3(job_id, hash):
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
-                style_data_conditional=[
-                    {
-                        'if': {
-                            'filter_query': '{Variant Unique} eq F',
-                        },
-                        'background-color': 'rgba(0, 0, 0,0.15)'
-                    },
-                ]
+                # style_data_conditional=[
+                #     {
+                #         'if': {
+                #             'filter_query': '{Variant Unique} eq F',
+                #         },
+                #         'background-color': 'rgba(0, 0, 0,0.15)'
+                #     },
+                # ]
             ),
             id='div-result-table',
         )
     )
     final_list.append(html.Br())
-    final_list.append(
-        html.Div(
-            id='div-second-table-subset-targets'
-        )
+    # final_list.append(
+    #     html.Div(
+    #         id='div-second-table-subset-targets'
+    #     )
     )
 
-    return html.Div(final_list, style={'margin': '1%'})
+    return html.Div(final_list, style = {'margin': '1%'})
 
 
-@cache.memoize()
+@ cache.memoize()
 def global_store_subset(value, bulge_t, bulge_s, mms, guide):
     '''
     Caching dei file targets per una miglior performance di visualizzazione
@@ -1667,38 +1667,40 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
     if value is None:
         return ''
     # Skiprows = 1 to skip header of file
-    df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25), skiprows=1, na_filter=False)
-    print('df dei target', df)
+    df=pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep = '\t', header = None, usecols = range(0, 25), skiprows = 1, na_filter = False)
+    # print('df dei target', df)
     return df
 
 # Load barplot of population distribution for selected guide
 
 
-@app.callback(
+@ app.callback(
     Output('content-collapse-population', 'children'),
     [Input('general-profile-table', 'selected_cells')],
     [State('general-profile-table', 'data'),
      State('url', 'search')]
+
+
 )
 def loadDistributionPopulations(sel_cel, all_guides, job_id):
     if sel_cel is None or not sel_cel or not all_guides:
         raise PreventUpdate
-    guide = all_guides[int(sel_cel[0]['row'])]['Guide']
-    job_id = job_id.split('=')[-1]
+    guide=all_guides[int(sel_cel[0]['row'])]['Guide']
+    job_id=job_id.split('=')[-1]
 
     with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
-        all_params = p.read()
-        mms = int((next(s for s in all_params.split('\n')
+        all_params=p.read()
+        mms=int((next(s for s in all_params.split('\n')
                         if 'Mismatches' in s)).split('\t')[-1])
-        max_bulges = int((next(s for s in all_params.split(
+        max_bulges=int((next(s for s in all_params.split(
             '\n') if 'Max_bulges' in s)).split('\t')[-1])
 
-    distributions = [dbc.Row(html.P(
+    distributions=[dbc.Row(html.P(
         'On- and Off-Targets distributions in the Reference and Variant Genome. For the Variant Genome, the targets are divided into SuperPopulations.', style={'margin-left': '0.75rem'}))]
 
     for i in range(math.ceil((mms + max_bulges + 1) / BARPLOT_LEN)):
-        all_images = []
+        all_images=[]
         for mm in range(i * BARPLOT_LEN, (i + 1) * BARPLOT_LEN):
             if mm < (mms + max_bulges + 1):
                 try:
@@ -2246,13 +2248,13 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
-            #df.drop(['Targets in Reference'], axis=1, inplace=True)
+            # df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
-            #df.drop(['Targets in Reference'], axis=1, inplace=True)
-            #df.drop(['Class'], axis=1, inplace=True)
+            # df.drop(['Targets in Reference'], axis=1, inplace=True)
+            # df.drop(['Class'], axis=1, inplace=True)
         more_info_col = []
         for i in range(df.shape[0]):
             more_info_col.append('Show Targets')
@@ -2279,13 +2281,13 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
                 df = df.sort_values('Targets in Variant', ascending=False)
-                #df.drop(['Targets in Reference'], axis=1, inplace=True)
+                # df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
                 df = df.sort_values('Targets in Reference', ascending=False)
-                #df.drop(['Targets in Reference'], axis=1, inplace=True)
-                #df.drop(['Class'], axis=1, inplace=True)
+                # df.drop(['Targets in Reference'], axis=1, inplace=True)
+                # df.drop(['Class'], axis=1, inplace=True)
             more_info_col = []
             for i in range(df.shape[0]):
                 more_info_col.append('Show Targets')
@@ -2318,13 +2320,13 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
                 df = df.sort_values('Targets in Variant', ascending=False)
-                #df.drop(['Targets in Reference'], axis=1, inplace=True)
+                # df.drop(['Targets in Reference'], axis=1, inplace=True)
             else:
                 df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                                  guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
                 df = df.sort_values('Targets in Variant', ascending=False)
-                #df.drop(['Targets in Reference'], axis=1, inplace=True)
-                #df.drop(['Class'], axis=1, inplace=True)
+                # df.drop(['Targets in Reference'], axis=1, inplace=True)
+                # df.drop(['Class'], axis=1, inplace=True)
             more_info_col = []
             for i in range(df.shape[0]):
                 more_info_col.append('Show Targets')
@@ -3082,7 +3084,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
-            #df.drop(['Targets in Reference'], axis=1, inplace=True)
+            # df.drop(['Targets in Reference'], axis=1, inplace=True)
         else:
             # col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  'Targets in Reference', 'Targets in Enriched', 'Targets in Population', 'Targets in Super Population', 'PAM Creation', 'Class']
             col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
@@ -3090,8 +3092,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                              guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
-            #df.drop(['Targets in Reference'], axis=1, inplace=True)
-            #df.drop(['Class'], axis=1, inplace=True)
+            # df.drop(['Targets in Reference'], axis=1, inplace=True)
+            # df.drop(['Class'], axis=1, inplace=True)
         more_info_col = []
         for i in range(df.shape[0]):
             more_info_col.append('Show Targets')
