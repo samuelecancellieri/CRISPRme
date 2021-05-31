@@ -1433,7 +1433,8 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # print(dff, 'line 1397')
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
-        dff.drop(df[(df['Samples'] == 'NA')].index, inplace=True)
+        dff.drop(
+            df[(df['Highest_CFD_variant_samples'] == 'NA')].index, inplace=True)
 
     # try:  # For VAR and BOTH
     #     del dff['Variant Unique']
