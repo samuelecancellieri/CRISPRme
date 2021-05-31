@@ -1296,98 +1296,98 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
 # Create second table for subset targets page, and show corresponding samples    -> CHANGED, now show IUPAC scomposition
 
 
-@app.callback(
-    [Output('div-second-table-subset-targets', 'children'),
-     Output('table-subset-target', 'style_data_conditional')],
-    [Input('table-subset-target', 'active_cell')],
-    [State('table-subset-target', 'data'),
-     State('table-subset-target', 'columns'),
-     State('url', 'search'),
-     State('table-subset-target', 'style_data_conditional'),
-     State('table-subset-target', 'selected_cells')]
-)
-def loadFullSubsetTable(active_cel, data, cols, search, style_data, sel_cell):
-    # NOTE tabella secondaria della scomposizione ora non serve, non cancello il codice ma uso PreventUpdate per non azionare la funzione
-    if False:
-        raise PreventUpdate
-    if active_cel is None:
-        raise PreventUpdate
-    fl = []
-    job_id = search.split('=')[-1]
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
-        all_params = p.read()
-        genome_type_f = (next(s for s in all_params.split(
-            '\n') if 'Genome_selected' in s)).split('\t')[-1]
-        ref_comp = (next(s for s in all_params.split(
-            '\n') if 'Ref_comp' in s)).split('\t')[-1]
+# @app.callback(
+#     [Output('div-second-table-subset-targets', 'children'),
+#      Output('table-subset-target', 'style_data_conditional')],
+#     [Input('table-subset-target', 'active_cell')],
+#     [State('table-subset-target', 'data'),
+#      State('table-subset-target', 'columns'),
+#      State('url', 'search'),
+#      State('table-subset-target', 'style_data_conditional'),
+#      State('table-subset-target', 'selected_cells')]
+# )
+# def loadFullSubsetTable(active_cel, data, cols, search, style_data, sel_cell):
+#     # NOTE tabella secondaria della scomposizione ora non serve, non cancello il codice ma uso PreventUpdate per non azionare la funzione
+#     if False:
+#         raise PreventUpdate
+#     if active_cel is None:
+#         raise PreventUpdate
+#     fl = []
+#     job_id = search.split('=')[-1]
+#     with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+#         all_params = p.read()
+#         genome_type_f = (next(s for s in all_params.split(
+#             '\n') if 'Genome_selected' in s)).split('\t')[-1]
+#         ref_comp = (next(s for s in all_params.split(
+#             '\n') if 'Ref_comp' in s)).split('\t')[-1]
 
-    genome_type = 'ref'
-    if '+' in genome_type_f:
-        genome_type = 'var'
-    if 'True' in ref_comp:
-        genome_type = 'both'
+#     genome_type = 'ref'
+#     if '+' in genome_type_f:
+#         genome_type = 'var'
+#     if 'True' in ref_comp:
+#         genome_type = 'both'
 
-    if genome_type == 'ref':
-        raise PreventUpdate
-    fl.append(html.Hr())
-    fl.append('List of all the configurations for the selected target.')
-    fl.append(html.Br())
-    cols.append({"name": 'Samples', "id": 'Samples',
-                 'type': 'text', 'hideable': True})
+#     if genome_type == 'ref':
+#         raise PreventUpdate
+#     fl.append(html.Hr())
+#     fl.append('List of all the configurations for the selected target.')
+#     fl.append(html.Br())
+#     cols.append({"name": 'Samples', "id": 'Samples',
+#                  'type': 'text', 'hideable': True})
 
-    fl.append(
-        html.Div(
-            dash_table.DataTable(
-                id='second-table-subset-targets',
-                columns=cols,
-                virtualization=True,
-                fixed_rows={'headers': True, 'data': 0},
-                style_cell={'width': '150px'},
-                page_current=0,
-                page_size=PAGE_SIZE,
-                page_action='custom',
-                sort_action='custom',
-                sort_mode='multi',
-                sort_by=[],
-                filter_action='custom',
-                filter_query='',
-                style_table={
-                    'max-height': '600px'
-                },
-                style_cell_conditional=[
-                    {
-                        'if': {'column_id': 'Samples'},
-                        'textAlign': 'left'
-                    }
-                ],
-                css=[{'selector': '.row',
-                      'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
-                    'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
-                style_data_conditional=[
-                    {
-                        'if': {
-                            'filter_query': '{Variant Unique} eq F',
-                        },
-                        'background-color': 'rgba(0, 0, 0,0.15)'
-                    }
-                ]
-            )
-        )
-    )
+#     fl.append(
+#         html.Div(
+#             dash_table.DataTable(
+#                 id='second-table-subset-targets',
+#                 columns=cols,
+#                 virtualization=True,
+#                 fixed_rows={'headers': True, 'data': 0},
+#                 style_cell={'width': '150px'},
+#                 page_current=0,
+#                 page_size=PAGE_SIZE,
+#                 page_action='custom',
+#                 sort_action='custom',
+#                 sort_mode='multi',
+#                 sort_by=[],
+#                 filter_action='custom',
+#                 filter_query='',
+#                 style_table={
+#                     'max-height': '600px'
+#                 },
+#                 style_cell_conditional=[
+#                     {
+#                         'if': {'column_id': 'Samples'},
+#                         'textAlign': 'left'
+#                     }
+#                 ],
+#                 css=[{'selector': '.row',
+#                       'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
+#                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
+#                 style_data_conditional=[
+#                     {
+#                         'if': {
+#                             'filter_query': '{Variant Unique} eq F',
+#                         },
+#                         'background-color': 'rgba(0, 0, 0,0.15)'
+#                     }
+#                 ]
+#             )
+#         )
+#     )
 
-    pos_cluster = data[int(sel_cell[0]['row'])]['Cluster Position']
-    chrom = data[int(sel_cell[0]['row'])]['Chromosome']
-    cells_style = [
-        style_data[0],
-        {
-            'if': {
-                'filter_query': '{Cluster Position} eq "' + str(pos_cluster) + '"',
-            },
-            'background-color': 'rgba(0, 0, 255,0.15)'  # 'rgb(255, 102, 102)'
+#     pos_cluster = data[int(sel_cell[0]['row'])]['Cluster Position']
+#     chrom = data[int(sel_cell[0]['row'])]['Chromosome']
+#     cells_style = [
+#         style_data[0],
+#         {
+#             'if': {
+#                 'filter_query': '{Cluster Position} eq "' + str(pos_cluster) + '"',
+#             },
+#             'background-color': 'rgba(0, 0, 255,0.15)'  # 'rgb(255, 102, 102)'
 
-        }
-    ]
-    return fl, cells_style
+#         }
+#     ]
+#     return fl, cells_style
 
 # Update primary table of 'Show targets' of Summary by Guide
 
@@ -1667,6 +1667,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
                      bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25), skiprows=1, na_filter=False)
+    print('df dei target', df)
     return df
 
 # Load barplot of population distribution for selected guide
