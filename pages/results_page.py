@@ -59,15 +59,18 @@ COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Refere
 #                           'Bulge Size', 'PAM gen', 'Samples', 'Variant',
 #                           'CFD', 'CFD ref', 'Highest CFD Risk Score',
 #                           'AF', 'Annotation Type']
-COL_BOTH = ['Highest_CFD_Strand', 'Chromosome', 'Start_coordinate', 'Highest_CFD_aligned_spacer+PAM',
+COL_BOTH = ['Highest_CFD_Strand', 'Chromosome', 'Highest_CFD_start_coordinate', 'Highest_CFD_aligned_spacer+PAM',
             'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
             'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges',
             'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
             'Highest_CFD_risk_score', 'Not_found_in_REF', 'Variant_info_genome', 'MAF', 'rsID',
             'Highest_CFD_variant_samples', 'Other_motifs', 'Annotation_ENCODE']
-COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
-                 'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
-                 'numeric', 'numeric', 'numeric', 'numeric', 'text']
+COL_BOTH_TYPE = ['text', 'text', 'numeric', 'text',
+                 'text', 'text',
+                 'numeric', 'numeric', 'numeric',
+                 'text', 'text', 'numeric', 'numeric',
+                 'numeric', 'text', 'text', 'numeric', 'text',
+                 'text', 'numeric', 'text']
 COL_BOTH_RENAME = {0: 'Highest_CFD_bulge_type', 1: 'Highest_CFD_aligned_spacer+PAM',
                    2: 'Highest_CFD_aligned_protospacer+PAM_ALT', 3: 'Highest_CFD_aligned_protospacer+PAM_REF',
                    4: 'Chromosome', 5: 'Highest_CFD_start_coordinate', 6: 'Cluster_Position', 7: 'Highest_CFD_Strand',
