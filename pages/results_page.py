@@ -1160,139 +1160,139 @@ def global_store_general(path_file_to_load):
 # Filter etc for second table
 
 
-@app.callback(
-    [Output('second-table-subset-targets', 'data'),  # Table showing iupac scomposition
-     Output('second-table-subset-targets', 'style_data_conditional')],
-    [Input('second-table-subset-targets', "page_current"),
-     Input('second-table-subset-targets', "page_size"),
-     Input('second-table-subset-targets', "sort_by"),
-     Input('second-table-subset-targets', 'filter_query')],
-    [State('url', 'search'),
-     State('url', 'hash'),
-     State('table-subset-target', 'active_cell'),
-     State('table-subset-target', 'data')]
-)
-def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, search, hash_guide, active_cel, data):
-    # NOTE tabella secondaria della scomposizione ora non serve, non cancello il codice ma uso PreventUpdate per non azionare la funzione
-    if False:
-        raise PreventUpdate
-    if active_cel is None:
-        raise PreventUpdate
-    job_id = search.split('=')[-1]
-    job_directory = current_working_directory + 'Results/' + job_id + '/'
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
-        all_params = p.read()
-        genome_type_f = (next(s for s in all_params.split(
-            '\n') if 'Genome_selected' in s)).split('\t')[-1]
-        ref_comp = (next(s for s in all_params.split(
-            '\n') if 'Ref_comp' in s)).split('\t')[-1]
+# @app.callback(
+#     [Output('second-table-subset-targets', 'data'),  # Table showing iupac scomposition
+#      Output('second-table-subset-targets', 'style_data_conditional')],
+#     [Input('second-table-subset-targets', "page_current"),
+#      Input('second-table-subset-targets', "page_size"),
+#      Input('second-table-subset-targets', "sort_by"),
+#      Input('second-table-subset-targets', 'filter_query')],
+#     [State('url', 'search'),
+#      State('url', 'hash'),
+#      State('table-subset-target', 'active_cell'),
+#      State('table-subset-target', 'data')]
+# )
+# def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, search, hash_guide, active_cel, data):
+#     # NOTE tabella secondaria della scomposizione ora non serve, non cancello il codice ma uso PreventUpdate per non azionare la funzione
+#     if False:
+#         raise PreventUpdate
+#     if active_cel is None:
+#         raise PreventUpdate
+#     job_id = search.split('=')[-1]
+#     job_directory = current_working_directory + 'Results/' + job_id + '/'
+#     with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+#         all_params = p.read()
+#         genome_type_f = (next(s for s in all_params.split(
+#             '\n') if 'Genome_selected' in s)).split('\t')[-1]
+#         ref_comp = (next(s for s in all_params.split(
+#             '\n') if 'Ref_comp' in s)).split('\t')[-1]
 
-    guide = hash_guide[1:hash_guide.find('new')]
-    genome_type = 'ref'
-    if '+' in genome_type_f:
-        genome_type = 'var'
-    if 'True' in ref_comp:
-        genome_type = 'both'
-    if search is None:
-        raise PreventUpdate
+#     guide = hash_guide[1:hash_guide.find('new')]
+#     genome_type = 'ref'
+#     if '+' in genome_type_f:
+#         genome_type = 'var'
+#     if 'True' in ref_comp:
+#         genome_type = 'both'
+#     if search is None:
+#         raise PreventUpdate
 
-    if genome_type == 'ref':
-        raise PreventUpdate
+#     if genome_type == 'ref':
+#         raise PreventUpdate
 
-    filtering_expressions = filter.split(' && ')
-    bulge_t = data[active_cel['row']]['Bulge Type']
-    bulge_s = str(data[active_cel['row']]['Bulge Size'])
-    mms = str(data[active_cel['row']]['Mismatches'])
-    chrom = str(data[active_cel['row']]['Chromosome'])
-    pos = str(data[active_cel['row']]['Cluster Position'])
-    # annotation_type = str(data[active_cel['row']]['Annotation Type'])
+#     filtering_expressions = filter.split(' && ')
+#     bulge_t = data[active_cel['row']]['Bulge Type']
+#     bulge_s = str(data[active_cel['row']]['Bulge Size'])
+#     mms = str(data[active_cel['row']]['Mismatches'])
+#     chrom = str(data[active_cel['row']]['Chromosome'])
+#     pos = str(data[active_cel['row']]['Cluster Position'])
+#     # annotation_type = str(data[active_cel['row']]['Annotation Type'])
 
-    scomposition_file = job_directory + job_id + '.' + bulge_t + '.' + bulge_s + \
-        '.' + mms + '.' + guide + '.' + chrom + '.' + pos + '.scomposition.txt'
-    file_to_grep = job_directory + job_id + '.' + bulge_t + \
-        '.' + bulge_s + '.' + mms + '.' + guide + '.txt'
-    # file_to_grep_alt = '.altMerge.txt'
-    # if not os.path.exists(scomposition_file):
-    os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-    os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
-              '\' > ' + scomposition_file)  # , shell = True)
-    os.system(
-        f'cat {job_directory}/header.txt {scomposition_file} > {scomposition_file}.tmp')
-    os.system(f'mv -f {scomposition_file}.tmp > {scomposition_file}')
-    # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
-    # Check if result grep has at least 1 result
-    if os.path.getsize(scomposition_file) > 0:
-        df = pd.read_csv(scomposition_file, header=None,
-                         sep='\t', skiprows=1, na_filter=False)
-        # df['Annotation Type'] = annotation_type
-    else:
-        raise PreventUpdate
+#     scomposition_file = job_directory + job_id + '.' + bulge_t + '.' + bulge_s + \
+#         '.' + mms + '.' + guide + '.' + chrom + '.' + pos + '.scomposition.txt'
+#     file_to_grep = job_directory + job_id + '.' + bulge_t + \
+#         '.' + bulge_s + '.' + mms + '.' + guide + '.txt'
+#     # file_to_grep_alt = '.altMerge.txt'
+#     # if not os.path.exists(scomposition_file):
+#     os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
+#     os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
+#               '\' > ' + scomposition_file)  # , shell = True)
+#     os.system(
+#         f'cat {job_directory}/header.txt {scomposition_file} > {scomposition_file}.tmp')
+#     os.system(f'mv -f {scomposition_file}.tmp > {scomposition_file}')
+#     # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
+#     # Check if result grep has at least 1 result
+#     if os.path.getsize(scomposition_file) > 0:
+#         df = pd.read_csv(scomposition_file, header=None,
+#                          sep='\t', skiprows=1, na_filter=False)
+#         # df['Annotation Type'] = annotation_type
+#     else:
+#         raise PreventUpdate
 
-    df.rename(columns=COL_BOTH_RENAME, inplace=True)
-    df.drop(df[(~(df['Cluster Position'] == int(data[active_cel['row']]['Cluster Position']))) | (
-        ~(df['Chromosome'] == data[active_cel['row']]['Chromosome']))].index, inplace=True)
-    dff = df
+#     df.rename(columns=COL_BOTH_RENAME, inplace=True)
+#     df.drop(df[(~(df['Cluster Position'] == int(data[active_cel['row']]['Cluster Position']))) | (
+#         ~(df['Chromosome'] == data[active_cel['row']]['Chromosome']))].index, inplace=True)
+#     dff = df
 
-    for filter_part in filtering_expressions:
-        col_name, operator, filter_value = split_filter_part(filter_part)
+#     for filter_part in filtering_expressions:
+#         col_name, operator, filter_value = split_filter_part(filter_part)
 
-        if operator in ('eq', 'ne', 'lt', 'le', 'gt', 'ge'):
-            # these operators match pandas series operator method names
-            dff = dff.loc[getattr(dff[col_name], operator)(filter_value)]
-        elif operator == 'contains':
-            dff = dff.loc[dff[col_name].str.contains(filter_value)]
-        elif operator == 'datestartswith':
-            # this is a simplification of the front-end filtering logic,
-            # only works with complete fields in standard format
-            dff = dff.loc[dff[col_name].str.startswith(filter_value)]
+#         if operator in ('eq', 'ne', 'lt', 'le', 'gt', 'ge'):
+#             # these operators match pandas series operator method names
+#             dff = dff.loc[getattr(dff[col_name], operator)(filter_value)]
+#         elif operator == 'contains':
+#             dff = dff.loc[dff[col_name].str.contains(filter_value)]
+#         elif operator == 'datestartswith':
+#             # this is a simplification of the front-end filtering logic,
+#             # only works with complete fields in standard format
+#             dff = dff.loc[dff[col_name].str.startswith(filter_value)]
 
-    if len(sort_by):
-        dff = dff.sort_values(
-            ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
-                for col in sort_by],
-            ascending=[
-                col['direction'] == 'asc'
-                for col in sort_by
-            ],
-            inplace=False
-        )
+#     if len(sort_by):
+#         dff = dff.sort_values(
+#             ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
+#                 for col in sort_by],
+#             ascending=[
+#                 col['direction'] == 'asc'
+#                 for col in sort_by
+#             ],
+#             inplace=False
+#         )
 
-    cells_style = [
-        {
-            'if': {
-                'filter_query': '{Variant Unique} eq F',
-                                # 'filter_query': '{Direction} eq +',
-                                # 'column_id' :'Bulge Type'
-            },
-            # 'border-left': '5px solid rgba(255, 26, 26, 0.9)',
-            # 'rgb(255, 102, 102)'
-            'background-color': 'rgba(0, 0, 0,0.15)'
-        }
-    ]
+#     cells_style = [
+#         {
+#             'if': {
+#                 'filter_query': '{Variant Unique} eq F',
+#                                 # 'filter_query': '{Direction} eq +',
+#                                 # 'column_id' :'Bulge Type'
+#             },
+#             # 'border-left': '5px solid rgba(255, 26, 26, 0.9)',
+#             # 'rgb(255, 102, 102)'
+#             'background-color': 'rgba(0, 0, 0,0.15)'
+#         }
+#     ]
 
-    # Calculate sample count
+#     # Calculate sample count
 
-    data_to_send = dff.iloc[
-        page_current*page_size:(page_current + 1)*page_size
-    ].to_dict('records')
-    if genome_type != 'ref':
-        dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-            job_directory + 'sampleID.txt')[:2]
-        for row in data_to_send:
-            summarized_sample_cell = dict()
-            for s in row['Samples'].split(','):
-                if s == 'n':
-                    break
-                try:
-                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
-                except:
-                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
-            if summarized_sample_cell:
-                row['Samples Summary'] = ', '.join(
-                    [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
-            else:
-                row['Samples Summary'] = 'n'
-    return data_to_send, cells_style
+#     data_to_send = dff.iloc[
+#         page_current*page_size:(page_current + 1)*page_size
+#     ].to_dict('records')
+#     if genome_type != 'ref':
+#         dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
+#             job_directory + 'sampleID.txt')[:2]
+#         for row in data_to_send:
+#             summarized_sample_cell = dict()
+#             for s in row['Samples'].split(','):
+#                 if s == 'n':
+#                     break
+#                 try:
+#                     summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
+#                 except:
+#                     summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
+#             if summarized_sample_cell:
+#                 row['Samples Summary'] = ', '.join(
+#                     [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
+#             else:
+#                 row['Samples Summary'] = 'n'
+#     return data_to_send, cells_style
 # Create second table for subset targets page, and show corresponding samples    -> CHANGED, now show IUPAC scomposition
 
 
@@ -1457,7 +1457,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # except:  # For REF
     #     pass
 
-    # print(dff)
+    print('tabella target', dff)
 
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
@@ -1484,25 +1484,24 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     #         inplace=False
     #     )
 
-    cells_style = [
-        {
-            'if': {
-                'filter_query': '{Cluster Position} eq "' + guide + '"',
-                                # 'column_id' :'{#Bulge type}',
-                                # 'column_id' :'{Total}'
-            },
-            # 'border-left': '5px solid rgba(255, 26, 26, 0.9)',
-            # 'rgb(255, 102, 102)'
-            'background-color': 'rgba(0, 0, 255,0.15)'
+    # cells_style = [
+    #     {
+    #         'if': {
+    #             'filter_query': '{Cluster Position} eq "' + guide + '"',
+    #                             # 'column_id' :'{#Bulge type}',
+    #                             # 'column_id' :'{Total}'
+    #         },
+    #         # 'border-left': '5px solid rgba(255, 26, 26, 0.9)',
+    #         # 'rgb(255, 102, 102)'
+    #         'background-color': 'rgba(0, 0, 255,0.15)'
 
-        },
-    ]
+    #     },
+    # ]
 
     # Calculate sample count
 
-    data_to_send = dff.iloc[
-        page_current*page_size:(page_current + 1)*page_size
-    ].to_dict('records')
+    data_to_send = dff.iloc[page_current *
+                            page_size:(page_current + 1)*page_size].to_dict('records')
     # if genome_type != 'ref':
     #     dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
     #         job_directory + 'sampleID.txt')[:2]
@@ -1602,7 +1601,7 @@ def guidePagev3(job_id, hash):
         f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2 {job_directory}/header.txt')
     os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
               ' ' + guide_grep_result + " &")  # , shell = True)
-    global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
+    # global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
     # print('table', cols)
 
@@ -1649,7 +1648,7 @@ def guidePagev3(job_id, hash):
     #     )
     # )
 
-    return html.Div(final_list, style = {'margin': '1%'})
+    return html.Div(final_list, style={'margin': '1%'})
 
 
 @ cache.memoize()
@@ -1660,8 +1659,8 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
     if value is None:
         return ''
     # Skiprows = 1 to skip header of file
-    df=pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep = '\t', header = None, usecols = range(0, 25), skiprows = 1, na_filter = False)
+    df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25), skiprows=1, na_filter=False)
     # print('df dei target', df)
     return df
 
@@ -1679,21 +1678,21 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
 def loadDistributionPopulations(sel_cel, all_guides, job_id):
     if sel_cel is None or not sel_cel or not all_guides:
         raise PreventUpdate
-    guide=all_guides[int(sel_cel[0]['row'])]['Guide']
-    job_id=job_id.split('=')[-1]
+    guide = all_guides[int(sel_cel[0]['row'])]['Guide']
+    job_id = job_id.split('=')[-1]
 
     with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
-        all_params=p.read()
-        mms=int((next(s for s in all_params.split('\n')
+        all_params = p.read()
+        mms = int((next(s for s in all_params.split('\n')
                         if 'Mismatches' in s)).split('\t')[-1])
-        max_bulges=int((next(s for s in all_params.split(
+        max_bulges = int((next(s for s in all_params.split(
             '\n') if 'Max_bulges' in s)).split('\t')[-1])
 
-    distributions=[dbc.Row(html.P(
+    distributions = [dbc.Row(html.P(
         'On- and Off-Targets distributions in the Reference and Variant Genome. For the Variant Genome, the targets are divided into SuperPopulations.', style={'margin-left': '0.75rem'}))]
 
     for i in range(math.ceil((mms + max_bulges + 1) / BARPLOT_LEN)):
-        all_images=[]
+        all_images = []
         for mm in range(i * BARPLOT_LEN, (i + 1) * BARPLOT_LEN):
             if mm < (mms + max_bulges + 1):
                 try:
