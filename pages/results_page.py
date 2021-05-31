@@ -54,17 +54,29 @@ COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Refere
                   16: 'rsID', 17: 'AF', 18: 'Variant', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
 # Columns for dash datatable in VAR and BOTH search
 # COL_BOTH = ['Bulge Type', 'crRNA', 'Off_target_motif', 'Reference_sequence', 'Chromosome', 'Position', 'Cluster Position','Direction', 'Mismatches', 'Bulge Size', 'Total', 'PAM Creation', 'Samples Summary', 'Annotation Type', 'Real_Guide', 'rsID', 'AF', 'SNP', '#Seq_in_cluster', 'CFD', 'CFD_ref']
-COL_BOTH = ['Bulge Type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
-                          'Position', 'Direction', 'Mismatches',
-                          'Bulge Size', 'PAM gen', 'Samples', 'Variant',
-                          'CFD', 'CFD ref', 'Highest CFD Risk Score',
-                          'AF', 'Annotation Type']
+# COL_BOTH = ['Bulge Type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
+#                           'Position', 'Direction', 'Mismatches',
+#                           'Bulge Size', 'PAM gen', 'Samples', 'Variant',
+#                           'CFD', 'CFD ref', 'Highest CFD Risk Score',
+#                           'AF', 'Annotation Type']
+COL_BOTH = ['Highest_CFD_Strand', 'Chromosome', 'Start_coordinate', 'Highest_CFD_aligned_spacer+PAM',
+            'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
+            'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges',
+            'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
+            'Highest_CFD_risk_score', 'Not_found_in_REF', 'Variant_info_genome', 'MAF', 'rsID',
+            'Highest_CFD_variant_samples', 'Other_motifs', 'Annotation_ENCODE']
 COL_BOTH_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
                  'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
                  'numeric', 'numeric', 'numeric', 'numeric', 'text']
-COL_BOTH_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
-                   8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
-                   16: 'rsID', 17: 'AF', 18: 'Variant', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
+COL_BOTH_RENAME = {0: 'Highest_CFD_bulge_type', 1: 'Highest_CFD_aligned_spacer+PAM',
+                   2: 'Highest_CFD_aligned_protospacer+PAM_ALT', 3: 'Highest_CFD_aligned_protospacer+PAM_REF',
+                   4: 'Chromosome', 5: 'Highest_CFD_start_coordinate', 6: 'Cluster_Position', 7: 'Highest_CFD_Strand',
+                   8: 'Highest_CFD_mismatches', 9: 'Highest_CFD_bulges',
+                   10: 'Highest_CFD_mismatches+bulges', 11: 'Highest_CFD_PAM_gen', 12: 'Not_found_in_REF',
+                   13: 'Highest_CFD_variant_samples', 14: 'Annotation_ENCODE', 15: 'Real_Guide',
+                   16: 'Highest_CFD_variant_rsID', 17: 'Highest_CFD_variant_MAF', 18: 'Highest_CFD_variant_info_genome',
+                   19: 'Other_motifs', 20: 'Highest_CFD_score', 21: 'Highest_CFD_score_REF',
+                   22: 'Highest_CFD_risk_score'}
 GENOME_DATABASE = ['Reference', 'Enriched',
                    'Samples', 'Dictionary', 'Annotation']
 
@@ -562,9 +574,9 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
     # else:
     dff.rename(columns=COL_BOTH_RENAME, inplace=True)
     # dff.drop(dff.columns[[-1,]], axis=1, inplace=True)         #NOTE Drop the Correct Guide column
-    del dff['Correct Guide']
+    # del dff['Correct Guide']
     # dff['Annotation Type'] = annotation_type
-    del dff['Variant Unique']
+    # del dff['Variant Unique']
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
 
@@ -657,20 +669,20 @@ def update_table_cluster(page_current, page_size, sort_by, filter, hide_referenc
     else:
         dff.rename(columns=COL_BOTH_RENAME, inplace=True)
 
-    if genome_type != 'ref':
-        # add_samples = [dff['Samples'][0]] * dff.shape[0]
-        # check_minmms = dff['Min Mismatches']
-        # if dff['Variant Unique'][0] != 'y' and dff['PAM Creation'][0] == 'n':
-        #     for pos_minmms, minmms in enumerate(check_minmms):
-        #         if minmms == '-':
-        #             add_samples[pos_minmms] = 'n'
-        # dff['Samples'] = add_samples
-        del dff['Variant Unique']
-        # dff.drop(dff.head(1).index, inplace=True)       #Remove first target, that is the top1 with no iupac (lowest mm of scomposed target) and is
-        # needed only for summary by guide, not the show target part
-        # NOTE 18/03 removed all the iupac char, the first line is needed to be shown
-    # dff['Annotation Type'] = list(dff['Annotation Type'])[0]
-    del dff['Correct Guide']
+    # if genome_type != 'ref':
+    #     # add_samples = [dff['Samples'][0]] * dff.shape[0]
+    #     # check_minmms = dff['Min Mismatches']
+    #     # if dff['Variant Unique'][0] != 'y' and dff['PAM Creation'][0] == 'n':
+    #     #     for pos_minmms, minmms in enumerate(check_minmms):
+    #     #         if minmms == '-':
+    #     #             add_samples[pos_minmms] = 'n'
+    #     # dff['Samples'] = add_samples
+    #     del dff['Variant Unique']
+    #     # dff.drop(dff.head(1).index, inplace=True)       #Remove first target, that is the top1 with no iupac (lowest mm of scomposed target) and is
+    #     # needed only for summary by guide, not the show target part
+    #     # NOTE 18/03 removed all the iupac char, the first line is needed to be shown
+    # # dff['Annotation Type'] = list(dff['Annotation Type'])[0]
+    # del dff['Correct Guide']
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
         dff.drop(dff[(dff['Samples'] == 'n')].index, inplace=True)
@@ -1423,10 +1435,10 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     if 'hide-ref' in hide_reference or genome_type == 'var':
         dff.drop(df[(df['Samples'] == 'NA')].index, inplace=True)
 
-    try:  # For VAR and BOTH
-        del dff['Variant Unique']
-    except:  # For REF
-        pass
+    # try:  # For VAR and BOTH
+    #     del dff['Variant Unique']
+    # except:  # For REF
+    #     pass
 
     # print(dff)
 
