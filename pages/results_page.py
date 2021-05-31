@@ -1070,6 +1070,8 @@ def samplePage(job_id, hash):
         )
     )
 
+    header = current_working_directory + 'Results/'+job_id+'/header.txt'
+
     file_to_grep = current_working_directory + 'Results/' + \
         job_id + '/.' + job_id + '.bestMerge.txt'
     sample_grep_result = current_working_directory + 'Results/' + \
@@ -1079,9 +1081,13 @@ def samplePage(job_id, hash):
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
     if not os.path.exists(sample_grep_result):
-        os.system(f"head -1 {file_to_grep} > {sample_grep_result}")
+        # os.system(f"head -1 {file_to_grep} > {sample_grep_result}")
+        os.system(f"head -1 {file_to_grep} > {header}")
         os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
-                  ' | awk \'$14~\"' + sample + '\"\' >> ' + sample_grep_result)
+                  ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
+        os.system(
+            f'cat {header} {sample_grep_result} > {sample_grep_result}.tmp')
+        os.system(f'mv -f {sample_grep_result}.tmp {sample_grep_result}')
 
         os.system(
             f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp')
@@ -1207,9 +1213,12 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
         '.' + bulge_s + '.' + mms + '.' + guide + '.txt'
     # file_to_grep_alt = '.altMerge.txt'
     if not os.path.exists(scomposition_file):
-        os.system(f'head -1 {file_to_grep} > {scomposition_file}')
+        os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
         os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
-                  '\' >> ' + scomposition_file)  # , shell = True)
+                  '\' > ' + scomposition_file)  # , shell = True)
+        os.system(
+            f'cat {job_directory}/header.txt {scomposition_file} > {scomposition_file}.tmp')
+        os.system(f'mv -f {scomposition_file}.tmp > {scomposition_file}')
     # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
     # Check if result grep has at least 1 result
     if os.path.getsize(scomposition_file) > 0:
