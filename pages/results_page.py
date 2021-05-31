@@ -59,11 +59,13 @@ COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Refere
 #                           'Bulge Size', 'PAM gen', 'Samples', 'Variant',
 #                           'CFD', 'CFD ref', 'Highest CFD Risk Score',
 #                           'AF', 'Annotation Type']
-COL_BOTH = ['Highest_CFD_Strand', 'Chromosome', 'Highest_CFD_start_coordinate', 'Highest_CFD_aligned_spacer+PAM',
+COL_BOTH = ['Highest_CFD_Strand', 'Chromosome', 'Highest_CFD_start_coordinate',
+            'Highest_CFD_aligned_spacer+PAM',
             'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
             'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges',
             'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
-            'Highest_CFD_risk_score', 'Not_found_in_REF', 'Highest_CFD_variant_info_genome', 'Highest_CFD_variant_MAF', 'Highest_CFD_variant_rsID',
+            'Highest_CFD_risk_score', 'Not_found_in_REF', 'Highest_CFD_variant_info_genome',
+            'Highest_CFD_variant_MAF', 'Highest_CFD_variant_rsID',
             'Highest_CFD_variant_samples', 'Other_motifs', 'Annotation_ENCODE']
 COL_BOTH_TYPE = ['text', 'text', 'numeric', 'text',
                  'text', 'text',
@@ -73,11 +75,13 @@ COL_BOTH_TYPE = ['text', 'text', 'numeric', 'text',
                  'text', 'numeric', 'text']
 COL_BOTH_RENAME = {0: 'Highest_CFD_bulge_type', 1: 'Highest_CFD_aligned_spacer+PAM',
                    2: 'Highest_CFD_aligned_protospacer+PAM_ALT', 3: 'Highest_CFD_aligned_protospacer+PAM_REF',
-                   4: 'Chromosome', 5: 'Highest_CFD_start_coordinate', 6: 'Cluster_Position', 7: 'Highest_CFD_Strand',
+                   4: 'Chromosome', 5: 'Highest_CFD_start_coordinate', 6: 'Cluster_Position',
+                   7: 'Highest_CFD_Strand',
                    8: 'Highest_CFD_mismatches', 9: 'Highest_CFD_bulges',
                    10: 'Highest_CFD_mismatches+bulges', 11: 'Highest_CFD_PAM_gen', 12: 'Not_found_in_REF',
                    13: 'Highest_CFD_variant_samples', 14: 'Annotation_ENCODE', 15: 'Real_Guide',
-                   16: 'Highest_CFD_variant_rsID', 17: 'Highest_CFD_variant_MAF', 18: 'Highest_CFD_variant_info_genome',
+                   16: 'Highest_CFD_variant_rsID', 17: 'Highest_CFD_variant_MAF',
+                   18: 'Highest_CFD_variant_info_genome',
                    19: 'Other_motifs', 20: 'Highest_CFD_score', 21: 'Highest_CFD_score_REF',
                    22: 'Highest_CFD_risk_score'}
 GENOME_DATABASE = ['Reference', 'Enriched',
@@ -593,39 +597,39 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
             # only works with complete fields in standard format
             dff = dff.loc[dff[col_name].str.startswith(filter_value)]
 
-    if len(sort_by):
-        dff = dff.sort_values(
-            ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
-                for col in sort_by],
-            ascending=[
-                col['direction'] == 'asc'
-                for col in sort_by
-            ],
-            inplace=False
-        )
+    # if len(sort_by):
+    #     dff = dff.sort_values(
+    #         ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
+    #             for col in sort_by],
+    #         ascending=[
+    #             col['direction'] == 'asc'
+    #             for col in sort_by
+    #         ],
+    #         inplace=False
+    #     )
 
     # Calculate sample count
 
     data_to_send = dff.iloc[
         page_current*page_size:(page_current + 1)*page_size
     ].to_dict('records')
-    if genome_type != 'ref':
-        dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-            job_directory + 'sampleID.txt')[:2]
-        for row in data_to_send:
-            summarized_sample_cell = dict()
-            for s in row['Samples'].split(','):
-                if s == 'n':
-                    break  # If a target have n, it means it's REF, because either all have samples or the single target is REF
-                try:
-                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
-                except:
-                    summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
-            if summarized_sample_cell:
-                row['Samples Summary'] = ', '.join(
-                    [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
-            else:
-                row['Samples Summary'] = 'n'
+    # if genome_type != 'ref':
+    #     dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
+    #         job_directory + 'sampleID.txt')[:2]
+    #     for row in data_to_send:
+    #         summarized_sample_cell = dict()
+    #         for s in row['Samples'].split(','):
+    #             if s == 'n':
+    #                 break  # If a target have n, it means it's REF, because either all have samples or the single target is REF
+    #             try:
+    #                 summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] += 1
+    #             except:
+    #                 summarized_sample_cell[dict_pop_to_superpop[dict_sample_to_pop[s]]] = 1
+    #         if summarized_sample_cell:
+    #             row['Samples Summary'] = ', '.join(
+    #                 [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
+    #         else:
+    #             row['Samples Summary'] = 'n'
     return data_to_send
 
 
@@ -668,7 +672,7 @@ def update_table_cluster(page_current, page_size, sort_by, filter, hide_referenc
         raise PreventUpdate
 
     if genome_type == 'ref':
-        dff.rename(columns=COL_REF_RENAME, inplace=True)
+        dff.rename(columns=COL_BOTH_RENAME, inplace=True)
     else:
         dff.rename(columns=COL_BOTH_RENAME, inplace=True)
 
@@ -774,7 +778,7 @@ def clusterPage(job_id, hash):
 
     if genome_type == 'ref':
         cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
-                for i, t in zip(COL_REF, COL_REF_TYPE)]
+                for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
         file_to_grep = '.bestMerge.txt'
     else:
         cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
@@ -2080,7 +2084,8 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     #     f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
     if not os.path.exists(pos_grep_result):
         os.system(
-            f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n >> {pos_grep_result}')
+            # f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n >> {pos_grep_result}')
+            f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
     # pos_grep_result_zip = pos_grep_result.replace('txt', 'zip')
     # os.system(f'zip -j {pos_grep_result_zip} {pos_grep_result}')
 
@@ -2755,14 +2760,21 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
 
         # copy header from integrated results into sample files
-        os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
-        os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
+        # os.system(f"head -1 {integrated_to_grep} > {integrated_personal}")
+        # os.system(f"head -1 {integrated_to_grep} > {integrated_private}")
+        os.system(f'head -1 {integrated_to_grep} > {job_directory}/header.txt')
         # grep guide and then sample into personal card data
         os.system(
-            f"LC_ALL=C fgrep {guide} {integrated_to_grep} | awk \'$32~\"{sample}\"\' >> {integrated_personal}")
+            f"LC_ALL=C fgrep {guide} {integrated_to_grep} | awk \'$32~\"{sample}\"\' > {integrated_personal}")
+        os.system(
+            f'cat {job_directory}/header.txt {integrated_personal} > {integrated_personal}.tmp')
+        os.system(f'mv {integrated_personal}.tmp > {integrated_personal}')
         # grep private targets from personal targets
         os.system(
-            f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} >> {integrated_private}")
+            f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} > {integrated_private}")
+        os.system(
+            f'cat {job_directory}/header.txt {integrated_private} > {integrated_private}.tmp')
+        os.system(f'mv {integrated_private}.tmp > {integrated_private}')
         # grep private targets to generate table and file
         os.system(
             f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
@@ -2786,10 +2798,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 job_id + '/' + job_id + '.' + sample + ".tmp_card.txt"
             tmp_file_2 = current_working_directory + 'Results/' + \
                 job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
+            os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
             os.system(
-                f"head -1 {file_to_grep} > \"{tmp_file}\"; LC_ALL=C sort -k21,21rg \"{sample_grep_result}\" >> \"{tmp_file}\" ; head -6 {tmp_file} > \"{tmp_file_2}\"")
+                f'LC_ALL=C sort - k21, 21rg \"{sample_grep_result} > {tmp_file}')
+            os.system(f'head - 6 {tmp_file} > {tmp_file_2}')
             ans = pd.read_csv(tmp_file_2, sep='\t',
-                              header=None, usecols=range(0, 23), skiprows=1, na_filter=False)
+                              header=None, usecols=range(0, 23), skiprows=0, na_filter=False)
             with open(file_to_grep) as f_:
                 c = f_.readline().strip()
             ans.columns = c.split('\t')[:23]
@@ -2800,6 +2814,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             os.system(
                 f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp')
             os.system(f'mv -f {tmp_file}.tmp {tmp_file}')
+            os.system(
+                f'cat {job_directory}/header.txt {tmp_file} > {tmp_file_2}')
+            os.system(f'mv -f {tmp_file_2} > {tmp_file}')
             os.system('zip '+'-j ' + tmp_file.replace('.txt',
                                                       '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
