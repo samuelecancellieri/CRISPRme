@@ -787,7 +787,9 @@ def clusterPage(job_id, hash):
             # print('qui cluster in grep')     #NOTE HEADER NON SALVATO
             os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
                      '\"\' >> ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
-        os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {cluster_grep_result} {cluster_grep_result}.tmp ; mv {cluster_grep_result}.tmp {cluster_grep_result}')
+        os.system(
+            f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {cluster_grep_result} {cluster_grep_result}.tmp')
+        os.system(f'mv {cluster_grep_result}.tmp {cluster_grep_result}')
         os.system('zip '+'-j ' + cluster_grep_result.replace('.txt',
                                                              '.zip') + ' ' + cluster_grep_result+" &")
     final_list.append(
@@ -1062,7 +1064,9 @@ def samplePage(job_id, hash):
         os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
                   ' | awk \'$14~\"' + sample + '\"\' >> ' + sample_grep_result)
 
-        os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp ; mv {sample_grep_result}.tmp {sample_grep_result}')
+        os.system(
+            f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp')
+        os.system(f'mv {sample_grep_result}.tmp {sample_grep_result}')
         os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
                                                             '.zip') + ' ' + sample_grep_result + " &")
 
@@ -1555,15 +1559,15 @@ def guidePagev3(job_id, hash):
                  guide, style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
 
-    # if not os.path.exists(guide_grep_result):
-    os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
-    os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
-              bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
-    os.system(
-        f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result} {guide_grep_result}.tmp')
-    os.system(f'mv {guide_grep_result}.tmp {guide_grep_result}')
-    os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
-              ' ' + guide_grep_result + " &")  # , shell = True)
+    if not os.path.exists(guide_grep_result):
+        os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
+        os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
+                  bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
+        os.system(
+            f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result} {guide_grep_result}.tmp')
+        os.system(f'mv {guide_grep_result}.tmp {guide_grep_result}')
+        os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
+                  ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
     final_list.append(
@@ -2775,7 +2779,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             os.system(f"rm {tmp_file_2} &")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
             os.system(
-                f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp ; mv {tmp_file}.tmp {tmp_file}')
+                f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp')
+            os.system(f'mv {tmp_file}.tmp {tmp_file}')
             os.system('zip '+'-j ' + tmp_file.replace('.txt',
                                                       '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
