@@ -1190,7 +1190,8 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
     # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
     # Check if result grep has at least 1 result
     if os.path.getsize(scomposition_file) > 0:
-        df = pd.read_csv(scomposition_file, header=None, sep='\t', skiprows=1, na_filter=False)
+        df = pd.read_csv(scomposition_file, header=None,
+                         sep='\t', skiprows=1, na_filter=False)
         # df['Annotation Type'] = annotation_type
     else:
         raise PreventUpdate
@@ -1554,13 +1555,13 @@ def guidePagev3(job_id, hash):
                  guide, style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
 
-    if not os.path.exists(guide_grep_result):
-        os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
-        os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
-                  bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
-        os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result} {guide_grep_result}.tmp ; mv {guide_grep_result}.tmp {guide_grep_result}')
-        os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
-                  ' ' + guide_grep_result + " &")  # , shell = True)
+    # if not os.path.exists(guide_grep_result):
+    os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
+    os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep + ' | LC_ALL=C fgrep ' +
+              bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' >> ' + guide_grep_result)
+    os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result} {guide_grep_result}.tmp ; mv {guide_grep_result}.tmp {guide_grep_result}')
+    os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
+              ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
     final_list.append(
@@ -2473,7 +2474,8 @@ def generate_table(dataframe, id_table, genome_type, guide='', job_id='', max_ro
 
 
 def check_existance_sample(job_directory, job_id, sample):
-    df = pd.read_csv(job_directory + job_id + 'sampleID.txt', sep='\t', na_filter=False)
+    df = pd.read_csv(job_directory + job_id + 'sampleID.txt',
+                     sep='\t', na_filter=False)
     samples = df.iloc[:, 0]
     if sample in samples.values:
         return True
@@ -2770,7 +2772,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
-            os.system(f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp ; mv {tmp_file}.tmp {tmp_file}')
+            os.system(
+                f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp ; mv {tmp_file}.tmp {tmp_file}')
             os.system('zip '+'-j ' + tmp_file.replace('.txt',
                                                       '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
