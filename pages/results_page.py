@@ -1080,20 +1080,20 @@ def samplePage(job_id, hash):
         html.Div(job_id + '.' + sample + '.' + guide,
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
-    if not os.path.exists(sample_grep_result):
-        # os.system(f"head -1 {file_to_grep} > {sample_grep_result}")
-        os.system(f"head -1 {file_to_grep} > {header}")
-        os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
-                  ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
-        os.system(
-            f'cat {header} {sample_grep_result} > {sample_grep_result}.tmp')
-        os.system(f'mv -f {sample_grep_result}.tmp {sample_grep_result}')
+    # if not os.path.exists(sample_grep_result):
+    # os.system(f"head -1 {file_to_grep} > {sample_grep_result}")
+    os.system(f"head -1 {file_to_grep} > {header}")
+    os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
+              ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
+    os.system(
+        f'cat {header} {sample_grep_result} > {sample_grep_result}.tmp')
+    os.system(f'mv -f {sample_grep_result}.tmp {sample_grep_result}')
 
-        os.system(
-            f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp')
-        os.system(f'mv -f {sample_grep_result}.tmp {sample_grep_result}')
-        os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
-                                                            '.zip') + ' ' + sample_grep_result + " &")
+    os.system(
+        f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp')
+    os.system(f'mv -f {sample_grep_result}.tmp {sample_grep_result}')
+    os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
+                                                        '.zip') + ' ' + sample_grep_result + " &")
 
     cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
             for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
@@ -1212,13 +1212,13 @@ def update_table_subsetSecondTable(page_current, page_size, sort_by, filter, sea
     file_to_grep = job_directory + job_id + '.' + bulge_t + \
         '.' + bulge_s + '.' + mms + '.' + guide + '.txt'
     # file_to_grep_alt = '.altMerge.txt'
-    if not os.path.exists(scomposition_file):
-        os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-        os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
-                  '\' > ' + scomposition_file)  # , shell = True)
-        os.system(
-            f'cat {job_directory}/header.txt {scomposition_file} > {scomposition_file}.tmp')
-        os.system(f'mv -f {scomposition_file}.tmp > {scomposition_file}')
+    # if not os.path.exists(scomposition_file):
+    os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
+    os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
+              '\' > ' + scomposition_file)  # , shell = True)
+    os.system(
+        f'cat {job_directory}/header.txt {scomposition_file} > {scomposition_file}.tmp')
+    os.system(f'mv -f {scomposition_file}.tmp > {scomposition_file}')
     # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
     # Check if result grep has at least 1 result
     if os.path.getsize(scomposition_file) > 0:
@@ -1588,20 +1588,20 @@ def guidePagev3(job_id, hash):
                  guide, style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
 
-    if not os.path.exists(guide_grep_result):
-        # os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
-        os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-        os.system('fgrep ' + guide + ' ' + file_to_grep + ' | fgrep ' +
-                  bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' > ' + guide_grep_result)
-        os.system(
-            f'cat header.txt {guide_grep_result} > {guide_grep_result}.tmp')
-        os.system(
-            f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result}.tmp {guide_grep_result}.tmp2')
-        os.system(f'mv -f {guide_grep_result}.tmp2 {guide_grep_result}')
-        os.system(
-            f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2 {job_directory}/header.txt')
-        os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
-                  ' ' + guide_grep_result + " &")  # , shell = True)
+    # if not os.path.exists(guide_grep_result):
+    # os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
+    os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
+    os.system('fgrep ' + guide + ' ' + file_to_grep + ' | fgrep ' +
+              bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' > ' + guide_grep_result)
+    os.system(
+        f'cat header.txt {guide_grep_result} > {guide_grep_result}.tmp')
+    os.system(
+        f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result}.tmp {guide_grep_result}.tmp2')
+    os.system(f'mv -f {guide_grep_result}.tmp2 {guide_grep_result}')
+    os.system(
+        f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2 {job_directory}/header.txt')
+    os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
+              ' ' + guide_grep_result + " &")  # , shell = True)
     global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
     final_list.append(
@@ -1960,8 +1960,8 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
     integrated_to_zip = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip'
-    if not os.path.exists(integrated_to_zip):
-        os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
+    # if not os.path.exists(integrated_to_zip):
+    os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
 
     if 'NO SCORES' not in all_scores:
         try:
@@ -2091,10 +2091,10 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     #    f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
     # os.system(
     #     f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
-    if not os.path.exists(pos_grep_result):
-        os.system(
-            # f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n >> {pos_grep_result}')
-            f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
+    # if not os.path.exists(pos_grep_result):
+    os.system(
+        # f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n >> {pos_grep_result}')
+        f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
     # pos_grep_result_zip = pos_grep_result.replace('txt', 'zip')
     # os.system(f'zip -j {pos_grep_result_zip} {pos_grep_result}')
 
