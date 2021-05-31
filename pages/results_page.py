@@ -63,7 +63,7 @@ COL_BOTH = ['Highest_CFD_Strand', 'Chromosome', 'Highest_CFD_start_coordinate', 
             'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
             'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges',
             'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
-            'Highest_CFD_risk_score', 'Not_found_in_REF', 'Variant_info_genome', 'MAF', 'rsID',
+            'Highest_CFD_risk_score', 'Not_found_in_REF', 'Highest_CFD_variant_info_genome', 'Highest_CFD_variant_MAF', 'Highest_CFD_variant_rsID',
             'Highest_CFD_variant_samples', 'Other_motifs', 'Annotation_ENCODE']
 COL_BOTH_TYPE = ['text', 'text', 'numeric', 'text',
                  'text', 'text',
