@@ -1637,14 +1637,7 @@ def guidePagev3(job_id, hash):
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
-                # style_data_conditional=[
-                #     {
-                #         'if': {
-                #             'filter_query': '{Variant Unique} eq F',
-                #         },
-                #         'background-color': 'rgba(0, 0, 0,0.15)'
-                #     },
-                # ]
+                # style_data_conditional=[ ]
             ),
             id='div-result-table',
         )
@@ -1654,7 +1647,7 @@ def guidePagev3(job_id, hash):
     #     html.Div(
     #         id='div-second-table-subset-targets'
     #     )
-    )
+    # )
 
     return html.Div(final_list, style = {'margin': '1%'})
 
