@@ -1457,7 +1457,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # except:  # For REF
     #     pass
 
-    print('tabella target', dff)
+    print('tabella target prima', dff)
 
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
@@ -1472,7 +1472,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
             # this is a simplification of the front-end filtering logic,
             # only works with complete fields in standard format
             dff = dff.loc[dff[col_name].str.startswith(filter_value)]
-
+    print('tabella target dopo', dff)
     # if len(sort_by):
     #     dff = dff.sort_values(
     #         ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
@@ -1519,6 +1519,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     #                 [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
     #         else:
     #             row['Samples Summary'] = 'n'
+    print('data nella tabella', data_to_send)
     return data_to_send  # , cells_style + style_data_table
 
 
@@ -1561,7 +1562,7 @@ def guidePagev3(job_id, hash):
         html.P(
             [
                 # 'Select a row to view the target IUPAC character scomposition. The rows highlighted in red indicates that the target was found only in the genome with variants.',
-                'List of Targets found for the selected guide. Select a row to view other possible configurations of the target, along with the corresponding samples list.',
+                'List of Targets found for the selected guide.',
                 dcc.Checklist(options=[{'label': 'Hide Reference Targets', 'value': 'hide-ref'}],
                               id='hide-reference-targets', value=value_hide_reference, style=style_hide_reference),
                 html.Div(
@@ -1651,7 +1652,7 @@ def guidePagev3(job_id, hash):
     return html.Div(final_list, style={'margin': '1%'})
 
 
-@ cache.memoize()
+# @ cache.memoize()
 def global_store_subset(value, bulge_t, bulge_s, mms, guide):
     '''
     Caching dei file targets per una miglior performance di visualizzazione
@@ -1660,7 +1661,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 25), skiprows=1, na_filter=False)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 23), skiprows=1, na_filter=False)
     # print('df dei target', df)
     return df
 
