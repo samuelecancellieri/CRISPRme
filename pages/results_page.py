@@ -2891,7 +2891,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
         0, 23), skiprows=0, na_filter=False, nrows=5)
     ans = ans.astype(str)
-    print('personal df', ans)
+    # print('personal df', ans)
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
@@ -2905,7 +2905,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # ans.columns(COL_BOTH_RENAME, inplace=True)
     # #print(ans, 'table sample post rename line 2786')
 
-    # #print(ans, 'table sample line 2792')
+    #print(ans, 'table sample line 2792')
+
+    ans = ans[COL_BOTH]
 
     try:
         file_to_load = job_id + '.' + sample + '.' + guide + '.private.zip'
@@ -2915,7 +2917,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         #            'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
         #            'AF', 'Annotation_Type']]
         ans = ans[COL_BOTH]
-        print('personal df', ans)
+        # print('personal df', ans)
         # ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
         # ans_cols = ans.columns.tolist()
         # ans_cols.remove('Samples')
