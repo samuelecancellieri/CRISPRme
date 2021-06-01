@@ -154,10 +154,10 @@ plt.rcParams['ps.fonttype'] = 42
 # ax = fig.add_subplot(1,1,1)
 
 # Plot data
-ax = df.plot.scatter(x="index", y="highest_CFD_score(ref)",
+ax = df.plot.scatter(x="index", y="Highest_CFD_score_REF",
                      s="ref_AF", c=transparent_red, zorder=1)
 # ax = df.plot.scatter(x="index", y="highest_CFD_score(ref)", s="ref_AF", c=transparent_red, zorder=1, ax=ax)
-df.plot.scatter(x="index", y="highest_CFD_score(alt)",
+df.plot.scatter(x="index", y="Highest_CFD_score_ALT",
                 s="plot_AF", c=transparent_blue, zorder=2, ax=ax)
 ax.set_xscale("log")
 # plt.title("Top CRISPRme-identified sites for sgRNA 1617")
