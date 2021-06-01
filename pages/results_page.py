@@ -3980,7 +3980,6 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
             data.loc[mask, 'DNA'] = 'NA'
             # data.loc[mask, 'DNA'] = data['Reference']
             snps = pd.DataFrame(data['SNP']).to_dict('records')
-            data.columns = COL_BOTH
             data = data.to_dict('records')
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
