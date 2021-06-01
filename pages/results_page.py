@@ -871,7 +871,7 @@ def clusterPage(job_id, hash):
                 virtualization=True,
                 fixed_rows={'headers': True, 'data': 0},
                 # fixed_columns = {'headers': True, 'data':1},
-                style_cell={'width': '150px'},
+                # style_cell={'width': '150px'},
                 page_current=0,
                 page_size=PAGE_SIZE,
                 page_action='custom',
@@ -883,15 +883,15 @@ def clusterPage(job_id, hash):
                 style_table={
                     'max-height': '600px'
                 },
-                style_data_conditional=[
-                    {
-                        'if': {
-                            'filter_query': '{Variant Unique} eq F',
-                        },
-                        'background-color': 'rgba(0, 0, 0,0.15)'
+                # style_data_conditional=[
+                #     {
+                #         'if': {
+                #             'filter_query': '{Variant Unique} eq F',
+                #         },
+                #         'background-color': 'rgba(0, 0, 0,0.15)'
 
-                    }
-                ],
+                #     }
+                # ],
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
@@ -917,7 +917,7 @@ def clusterPage(job_id, hash):
                 virtualization=True,
                 fixed_rows={'headers': True, 'data': 0},
                 # fixed_columns = {'headers': True, 'data':1},
-                style_cell={'width': '150px'},
+                # style_cell={'width': '150px'},
                 page_current=0,
                 page_size=PAGE_SIZE,
                 page_action='custom',
@@ -930,15 +930,15 @@ def clusterPage(job_id, hash):
                     'max-height': '600px'
                     # 'overflowY': 'scroll',
                 },
-                style_data_conditional=[
-                    {
-                        'if': {
-                            'filter_query': '{Variant Unique} eq F',
-                        },
-                        'background-color': 'rgba(0, 0, 0,0.15)'
+                # style_data_conditional=[
+                #     {
+                #         'if': {
+                #             'filter_query': '{Variant Unique} eq F',
+                #         },
+                #         'background-color': 'rgba(0, 0, 0,0.15)'
 
-                    }
-                ],
+                #     }
+                # ],
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
@@ -1116,7 +1116,7 @@ def samplePage(job_id, hash):
                 virtualization=True,
                 fixed_rows={'headers': True, 'data': 0},
                 # fixed_columns = {'headers': True, 'data':1},
-                style_cell={'width': '150px'},
+                # style_cell={'width': '150px'},
                 page_current=0,
                 page_size=PAGE_SIZE,
                 page_action='custom',
@@ -1129,15 +1129,15 @@ def samplePage(job_id, hash):
                     'max-height': '600px'
                     # 'overflowY': 'scroll',
                 },
-                style_data_conditional=[
-                    {
-                        'if': {
-                            'filter_query': '{Variant Unique} eq F',
-                        },
-                        'background-color': 'rgba(0, 0, 0,0.15)'
+                # style_data_conditional=[
+                #     {
+                #         'if': {
+                #             'filter_query': '{Variant Unique} eq F',
+                #         },
+                #         'background-color': 'rgba(0, 0, 0,0.15)'
 
-                    }
-                ],
+                #     }
+                # ],
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}, {'selector': 'td.cell--selected, td.focused', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}, {
                     'selector': 'td.cell--selected *, td.focused *', 'rule': 'background-color: rgba(0, 0, 255,0.15) !important;'}],
@@ -1624,7 +1624,7 @@ def guidePagev3(job_id, hash):
                 virtualization=True,
                 fixed_rows={'headers': True, 'data': 0},
                 # fixed_columns = {'headers': True, 'data':1},
-                style_cell={'width': '150px'},
+                # style_cell={'width': '150px'},
                 page_current=0,
                 page_size=PAGE_SIZE,
                 page_action='custom',
@@ -3509,11 +3509,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
                                     # style_cell=dict(textAlign='left'),
                                     # style_header=dict(backgroundColor="white"),
-                                    style_data={
-                                        'backgroundColor': "white",
-                                        # 'whiteSpace': 'normal',
-                                        # 'height': 'auto'
-                                    },
+                                    # style_data={
+                                    #     'backgroundColor': "white",
+                                    #     # 'whiteSpace': 'normal',
+                                    #     # 'height': 'auto'
+                                    # },
                                     # , 'overflowX': 'auto'
                                     style_table={
                                         'overflowX': 'scroll', 'overflowY': 'scroll', 'max-height': '300px'},
@@ -3523,18 +3523,18 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #     'width': '{}%'.format(len(dff.columns)),
                                     #     # 'whiteSpace': 'normal'
                                     # }],
-                                    style_cell_conditional=[
-                                        {'if': {'column_id': 'SNP'},
-                                         # 'overflow': 'hidden',
-                                         'textOverflow': 'ellipsis',
-                                         'maxWidth': 200,
-                                         },
-                                        {'if': {'column_id': 'Samples'},
-                                         # 'overflow': 'hidden',
-                                         'textOverflow': 'ellipsis',
-                                         'maxWidth': 300,
-                                         }
-                                    ],
+                                    # style_cell_conditional=[
+                                    #     {'if': {'column_id': 'SNP'},
+                                    #      # 'overflow': 'hidden',
+                                    #      'textOverflow': 'ellipsis',
+                                    #      'maxWidth': 200,
+                                    #      },
+                                    #     {'if': {'column_id': 'Samples'},
+                                    #      # 'overflow': 'hidden',
+                                    #      'textOverflow': 'ellipsis',
+                                    #      'maxWidth': 300,
+                                    #      }
+                                    # ],
                                     # style_cell_conditional=[{'if': {'column_id': 'SNP'},
                                     #                          'overflow': 'hidden',
                                     #                           'textOverflow': 'ellipsis'
