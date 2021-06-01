@@ -2843,9 +2843,11 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 targets = []
                 for line in file_in:
                     targets.append(line.strip().split('\t'))
-
-    ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
-        0, 23), skiprows=0, na_filter=False, nrows=5)
+    try:
+        ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
+            0, 23), skiprows=0, na_filter=False, nrows=5)
+    except:
+        pass
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
@@ -2871,7 +2873,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         #            'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
         #            'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
         #            'AF', 'Annotation_Type']]
-        # ans = ans[COL_BOTH]
+        ans = ans[COL_BOTH]
         # print('personal df', ans)
         # ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
         # ans_cols = ans.columns.tolist()
