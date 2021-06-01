@@ -2906,12 +2906,13 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # #print(ans, 'table sample line 2792')
 
     try:
-        file_to_load = job_id + '.' + sample + '.private.zip'
+        file_to_load = job_id + '.' + sample + '.'+guide + '.private.zip'
         # ans = ans[['#Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
         #            'Position', 'Direction', 'Mismatches',
         #            'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
         #            'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
         #            'AF', 'Annotation_Type']]
+        ans = ans[COL_BOTH]
         # ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
         # ans_cols = ans.columns.tolist()
         # ans_cols.remove('Samples')
