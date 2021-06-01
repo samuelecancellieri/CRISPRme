@@ -521,6 +521,7 @@ echo -e 'Creating database\tStart\t'$(date) >>$log
 if [ -f "${output_folder}/$(basename ${output_folder}).db" ]; then
 	rm "${output_folder}/$(basename ${output_folder}).db"
 fi
+python $starting_dir/remove_n_and_dots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
 python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/$(basename ${output_folder})"
 echo -e 'Creating database\tEnd\t'$(date) >>$log
 # echo -e 'Creating database\tEnd\t'$(date) >&2
@@ -558,6 +559,10 @@ truncate -s -1 $vcf_list
 if [ $6 != "_" ]; then
 	truncate -s -1 $6
 fi
+
+python $starting_dir/change_headers_bestMerge.py "${output_folder}/$(basename ${output_folder}).altMerge.txt" "${output_folder}/$(basename ${output_folder}).altMerge.new.header.txt"
+mv "${output_folder}/$(basename ${output_folder}).altMerge.new.header.txt" "${output_folder}/$(basename ${output_folder}).altMerge.txt"
+mv "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/.$(basename ${output_folder}).bestMerge.txt" 
 
 echo -e 'Integrating results\tEnd\t'$(date) >>$log
 # echo -e 'Integrating results\tEnd\t'$(date) >&2
