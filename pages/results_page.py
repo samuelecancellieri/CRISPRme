@@ -2830,9 +2830,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             tmp_file_2 = current_working_directory + 'Results/' + \
                 job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
             os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
+            print('fatto 1')
             os.system(
-                f' sort - k21, 21rg \"{sample_grep_result} > {tmp_file}')
+                f' sort -k21,21rg {sample_grep_result} > {tmp_file}')
+            print('fatto 2')
             os.system(f'head - 6 {tmp_file} > {tmp_file_2}')
+            print('fatto 3')
             ans = pd.read_csv(tmp_file_2, sep='\t',
                               header=None, usecols=range(0, 23), skiprows=0, na_filter=False)
             with open(file_to_grep) as f_:
@@ -2864,7 +2867,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                         '\t'.join(ans.iloc[row, :].values.tolist()) + '\n')
 
         # os.system(f"{app_main_directory}/PostProcess/personal_cards.py {current_working_directory}/Results/{job_id}/{job_id}.{sample}.{guide}.sample_card.txt {current_working_directory}/Results/{job_id}")
-        os.system(f"rm {sample_grep_result}")
+        # os.system(f"rm {sample_grep_result}")
     else:
         with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "r") as file_in:
             infos = file_in.readline().strip().split('\t')
