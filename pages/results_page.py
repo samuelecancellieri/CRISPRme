@@ -3995,7 +3995,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
                 #             'AF_1', 'Annotation_Type_1']
                 sub_cols = ['Direction_1', 'Chromosome_1', 'Position_1', 'crRNA_1', 'Reference_1',
                             'DNA_1', 'Mismatches_1', 'Bulge_Size_1',
-                            'Total_1', 'Bulge_type_1', 'PAM_gen_1', 'CFD_',
+                            'Total_1', 'Bulge_type_1', 'PAM_gen_1', 'CFD_1',
                             'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
                             'Var_uniq_1', 'SNP_1', 'AF_1', 'rsID_1', 'Samples_1', 'Seq_in_cluster_1', 'Annotation_Type_1']
 
@@ -4014,7 +4014,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
                             } for row in snps]
     else:
         raise PreventUpdate
-    print('query table', data)
+    # print('query table', data)
     return data, tooltip_data, alert
 
 
