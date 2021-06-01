@@ -1623,8 +1623,8 @@ def guidePagev3(job_id, hash):
                 id='table-subset-target',
                 columns=cols,
                 # data = subset_targets.to_dict('records'),
-                virtualization=True,
-                fixed_rows={'headers': True, 'data': 0},
+                # virtualization=True,
+                # fixed_rows={'headers': True, 'data': 0},
                 # fixed_columns = {'headers': True, 'data':1},
                 # style_cell={'width': '150px'},
                 page_current=0,
@@ -1641,7 +1641,7 @@ def guidePagev3(job_id, hash):
                 },
                 style_cell_conditional=[
                     {
-                        'if': {'column_id': 'Samples'},
+                        'if': {'column_id': 'Highest_CFD_variant_samples'},
                         'textAlign': 'left'
                     }
                 ],
@@ -2123,7 +2123,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         df = pd.DataFrame(columns=header)
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
     # df.columns = header
-    print(df, 'line 2126')
+    # print(df, 'line 2126')
     try:
         df = df[COL_BOTH]
         df_check = True
