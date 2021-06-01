@@ -2825,50 +2825,47 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         results_table = pd.DataFrame([[personal, pam_creation, private]], columns=[
             'Personal', 'PAM Creation', 'Private']).astype(str)
         if int(private) > 0:
-            tmp_file = current_working_directory + 'Results/' + \
-                job_id + '/' + job_id + '.' + sample + ".tmp_card.txt"
-            tmp_file_2 = current_working_directory + 'Results/' + \
-                job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
+            # tmp_file = current_working_directory + 'Results/' + \
+            #     job_id + '/' + job_id + '.' + sample + ".tmp_card.txt"
+            # tmp_file_2 = current_working_directory + 'Results/' + \
+            #     job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
             os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-            # print('fatto 1')
             os.system(
-                f' sort -k21,21rg {sample_grep_result} > {tmp_file}')
-            # print('fatto 2')
+                f' sort -k21,21rg {sample_grep_result} -o {sample_grep_result}')
             os.system(
-                f'cat {job_directory}/header.txt {tmp_file} > {tmp_file_2}')
-            os.system(f'head -6 {tmp_file_2} > {tmp_file}.tmp')
-            os.system(f'mv {tmp_file}.tmp {tmp_file_2} > /dev/null 2>&1')
-            os.system(f'mv {tmp_file_2} {tmp_file} > /dev/null 2>&1')
+                f'cat {job_directory}/header.txt {sample_grep_result} > {sample_grep_result}.tmp')
+            # os.system(
+            #     f'head -6 {sample_grep_result}.tmp > {sample_grep_result}.head6.tmp')
             # print('fatto 3')
-            ans = pd.read_csv(tmp_file_2, sep='\t',
-                              header=None, usecols=range(0, 23), skiprows=0, na_filter=False)
-            with open(file_to_grep) as f_:
-                c = f_.readline().strip()
-            ans.columns = c.split('\t')[:23]
-            ans = ans.astype(str)
+            # ans = pd.read_csv(tmp_file_2, sep='\t',
+            #                   header=None, usecols=range(0, 23), skiprows=0, na_filter=False)
+            # with open(file_to_grep) as f_:
+            #     c = f_.readline().strip()
+            # ans.columns = c.split('\t')[:23]
+            # ans = ans.astype(str)
             # print('personal df', ans)
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
-            os.system(f"rm -f {tmp_file_2}")
+            # os.system(f"rm -f {tmp_file_2}")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
             os.system(
-                f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp')
-            os.system(f'mv {tmp_file}.tmp {tmp_file} > /dev/null 2>&1')
+                f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result}.tmp {sample_grep_result}')
+            os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
+                                                                '.zip') + ' ' + sample_grep_result)
             os.system(
-                f'cat {job_directory}/header.txt {tmp_file} > {tmp_file_2}')
-            os.system(f'mv {tmp_file_2} {tmp_file} > /dev/null 2>&1')
-            os.system('zip '+'-j ' + tmp_file.replace('.txt',
-                                                      '.zip') + ' ' + tmp_file)
+                f'head -6 {sample_grep_result} > {sample_grep_result}.head6.tmp')
             # do not delete temp file until zip is created
             # os.system(f"rm {tmp_file} &")
+            # sample_card = sample_grep_result.replace('private', 'sample_card')
+            # os.system(f'cp {sample_grep_result} {sample_card}')
 
         with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "w") as file_out:
             file_out.write(
                 '\t'.join(results_table.iloc[0, :].values.tolist()) + '\n')
-            if int(private) > 0:
-                up_to = min([ans.shape[0], 5])
-                for row in range(up_to):
-                    file_out.write(
-                        '\t'.join(ans.iloc[row, :].values.tolist()) + '\n')
+        #     if int(private) > 0:
+        #         up_to = min([ans.shape[0], 5])
+        #         for row in range(up_to):
+        #             file_out.write(
+        #                 '\t'.join(ans.iloc[row, :].values.tolist()) + '\n')
 
         # os.system(f"{app_main_directory}/PostProcess/personal_cards.py {current_working_directory}/Results/{job_id}/{job_id}.{sample}.{guide}.sample_card.txt {current_working_directory}/Results/{job_id}")
         # os.system(f"rm {sample_grep_result}")
@@ -2882,15 +2879,16 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 for line in file_in:
                     targets.append(line.strip().split('\t'))
 
-                ans = pd.DataFrame(targets)
-                # ans = ans.iloc[:,:23]
-                with open(file_to_grep) as f_:
-                    c = f_.readline().strip()
-                ans.columns = c.split('\t')[:23]
+                # ans = pd.DataFrame(targets)
+                # # ans = ans.iloc[:,:23]
+                # with open(file_to_grep) as f_:
+                #     c = f_.readline().strip()
+                # ans.columns = c.split('\t')[:23]
 
     # print('personal df', ans)
-    ans = pd.read_csv(tmp_file, sep='\t', usecols=range(
+    ans = pd.read_csv(sample_grep_result+'.head6.tmp', sep='\t', usecols=range(
         0, 23), skiprows=0, na_filter=False, nrows=5)
+    ans = ans.astype(str)
     print('personal df', ans)
     # image for personal and private
     try:
