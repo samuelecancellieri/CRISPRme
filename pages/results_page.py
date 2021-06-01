@@ -2834,7 +2834,11 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             os.system(
                 f' sort -k21,21rg {sample_grep_result} > {tmp_file}')
             # print('fatto 2')
-            os.system(f'head -6 {tmp_file} > {tmp_file_2}')
+            os.system(
+                f'cat {job_directory}/header.txt {tmp_file} > {tmp_file_2}')
+            os.system(f'head -6 {tmp_file_2} > {tmp_file}.tmp')
+            os.system(f'mv {tmp_file}.tmp {tmp_file_2} > /dev/null 2>&1')
+            os.system(f'mv {tmp_file_2} {tmp_file} > /dev/null 2>&1')
             # print('fatto 3')
             ans = pd.read_csv(tmp_file_2, sep='\t',
                               header=None, usecols=range(0, 23), skiprows=0, na_filter=False)
@@ -2844,18 +2848,18 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             ans = ans.astype(str)
             # print('personal df', ans)
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
-            os.system(f"rm {tmp_file_2} &")
+            os.system(f"rm -f {tmp_file_2}")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
             os.system(
                 f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp')
-            os.system(f'mv -f {tmp_file}.tmp {tmp_file} > /dev/null 2>&1')
+            os.system(f'mv {tmp_file}.tmp {tmp_file} > /dev/null 2>&1')
             os.system(
                 f'cat {job_directory}/header.txt {tmp_file} > {tmp_file_2}')
-            os.system(f'mv -f {tmp_file_2} {tmp_file} > /dev/null 2>&1')
+            os.system(f'mv {tmp_file_2} {tmp_file} > /dev/null 2>&1')
             os.system('zip '+'-j ' + tmp_file.replace('.txt',
                                                       '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
-            os.system(f"rm {tmp_file} &")
+            # os.system(f"rm {tmp_file} &")
 
         with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "w") as file_out:
             file_out.write(
@@ -2884,6 +2888,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     c = f_.readline().strip()
                 ans.columns = c.split('\t')[:23]
 
+    # print('personal df', ans)
+    ans = pd.read_csv(tmp_file, sep='\t', usecols=range(
+        0, 23), skiprows=0, na_filter=False, nrows=5)
     print('personal df', ans)
     # image for personal and private
     try:
@@ -2902,11 +2909,11 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
     try:
         file_to_load = job_id + '.' + sample + '.tmp_card.zip'
-        ans = ans[['#Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
-                   'Position', 'Direction', 'Mismatches',
-                   'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
-                   'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-                   'AF', 'Annotation_Type']]
+        # ans = ans[['#Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
+        #            'Position', 'Direction', 'Mismatches',
+        #            'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
+        #            'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
+        #            'AF', 'Annotation_Type']]
         # ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
         # ans_cols = ans.columns.tolist()
         # ans_cols.remove('Samples')
