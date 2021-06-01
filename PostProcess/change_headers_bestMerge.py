@@ -28,12 +28,12 @@ new_order = ['Real_Guide', 'Direction', 'Chromosome', 'Position', 'Cluster_Posit
              'MMBLG_Reference', 'MMBLG_DNA', 'MMBLG_Mismatches', 'MMBLG_Bulge_Size', 'MMBLG_Total', 'MMBLG_#Bulge_type', 'MMBLG_PAM_gen', 'MMBLG_CFD', 'MMBLG_CFD_ref',
              'MMBLG_CFD_Risk_Score', 'MMBLG_CFD_Absolute_Risk_Score', 'MMBLG_Var_uniq', 'MMBLG_SNP', 'MMBLG_AF', 'MMBLG_rsID', 'MMBLG_Samples', 'MMBLG_#Seq_in_cluster',
              'MMBLG_Annotation_Type', 'Annotation_Type']
-print(len(new_order))
+# print(len(new_order))
 
 to_remove = ['Real_Guide', 'Cluster_Position', 'Highest_CFD_Absolute_Risk_Score', 'MMBLG_Real_Guide', 'MMBLG_Chromosome', 'MMBLG_Cluster_Position',
              'MMBLG_CFD_Absolute_Risk_Score', 'MMBLG_Var_uniq', 'MMBLG_#Seq_in_cluster', 'MMBLG_Annotation_Type'
              ]
-print(len(to_remove))
+# print(len(to_remove))
 
 new_names = ['Highest_CFD_Strand', 'Chromosome', 'Start_coordinate', 'Highest_CFD_aligned_spacer+PAM', 'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
              'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges', 'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
