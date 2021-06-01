@@ -2850,6 +2850,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     except:
         pass
 
+    ans = ans[COL_BOTH]
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
