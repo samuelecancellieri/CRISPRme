@@ -3591,7 +3591,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             ]
         )
         fl.append(query_tab_content)
-
+        print('table query',dff)
         # fl.append(
 
         return fl
