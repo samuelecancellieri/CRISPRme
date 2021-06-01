@@ -818,7 +818,8 @@ def clusterPage(job_id, hash):
                      '\"\' >> ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
         os.system(
             f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {cluster_grep_result} {cluster_grep_result}.tmp')
-        os.system(f'mv -f {cluster_grep_result}.tmp {cluster_grep_result}')
+        os.system(
+            f'mv -f {cluster_grep_result}.tmp {cluster_grep_result} > /dev/null')
         os.system('zip '+'-j ' + cluster_grep_result.replace('.txt',
                                                              '.zip') + ' ' + cluster_grep_result+" &")
     final_list.append(
@@ -1102,7 +1103,8 @@ def samplePage(job_id, hash):
 
     os.system(
         f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp')
-    os.system(f'mv -f {sample_grep_result}.tmp {sample_grep_result}')
+    os.system(
+        f'mv -f {sample_grep_result}.tmp {sample_grep_result} > /dev/null')
     os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
                                                         '.zip') + ' ' + sample_grep_result + " &")
 
@@ -1608,7 +1610,8 @@ def guidePagev3(job_id, hash):
         f'cat {job_directory}/header.txt {guide_grep_result} > {guide_grep_result}.tmp')
     os.system(
         f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result}.tmp {guide_grep_result}.tmp2')
-    os.system(f'mv -f {guide_grep_result}.tmp2 {guide_grep_result}')
+    os.system(
+        f'mv -f {guide_grep_result}.tmp2 {guide_grep_result} > /dev/null')
     os.system(
         f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2 {job_directory}/header.txt')
     os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
@@ -2109,7 +2112,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         f'cat {job_directory}/header.txt {pos_grep_result} > {pos_grep_result}.tmp')
     os.system(
         f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {pos_grep_result}.tmp {pos_grep_result}.tmp2')
-    os.system(f'mv {pos_grep_result}.tmp2 {pos_grep_result}')
+    os.system(f'mv {pos_grep_result}.tmp2 {pos_grep_result} > /dev/null')
     # pos_grep_result_zip = pos_grep_result.replace('txt', 'zip')
     # os.system(f'zip -j {pos_grep_result_zip} {pos_grep_result}')
 
@@ -2793,13 +2796,15 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             f"LC_ALL=C fgrep {guide} {integrated_to_grep} | awk \'$32~\"{sample}\"\' > {integrated_personal}")
         os.system(
             f'cat {job_directory}/header.txt {integrated_personal} > {integrated_personal}.tmp')
-        os.system(f'mv {integrated_personal}.tmp > {integrated_personal}')
+        os.system(
+            f'mv {integrated_personal}.tmp {integrated_personal} > /dev/null')
         # grep private targets from personal targets
         os.system(
             f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} > {integrated_private}")
         os.system(
             f'cat {job_directory}/header.txt {integrated_private} > {integrated_private}.tmp')
-        os.system(f'mv {integrated_private}.tmp > {integrated_private}')
+        os.system(
+            f'mv {integrated_private}.tmp {integrated_private} > /dev/null')
         # grep private targets to generate table and file
         os.system(
             f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
@@ -2838,10 +2843,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
             os.system(
                 f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {tmp_file} {tmp_file}.tmp')
-            os.system(f'mv -f {tmp_file}.tmp {tmp_file}')
+            os.system(f'mv -f {tmp_file}.tmp {tmp_file} > /dev/null')
             os.system(
                 f'cat {job_directory}/header.txt {tmp_file} > {tmp_file_2}')
-            os.system(f'mv -f {tmp_file_2} > {tmp_file}')
+            os.system(f'mv -f {tmp_file_2} {tmp_file} > /dev/null')
             os.system('zip '+'-j ' + tmp_file.replace('.txt',
                                                       '.zip') + ' ' + tmp_file)
             # do not delete temp file until zip is created
