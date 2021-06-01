@@ -3312,9 +3312,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #                   'AF', 'Annotation Type']
         dff = pd.DataFrame(columns=['Direction', 'Chromosome', 'Position', 'crRNA', 'DNA',
                                     'Reference', 'Mismatches', 'Bulge_Size',
-                                    'Total', 'Bulge_type', 'PAM_gen', 'CFD',
+                                    'Total_1', 'Bulge_type', 'PAM_gen', 'CFD',
                                     'CFD_ref', 'Highest_CFD_Risk_Score',
-                                    'Var_uniq', 'Annotation_Type'])
+                                    'Var_uniq_1', 'Annotation_Type'])
         # to define column names in the first empty table
         print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
         # print('check col in query table', dff)
