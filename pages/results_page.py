@@ -2794,14 +2794,14 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         os.system(f'head -1 {integrated_to_grep} > {job_directory}/header.txt')
         # grep guide and then sample into personal card data
         os.system(
-            f"fgrep {guide} {integrated_to_grep} | awk \'$32~\"{sample}\"\' > {integrated_personal}")
+            f"fgrep {guide} {integrated_to_grep} | awk \'$22~\"{sample}\"\' > {integrated_personal}")
         os.system(
             f'cat {job_directory}/header.txt {integrated_personal} > {integrated_personal}.tmp')
         os.system(
             f'mv {integrated_personal}.tmp {integrated_personal} > /dev/null 2>&1')
         # grep private targets from personal targets
         os.system(
-            f"awk \'$32==\"{sample}\"\' {integrated_personal} > {integrated_private}")
+            f"awk \'$22==\"{sample}\"\' {integrated_personal} > {integrated_private}")
         os.system(
             f'cat {job_directory}/header.txt {integrated_private} > {integrated_private}.tmp')
         os.system(
