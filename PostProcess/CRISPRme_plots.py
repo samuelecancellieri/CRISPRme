@@ -57,7 +57,7 @@ df["Highest_CFD_variant_MAF"] = df["Highest_CFD_variant_MAF"].fillna(-1)
 
 # If multiple AFs (haplotype with multiple SNPs), take min AF
 # Approximation until we have haplotype frequencies
-df["AF"] = df["prim_AF"].astype(str).str.split(',')
+df["AF"] = df["Highest_CFD_variant_MAF"].astype(str).str.split(',')
 df["AF"] = df["AF"].apply(lambda x: min(x))
 df["AF"] = pd.to_numeric(df["AF"])
 
