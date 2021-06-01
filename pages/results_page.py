@@ -2831,9 +2831,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             #     job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
             os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
             os.system(
-                f' sort -k21,21rg {sample_grep_result} -o {sample_grep_result}')
+                f' sort -k21,21rg {sample_grep_result} > {sample_grep_result}.tmp2')
             os.system(
-                f'cat {job_directory}/header.txt {sample_grep_result} > {sample_grep_result}.tmp')
+                f'cat {job_directory}/header.txt {sample_grep_result}.tmp2 > {sample_grep_result}.tmp')
             # os.system(
             #     f'head -6 {sample_grep_result}.tmp > {sample_grep_result}.head6.tmp')
             # print('fatto 3')
@@ -2851,8 +2851,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result}.tmp {sample_grep_result}')
             os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
                                                                 '.zip') + ' ' + sample_grep_result)
-            os.system(
-                f'head -6 {sample_grep_result} > {sample_grep_result}.head6.tmp')
+            # os.system(
+            #     f'head -6 {sample_grep_result} > {sample_grep_result}.head6.tmp')
             # do not delete temp file until zip is created
             # os.system(f"rm {tmp_file} &")
             # sample_card = sample_grep_result.replace('private', 'sample_card')
@@ -2886,10 +2886,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 # ans.columns = c.split('\t')[:23]
 
     # print('personal df', ans)
-    ans = pd.read_csv(sample_grep_result+'.head6.tmp', sep='\t', usecols=range(
+    ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
         0, 23), skiprows=0, na_filter=False, nrows=5)
     ans = ans.astype(str)
-    print('personal df', ans)
+    # print('personal df', ans)
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
