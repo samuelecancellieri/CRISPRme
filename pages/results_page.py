@@ -81,7 +81,7 @@ COL_BOTH_RENAME = {0: 'Highest_CFD_Strand', 1: 'Chromosome', 2: 'Highest_CFD_sta
                    12: 'Highest_CFD_score_REF', 13: 'Highest_CFD_risk_score',
                    14: 'Not_found_in_REF', 15: 'Highest_CFD_variant_info_genome',
                    16: 'Highest_CFD_variant_MAF', 17: 'Highest_CFD_variant_rsID',
-                   18: 'Highest_CFD_variant_samples', 19: 'Other_motifs', 36: 'Annotation_ENCODE'}
+                   18: 'Highest_CFD_variant_samples', 19: 'Other_motifs', 33: 'Annotation_ENCODE'}
 # COL_BOTH_RENAME = {0: 'Highest_CFD_bulge_type', 1: 'Highest_CFD_aligned_spacer+PAM',
 #                    2: 'Highest_CFD_aligned_protospacer+PAM_ALT', 3: 'Highest_CFD_aligned_protospacer+PAM_REF',
 #                    4: 'Chromosome', 5: 'Highest_CFD_start_coordinate', 6: 'Cluster_Position',
