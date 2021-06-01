@@ -3986,18 +3986,18 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
             else:
                 data = query_manager.noshold(target, n_clicks, page_current, page_size,
                                              radio_order, orderdrop, asc1, url, guide, current_working_directory)
-            if target[-1] == '1':
+            # if target[-1] == '1':
 
-                sub_cols = ['Bulge_type_1', 'crRNA_1', 'DNA_1', 'Reference_1', 'Chromosome_1',
-                            'Position_1', 'Direction_1', 'Mismatches_1',
-                            'Bulge_Size_1', 'PAM_gen_1', 'Samples_1', 'SNP_1',
-                            'CFD_1', 'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
-                            'AF_1', 'Annotation_Type_1']
+            #     sub_cols = ['Bulge_type_1', 'crRNA_1', 'DNA_1', 'Reference_1', 'Chromosome_1',
+            #                 'Position_1', 'Direction_1', 'Mismatches_1',
+            #                 'Bulge_Size_1', 'PAM_gen_1', 'Samples_1', 'SNP_1',
+            #                 'CFD_1', 'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
+            #                 'AF_1', 'Annotation_Type_1']
 
-                data = data[sub_cols]
-                data.columns = [x[:-2] for x in sub_cols]
-                # data[' '] = [' '] * data.shape[0]
-                data_cols = data.columns.tolist()
+            #     data = data[sub_cols]
+            #     data.columns = [x[:-2] for x in sub_cols]
+            #     # data[' '] = [' '] * data.shape[0]
+            #     data_cols = data.columns.tolist()
                 # data_cols.remove(' ')
                 # data_cols.insert(0, ' ')
 
