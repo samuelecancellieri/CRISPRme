@@ -2115,15 +2115,15 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
 
     with open(file_to_grep, 'r') as ftg:
         header = ftg.readline().split('\t')[:24]
-        header = ftg.readline().split('\t')[:24]
+        # header = ftg.readline().split('\t')[:24]
     try:
         df = pd.read_csv(pos_grep_result, sep='\t',
-                         header=None, usecols=range(0, 24), na_filter=False)
+                         header=None, usecols=range(0, 24), skiprows=1, na_filter=False)
     except:
         df = pd.DataFrame(columns=header)
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
     # df.columns = header
-    # #print(df, 'line 2057')
+    print(df, 'line 2126')
     try:
         df = df[COL_BOTH]
         df_check = True
