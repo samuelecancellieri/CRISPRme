@@ -1166,8 +1166,8 @@ def global_store_general(path_file_to_load):
         return ''
     if os.path.getsize(path_file_to_load) > 0:
         # df = pd.read_csv(path_file_to_load, sep='\t', header=None, skiprows=rows_to_skip, usecols=range(0, 16))
-        df = pd.read_csv(path_file_to_load, sep='\t',
-                         skiprows=0, usecols=range(0, 38), na_filter=False)
+        df = pd.read_csv(path_file_to_load, sep='\t', header=None,
+                         skiprows=1, usecols=range(0, 38), na_filter=False)
     else:
         df = None
     return df
