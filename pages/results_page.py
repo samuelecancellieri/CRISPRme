@@ -580,7 +580,7 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
 
     # #Grep annotation
     # file_to_grep = '.Annotation.targets.txt'
-    # get_annotation = subprocess.Popen(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep + ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\"\''], shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # get_annotation = subprocess.Popen([' fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep + ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\"\''], shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # out, err = get_annotation.communicate()
     # annotation_type = out.decode('UTF-8').strip().split('\t')[-1]
 
@@ -806,15 +806,15 @@ def clusterPage(job_id, hash):
         # Grep annotation for ref
         os.system(f'head -1 {file_to_grep} > {cluster_grep_result}')
         if genome_type == 'ref':  # NOTE HEADER NON SALVATO
-            get_annotation = subprocess.Popen(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + '.Annotation.targets.txt' +
+            get_annotation = subprocess.Popen([' fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + '.Annotation.targets.txt' +
                                                ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\"\''], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             out, err = get_annotation.communicate()
             annotation_type = out.decode('UTF-8').strip().split('\t')[-1]
-            os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep +
+            os.popen(put_header + ' fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep +
                      ' | awk \'$6==' + position + ' && $4==\"' + chromosome + '\" {#print $0\"\\t' + annotation_type + '\"}\' >> ' + cluster_grep_result).read()
         else:
             # #print('qui cluster in grep')     #NOTE HEADER NON SALVATO
-            os.popen(put_header + 'LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
+            os.popen(put_header + ' fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
                      '\"\' >> ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
         os.system(
             f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {cluster_grep_result} {cluster_grep_result}.tmp')
@@ -837,7 +837,7 @@ def clusterPage(job_id, hash):
         # Example    job_id.chr_pos.guide.scomposition.txt
         # if not os.path.exists(scomposition_file):
         # os.system(f'touch {scomposition_file}')
-        os.popen('LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/.' + job_id + file_to_grep +
+        os.popen(' fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/.' + job_id + file_to_grep +
                  ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\" && $13!=\"n\"\' > ' + scomposition_file).read()
 
     final_list.append(html.P(
@@ -1095,7 +1095,7 @@ def samplePage(job_id, hash):
     # if not os.path.exists(sample_grep_result):
     # os.system(f"touch {sample_grep_result}")
     os.system(f"head -1 {file_to_grep} > {header}")
-    os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
+    os.system(' fgrep ' + guide + ' ' + file_to_grep +
               ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
     os.system(
         f'cat {header} {sample_grep_result} > {sample_grep_result}.tmp')
@@ -1228,12 +1228,12 @@ def global_store_general(path_file_to_load):
 #     # file_to_grep_alt = '.altMerge.txt'
 #     # if not os.path.exists(scomposition_file):
 #     os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-#     os.system(f'LC_ALL=C fgrep {pos} {file_to_grep} | LC_ALL=C fgrep {chrom} | awk \'$14!=\"n\"' +
+#     os.system(f' fgrep {pos} {file_to_grep} |  fgrep {chrom} | awk \'$14!=\"n\"' +
 #               '\' > ' + scomposition_file)  # , shell = True)
 #     os.system(
 #         f'cat {job_directory}/header.txt {scomposition_file} > {scomposition_file}.tmp')
 #     os.system(f'mv -f {scomposition_file}.tmp > {scomposition_file}')
-#     # subprocess.call(['LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
+#     # subprocess.call([' fgrep ' + guide + ' ' + current_working_directory + 'Results/'+ job_id + '/' + job_id + file_to_grep_alt + ' |  awk \'$7==' + pos + ' && $5==\"' + chrom + '\" && $10==' + bulge_s + ' && $14!=\"n\"' +'\' >> ' + scomposition_file], shell = True)
 #     # Check if result grep has at least 1 result
 #     if os.path.getsize(scomposition_file) > 0:
 #         df = pd.read_csv(scomposition_file, header=None,
@@ -2101,9 +2101,9 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         'Results/' + job_id + '/' + job_id + '.' + start + "." + end + '.txt'
 
     # os.system(
-    #    f'LC_ALL=C fgrep {guide} {file_to_grep} | LC_ALL=C grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
+    #    f' fgrep {guide} {file_to_grep} |  grep -P \"{chrom}\t{pos}\t\" > {pos_grep_result}')
     # os.system(
-    #     f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
+    #     f' fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
     # if not os.path.exists(pos_grep_result):
     # os.system(f'touch {pos_grep_result}')
     os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
@@ -2794,29 +2794,29 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         os.system(f'head -1 {integrated_to_grep} > {job_directory}/header.txt')
         # grep guide and then sample into personal card data
         os.system(
-            f"LC_ALL=C fgrep {guide} {integrated_to_grep} | awk \'$32~\"{sample}\"\' > {integrated_personal}")
+            f"fgrep {guide} {integrated_to_grep} | awk \'$32~\"{sample}\"\' > {integrated_personal}")
         os.system(
             f'cat {job_directory}/header.txt {integrated_personal} > {integrated_personal}.tmp')
         os.system(
             f'mv {integrated_personal}.tmp {integrated_personal} > /dev/null 2>&1')
         # grep private targets from personal targets
         os.system(
-            f"LC_ALL=C awk \'$32==\"{sample}\"\' {integrated_personal} > {integrated_private}")
+            f"awk \'$32==\"{sample}\"\' {integrated_personal} > {integrated_private}")
         os.system(
             f'cat {job_directory}/header.txt {integrated_private} > {integrated_private}.tmp')
         os.system(
             f'mv {integrated_private}.tmp {integrated_private} > /dev/null 2>&1')
         # grep private targets to generate table and file
         os.system(
-            f"LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
+            f"fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
 
         # plot for images in personal card
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
-        os.system(
-            f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
+        # os.system(
+        #     f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
 
         private = 0
         for line in open(sample_grep_result):
@@ -2831,7 +2831,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
             os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
             os.system(
-                f'LC_ALL=C sort - k21, 21rg \"{sample_grep_result} > {tmp_file}')
+                f' sort - k21, 21rg \"{sample_grep_result} > {tmp_file}')
             os.system(f'head - 6 {tmp_file} > {tmp_file_2}')
             ans = pd.read_csv(tmp_file_2, sep='\t',
                               header=None, usecols=range(0, 23), skiprows=0, na_filter=False)
