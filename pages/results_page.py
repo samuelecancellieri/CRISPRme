@@ -2834,7 +2834,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             os.system(
                 f' sort -k21,21rg {sample_grep_result} > {tmp_file}')
             print('fatto 2')
-            os.system(f'head - 6 {tmp_file} > {tmp_file_2}')
+            os.system(f'head -6 {tmp_file} > {tmp_file_2}')
             print('fatto 3')
             ans = pd.read_csv(tmp_file_2, sep='\t',
                               header=None, usecols=range(0, 23), skiprows=0, na_filter=False)
