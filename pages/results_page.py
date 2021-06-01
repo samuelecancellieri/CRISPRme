@@ -2815,8 +2815,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > {current_working_directory}/Results/{job_id}/warnings.txt 2>&1")
-        # os.system(
-        #     f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
+        os.system(
+            f"rm -f {current_working_directory}/Results/{job_id}/warnings.txt {integrated_private} {integrated_personal}")
 
         private = 0
         for line in open(sample_grep_result):
@@ -2839,7 +2839,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 c = f_.readline().strip()
             ans.columns = c.split('\t')[:23]
             ans = ans.astype(str)
-            print('personal df', ans)
+            # print('personal df', ans)
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
@@ -2881,7 +2881,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     c = f_.readline().strip()
                 ans.columns = c.split('\t')[:23]
 
-    print('personal df', ans)
+    # print('personal df', ans)
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
