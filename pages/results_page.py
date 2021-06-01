@@ -4009,7 +4009,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
                             } for row in snps]
     else:
         raise PreventUpdate
-
+    print('query table', data)
     return data, tooltip_data, alert
 
 
