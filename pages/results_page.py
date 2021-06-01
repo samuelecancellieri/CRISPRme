@@ -802,6 +802,7 @@ def clusterPage(job_id, hash):
     # #print('esiste cluster?' , str(os.path.exists(cluster_grep_result)) )
     # Example    job_id.chr3_100.guide.txt
     if not os.path.exists(cluster_grep_result):
+        os.system(f'touch {cluster_grep_result}')
         # Grep annotation for ref
         os.system(f'head -1 {file_to_grep} > {cluster_grep_result}')
         if genome_type == 'ref':  # NOTE HEADER NON SALVATO
@@ -834,6 +835,7 @@ def clusterPage(job_id, hash):
         iupac_scomposition_visibility = {}
         # Example    job_id.chr_pos.guide.scomposition.txt
         if not os.path.exists(scomposition_file):
+            os.system(f'touch {scomposition_file}')
             os.popen('LC_ALL=C fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/.' + job_id + file_to_grep +
                      ' |  awk \'$6==' + position + ' && $4==\"' + chromosome + '\" && $13!=\"n\"\' > ' + scomposition_file).read()
 
@@ -1090,7 +1092,7 @@ def samplePage(job_id, hash):
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
     if not os.path.exists(sample_grep_result):
-        # os.system(f"head -1 {file_to_grep} > {sample_grep_result}")
+        os.system(f"touch {sample_grep_result}")
         os.system(f"head -1 {file_to_grep} > {header}")
         os.system('LC_ALL=C fgrep ' + guide + ' ' + file_to_grep +
                   ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
@@ -1598,7 +1600,7 @@ def guidePagev3(job_id, hash):
     )
 
     if not os.path.exists(guide_grep_result):
-        # os.system(f'head -1 {file_to_grep} > {guide_grep_result}')
+        os.system(f'touch {guide_grep_result}')
         os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
         os.system('fgrep ' + guide + ' ' + file_to_grep + ' | fgrep ' +
                   bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' > ' + guide_grep_result)
@@ -2099,6 +2101,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # os.system(
     #     f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
     if not os.path.exists(pos_grep_result):
+        os.system(f'touch {pos_grep_result}')
         os.system(
             # f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n >> {pos_grep_result}')
             f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
