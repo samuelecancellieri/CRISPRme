@@ -42,7 +42,7 @@ out_folder = sys.argv[2]
 guide = sys.argv[3]
 
 # Remove targets with no variant and CFD_ref=1
-df = df.loc[df["highest_CFD_score(ref)"] != 1.0]
+df = df.loc[df["Highest_CFD_score_REF"] != 1.0]
 
 # Make index column that numbers the OTs starting from 1
 df = df.reset_index()
@@ -52,7 +52,8 @@ df = df.reset_index()
 
 # If prim_AF = 'n', then it's a ref-nominated site, so we enter a fake numerical AF
 # This will cause a warning of invalid sqrt later on, but that's fine to ignore
-df["prim_AF"] = df["prim_AF"].fillna(-1)
+# df["prim_AF"] = df["prim_AF"].fillna(-1)
+df["Highest_CFD_variant_MAF"] = df["Highest_CFD_variant_MAF"].fillna(-1)
 
 # If multiple AFs (haplotype with multiple SNPs), take min AF
 # Approximation until we have haplotype frequencies
@@ -79,12 +80,12 @@ transparent_gray = mcolors.colorConverter.to_rgba("gray", alpha=0.5)
 
 # Color by annotation, with coding > accessible > neither
 # Note that coding & accessible categories are not mutually exclusive, but coding is more important than accessible, so if both, it's colored as coding
-df["color_str"] = np.where(df["gene_annotation"] ==
-                           "CDS", "red", "gray")  # coding
-df["color_str"] = np.where(df["annotation"].str.contains(
-    "HSC-1", na=False), "blue", df["color_str"])  # DHS, accessible in HSCs
-df["color"] = df["color_str"].apply(lambda x: transparent_red if x == "red" else (
-    transparent_blue if x == "blue" else transparent_gray))
+# df["color_str"] = np.where(df["gene_annotation"] ==
+#                            "CDS", "red", "gray")  # coding
+# df["color_str"] = np.where(df["annotation"].str.contains(
+#     "HSC-1", na=False), "blue", df["color_str"])  # DHS, accessible in HSCs
+# df["color"] = df["color_str"].apply(lambda x: transparent_red if x == "red" else (
+#     transparent_blue if x == "blue" else transparent_gray))
 
 """
 # Linear, annotated, top 100 (for supplement)
@@ -168,7 +169,7 @@ plt.xlim(xmin=0.9, xmax=1000)
 plt.ylim(ymin=0, ymax=1)
 
 # Arrows
-for x, y, z in zip(df["index"], df["highest_CFD_score(ref)"], df["highest_CFD_score(alt)"]-df["highest_CFD_score(ref)"]):
+for x, y, z in zip(df["index"], df["Highest_CFD_score_REF"], df["Highest_CFD_score_ALT"]-df["Highest_CFD_score_REF"]):
     plt.arrow(x, y+0.02, 0, z-0.04, color='gray', head_width=(x*(10**0.005-10**(-0.005))),
               head_length=0.02, length_includes_head=True, zorder=0, alpha=0.5)
     # +/- to avoid overlap of arrow w/ points, head_width calculated to remain constant despite log scale of x-axis
