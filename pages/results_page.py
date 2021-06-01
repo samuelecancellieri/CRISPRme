@@ -2830,19 +2830,19 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             tmp_file_2 = current_working_directory + 'Results/' + \
                 job_id + '/' + job_id + '.' + sample + ".tmp_card_2.txt"
             os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-            print('fatto 1')
+            # print('fatto 1')
             os.system(
                 f' sort -k21,21rg {sample_grep_result} > {tmp_file}')
-            print('fatto 2')
+            # print('fatto 2')
             os.system(f'head -6 {tmp_file} > {tmp_file_2}')
-            print('fatto 3')
+            # print('fatto 3')
             ans = pd.read_csv(tmp_file_2, sep='\t',
                               header=None, usecols=range(0, 23), skiprows=0, na_filter=False)
             with open(file_to_grep) as f_:
                 c = f_.readline().strip()
             ans.columns = c.split('\t')[:23]
             ans = ans.astype(str)
-            print('personal df', ans)
+            # print('personal df', ans)
             # os.system(f"rm {tmp_file} &") #do not delete temp file until zip is created
             os.system(f"rm {tmp_file_2} &")
             # create zip file to download result card /blocking operation on the system to avoid updating the page before the zip is created
@@ -2884,7 +2884,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     c = f_.readline().strip()
                 ans.columns = c.split('\t')[:23]
 
-    # print('personal df', ans)
+    print('personal df', ans)
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
