@@ -3310,13 +3310,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #                   'Bulge Size', 'PAM gen', 'Samples', 'SNP',
         #                   'CFD', 'CFD ref', 'Highest CFD Risk Score',
         #                   'AF', 'Annotation Type']
-        dff = pd.DataFrame(columns=['Direction', 'Chromosome', 'Position', 'crRNA', 'DNA',
-                                    'Reference', 'Mismatches', 'Bulge_Size',
+        dff = pd.DataFrame(columns=['Direction', 'Chromosome', 'Position', 'crRNA', 'Reference',
+                                    'DNA', 'Mismatches', 'Bulge_Size',
                                     'Total', 'Bulge_type', 'PAM_gen', 'CFD',
                                     'CFD_ref', 'Highest_CFD_Risk_Score',
-                                    'Var_uniq', 'Annotation_Type'])
+                                    'Var_uniq', 'SNP', 'AF', 'rsID', 'Samples', 'Seq_in_cluster', 'Annotation_Type'])
         # to define column names in the first empty table
-        print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
+        # print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
         # print('check col in query table', dff)
         all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
                      'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']}  # , 'CFD_Absolute_Risk_Score'
@@ -3591,7 +3591,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             ]
         )
         fl.append(query_tab_content)
-        print('table query',dff)
+        # print('table query', dff)
         # fl.append(
 
         return fl
