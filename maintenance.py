@@ -7,17 +7,17 @@ import flask
 import pandas as pd
 import time
 import os
-from pages import navbar_creation
 
 server = flask.Flask('app')
 
 app = dash.Dash('app', server=server)
 
-navbar = navbar_creation.Navbar()
 app.layout = html.Div(
     [
-        navbar,
-        html.P('We are sorry, CRISPRme website is under maintenance, we will be back online as soon as possible.\nThanks for yout patience.')
+        html.P('We are sorry, CRISPRme website is under maintenance, we will be back online as soon as possible.\nThanks for your patience.'),
+        html.P('In the meantime you can try CRISPRme offline version available on '),
+        html.A('Github', target='_blank',
+               href='https://github.com/pinellolab/CRISPRme')
     ]
 )
 if __name__ == '__main__':
