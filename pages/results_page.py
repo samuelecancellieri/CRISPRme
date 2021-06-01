@@ -2890,7 +2890,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # print('personal df', ans)
     ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
         0, 23), skiprows=0, na_filter=False, nrows=5)
-    ans = pd.DataFrame(ans)
+    # ans = pd.DataFrame(ans)
     # ans = ans.astype(str)
     # print('persona df columns', ans.columns())
     # image for personal and private
@@ -2908,7 +2908,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
     #print(ans, 'table sample line 2792')
 
-    ans = ans[COL_BOTH]
+    # ans = ans[COL_BOTH]
 
     try:
         file_to_load = job_id + '.' + sample + '.' + guide + '.private.zip'
@@ -2917,7 +2917,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         #            'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
         #            'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
         #            'AF', 'Annotation_Type']]
-        ans = ans[COL_BOTH]
+        # ans = ans[COL_BOTH]
         # print('personal df', ans)
         # ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
         # ans_cols = ans.columns.tolist()
