@@ -14,10 +14,10 @@ app = dash.Dash('app', server=server)
 
 app.layout = html.Div(
     [
-        html.P('We are sorry, CRISPRme website is under maintenance, we will be back online as soon as possible.\nThanks for your patience.'),
-        html.P('In the meantime you can try CRISPRme offline version available on '),
-        html.A('Github', target='_blank',
-               href='https://github.com/pinellolab/CRISPRme')
+        html.P('We are sorry, CRISPRme website is under maintenance, we will be back online as soon as possible. Thanks for your patience.'),
+        html.Div([html.P('In the meantime you can try CRISPRme offline version available on '),
+                  html.A('Github', target='_blank',
+                         href='https://github.com/pinellolab/CRISPRme')])
     ]
 )
 if __name__ == '__main__':
