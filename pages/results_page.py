@@ -4006,6 +4006,9 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
                 # data_cols.remove(' ')
                 # data_cols.insert(0, ' ')
 
+            mask = data['Reference_1'] == 'NA'
+            data.loc[mask, 'DNA_1'] = data['Reference_1']
+            data.loc[mask, 'DNA_1'] = 'NA'
             snps = pd.DataFrame(data['SNP']).to_dict('records')
             data = data.to_dict('records')
             tooltip_data = [{
