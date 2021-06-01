@@ -50,7 +50,8 @@ for chunk in chunks:
     #chunk[chunk.columns.difference(['Not_found_in_REF'])] = chunk[chunk.columns.difference(['Not_found_in_REF'])].replace('n', 'NA')
     chunk = chunk.replace('n', 'NA')
     #chunk = chunk.replace(regex=['\*.,\*', '\*,.\*'], value='NA')
-    chunk['rsID'] = chunk['rsID'].str.replace('.', 'NA')
+    chunk['Highest_CFD_variant_rsID'] = chunk['Highest_CFD_variant_rsID'].str.replace(
+        '.', 'NA')
     mask = chunk['Highest_CFD_aligned_protospacer+PAM_REF'] == 'NA'
     chunk['Highest_CFD_aligned_protospacer+PAM_REF_corrected'] = np.where(
         mask, chunk['Highest_CFD_aligned_protospacer+PAM_ALT'], chunk['Highest_CFD_aligned_protospacer+PAM_REF'])
