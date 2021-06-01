@@ -1619,7 +1619,7 @@ def guidePagev3(job_id, hash):
               ' ' + guide_grep_result + " &")  # , shell = True)
     # global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
-    # #print('table', cols)
+    print('table', cols)
 
     final_list.append(
         html.Div(
@@ -1640,8 +1640,8 @@ def guidePagev3(job_id, hash):
                 filter_action='custom',
                 filter_query='',
                 style_table={
-                    'max-height': '600px'
-                    # 'overflowY': 'scroll',
+                    'max-height': '600px',
+                    'overflowX': 'scroll'
                 },
                 style_cell_conditional=[
                     {
