@@ -2891,7 +2891,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
         0, 23), skiprows=0, na_filter=False, nrows=5)
     ans = ans.astype(str)
-    # print('personal df', ans)
+    print('persona df columns', ans.colums())
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
