@@ -2115,6 +2115,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
 
     with open(file_to_grep, 'r') as ftg:
         header = ftg.readline().split('\t')[:24]
+        header = ftg.readline().split('\t')[:24]
     try:
         df = pd.read_csv(pos_grep_result, sep='\t',
                          header=None, usecols=range(0, 24), na_filter=False)
