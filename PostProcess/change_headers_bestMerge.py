@@ -19,7 +19,7 @@ out_path = sys.argv[2]
 
 chunksize_ = 5000000000000
 
-#if not isFileLocked(in_path):
+# if not isFileLocked(in_path):
 chunks = pd.read_csv(in_path, sep='\t', chunksize=chunksize_, na_filter=False)
 
 new_order = ['Real_Guide', 'Direction', 'Chromosome', 'Position', 'Cluster_Position', 'crRNA', 'Reference', 'DNA', 'Mismatches', 'Bulge_Size', 'Total',
@@ -35,11 +35,10 @@ to_remove = ['Real_Guide', 'Cluster_Position', 'Highest_CFD_Absolute_Risk_Score'
 
 new_names = ['Highest_CFD_Strand', 'Chromosome', 'Start_coordinate', 'Highest_CFD_aligned_spacer+PAM', 'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
              'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges', 'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
-             'Highest_CFD_risk_score', 'Not_found_in_REF', 'Variant_info_genome', 'MAF', 'rsID', 'Samples', 'Other_motifs', 'Fewest_mm+b_Strand', 'Fewest_mm+b_start_coordinate',
+             'Highest_CFD_risk_score', 'Not_found_in_REF', 'Variant_info_genome', 'Highest_CFD_variant_MAF', 'Highest_CFD_variant_rsID', 'Highest_CFD_variant_Samples', 'Other_motifs', 'Fewest_mm+b_Strand', 'Fewest_mm+b_start_coordinate',
              'Fewest_mm+b_aligned_spacer+PAM', 'Fewest_mm+b_aligned_protospacer+PAM_REF', 'Fewest_mm+b_aligned_protospacer+PAM_ALT', 'Fewest_mm+b_mismatches', 'Fewest_mm+b_bulges',
              'Fewest_mm+b_mismatches+bulges', 'Fewest_mm+b_bulge_type', 'Fewest_mm+b_PAM_gen', 'Fewest_mm+b_CFD_score', 'Fewest_mm+b_CFD_score_REF', 'Fewest_mm+b_CFD_risk_score',
-             'Fewest_mm+b_variant_info_genome', 'Fewest_mm+b_MAF', 'Fewest_mm+b_rsID', 'Fewest_mm+b_samples', 'GENCODE+ENCODE_annotations'
-             ]
+             'Fewest_mm+b_variant_info_genome', 'Fewest_mm+b_variant_MAF', 'Fewest_mm+b_variant_rsID', 'Fewest_mm+b_variant_samples', 'Annotation_ENCODE']
 
 
 header = True
