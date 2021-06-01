@@ -3996,10 +3996,10 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
 
                 data = data[sub_cols]
                 data.columns = [x[:-2] for x in sub_cols]
-                data[' '] = [' '] * data.shape[0]
+                # data[' '] = [' '] * data.shape[0]
                 data_cols = data.columns.tolist()
-                data_cols.remove(' ')
-                data_cols.insert(0, ' ')
+                # data_cols.remove(' ')
+                # data_cols.insert(0, ' ')
 
             snps = pd.DataFrame(data['SNP']).to_dict('records')
             data = data.to_dict('records')
