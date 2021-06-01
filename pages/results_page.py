@@ -1605,7 +1605,7 @@ def guidePagev3(job_id, hash):
         os.system('fgrep ' + guide + ' ' + file_to_grep + ' | fgrep ' +
                   bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' > ' + guide_grep_result)
         os.system(
-            f'cat header.txt {guide_grep_result} > {guide_grep_result}.tmp')
+            f'cat {job_directory}/header.txt {guide_grep_result} > {guide_grep_result}.tmp')
         os.system(
             f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result}.tmp {guide_grep_result}.tmp2')
         os.system(f'mv -f {guide_grep_result}.tmp2 {guide_grep_result}')
