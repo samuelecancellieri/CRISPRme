@@ -1167,7 +1167,7 @@ def global_store_general(path_file_to_load):
     if os.path.getsize(path_file_to_load) > 0:
         # df = pd.read_csv(path_file_to_load, sep='\t', header=None, skiprows=rows_to_skip, usecols=range(0, 16))
         df = pd.read_csv(path_file_to_load, sep='\t', header=None,
-                         skiprows=rows_to_skip, usecols=range(0, 50), na_filter=False)
+                         skiprows=rows_to_skip, usecols=range(0, 38), na_filter=False)
     else:
         df = None
     return df
@@ -1676,7 +1676,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
         return ''
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 50), skiprows=1, na_filter=False)
+                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
     # ##print('df dei target', df)
     return df
 
@@ -2122,7 +2122,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         # header = ftg.readline().split('\t')[:24]
     try:
         df = pd.read_csv(pos_grep_result, sep='\t',
-                         header=None, usecols=range(0, 50), skiprows=1, na_filter=False)
+                         header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
     except:
         df = pd.DataFrame(columns=header)
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
@@ -2846,7 +2846,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
     try:  # to read the private targets file, if not created, pass
         ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
-            0, 50), skiprows=0, na_filter=False, nrows=5)
+            0, 38), skiprows=0, na_filter=False, nrows=5)
     except:
         pass
 
@@ -3820,7 +3820,7 @@ def global_store(value):
             join(current_working_directory + 'Results/'+value, f)) and f.endswith('targets.txt')]
 
     df = pd.read_csv(current_working_directory + 'Results/' +
-                     value + '/' + target[0], sep='\t', usecols=range(0, 50), na_filter=False)
+                     value + '/' + target[0], sep='\t', usecols=range(0, 38), na_filter=False)
     df.rename(columns={"#Bulge type": 'BulgeType', '#Bulge_type': 'BulgeType', 'Bulge Size': 'BulgeSize',
                        'Bulge_Size': 'BulgeSize', 'Doench 2016': 'Doench2016', 'Doench_2016': 'Doench2016'}, inplace=True)
     return df
