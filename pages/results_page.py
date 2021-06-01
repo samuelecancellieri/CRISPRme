@@ -2779,7 +2779,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         personal = df.loc[int_sample, 4]
         pam_creation = df.loc[int_sample, 7]
 
-        file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
+        # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
         integrated_to_grep = job_directory+job_id + \
             '.bestMerge.txt.integrated_results.tsv'
         integrated_personal = job_directory + job_id + '.' + \
@@ -2843,11 +2843,13 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 targets = []
                 for line in file_in:
                     targets.append(line.strip().split('\t'))
-    try:
+
+    try:  # to read the private targets file, if not created, pass
         ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
             0, 23), skiprows=0, na_filter=False, nrows=5)
     except:
         pass
+
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
@@ -2857,31 +2859,10 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     except:
         sys.stderr.write('PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED')
 
-    # #print(ans, 'table sample line 2784')
-    # ans.columns(COL_BOTH_RENAME, inplace=True)
-    # #print(ans, 'table sample post rename line 2786')
-
-    #print(ans, 'table sample line 2792')
-
-    # ans = ans[COL_BOTH]
-
     try:
         file_to_load = job_id + '.' + sample + '.' + guide + '.private.zip'
-        print(file_to_load)
-        # ans = ans[['#Bulge_type', 'crRNA', 'DNA', 'Reference', 'Chromosome',
-        #            'Position', 'Direction', 'Mismatches',
-        #            'Bulge_Size', 'PAM_gen', 'Samples', 'SNP',
-        #            'CFD', 'CFD_ref', 'Highest_CFD_Risk_Score',
-        #            'AF', 'Annotation_Type']]
+        # print(file_to_load)
         ans = ans[COL_BOTH]
-        # print('personal df', ans)
-        # ans[''] = [''] * ans.shape[0]  # taaaaaaaaaac
-        # ans_cols = ans.columns.tolist()
-        # ans_cols.remove('Samples')
-        # ans_cols.append('Samples')
-        # ans_cols.remove('')
-        # # ans_cols.insert(0, '')
-        # ans = ans[ans_cols]
         out_1 = [
             html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
