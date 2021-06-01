@@ -2102,8 +2102,14 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     #     f'LC_ALL=C fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
     # if not os.path.exists(pos_grep_result):
     # os.system(f'touch {pos_grep_result}')
+    os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
     os.system(
         f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
+    os.system(
+        f'cat {job_directory}/header.txt {pos_grep_result} > {pos_grep_result}.tmp')
+    os.system(
+        f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {pos_grep_result}.tmp {pos_grep_result}.tmp2')
+    os.system(f'mv {pos_grep_result}.tmp2 {pos_grep_result}')
     # pos_grep_result_zip = pos_grep_result.replace('txt', 'zip')
     # os.system(f'zip -j {pos_grep_result_zip} {pos_grep_result}')
 
