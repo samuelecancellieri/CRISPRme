@@ -358,8 +358,11 @@ for nline, line in enumerate(inCrispritzResults):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
                     secondcomp += rev_comp(piece)
-                variantList[count] = ''.join(
-                    reversed(firstcomp))+str(int(var_pos[count])+correction)+''.join(reversed(secondcomp))
+                try:
+                    variantList[count] = ''.join(
+                        reversed(firstcomp))+str(int(var_pos[count])+correction)+''.join(reversed(secondcomp))
+                except:
+                    pass
     variantList_fewest_mm_b = variantList
 
     saveDict['Highest_CFD_Strand'] = str(x[7])
