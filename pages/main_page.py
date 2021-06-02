@@ -19,8 +19,6 @@ import random
 from datetime import datetime
 from app import current_working_directory, app_main_directory, DISPLAY_OFFLINE, DISPLAY_ONLINE, ONLINE, exeggutor
 
-error_in_seq_extract = False
-
 VALID_CHARS = {'a', 'A', 't', 'T', 'c', 'C', 'g', 'G',
                "R",
                "Y",
@@ -409,9 +407,9 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # len_guides = len(text_guides.split('\n')[0])
     len_guides = len_guide_sequence
 
-    if 'A'*len_guide_sequence in text_guides:
-        error_in_seq_extract = True
-        return '/index', ''
+    # if 'A'*len_guide_sequence in text_guides:
+    #     error_in_seq_extract = True
+    #     return '/index', ''
     #     error = dbc.Alert(
     #         "The input spacer(s) or sequence is not a valid input, please check your input and retry.", color="danger")
     #     visibility = {'display': 'true'}
@@ -1066,13 +1064,6 @@ def indexPage():
 
     final_list = list()
 
-    error_input_check = html.Div('', id='error-div', style={'display': 'none'})
-    if error_in_seq_extract:
-        error_input_check = html.Div(error=dbc.Alert(
-            "The input spacer(s) or sequence is not a valid input, please check your input and retry.", color="danger"))
-
-    # error_in_seq_extract = False
-
     introduction_content = html.Div(
         [
             html.Div('CRISPRme is a web application, also available offline or command-line for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:spacer mismatches and bulges, and is suitable for population and personal genome analyses.'),
@@ -1286,7 +1277,6 @@ def indexPage():
     )
     # insert introduction in the layout
     final_list.append(introduction_content)
-    final_list.append(error_input_check)
     final_list.append(
         html.Div(
             [
