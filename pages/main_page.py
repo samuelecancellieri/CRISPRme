@@ -1066,7 +1066,7 @@ def indexPage():
     final_list = []
 
     input_error_content = html.Div(
-        '', id='error-div', style={'display': 'none'})
+        'eeeeeh', id='error-div', style={'display': 'true'})
 
     introduction_content = html.Div(
         [
