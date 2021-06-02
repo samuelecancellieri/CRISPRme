@@ -226,7 +226,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             os.system(
                 f"cp {current_working_directory}/Annotations/gencode_encode.hg38.bed {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
             os.system(
-                f'awk \'$4 = $4\"_personal\"\' {current_working_directory}/Annotations/{annotation_input} > {current_working_directory}/Annotations/{annotation_input}.tmp')
+                f'awk \'$4 = $4\"_personal\"\' {current_working_directory}/Annotations/{annotation_input} | sed "s/ /\t/g" > {current_working_directory}/Annotations/{annotation_input}.tmp')
             os.system(
                 f'mv {current_working_directory}/Annotations/{annotation_input}.tmp {current_working_directory}/Annotations/{annotation_input}')
             os.system(
