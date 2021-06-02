@@ -411,6 +411,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
 
     if 'A'*len_guide_sequence in text_guides:
         error_in_seq_extract = True
+        return '/index', ''
     #     error = dbc.Alert(
     #         "The input spacer(s) or sequence is not a valid input, please check your input and retry.", color="danger")
     #     visibility = {'display': 'true'}
