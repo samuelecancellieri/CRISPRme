@@ -202,9 +202,9 @@ for count, line in enumerate(inEmpiricalResults):
     empList = [elem.strip() for elem in empList]
     empList.append(count)
     # adding empirical data to the tree
-    empiricalTree[int(empList[2]):int(empList[3])] = empList
+    empiricalTree[int(empList[1]):int(empList[2])] = empList
     # generate temp empirical dict to save empirical information per row
-    empiricalDict[str(empList[5])] = 50
+    empiricalDict[str(empList[4])] = 50
     # value of empirical row, keeping info about mm+bul for each empirical origin (seq data, in-silico, vitro, ecc)
     valueDict[str(empList[5])] = 'NA'
     # update save dict with user-defined names from empirical data
@@ -518,22 +518,36 @@ for nline, line in enumerate(inCrispritzResults):
         else:
             saveDict['Fewest_mm+b_PAM'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'][-count_N_in_guide:]
 
+    annotationList = x[14].split(',')
+    personal_annotations = list()
+    encode_annotations = list()
+    for elem in annotationList:
+        if '_personal' not in elem:
+            encode_annotations.append(elem)
+        else:
+            personal_annotations.append(elem)
+
+    if len(personal_annotations) > 0:
+        saveDict['Annotation_personal'] = ','.join(personal_annotations)
+    if len(encode_annotations) > 0:
+        saveDict['Annotation_ENCODE'] = ','.join(encode_annotations)
+
     foundEmpirical = sorted(empiricalTree[int(x[6])-4:int(x[6])+4])
 
     for found in range(0, len(foundEmpirical)):
         empirical = foundEmpirical[found].data
         if str(saveDict['chr']) == str(empirical[0]):
             empiricalList.append(empirical[7])
-            valueDict[str(empirical[5])] = empirical[6]
-            empiricalDict[str(empirical[5])] = int(empirical[4])
+            valueDict[str(empirical[4])] = empirical[5]
+            empiricalDict[str(empirical[4])] = int(empirical[3])
 
     for key in empiricalDict:
         if int(empiricalDict[key]) < 50:
             saveDict[key] = str(valueDict[key])
             newkey = str(key)+'_mm+bul'
             saveDict[newkey] = empiricalDict[key]
-            if int(empiricalDict[key]) < lowestEmpirical:
-                saveDict['lowest_empirical'] = str(empiricalDict[key])
+            # if int(empiricalDict[key]) < lowestEmpirical:
+            # saveDict['lowest_empirical'] = str(empiricalDict[key])
 
     save = ''
     for key in saveDict:
