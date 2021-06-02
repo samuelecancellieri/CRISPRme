@@ -98,7 +98,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         split = str(elem).strip().split(';')
         new_name = str()
         for piece in split:
-            new_name += str(split[piece])+'\n'
+            new_name += str(piece)+'\n'
         categories_names.append(new_name.strip())
     # categories = new_categories
     print('new_categories', categories_names)
