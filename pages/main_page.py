@@ -643,6 +643,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
      Input('close', 'n_clicks')],
     [State('available-genome', 'value'),
      State('available-pam', 'value'),
+     State('radio-guide', 'value'),
      State('text-guides', 'value'),
      State('mms', 'value'),
      State('dna', 'value'),
@@ -650,7 +651,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
      State("modal", "is_open")]
 )
 # len_guide_seq, active_tab ,
-def checkInput(n, n_close, genome_selected, pam, text_guides, mms, dna, rna, is_open):
+def checkInput(n, n_close, genome_selected, pam, guide_type, text_guides, mms, dna, rna, is_open):
     '''
     Checks the presence and correctness of the input fields, changing their border to red if it's missing and displaying a Modal element with
     a list of the missing inputs. The callback is triggered when the user clicks on the 'Submit' button or when the modal is closed
@@ -718,6 +719,9 @@ def checkInput(n, n_close, genome_selected, pam, text_guides, mms, dna, rna, is_
         genome_update = classname_red
         update_style = True
         miss_input_list.append('Genome')
+    if genome_selected is None or genome_selected == '':
+        genome_selected = 'hg38_ref'
+    genome_ref = genome_selected
     if pam is None or pam == '':
         pam_update = classname_red
         update_style = True
@@ -742,6 +746,109 @@ def checkInput(n, n_close, genome_selected, pam, text_guides, mms, dna, rna, is_
     #    len_guide_update = classname_red
     #    update_style = True
     #    miss_input_list.append('gRNA length')
+    if pam is None or pam == '':
+        pam = '20bp-NGG-SpCas9'
+        len_guide_sequence = 20
+    else:
+        for elem in pam.split('-'):
+            if 'bp' in elem:
+                len_guide_sequence = int(elem.replace('bp', ''))
+
+    no_guides = False
+    if text_guides is None or text_guides == '':
+        text_guides = 'A'*len_guide_sequence
+        no_guides = True
+        # text_guides = 'GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC'
+    elif guide_type != 'GS':
+        text_guides = text_guides.strip()
+        if (not all(len(elem) == len(text_guides.split('\n')[0]) for elem in text_guides.split('\n'))):
+            text_guides = selectSameLenGuides(text_guides)
+
+    pam_len = 0
+    with open(current_working_directory + 'PAMs/' + pam + '.txt') as pam_file:
+        pam_char = pam_file.readline()
+        index_pam_value = pam_char.split(' ')[-1]
+        if int(pam_char.split(' ')[-1]) < 0:
+            end_idx = int(pam_char.split(' ')[-1]) * (-1)
+            pam_char = pam_char.split(' ')[0][0: end_idx]
+            pam_len = end_idx
+            pam_begin = True
+        else:
+            end_idx = int(pam_char.split(' ')[-1])
+            pam_char = pam_char.split(' ')[0][end_idx * (-1):]
+            pam_len = end_idx
+            pam_begin = False
+
+    if guide_type == 'GS':
+        text_sequence = text_guides
+        # print(text_sequence)
+        # exit()
+        # Extract sequence and create the guides
+        guides = []
+        # extracted_seqs = list()
+        # for lines in text_sequence:
+        #     print('linea', lines)
+        for name_and_seq in text_sequence.split('>'):
+            if '' == name_and_seq:
+                continue
+            name = name_and_seq[:name_and_seq.find('\n')]
+            seq = name_and_seq[name_and_seq.find('\n'):]
+            # seq = seq.strip().split()
+            # seq = ''.join(seq)
+            seq = seq.strip()
+            # name, seq = name_and_seq.strip().split('\n')
+            if 'chr' in seq:
+                # extracted_seq = extract_seq.extractSequence(
+                #         name, seq, genome_ref.replace(' ', '_'))
+                for single_row in seq.split('\n'):
+                    if '' == single_row:
+                        continue
+                    pieces_of_row = single_row.strip().split()
+                    seq_to_extract = pieces_of_row[0]+":" + \
+                        pieces_of_row[1]+"-"+pieces_of_row[2]
+                    extracted_seq = extract_seq.extractSequence(
+                        name, seq_to_extract, genome_ref.replace(' ', '_'))
+                    guides.extend(convert_pam.getGuides(
+                        extracted_seq, pam_char, len_guide_sequence, pam_begin))
+            else:
+                seq = seq.split()
+                seq = ''.join(seq)
+                extracted_seq = seq.strip()
+                guides.extend(convert_pam.getGuides(
+                    extracted_seq, pam_char, len_guide_sequence, pam_begin))
+            # print('extracted seq', extracted_seq)
+            # guides.extend(convert_pam.getGuides(
+            #     extracted_seq, pam_char, len_guide_sequence, pam_begin))
+        guides = list(set(guides))
+        if not guides:
+            guides = 'A'*len_guide_sequence
+            no_guides = True
+        text_guides = '\n'.join(guides).strip()
+    # print(text_guides, 'and', guides, 'and', pam_char)
+    # exit()
+    text_guides = text_guides.upper()
+    new_test_guides = list()
+    for guide in text_guides.split('\n'):
+        if len(guide) == len_guide_sequence:
+            new_test_guides.append(guide)
+    if not new_test_guides:
+        new_test_guides.append('A'*len_guide_sequence)
+        no_guides = True
+    text_guides = '\n'.join(new_test_guides)
+    for g in text_guides.split('\n'):
+        for c in g:
+            if c not in VALID_CHARS:
+                text_guides = text_guides.replace(c, '')
+    if len(text_guides.split('\n')) > 100:  # set limit to 100 guides per run in the website
+        text_guides = '\n'.join(text_guides.split('\n')[:100]).strip()
+    # len_guides = len(text_guides.split('\n')[0])
+    len_guides = len_guide_sequence
+
+    if no_guides:
+        text_update = {'width': '300px', 'height': '30px', 'border':'1px solid red'}
+        update_style = True
+        miss_input_list.append('Input at least one correct guide')
+
     miss_input = html.Div(
         [
             html.P('The following inputs are missing:'),
