@@ -178,7 +178,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     table.set_fontsize(fontsize)
     # table.scale(1, 2)
     cellDict = table.get_celld()
-    print(cellDict)
+    # print(cellDict)
     for count in range(11):
         cellDict[(count, -1)].set_height(0.15)
     for i in range(1, -1, -1):
