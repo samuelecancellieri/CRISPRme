@@ -243,6 +243,7 @@ for nline, line in enumerate(inCrispritzResults):
         valueDict[key] = 'NA'
 
     if 'NA' not in annotationLine and check == 'TRUE':
+        print(annotationLine.split())
         for elem in annotationLine:
             if 'gene_id' in elem:
                 temp = elem.strip().split(';')

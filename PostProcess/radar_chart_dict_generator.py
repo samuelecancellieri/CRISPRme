@@ -458,7 +458,8 @@ populationDict = dict()
 
 # read all the annotations
 for line in inAnnotationsFile:
-    for elem in line.strip().split('\t')[3].strip().split(','):
+    # for elem in line.strip().split('\t')[3].strip().split(','):
+    for elem in line.strip().split('\t')[3]:  # split entire annotation name
         if '_personal' not in elem:
             annotationsSet.add(elem)
 annotationsSet = sorted(annotationsSet)
