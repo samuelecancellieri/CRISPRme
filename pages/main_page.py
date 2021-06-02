@@ -226,7 +226,11 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             os.system(
                 f"cp {current_working_directory}/Annotations/gencode_encode.hg38.bed {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
             os.system(
-                f"tail -n +2 {current_working_directory}/Annotations/{annotation_input} >> {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
+                f'awk \'$4 = $4\"_personal\"\' {current_working_directory}/Annotations/{annotation_input} > {current_working_directory}/Annotations/{annotation_input}.tmp')
+            os.system(
+                f'mv {current_working_directory}/Annotations/{annotation_input}.tmp {current_working_directory}/Annotations/{annotation_input}')
+            os.system(
+                f"tail -n +1 {current_working_directory}/Annotations/{annotation_input} >> {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
             os.system(
                 f"mv {current_working_directory}/Annotations/ann_tmp_{job_id}.bed {current_working_directory}/Annotations/{annotation_name}")
     elif 'MA' in annotation_var:
