@@ -172,10 +172,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             if 'bp' in elem:
                 len_guide_sequence = int(elem.replace('bp', ''))
     if text_guides is None or text_guides == '':
-        random_guide = [random.choice('ACGT')
-                        for _ in range(len_guide_sequence)]
-        # text_guides = 'A'*len_guide_sequence
-        text_guides = ''.join(random_guide)
+        text_guides = 'A'*len_guide_sequence
         # text_guides = 'GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC'
     elif guide_type != 'GS':
         text_guides = text_guides.strip()
