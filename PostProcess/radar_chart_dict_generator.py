@@ -460,7 +460,7 @@ populationDict = dict()
 for line in inAnnotationsFile:
     annotation = line.strip().split('\t')[3]
     if '_personal' not in annotation:
-        annotationsSet.add(annotation[:12])
+        annotationsSet.add(annotation)
 
 annotationsSet = sorted(annotationsSet)
 
