@@ -64,7 +64,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         return
 
     titlesize = 18
-    fontsize = 17
+    fontsize = 15
 
     percentage_list = []
     for elem in guideDict:
@@ -160,7 +160,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                       loc='best', colWidths=[0.25, 0.30])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
-    table.scale(1, 2.2)
+    table.scale(1, 2)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
