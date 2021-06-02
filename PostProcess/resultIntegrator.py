@@ -526,8 +526,11 @@ for nline, line in enumerate(inCrispritzResults):
             encode_annotations.append(elem)
         else:
             personal_annotations.append(elem)
-    saveDict['Annotation_ENCODE'] = ','.join(encode_annotations)
-    saveDict['Annotation_personal'] = ','.join(personal_annotations)
+
+    if len(personal_annotations) > 0:
+        saveDict['Annotation_personal'] = ','.join(personal_annotations)
+    if len(encode_annotations) > 0:
+        saveDict['Annotation_ENCODE'] = ','.join(encode_annotations)
 
     foundEmpirical = sorted(empiricalTree[int(x[6])-4:int(x[6])+4])
 
