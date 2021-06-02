@@ -24,7 +24,8 @@ from os import listdir
      Output('database-status', 'children'),
      Output('integrate-status', 'children'),
      Output('view-results', 'href'),
-     Output('no-directory-error', 'children')],
+     Output('no-directory-error', 'children'),
+     Output('button-remove-result', 'hidden')],
     [Input('load-page-check', 'n_intervals')],
     [State('url', 'search')]
 )
@@ -237,13 +238,33 @@ def refreshSearch(n, dir_name):
                 else:
                     return {'visibility':'hidden'},  search_status, report_status, post_process_status,'', ''
                 '''
+                if os.path.isfile(f"{current_job_dir}/log_error.txt") and os.path.getsize(f"{current_job_dir}/log_error.txt") > 0:
+                    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),html.P('Not available', style={'color': 'red'}),'', dbc.Alert("The selected result encountered some errors, please remove it and try to submit again.", color="danger"), False
                 if all_done == 7 or 'Job\tDone' in current_log:
-                    return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, URL+'/result?job=' + dir_name.split('=')[-1], ''
+                    return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, URL+'/result?job=' + dir_name.split('=')[-1], '', True
                 else:
-                    return {'visibility': 'hidden'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, '', ''
+                    return {'visibility': 'hidden'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, '', '', True
         elif 'queue.txt' in onlyfile:
-            return {'visibility': 'hidden'}, html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),'', dbc.Alert("Job submitted. Current status: in queue", color="info")
-    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),html.P('Not available', style={'color': 'red'}),'', dbc.Alert("The selected result does not exist", color="danger")
+            return {'visibility': 'hidden'}, html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),'', dbc.Alert("Job submitted. Current status: in queue", color="info"), True
+    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),html.P('Not available', style={'color': 'red'}),'', dbc.Alert("The selected result does not exist", color="danger"), True
+
+
+@app.callback(
+    Output('result-deleted', 'children'),
+    [Input('button-remove-result', 'n_clicks')],
+    [State('url', 'search')]
+)
+def removeResult(n, dir_name):
+    if n == 0:
+        raise PreventUpdate
+    if n == 1:
+        current_job_dir = current_working_directory + \
+            'Results/' + dir_name.split('=')[-1]
+        os.system(f'rm -rf {current_job_dir}')
+        return html.P('Result deleted')
+    return None
+
+
 
 # Load Page
 
@@ -325,7 +346,9 @@ def load_page():
                     [
                         dcc.Link('View Results', style={
                                  'visibility': 'hidden'}, id='view-results', href=URL),
-                        html.Div(id='no-directory-error')
+                        html.Div(id='no-directory-error'),
+                        html.Div([html.Button('Remove result', id='button-remove-result', n_clicks=0, hidden=True)]),
+                        html.Div(id='result-deleted')
                     ]
                 )
             ],
