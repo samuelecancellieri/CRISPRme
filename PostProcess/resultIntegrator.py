@@ -233,7 +233,7 @@ for nline, line in enumerate(inCrispritzResults):
         annotationLine = inAnnotationFile.readline().strip().split('\t')
     except:
         annotationFile = 'NA'
-    print(annotationLine)
+    # print(annotationLine)
     lowestEmpirical = 100
 
     for key in saveDict:
@@ -254,18 +254,19 @@ for nline, line in enumerate(inCrispritzResults):
                     if 'gene_name' in name:
                         saveDict['Annotation_closest_gene_name'] = name.strip().split('=')[
                             1]
-                    if 'gene_type' in name:
-                        tipo = str(annotationLine[11])
-                        if 'codon' in tipo or 'exon' in tipo:
-                            tipo = 'CDS'
-                        elif 'gene' in tipo or 'transcript' in tipo:
-                            tipo = 'intron'
-                        elif 'five_prime_UTR' in tipo:
-                            tipo = "5'UTR"
-                        elif 'three_prime_UTR' in tipo:
-                            tipo = "3'UTR"
+                    # if 'gene_type' in name:
+                    #     tipo = str(annotationLine[11])
+                    #     if 'codon' in tipo or 'exon' in tipo:
+                    #         tipo = 'CDS'
+                    #     elif 'gene' in tipo or 'transcript' in tipo:
+                    #         tipo = 'intron'
+                    #     elif 'five_prime_UTR' in tipo:
+                    #         tipo = "5'UTR"
+                    #     elif 'three_prime_UTR' in tipo:
+                    #         tipo = "3'UTR"
                     # saveDict['gene_annotation'] = str(annotationLine[11])
-                        saveDict['Annotation_GENCODE'] = tipo
+                        saveDict['Annotation_GENCODE'] = str(
+                            annotationLine[11])
         saveDict['Annotation_closest_gene_distance_(kb)'] = str(
             float(annotationLine[len(annotationLine)-1])/1000)
         if float(annotationLine[len(annotationLine)-1]) != 0:
