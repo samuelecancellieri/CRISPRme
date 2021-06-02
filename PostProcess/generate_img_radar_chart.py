@@ -5,6 +5,7 @@ from operator import itemgetter
 from os.path import isfile, join
 from os import listdir
 import os
+from posixpath import split
 import warnings
 import glob
 from itertools import islice
@@ -94,7 +95,11 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     categories = list(guideDataFrame)[0:]
     categories_names = list()
     for elem in categories:
-        categories_names.append(elem[:12])
+        split = str(elem).strip().split(';')
+        new_name = str()
+        for piece in split:
+            new_name += str(split[piece])+'\n'
+        categories_names.append(new_name.strip())
     # categories = new_categories
     # print('categories', categories)
     N = len(categories)
