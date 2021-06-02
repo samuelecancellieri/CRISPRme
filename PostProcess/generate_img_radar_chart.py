@@ -172,19 +172,22 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # print('transpose_list', transpose_list)
 
     plt.axis('off')
-    table = plt.table(cellText=transpose_list, rowLabels=categories_names, colLabels=['Total', 'Percentage'],
+    categories_table_names = list()
+    for elem in categories:
+        categories_table_names.append(str(elem)[:15])
+    table = plt.table(cellText=transpose_list, rowLabels=categories_table_names, colLabels=['Total', 'Percentage'],
                       loc='best', colWidths=[0.25, 0.35])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
-    # table.scale(1, 1.1)
-    cellDict = table.get_celld()
-    # # # print(cellDict)
-    for count in range(1, 10, 1):
-        cellDict[(count, -1)].set_height(0.2)
-    for i in range(1, -1, -1):
-        cellDict[(0, i)].set_height(0.1)
-        for j in range(0, len(categories_names)+1):
-            cellDict[(j, i)].set_height(0.2)
+    table.scale(1, 1.5)
+    # cellDict = table.get_celld()
+    # # # # print(cellDict)
+    # for count in range(1, 10, 1):
+    #     cellDict[(count, -1)].set_height(0.2)
+    # for i in range(1, -1, -1):
+    #     cellDict[(0, i)].set_height(0.1)
+    #     for j in range(0, len(categories_names)+1):
+    #         cellDict[(j, i)].set_height(0.2)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
@@ -242,7 +245,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.suptitle(str(mismatch)+" Mismatches + "+str(bulge)+" Bulge "+str(source),
                  horizontalalignment='center', color='black', size=titlesize)
 
-    plt.tight_layout(pad=1.0)
+    plt.tight_layout()
     # plt.subplots_adjust(wspace=0.1)
     # figure.tight_layout(pad=3.0)
 
