@@ -93,6 +93,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # print('dopo', guideDataFrame)
     # number of variable
     categories = list(guideDataFrame)[0:]
+    categories.sort(key=len)
     categories_names = list()
     for elem in categories:
         split = str(elem).strip().split(';')
@@ -172,7 +173,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                       loc='best', colWidths=[0.25, 0.30])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
-    table.scale(1, 1.5)
+    table.scale(1, 2)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
