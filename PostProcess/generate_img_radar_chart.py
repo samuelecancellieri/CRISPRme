@@ -245,7 +245,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.suptitle(str(mismatch)+" Mismatches + "+str(bulge)+" Bulge "+str(source),
                  horizontalalignment='center', color='black', size=titlesize)
 
-    plt.tight_layout(pad=2.0)
+    plt.tight_layout()
     # plt.subplots_adjust(wspace=0.1)
     # figure.tight_layout(pad=3.0)
 
