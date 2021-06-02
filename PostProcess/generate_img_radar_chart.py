@@ -92,10 +92,10 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # print('dopo', guideDataFrame)
     # number of variable
     categories = list(guideDataFrame)[0:]
-    new_categories = list()
+    categories_names = list()
     for elem in categories:
-        new_categories.append(elem[:12])
-    categories = new_categories
+        categories_names.append(elem[:12])
+    # categories = new_categories
     # print('categories', categories)
     N = len(categories)
 
@@ -122,7 +122,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             label.set_horizontalalignment("right")
 
     # Draw one axe per variable + add labels labels yet
-    plt.xticks(angles[:-1], categories, color='black', size=fontsize)
+    # plt.xticks(angles[:-1], categories, color='black', size=fontsize)
+    plt.xticks(angles[:-1], categories_names, color='black', size=fontsize)
 
     # Draw ylabels
     # # # Draw ylabels
@@ -162,7 +163,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # print('transpose_list', transpose_list)
 
     plt.axis('off')
-    table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
+    table = plt.table(cellText=transpose_list, rowLabels=categories_names, colLabels=['Total', 'Percentage'],
                       loc='best', colWidths=[0.25, 0.30])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
