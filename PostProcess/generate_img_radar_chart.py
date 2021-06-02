@@ -101,7 +101,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             new_name += str(split[piece])+'\n'
         categories_names.append(new_name.strip())
     # categories = new_categories
-    # print('categories', categories)
+    print('new_categories', new_categories)
     N = len(categories)
 
     # We are going to plot the first line of the data frame.
