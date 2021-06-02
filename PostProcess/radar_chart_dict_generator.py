@@ -290,7 +290,8 @@ def fillDict(guide, guideDict, motifDict):
         if split[14] != 'n':
             annotationsList = split[14].strip().split(',')
             for annotation in annotationsList:
-                guideDict[mismatch][bulge]['TOTAL'][annotation] += 1
+                if '_personal' not in annotation:
+                    guideDict[mismatch][bulge]['TOTAL'][annotation] += 1
         # find motif in X and RNA/DNA targets
         if 'DNA' not in split[0]:
             for count, nucleotide in enumerate(alignedSequence):
@@ -370,7 +371,8 @@ def fillDict(guide, guideDict, motifDict):
                     if split[14] != 'n':
                         annotationsList = split[14].strip().split(',')
                         for annotation in annotationsList:
-                            guideDict[mismatch][bulge][superpop][annotation] += 1
+                            if '_personal' not in annotation:
+                                guideDict[mismatch][bulge][superpop][annotation] += 1
                 if pop not in alreadySampled:  # check if pop is already been updated for the current target to avoid duplicate count
                     alreadySampled.add(pop)
                     guideDict[mismatch][bulge][pop]['General'] += 1
@@ -410,7 +412,8 @@ def fillDict(guide, guideDict, motifDict):
                     if split[14] != 'n':
                         annotationsList = split[14].strip().split(',')
                         for annotation in annotationsList:
-                            guideDict[mismatch][bulge][pop][annotation] += 1
+                            if '_personal' not in annotation:
+                                guideDict[mismatch][bulge][pop][annotation] += 1
                 # add target to single sample, in this case duplicate are allowed
                 guideDict[mismatch][bulge][sample]['General'] += 1
                 # find motif in X and RNA/DNA targets
@@ -449,7 +452,8 @@ def fillDict(guide, guideDict, motifDict):
                 if split[14] != 'n':
                     annotationsList = split[14].strip().split(',')
                     for annotation in annotationsList:
-                        guideDict[mismatch][bulge][sample][annotation] += 1
+                        if '_personal' not in annotation:
+                            guideDict[mismatch][bulge][sample][annotation] += 1
 
 
 # data containing populations and annotations

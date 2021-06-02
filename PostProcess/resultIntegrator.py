@@ -518,6 +518,17 @@ for nline, line in enumerate(inCrispritzResults):
         else:
             saveDict['Fewest_mm+b_PAM'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'][-count_N_in_guide:]
 
+    annotationList = x[14].split(',')
+    personal_annotations = list()
+    encode_annotations = list()
+    for elem in annotationList:
+        if '_personal' not in elem:
+            encode_annotations.append(elem)
+        else:
+            personal_annotations.append(elem)
+    saveDict['Annotation_ENCODE'] = ','.join(encode_annotations)
+    saveDict['Annotation_personal'] = ','.join(personal_annotations)
+
     foundEmpirical = sorted(empiricalTree[int(x[6])-4:int(x[6])+4])
 
     for found in range(0, len(foundEmpirical)):
@@ -532,8 +543,8 @@ for nline, line in enumerate(inCrispritzResults):
             saveDict[key] = str(valueDict[key])
             newkey = str(key)+'_mm+bul'
             saveDict[newkey] = empiricalDict[key]
-            if int(empiricalDict[key]) < lowestEmpirical:
-                saveDict['lowest_empirical'] = str(empiricalDict[key])
+            # if int(empiricalDict[key]) < lowestEmpirical:
+            # saveDict['lowest_empirical'] = str(empiricalDict[key])
 
     save = ''
     for key in saveDict:
