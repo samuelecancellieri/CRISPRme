@@ -266,4 +266,4 @@ if __name__ == '__main__':
         generatePlot(guide, guideDict[mismatch][bulge][elem],
                      motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
     except:
-    sys.exit()
+        sys.exit()
