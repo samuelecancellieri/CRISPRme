@@ -173,15 +173,15 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     plt.axis('off')
     table = plt.table(cellText=transpose_list, rowLabels=categories_names, colLabels=['Total', 'Percentage'],
-                      loc='best', colWidths=[0.25, 0.30])
+                      loc='best', colWidths=[0.25, 0.35])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
     # table.scale(1, 2)
     cellDict = table.get_celld()
-    for i in range(2):
-        cellDict[(0, i)].set_height(0.2)
+    for i in range(3):
+        cellDict[(0, i)].set_height(0.1)
         for j in range(0, len(categories_names)+1):
-            cellDict[(j, i)].set_height(0.3)
+            cellDict[(j, i)].set_height(0.15)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
@@ -255,8 +255,8 @@ if __name__ == '__main__':
     # skip creation if no target in global category
     if guideDict[mismatch][bulge]['TOTAL']['General'] == 0:
         sys.exit()
-    # try:
-    generatePlot(guide, guideDict[mismatch][bulge][elem],
-                 motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
-    # except:
-    #     sys.exit()
+    try:
+        generatePlot(guide, guideDict[mismatch][bulge][elem],
+                     motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
+    except:
+        sys.exit()
