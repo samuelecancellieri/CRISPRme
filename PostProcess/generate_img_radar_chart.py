@@ -176,7 +176,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                       loc='best', colWidths=[0.25, 0.35])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
-    # table.scale(1, 2)
+    table.scale(1, 2)
     # cellDict = table.get_celld()
     # # print(cellDict)
     # for count in range(1, 11, 1):
