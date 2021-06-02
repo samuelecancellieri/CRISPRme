@@ -105,7 +105,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             new_name += str(piece)+'\n'
         categories_names.append(new_name.strip())
     # categories = new_categories
-    print('new_categories', categories_names)
+    # print('new_categories', categories_names)
     N = len(categories)
 
     # We are going to plot the first line of the data frame.
@@ -132,7 +132,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     # Draw one axe per variable + add labels labels yet
     # plt.xticks(angles[:-1], categories, color='black', size=fontsize)
-    plt.xticks(angles[:-1], categories_names, color='black', size=fontsize)
+    plt.xticks(angles[:-1], categories_names, color='black', size=fontsize-1)
 
     # Draw ylabels
     # # # Draw ylabels
@@ -179,9 +179,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # table.scale(1, 2)
     cellDict = table.get_celld()
     for i in range(2):
-        cellDict[(0, i)].set_height(.3)
+        cellDict[(0, i)].set_height(0.3)
     for j in range(1, len(categories_names)+1):
-        cellDict[(j, i)].set_height(.2)
+        cellDict[(j, i)].set_height(0.5)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
