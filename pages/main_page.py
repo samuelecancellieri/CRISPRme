@@ -10,7 +10,7 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_table
 from os.path import isfile, isdir, join  # for getting directories
-from os import listdir  # for getting directories
+from os import error, listdir  # for getting directories
 import os
 import subprocess
 import string
@@ -54,8 +54,9 @@ av_mismatches = [{'label': i, 'value': i} for i in range(0, set_max_mms)]
 av_bulges = [{'label': i, 'value': i} for i in range(0, set_max_bulges)]
 av_guide_sequence = [{'label': i, 'value': i} for i in range(15, 26)]
 
-
 # For filtering
+
+
 def split_filter_part(filter_part):
     '''
     Preso dal sito di dash sul filtering datatables con python
@@ -225,7 +226,11 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             os.system(
                 f"cp {current_working_directory}/Annotations/gencode_encode.hg38.bed {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
             os.system(
-                f"tail -n +2 {current_working_directory}/Annotations/{annotation_input} >> {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
+                f'awk \'$4 = $4\"_personal\"\' {current_working_directory}/Annotations/{annotation_input} > {current_working_directory}/Annotations/{annotation_input}.tmp')
+            os.system(
+                f'mv {current_working_directory}/Annotations/{annotation_input}.tmp {current_working_directory}/Annotations/{annotation_input}')
+            os.system(
+                f"tail -n +1 {current_working_directory}/Annotations/{annotation_input} >> {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
             os.system(
                 f"mv {current_working_directory}/Annotations/ann_tmp_{job_id}.bed {current_working_directory}/Annotations/{annotation_name}")
     elif 'MA' in annotation_var:
@@ -405,6 +410,14 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         text_guides = '\n'.join(text_guides.split('\n')[:1000000000]).strip()
     # len_guides = len(text_guides.split('\n')[0])
     len_guides = len_guide_sequence
+
+    # if 'A'*len_guide_sequence in text_guides:
+    #     error_in_seq_extract = True
+    #     return '/index', ''
+    #     error = dbc.Alert(
+    #         "The input spacer(s) or sequence is not a valid input, please check your input and retry.", color="danger")
+    #     visibility = {'display': 'true'}
+    #     return '/index', '', error, visibility
 
     # Adjust guides by adding Ns to make compatible with Crispritz
     if (pam_begin):
@@ -1053,7 +1066,7 @@ def indexPage():
     + **index_page** (*list*): list of html, dcc and dbc components for the layout.
     '''
 
-    final_list = []
+    final_list = list()
 
     introduction_content = html.Div(
         [

@@ -319,7 +319,7 @@ def resultPage(job_id):
                     style_table={
                         # 'margin-left': "10%",
                         'max-height': '260px',
-                        'overflowY': 'auto',
+                        'overflowY': 'scroll',
                         # 'overflowX': 'hidden',
                     },
                     style_data={
@@ -930,8 +930,8 @@ def clusterPage(job_id, hash):
                 filter_action='custom',
                 filter_query='',
                 style_table={
-                    'max-height': '600px'
-                    # 'overflowY': 'scroll',
+                    'max-height': '600px',
+                    'overflowY': 'scroll',
                 },
                 # style_data_conditional=[
                 #     {
@@ -1131,8 +1131,8 @@ def samplePage(job_id, hash):
                 filter_action='custom',
                 filter_query='',
                 style_table={
-                    'max-height': '600px'
-                    # 'overflowY': 'scroll',
+                    'max-height': '600px',
+                    'overflowY': 'scroll',
                 },
                 # style_data_conditional=[
                 #     {
