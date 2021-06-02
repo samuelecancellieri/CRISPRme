@@ -463,6 +463,7 @@ for line in inAnnotationsFile:
         if '_personal' not in elem:
             annotationsSet.add(elem)
 annotationsSet = sorted(annotationsSet)
+print(annotationsSet)
 
 # read all the population, superpop and samples
 for line in inSamplesIDFile:
