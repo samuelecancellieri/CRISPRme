@@ -458,15 +458,11 @@ populationDict = dict()
 
 # read all the annotations
 for line in inAnnotationsFile:
-    # for elem in line.strip().split('\t')[3].strip().split(','):
-    # print('line annot', line)
     annotation = line.strip().split('\t')[3]
-    # print('annotation', annotation)
     if '_personal' not in annotation:
         annotationsSet.add(annotation)
-annotationsSet.add('NA')
+
 annotationsSet = sorted(annotationsSet)
-# print('annotset', annotationsSet)
 
 # read all the population, superpop and samples
 for line in inSamplesIDFile:
