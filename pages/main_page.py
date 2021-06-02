@@ -10,7 +10,7 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_table
 from os.path import isfile, isdir, join  # for getting directories
-from os import listdir  # for getting directories
+from os import error, listdir  # for getting directories
 import os
 import subprocess
 import string
@@ -18,6 +18,8 @@ import glob
 import random
 from datetime import datetime
 from app import current_working_directory, app_main_directory, DISPLAY_OFFLINE, DISPLAY_ONLINE, ONLINE, exeggutor
+
+error_in_seq_extract = False
 
 VALID_CHARS = {'a', 'A', 't', 'T', 'c', 'C', 'g', 'G',
                "R",
@@ -54,8 +56,9 @@ av_mismatches = [{'label': i, 'value': i} for i in range(0, set_max_mms)]
 av_bulges = [{'label': i, 'value': i} for i in range(0, set_max_bulges)]
 av_guide_sequence = [{'label': i, 'value': i} for i in range(15, 26)]
 
-
 # For filtering
+
+
 def split_filter_part(filter_part):
     '''
     Preso dal sito di dash sul filtering datatables con python
@@ -86,9 +89,7 @@ def split_filter_part(filter_part):
 # Submit Job, change url
 @app.callback(
     [Output('url', 'pathname'),
-     Output('url', 'search'),
-     Output('error-div', 'children'),
-     Output('error-div', 'style')],
+     Output('url', 'search')],
     [Input('submit-job', 'n_clicks')],
     [State('url', 'href'),
      State('available-cas', 'value'),
@@ -409,10 +410,11 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     len_guides = len_guide_sequence
 
     if 'A'*len_guide_sequence in text_guides:
-        error = dbc.Alert(
-            "The input spacer(s) or sequence is not a valid input, please check your input and retry.", color="danger")
-        visibility = {'display': 'true'}
-        return '/index', '', error, visibility
+        error_in_seq_extract = True
+    #     error = dbc.Alert(
+    #         "The input spacer(s) or sequence is not a valid input, please check your input and retry.", color="danger")
+    #     visibility = {'display': 'true'}
+    #     return '/index', '', error, visibility
 
     # Adjust guides by adding Ns to make compatible with Crispritz
     if (pam_begin):
@@ -619,9 +621,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # , stdout=log_verbose)
     exeggutor.submit(subprocess.run, command, shell=True)
     # subprocess.run(command, shell=True, stdout=log_verbose)
-    no_error = html.Div('')
-    visibility = {'display': 'none'}
-    return '/load', '?job=' + job_id, no_error, visibility
+    return '/load', '?job=' + job_id
 
 
 # Check input presence
@@ -1063,10 +1063,14 @@ def indexPage():
     + **index_page** (*list*): list of html, dcc and dbc components for the layout.
     '''
 
-    final_list = []
+    final_list = list()
 
-    input_error_content = html.Div(
-        'eeeeeh', id='error-div', style={'display': 'true'})
+    error_input_check = html.Div('', id='error-div', style={'display': 'none'})
+    if error_in_seq_extract:
+        error_input_check = html.Div(error=dbc.Alert(
+            "The input spacer(s) or sequence is not a valid input, please check your input and retry.", color="danger"))
+
+    # error_in_seq_extract = False
 
     introduction_content = html.Div(
         [
@@ -1281,7 +1285,7 @@ def indexPage():
     )
     # insert introduction in the layout
     final_list.append(introduction_content)
-    final_list.append(input_error_content)
+    final_list.append(error_input_check)
     final_list.append(
         html.Div(
             [
