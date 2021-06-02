@@ -460,6 +460,8 @@ populationDict = dict()
 for line in inAnnotationsFile:
     # for elem in line.strip().split('\t')[3].strip().split(','):
     print('line annot', line)
+    annotation = line.strip().split('\t')[3]
+    print('annotation', annotation)
     for elem in line.strip().split('\t')[3]:  # split entire annotation name
         if '_personal' not in elem:
             print('elem', elem)
