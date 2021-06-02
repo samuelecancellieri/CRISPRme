@@ -464,8 +464,9 @@ for line in inAnnotationsFile:
     # print('annotation', annotation)
     if '_personal' not in annotation:
         annotationsSet.add(annotation)
+annotationsSet.add('NA')
 annotationsSet = sorted(annotationsSet)
-print('annotset', annotationsSet)
+# print('annotset', annotationsSet)
 
 # read all the population, superpop and samples
 for line in inSamplesIDFile:
