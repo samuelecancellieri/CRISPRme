@@ -92,7 +92,11 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # print('dopo', guideDataFrame)
     # number of variable
     categories = list(guideDataFrame)[0:]
-    print('categories', categories)
+    new_categories = list()
+    for elem in categories:
+        new_categories.append(elem[:12])
+    categories = new_categories
+    # print('categories', categories)
     N = len(categories)
 
     # We are going to plot the first line of the data frame.
@@ -155,7 +159,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         templist.append(couple)
     # templist to convert into only the total column
     transpose_list = templist
-    print('transpose_list', transpose_list)
+    # print('transpose_list', transpose_list)
 
     plt.axis('off')
     table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
