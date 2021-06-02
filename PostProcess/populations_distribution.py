@@ -24,7 +24,7 @@ SAS     0,0     0,0     0,0     2,1     3,21    0,153   0,0     0,0     0,0     
 from matplotlib.legend_handler import HandlerTuple
 import matplotlib.colors as mc
 import colorsys
-from operator import itemgetter
+from operator import itemgetter, truediv
 from os.path import isfile, join
 from os import listdir
 import os
@@ -140,32 +140,36 @@ legend_labels = []
 handles_color = []
 # for x in range(min(number_bars, total+1)):
 for x in range(number_bars):
+    check_value = False
     if x == 0:
         for pop in barplot_values:
             for elem in barplot_values[pop][x]:
                 if elem != 0:
+                    check_value = True
                     # if barplot_values['REF'][0] != 0:
                     # got Total mms and 0 bulges
-                    legend_labels.append(str(total) + ' MM')
-                    # handles_color.append((all_bar[0][:]))
-                    handles_color.append(all_bar[0][0])
+        legend_labels.append(str(total) + ' MM')
+        # handles_color.append((all_bar[0][:]))
+        handles_color.append(all_bar[0][0])
     else:
         if (total - x) < 0:  # To avoid negative numbers on MM values
             # if barplot_values['REF'][x] != 0:
             for pop in barplot_values:
                 for elem in barplot_values[pop][x]:
                     if elem != 0:
-                        legend_labels.append('0 MM + ' + str(x) + ' B')
-                    # handles_color.append((all_bar[x][:]))
-                        handles_color.append(all_bar[x][0])
+                        check_value = True
+            legend_labels.append('0 MM + ' + str(x) + ' B')
+        # handles_color.append((all_bar[x][:]))
+            handles_color.append(all_bar[x][0])
         else:
             # if barplot_values['REF'][x] != 0:
             for pop in barplot_values:
                 for elem in barplot_values[pop][x]:
                     if elem != 0:
-                        legend_labels.append(
-                            str(total - x) + ' MM + ' + str(x) + ' B')
-                        handles_color.append(all_bar[x][0])
+                        check_value = True
+            legend_labels.append(
+                str(total - x) + ' MM + ' + str(x) + ' B')
+            handles_color.append(all_bar[x][0])
 
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
