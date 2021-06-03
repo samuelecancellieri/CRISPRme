@@ -93,9 +93,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # print('dopo', guideDataFrame)
     # number of variable
     categories = list(guideDataFrame)[0:]
-    categories.remove('General')
-    categories.sort(key=len, reverse=True)
-    categories.insert(0, 'General')
+    # categories.remove('General')
+    # categories.sort(key=len, reverse=True)
+    # categories.insert(0, 'General')
 
     categories_names = list()
     for elem in categories:
