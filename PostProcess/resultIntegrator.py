@@ -350,7 +350,7 @@ for nline, line in enumerate(inCrispritzResults):
             correction = 0
             if split_one_len != split_second_len:
                 correction = split_second_len
-            if '+' in str(x[7]):
+            if '+' in str(x[31]):
                 variantList[count] = str(
                     split[2])+str(int(var_pos[count])+correction)+str(split[3])
             else:
