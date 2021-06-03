@@ -279,7 +279,7 @@ for nline, line in enumerate(inCrispritzResults):
     #     origin = 'alt'
 
     variantList = ['NA']
-    if str(x[13]) != 'NA' and str(x[13]) != 'n':
+    if str(x[13]) != 'NA' and str(x[13]) != 'n' and str(x[20]) != str(x[21]):
         variantList = str(x[18]).strip().split(',')
         if len(variantList) > 1 and checkVCF:
             samples = x[13]
@@ -322,7 +322,7 @@ for nline, line in enumerate(inCrispritzResults):
     variantList_highest_cfd = variantList
 
     variantList = ['NA']
-    if str(x[37]) != 'NA' and str(x[37]) != 'n':
+    if str(x[37]) != 'NA' and str(x[37]) != 'n' and str(x[44]) != str(x[45]):
         variantList = str(x[42]).strip().split(',')
         if len(variantList) > 1 and checkVCF:
             samples = x[37]
