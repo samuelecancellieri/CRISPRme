@@ -174,7 +174,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.axis('off')
     categories_table_names = list()
     for elem in categories:
-        categories_table_names.append(str(elem)[:17])
+        categories_table_names.append(str(elem)[:15])
     table = plt.table(cellText=transpose_list, rowLabels=categories_table_names, colLabels=['Total', 'Percentage'],
                       loc='best', colWidths=[0.25, 0.35])
     table.auto_set_font_size(False)
