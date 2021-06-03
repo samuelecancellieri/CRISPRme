@@ -3463,8 +3463,17 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 html.P(
                                     'Export will download 1000 lines contained in the current view of the table'),
                                 html.Div(dash_table.DataTable(
-                                    css=[{'selector': '.row',
-                                          'rule': 'margin: 0'}],
+                                    css=[{'word-break': 'break-all',
+                                          'line-break': 'anywhere',
+                                          'overflow-wrap': 'break-word',
+                                          'selector': '.row',
+                                          #'rule': 'margin: 0',
+                                          'rule': 'margin: 0; overflow: inherit; word-break: break-all; overflow-wrap: break-word; line-break: anywhere;'}],
+                                    style_cell={
+                                        'height': 'auto',
+                                        'textAlign': 'left',
+                                        #'maxWidth': '500px'
+                                    },
                                     export_format="csv",
                                     id='live_table',
                                     columns=[{"name": dff_view_names[count], "id": i, 'hideable':True}
