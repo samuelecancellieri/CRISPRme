@@ -410,14 +410,12 @@ for line in inTarget:
                                 totalDict[count][size+1][combinedKey] = [
                                     replaceTarget2, resultSet, listInfo2]
                                 # remove the new generated sample set from all lower levels
-                                # removed to test with unphased genotype, necessary for phased to maintain only real combinations
-                                if haplotype_check:
-                                    totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
-                                        totalDict[count][size +
-                                                         1][combinedKey][1]
-                                    totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
-                                        totalDict[count][size +
-                                                         1][combinedKey][1]
+                                totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
+                                    totalDict[count][size +
+                                                     1][combinedKey][1]
+                                totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
+                                    totalDict[count][size +
+                                                     1][combinedKey][1]
 
             refSeq_with_bulges = list(refSeq)
             for pos, char in enumerate(realTarget):
