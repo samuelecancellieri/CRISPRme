@@ -1,3 +1,4 @@
+import glob
 from sqlite3.dbapi2 import Row
 import sys
 from dash.exceptions import PreventUpdate
@@ -108,6 +109,11 @@ def resultPage(job_id):
     '''
     value = job_id
     job_directory = current_working_directory + 'Results/' + job_id + '/'
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/'+job_id + '*integrated*')[0]
+    integrated_file_name = str(integrated_file_name)
+    integrated_file_name_zip = integrated_file_name.replace('tsv','zip')
     warning_message = []
     if (not isdir(job_directory)):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
@@ -284,8 +290,8 @@ def resultPage(job_id):
                                        id='download-link-integrated-results'),
                                 dcc.Interval(interval=1*1000,
                                              id='interval-integrated-results'),
-                                html.Div(current_working_directory + 'Results/' + job_id + '/' + job_id +
-                                         '.bestMerge.txt.integrated_results.zip', style={'display': 'none'}, id='div-info-integrated-results')
+                                html.Div(integrated_file_name_zip, style={
+                                         'display': 'none'}, id='div-info-integrated-results')
                             ]
                         )
                     ]
@@ -1969,10 +1975,16 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     outfile.close()
 
     # zip integrated results
-    integrated_file = current_working_directory + 'Results/' + \
-        job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
-    integrated_to_zip = current_working_directory + 'Results/' + \
-        job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip'
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/'+job_id + '*integrated*')[0]
+    integrated_file_name = str(integrated_file_name)
+    # integrated_file = current_working_directory + 'Results/' + \
+    #     job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
+    integrated_file = integrated_file_name
+    # integrated_to_zip = current_working_directory + 'Results/' + \
+    #     job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip'
+    integrated_to_zip = integrated_file_name.replace('tsv', 'zip')
     # if not os.path.exists(integrated_to_zip):
     os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
 
@@ -2780,8 +2792,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         pam_creation = df.loc[int_sample, 7]
 
         # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
-        integrated_to_grep = job_directory+job_id + \
-            '.bestMerge.txt.integrated_results.tsv'
+        integrated_file_name = glob.glob(
+            job_directory+job_id + '*integrated*')[0]
+        integrated_file_name = str(integrated_file_name)
+        # integrated_to_grep = job_directory+job_id + \
+        #     '.bestMerge.txt.integrated_results.tsv'
+        integrated_to_grep = integrated_file_name
         integrated_personal = job_directory + job_id + '.' + \
             sample + '.' + guide + '.integrated.personal.txt'
         integrated_private = job_directory + job_id + '.' + \
@@ -3467,12 +3483,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                           'line-break': 'anywhere',
                                           'overflow-wrap': 'break-word',
                                           'selector': '.row',
-                                          #'rule': 'margin: 0',
+                                          # 'rule': 'margin: 0',
                                           'rule': 'margin: 0; overflow: inherit; word-break: break-all; overflow-wrap: break-word; line-break: anywhere;'}],
                                     style_cell={
                                         'height': 'auto',
                                         'textAlign': 'left',
-                                        #'maxWidth': '500px'
+                                        # 'maxWidth': '500px'
                                     },
                                     export_format="csv",
                                     id='live_table',
