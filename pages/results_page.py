@@ -2642,11 +2642,14 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
     #     )
 
     # guide = guide.replace("N", "")
-    radar_img = '/imgs/summary_single_guide_' + \
+    radar_img_encode = '/imgs/summary_single_guide_' + \
         guide + '_' + str(mm) + \
-        '.' + str(bulge) + '_TOTAL.png'
+        '.' + str(bulge) + '_TOTAL.ENCODE.png'
+    radar_img_gencode = '/imgs/summary_single_guide_' + \
+        guide + '_' + str(mm) + \
+        '.' + str(bulge) + '_TOTAL.GENCODE.png'
 
-    if not os.path.isfile(f"{job_directory}/{radar_img}"):
+    if not os.path.isfile(f"{job_directory}/{radar_img_encode}"):
         # try:
         # ##print('faccio radar chart')
         os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
@@ -2655,26 +2658,38 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     img_found = False
     try:
-        radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-            current_working_directory + 'Results/' + job_id + '/' + radar_img, 'rb').read()).decode())
+        radar_src_encode = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+            current_working_directory + 'Results/' + job_id + '/' + radar_img_encode, 'rb').read()).decode())
+        radar_src_gencode = 'data:image/png;base64,{}'.format(base64.b64encode(open(
+            current_working_directory + 'Results/' + job_id + '/' + radar_img_gencode, 'rb').read()).decode())
         img_found = True
     except:
         pass
         # radar_src = 'data:image/png;base64,{}'.format(base64.b64encode(open(
         #     current_working_directory+'assets/placeholder.png', 'rb').read()).decode())
     try:
-        radar_href = '/Results/' + job_id + '/' + radar_img
+        radar_href_encode = '/Results/' + job_id + '/' + radar_img_encode
+        radar_href_gencode = '/Results/' + job_id + '/' + radar_img_gencode
     except:
         radar_href = ''
 
     if img_found:
         radar_chart_images.append(
-            html.A(
-                html.Img(src=radar_src, id='radar-img-guide',
-                         width="100%", height="auto"),
-                target="_blank",
-                href=radar_href
-            )
+            [
+
+                html.A(
+                    html.Img(src=radar_src_encode, id='radar-img-guide',
+                             width="100%", height="auto"),
+                    target="_blank",
+                    href=radar_href_encode
+                ),
+                html.A(
+                    html.Img(src=radar_src_gencode, id='radar-img-guide',
+                             width="100%", height="auto"),
+                    target="_blank",
+                    href=radar_href_gencode
+                )
+            ]
         )
     else:
         radar_chart_images.append(
