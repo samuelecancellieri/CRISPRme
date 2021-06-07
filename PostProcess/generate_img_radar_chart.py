@@ -87,7 +87,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     print('data frame prima', guideDataFrame)
 
     guideDataFrame.drop(['General', 'CTCF-only;CTCF-bound', 'dELS;CTCF-bound', 'DNase-H3K4me3;CTCF-bound', 'pELS;CTCF-bound',
-                         'PLS;CTCF-bound', 'start_codon', 'stop_codon', 'stop_codon_redefined_as_selenocysteine', 'transcript'], axis=1)
+                         'PLS;CTCF-bound', 'start_codon', 'stop_codon', 'stop_codon_redefined_as_selenocysteine', 'transcript'], inplace=True)
 
     print('data frame dopo', guideDataFrame)
 
