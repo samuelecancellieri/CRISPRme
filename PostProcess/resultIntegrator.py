@@ -523,17 +523,17 @@ for nline, line in enumerate(inCrispritzResults):
             saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][-count_N_in_guide:]
 
     annotationList = x[14].split(',')
-    personal_annotations = list()
-    encode_annotations = list()
-    gencode_annotations = list()
+    personal_annotations = set()
+    encode_annotations = set()
+    gencode_annotations = set()
     check_personal_existence = False
     for elem in annotationList:
         if '_personal' in elem:
-            personal_annotations.append(elem.replace('_personal', ''))
+            personal_annotations.add(elem.replace('_personal', ''))
         elif '_gencode' in elem:
-            gencode_annotations.append(elem.replace('_gencode', ''))
+            gencode_annotations.add(elem.replace('_gencode', ''))
         else:
-            encode_annotations.append(elem)
+            encode_annotations.add(elem)
 
     if len(personal_annotations) > 0:
         saveDict['Annotation_personal'] = ','.join(personal_annotations)
