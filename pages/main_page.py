@@ -845,7 +845,8 @@ def checkInput(n, n_close, genome_selected, pam, guide_type, text_guides, mms, d
     len_guides = len_guide_sequence
 
     if no_guides:
-        text_update = {'width': '300px', 'height': '30px', 'border':'1px solid red'}
+        text_update = {'width': '300px',
+                       'height': '30px', 'border': '1px solid red'}
         update_style = True
         miss_input_list.append('Input at least one correct guide')
 
@@ -1177,8 +1178,9 @@ def indexPage():
 
     introduction_content = html.Div(
         [
-            html.Div('CRISPRme is a web application, also available offline or command-line for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:spacer mismatches and bulges, and is suitable for population and personal genome analyses.'),
-            html.Div(['Check out our manuscript on bioRxiv ', html.A(
+            # html.Div('CRISPRme is a web application, also available offline or command-line for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:spacer mismatches and bulges, and is suitable for population and personal genome analyses.'),
+            html.Div('CRISPRme is a web application, also available offline or command line, for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:protospacer mismatches and bulges, and is suitable for population and personal genome analyses.'),
+            html.Div(['Check out our preprint on bioRxiv ', html.A(
                 'here!', target='_blank', href='https://www.biorxiv.org/content/10.1101/2021.05.20.445054v1')]),
             html.Div(['CRISPRme offline version can be downloaded from ', html.A(
                 'Github', target='_blank', href='https://github.com/pinellolab/CRISPRme')]),
@@ -1222,7 +1224,7 @@ def indexPage():
             dcc.Textarea(id='text-guides', placeholder='GAGTCCGAGCAGAAGAAGAA\nCCATCGGTGGCCGTTTGCCC', style={
                          'width': '300px', 'height': '30px'}),
             dbc.FormText(
-                'Note: a maximum number of 100 guides can be provided, spacer must be provided without PAM. If using the sequence extraction features only the first 100 guides extracted will be processed', color='secondary')
+                'Spacer must be provided as a DNA sequence without a PAM. A maximum of 100 spacer sequences can be provided . If using the sequence extraction feature, only the first 100 spacer sequences (starting from the top strand) will be extracted.*', color='secondary')
         ],
         style={'width': '300px'}  # NOTE same as text-area
     )
@@ -1477,7 +1479,7 @@ def indexPage():
     )
     final_list.append(html.Br())
     final_list.append(
-        html.P('*Personal data can be used in the offline version of CRISPRme'))
+        html.P('**The offline version of CRISPRme can be downloaded from GitHub and offers additional functionalities, including the option to input personal data (such as genetic variants, annotations, and/or empirical off-target results) as well as custom PAMs and genomes. There is no limit on the number of spacers, mismatches, and/or bulges used in the offline search.'))
     # final_list.append(html.P(
     #     '[1] Cancellieri, Samuele, et al. \"Crispritz: rapid, high-throughput, and variant-aware in silico off-target site identification for crispr genome editing.\" Bioinformatics (2019).'))
     # final_list.append(
