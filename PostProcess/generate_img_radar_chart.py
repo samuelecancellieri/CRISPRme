@@ -84,6 +84,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     #         elem = 0
     #     percentage_list[count] = elem
 
+    guideDataFrame.drop(['General', 'CTCF-only;CTCF-bound', 'dELS;CTCF-bound', 'DNase-H3K4me3;CTCF-bound', 'pELS;CTCF-bound',
+                         'PLS;CTCF-bound', 'start_codon', 'stop_codon', 'stop_codon_redefined_as_selenocysteine', 'transcript'])
+
     guideDataFrame['Percentage'] = percentage_list
     guideDataFrame.columns = ['Total', 'Percentage']
     # convert to int total column
@@ -132,7 +135,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     # Draw one axe per variable + add labels labels yet
     # plt.xticks(angles[:-1], categories, color='black', size=fontsize)
-    plt.xticks(angles[:-1], categories_names, color='black', size=fontsize-1)
+    plt.xticks(angles[:-1], categories, color='black', size=fontsize-1)
 
     # Draw ylabels
     # # # Draw ylabels
@@ -172,10 +175,10 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # print('transpose_list', transpose_list)
 
     plt.axis('off')
-    categories_table_names = list()
-    for elem in categories:
-        categories_table_names.append(str(elem)[:15])
-    table = plt.table(cellText=transpose_list, rowLabels=categories_table_names, colLabels=['Total', 'Percentage'],
+    # categories_table_names = list()
+    # for elem in categories:
+    #     categories_table_names.append(str(elem)[:15])
+    table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
                       loc='best', colWidths=[0.25, 0.35])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
