@@ -305,6 +305,7 @@ def fillDict(guide, guideDict, motifDict):
         if split[14] != 'n':
             annotationsList = split[14].strip().split(',')
             for annotation in annotationsList:
+                annotation.replace('_gencode', '')
                 if 'CTCF-bound' in annotation:
                     guideDict[total]['CTCF-only'] += 1
                     guideDict[total][annotation.split(';')[0]] += 1
