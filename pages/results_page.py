@@ -3768,15 +3768,17 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 ]
             )
         )
-        fl.append(
-            html.Div(
-                [
-                    html.Br(),
-                    dbc.Row(sample_buttons),
-                    radar_chart_sample_content
-                ]
-            )
-        )
+
+        # uncomment to include samples charts
+        # fl.append(
+        #     html.Div(
+        #         [
+        #             html.Br(),
+        #             dbc.Row(sample_buttons),
+        #             radar_chart_sample_content
+        #         ]
+        #     )
+        # )
 
         # TODO codice per l'integrazione del CFD graph. When .CFDGraph.txt will be integrated, remove the try/except
 
