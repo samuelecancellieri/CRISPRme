@@ -1477,7 +1477,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # except:  # For REF
     #     pass
 
-    #print('tabella target prima', dff)
+    # print('tabella target prima', dff)
 
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
@@ -1492,7 +1492,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
             # this is a simplification of the front-end filtering logic,
             # only works with complete fields in standard format
             dff = dff.loc[dff[col_name].str.startswith(filter_value)]
-    ##print('tabella target dopo', dff)
+    # print('tabella target dopo', dff)
     # if len(sort_by):
     #     dff = dff.sort_values(
     #         ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
@@ -1539,7 +1539,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     #                 [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
     #         else:
     #             row['Samples Summary'] = 'n'
-    ##print('data nella tabella', data_to_send)
+    # print('data nella tabella', data_to_send)
     return data_to_send  # , cells_style + style_data_table
 
 
@@ -1625,7 +1625,7 @@ def guidePagev3(job_id, hash):
               ' ' + guide_grep_result + " &")  # , shell = True)
     # global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
-    #print('table', cols)
+    # print('table', cols)
 
     final_list.append(
         html.Div(
@@ -3749,7 +3749,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         # radar_chart_total_content = html.Div(id='div-radar-chart-total')
         radar_chart_encode = dbc.Col(html.Div(id='div-radar-chart-encode'))
         radar_chart_gencode = dbc.Col(html.Div(id='div-radar-chart-gencode'))
-        populations_barplots = html.Div(id='div-population-barplot')
+        populations_barplots = dbc.Col(html.Div(id='div-population-barplot'))
         # radar_chart_sample_content = html.Div(id='div-radar-chart-sample')
         radar_chart_sample_content = dbc.Row(id='row-radar-chart-sample')
         sample_image_content = html.Div(id='div-sample-image')
@@ -3757,21 +3757,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         print('radar chart')
 
         if genome_type != 'ref':
-            graph_summary_both = [dbc.Col(populations_barplots), dbc.Col(
-                radar_chart_encode), dbc.Col(radar_chart_gencode)]
+            graph_summary_both = [populations_barplots,
+                                  radar_chart_encode, radar_chart_gencode]
         else:
-            graph_summary_both = [
-                dbc.Col(radar_chart_encode), dbc.Col(radar_chart_gencode)]
+            graph_summary_both = [radar_chart_encode, radar_chart_gencode]
 
         fl.append(
             html.Div(
                 [
                     dbc.Row(
-                        [
-                            # dbc.Col('TEST')
-                            radar_chart_encode,
-                            radar_chart_gencode
-                        ]
+                        graph_summary_both
                     )
                 ]
             )
@@ -3975,10 +3970,10 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
 
     target = target[0:7]
     """
-    ##print(target)
+    # print(target)
     # temporal guide for test file
-    ##print(n_clicks)
-    ##print(type(n_clicks))
+    # print(n_clicks)
+    # print(type(n_clicks))
     """
     if n_clicks > 0:
         if radio_order == None:
