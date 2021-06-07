@@ -2570,7 +2570,7 @@ def check_existance_sample(job_directory, job_id, sample):
     [State('url', 'search'),
      State('general-profile-table', 'data')]
 )
-def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, search, all_guides):
+def updateImagesTabs(mm, bulge, sel_cel, search, all_guides):
     # if sel_cel is None:
     #     raise PreventUpdate
     print('entro update tab')
