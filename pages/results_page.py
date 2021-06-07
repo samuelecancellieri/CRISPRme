@@ -1534,11 +1534,13 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # ##print(dff, 'line 1397')
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
+        print('going to call no ref', genome_type, hide_reference)
         #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)) & (f['Variant_samples_(highest_CFD)'] != 'NA'), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
         result = global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page_current)
         # dff.drop(
         #     df[(df['Variant_samples_(highest_CFD)'] == 'NA')].index, inplace=True)
     else:
+        print('going to call ref', genome_type, hide_reference)
         result = global_store_subset(value, bulge_t, bulge_s, mms, guide, page_current)
         #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
     #print('filtered and sorted')
@@ -1780,10 +1782,10 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page):
         current_working_directory + 'Results/' +
         value + '/'+value + '*integrated*.jay')[0]
     integrated_file_name = str(integrated_file_name)
-    df = dt.fread(integrated_file_name, na_strings=['NA'])
+    df = dt.fread(integrated_file_name)
     result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) &
                  (f['Bulges_(highest_CFD)'] == int(bulge_s)) & (f['Mismatches_(highest_CFD)'] == int(mms)) 
-                 & (f['Variant_samples_(highest_CFD)'] != 'NA'), 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[page *PAGE_SIZE:(page + 1)*PAGE_SIZE, :].to_pandas().fillna('NA')
+                 & (f['Variant_samples_(highest_CFD)'] != None), 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[(page *PAGE_SIZE):((page + 1)*PAGE_SIZE), :].to_pandas().fillna('NA')
     # Skiprows = 1 to skip header of file
     # df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
     #                  bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
