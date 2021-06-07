@@ -142,10 +142,11 @@ def refreshSearch(n, dir_name):
                 elif 'Merging Targets\tStart' in current_log:
                     merge_status = html.P(
                         'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
-                
+
                 if 'Annotating results\tStart' in current_log:
-                    images_status = html.P('Annotating... Step[1/2]', style={'color': 'orange'})
-                    
+                    images_status = html.P(
+                        'Annotating... Step[1/2]', style={'color': 'orange'})
+
                 if 'Creating images\tEnd' in current_log:
                     images_status = html.P('Done', style={'color': 'green'})
                     all_done = all_done + 1
@@ -159,7 +160,7 @@ def refreshSearch(n, dir_name):
                 elif 'Creating database\tStart' in current_log:
                     database_status = html.P(
                         'Inserting data...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
-                
+
                 if 'Integrating results\tEnd' in current_log:
                     integrate_status = html.P('Done', style={'color': 'green'})
                     all_done = all_done + 1
@@ -239,14 +240,14 @@ def refreshSearch(n, dir_name):
                     return {'visibility':'hidden'},  search_status, report_status, post_process_status,'', ''
                 '''
                 if os.path.isfile(f"{current_job_dir}/log_error.txt") and os.path.getsize(f"{current_job_dir}/log_error.txt") > 0:
-                    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),html.P('Not available', style={'color': 'red'}),'', dbc.Alert("The selected result encountered some errors, please remove it and try to submit again.", color="danger"), False
+                    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), '', dbc.Alert("The selected result encountered some errors, please remove it and try to submit again.", color="danger"), False
                 if all_done == 7 or 'Job\tDone' in current_log:
                     return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, URL+'/result?job=' + dir_name.split('=')[-1], '', True
                 else:
                     return {'visibility': 'hidden'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, '', '', True
         elif 'queue.txt' in onlyfile:
-            return {'visibility': 'hidden'}, html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),'', dbc.Alert("Job submitted. Current status: in queue", color="info"), True
-    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}),html.P('Not available', style={'color': 'red'}),'', dbc.Alert("The selected result does not exist", color="danger"), True
+            return {'visibility': 'hidden'}, html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), '', dbc.Alert("Job submitted. Current status: in queue", color="info"), True
+    return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), '', dbc.Alert("The selected result does not exist", color="danger"), True
 
 
 @app.callback(
@@ -265,7 +266,6 @@ def removeResult(n, dir_name):
     return None
 
 
-
 # Load Page
 
 
@@ -279,7 +279,8 @@ def load_page():
                         html.P(
                             'Job submitted. Copy this link to view the status and the result page '),
                         html.Div(
-                            html.P('link', id='job-link', style={'margin-top': '0.75rem', 'font-size': 'large'}),
+                            html.P(
+                                'link', id='job-link', style={'margin-top': '0.75rem', 'font-size': 'large'}),
                             style={'border-radius': '5px', 'border': '2px solid', 'border-color': 'blue',
                                    'width': '100%', 'display': 'inline-block', 'margin': '5px'}
                         ),
@@ -304,10 +305,11 @@ def load_page():
                             html.Ul(
                                 [
                                     html.Li('Indexing genome(s)'),
-                                    html.Li('Searching crRNA'),
+                                    html.Li('Searching spacer'),
                                     html.Li('Post processing'),
                                     html.Li('Merge targets'),
-                                    html.Li('Annotating and generating images'),
+                                    html.Li(
+                                        'Annotating and generating images'),
                                     html.Li('Populating database'),
                                     html.Li('Integrating results'),
                                     #html.Li('Annotating result'),
@@ -347,7 +349,8 @@ def load_page():
                         dcc.Link('View Results', style={
                                  'visibility': 'hidden'}, id='view-results', href=URL),
                         html.Div(id='no-directory-error'),
-                        html.Div([html.Button('Remove result', id='button-remove-result', n_clicks=0, hidden=True)]),
+                        html.Div([html.Button(
+                            'Remove result', id='button-remove-result', n_clicks=0, hidden=True)]),
                         html.Div(id='result-deleted')
                     ]
                 )
