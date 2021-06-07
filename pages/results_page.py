@@ -2675,21 +2675,24 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     if img_found:
         radar_chart_images.append(
-            [
-
+            dbc.Col(
                 html.A(
                     html.Img(src=radar_src_encode, id='radar-img-guide',
                              width="100%", height="auto"),
                     target="_blank",
                     href=radar_href_encode
-                ),
+                )
+            )
+        )
+        radar_chart_images.append(
+            dbc.Col(
                 html.A(
                     html.Img(src=radar_src_gencode, id='radar-img-guide',
                              width="100%", height="auto"),
                     target="_blank",
                     href=radar_href_gencode
                 )
-            ]
+            )
         )
     else:
         radar_chart_images.append(
@@ -3771,18 +3774,18 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
         if genome_type != 'ref':
             graph_summary_both = [
-                dbc.Col(populations_barplots), dbc.Col(radar_chart_total_content)]
+                dbc.Col(populations_barplots), radar_chart_total_content]
         else:
             graph_summary_both = dbc.Col(radar_chart_total_content, width={
                                          "size": 8, "offset": 2})
 
-        # fl.append(
-        #     html.Div(
-        #         [
-        #             dbc.Row(graph_summary_both)
-        #         ]
-        #     )
-        # )
+        fl.append(
+            html.Div(
+                [
+                    dbc.Row(graph_summary_both)
+                ]
+            )
+        )
 
         # uncomment to include samples charts
         # fl.append(
