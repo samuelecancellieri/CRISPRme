@@ -468,7 +468,7 @@ input_args = sys.argv
 def directoryCheck():
     # function to check the main directory status, if some directory is missing, create it
     directoryList = ['Genomes', 'Results', 'Dictionaries',
-                     'VCFs', 'Annotations', 'Gencode', 'PAMs', 'samplesIDs']
+                     'VCFs', 'Annotations', 'PAMs', 'samplesIDs']
     for directory in directoryList:
         if not os.path.exists(current_working_directory+directory):
             os.makedirs(current_working_directory+directory)
@@ -790,7 +790,8 @@ def complete_search():
         p.write('Ref_comp\t' + str(ref_comparison) + '\n')
         p.close()
     os.system(f'cp {guidefile} {outputfolder}/guides.txt')
-    print(f"Launching job {outputfolder}. The stdout is redirected in log_verbose.txt and stderr is redirected in log_error.txt")
+    print(
+        f"Launching job {outputfolder}. The stdout is redirected in log_verbose.txt and stderr is redirected in log_error.txt")
     if variant:
         with open(f"{outputfolder}/log_verbose.txt", 'w') as log_verbose:
             with open(f"{outputfolder}/log_error.txt", 'w') as log_error:
@@ -920,15 +921,17 @@ def target_integration():
     os.system(script_path+"./post_process.sh "+target_file+" "+gencode_file +
               " "+empiricalfile+" "+guidefile+" "+str(genome_version)+" "+outputfolder+" "+vcf_dir+" "+script_path)
 
+
 def gnomAD_converter():
     if "--help" in input_args:
         print("This is the VCF gnomAD converter provided to convert all gnomADv3.1 VCFs into CRISPRme supported VCFs")
         print("These are the flags that must be used in order to run this function:")
         print("\t--gnomAD_VCFdir, used to specify the directory containing gnomADv3.1 original VCFs")
         print("\t--samplesID, used to specify the pre-generated samplesID file necessary to introduce samples into gnomAD variant")
-        print("\t--thread, used to specify the number of core used to process VCFs in parallel (DEFAULT is ALL available minus 2) [OPTIONAL]")
+        print(
+            "\t--thread, used to specify the number of core used to process VCFs in parallel (DEFAULT is ALL available minus 2) [OPTIONAL]")
         exit(0)
-        
+
     if "--gnomAD_VCFdir" not in input_args:
         print("--gnomAD_VCFdir not in input, MANDATORY TO CONVERT DATA")
         # vcf_dir = script_path+'vuota/'
@@ -943,7 +946,7 @@ def gnomAD_converter():
         if not os.path.isdir(vcf_dir):
             print("The folder specified for --gnomAD_VCFdir does not exist")
             exit(1)
-            
+
     if "--thread" not in input_args:
         # print("--thread must be contained in the input")
         # exit(1)
@@ -963,7 +966,7 @@ def gnomAD_converter():
             print("thread is set to default (ALL available minus 2)")
             thread = len(os.sched_getaffinity(0))-2
             # exit(1)
-            
+
     if "--samplesID" not in input_args:
         print("--samplesID not in input, MANDATORY TO CONVERT DATA")
         exit(1)
@@ -977,9 +980,10 @@ def gnomAD_converter():
         if not os.path.isfile(samplefile):
             print("The file specified for --samplesID does not exist")
             exit(1)
-            
-    os.system(script_path+"./convert_gnomAD.py "+vcf_dir+" "+samplefile +" "+ str(thread))
-        
+
+    os.system(script_path+"./convert_gnomAD.py " +
+              vcf_dir+" "+samplefile + " " + str(thread))
+
 
 def web_interface():
     if "--help" in input_args:

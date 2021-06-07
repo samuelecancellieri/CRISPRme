@@ -618,7 +618,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     merge_default = 3
     print(
         f"Submitted JOB {job_id}. The stdout is redirected in log_verbose.txt and stderr is redirected in log_error.txt")
-    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new_multiple_vcfs.sh {current_working_directory}/Genomes/{genome_ref} {result_dir}/list_vcfs.txt {guides_file} {pam} {current_working_directory}/Annotations/{annotation_name} {result_dir}/samplesID.txt {max([int(dna), int(rna)])} {mms} {dna} {rna} {merge_default} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/Gencode/gencode.protein_coding.bed {dest_email} 1> {result_dir}/log_verbose.txt 2>{result_dir}/log_error.txt"
+    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new_multiple_vcfs.sh {current_working_directory}/Genomes/{genome_ref} {result_dir}/list_vcfs.txt {guides_file} {pam} {current_working_directory}/Annotations/{annotation_name} {result_dir}/samplesID.txt {max([int(dna), int(rna)])} {mms} {dna} {rna} {merge_default} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/Annotations/gencode.protein_coding.bed {dest_email} 1> {result_dir}/log_verbose.txt 2>{result_dir}/log_error.txt"
     # with open(f"{result_dir}/log_verbose.txt", 'w') as log_verbose:
     # log_verbose = open(f"{result_dir}/log_verbose.txt", 'w')
     # , stdout=log_verbose)
