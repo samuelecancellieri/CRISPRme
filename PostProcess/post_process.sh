@@ -16,7 +16,8 @@ dir=$(dirname $1)
 starting_dir=$8
 echo 'Preparing files for post processing'
 sed -i '/#/d' $1
-LC_ALL=C sort -T $dir -k21,21rg $1 -o $1
+# LC_ALL=C sort -T $dir -k21,21rg $1 -o $1
+LC_ALL=C sort -T $dir -k21,21rg -k11,11n $1 -o $1
 # awk '{print $5"\t"$7"\t"$7+length($3)"\t"$21}' $1 > $1.bed
 awk '{print $5"\t"$7"\t"$7+length($3)"\t"NR}' $1 >$1.bed
 sort-bed $1.bed >$1.bed.sort
