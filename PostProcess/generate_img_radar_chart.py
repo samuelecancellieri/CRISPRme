@@ -241,7 +241,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.tight_layout()
 
     plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
-                "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
+                "."+str(bulge) + '_' + str(source) + ".ENCODE." + file_extension, format=file_extension)
 
     plt.close('all')
 
