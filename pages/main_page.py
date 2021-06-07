@@ -1116,7 +1116,7 @@ def changeVariantsChecklistState(genome_value):
                                            'value': '1000G', 'disabled': False})
         checklist_variants_options.append({'label': ' plus HGDP variants',
                                            'value': 'HGDP', 'disabled': False})
-        checklist_variants_options.append({'label': ' plus Personal Variants*',
+        checklist_variants_options.append({'label': ' plus personal variants*',
                                            'value': 'PV', 'disabled': True})
     personal_vcf = get_more_VCF(genome_value)
     return [checklist_variants_options, personal_vcf]
