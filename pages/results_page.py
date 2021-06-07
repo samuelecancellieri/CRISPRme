@@ -2652,6 +2652,8 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
         guide + '_' + str(mm) + \
         '.' + str(bulge) + '_TOTAL.GENCODE.png'
 
+    print('faccio i radar')
+
     if not os.path.isfile(f"{job_directory}/{radar_img_encode}"):
         # try:
         # ##print('faccio radar chart')
