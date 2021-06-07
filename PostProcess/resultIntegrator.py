@@ -266,8 +266,8 @@ for nline, line in enumerate(inCrispritzResults):
                     #     elif 'three_prime_UTR' in tipo:
                     #         tipo = "3'UTR"
                     # saveDict['gene_annotation'] = str(annotationLine[11])
-                        saveDict['Annotation_GENCODE'] = str(
-                            annotationLine[11])
+                        # saveDict['Annotation_GENCODE'] = str(
+                        #     annotationLine[11])
         saveDict['Annotation_closest_gene_distance_(kb)'] = str(
             float(annotationLine[len(annotationLine)-1])/1000)
         if float(annotationLine[len(annotationLine)-1]) != 0:
@@ -525,12 +525,15 @@ for nline, line in enumerate(inCrispritzResults):
     annotationList = x[14].split(',')
     personal_annotations = list()
     encode_annotations = list()
+    gencode_annotations = list()
     check_personal_existence = False
     for elem in annotationList:
-        if '_personal' not in elem:
-            encode_annotations.append(elem)
+        if '_personal' in elem:
+            personal_annotations.append(elem.replace('_personal', ''))
+        elif '_gencode' in elem:
+            gencode_annotations.append(elem.replace('_gencode', ''))
         else:
-            personal_annotations.append(elem)
+            encode_annotations.append(elem)
 
     if len(personal_annotations) > 0:
         saveDict['Annotation_personal'] = ','.join(personal_annotations)
@@ -538,6 +541,9 @@ for nline, line in enumerate(inCrispritzResults):
 
     if len(encode_annotations) > 0:
         saveDict['Annotation_ENCODE'] = ','.join(encode_annotations)
+
+    if len(gencode_annotations) > 0:
+        saveDict['Annotation_GENCODE'] = ','.join(gencode_annotations)
 
     foundEmpirical = sorted(empiricalTree[int(x[6])-4:int(x[6])+4])
 
