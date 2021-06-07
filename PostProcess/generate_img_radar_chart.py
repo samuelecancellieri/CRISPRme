@@ -260,6 +260,7 @@ guideDict = json.load(guideDictFile)
 motifDict = json.load(motifDictFile)
 if __name__ == '__main__':
     total = mismatch+bulge
+    total = str(total)
     # skip creation if no target in global category
     # if guideDict[mismatch][bulge]['TOTAL']['General'] == 0:
     if guideDict[total]['General'] == 0:
