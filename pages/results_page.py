@@ -113,7 +113,7 @@ def resultPage(job_id):
         current_working_directory + 'Results/' +
         job_id + '/'+job_id + '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
-    integrated_file_name_zip = integrated_file_name.replace('tsv','zip')
+    integrated_file_name_zip = integrated_file_name.replace('tsv', 'zip')
     warning_message = []
     if (not isdir(job_directory)):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
@@ -3656,12 +3656,15 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             populations = []
         # fl.append(html.P('Select Mismatch Value'))
 
-        top1000_image = html.Div(
-            html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                            id='top-1000-score', width="80%", height="auto"),
-                   target="_blank")
-        )
+        try:
+            top1000_image = html.Div(
+                html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                                id='top-1000-score', width="80%", height="auto"),
+                       target="_blank")
+            )
+        except:
+            top1000_image = html.Div('')
 
         total_buttons = [
             dbc.Col(
