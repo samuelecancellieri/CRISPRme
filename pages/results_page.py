@@ -2559,7 +2559,8 @@ def check_existance_sample(job_directory, job_id, sample):
 @app.callback(
     # [Output('div-guide-image', 'children'),
     #  Output('div-sample-image', 'children')],
-    [Output('div-radar-chart-total', 'children'),
+    [Output('div-radar-chart-encode', 'children'),
+     Output('div-radar-chart-gencode', 'children'),
      Output('div-population-barplot', 'children'),
      Output('div-sample-image', 'children'),
      #  Output('div-radar-chart-sample', 'children')],
@@ -2584,7 +2585,9 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     # search for getting job id
     # get guide with sel_cel and all_data
-    radar_chart_images = list()
+    # radar_chart_images = list()
+    radar_chart_encode = list()
+    radar_chart_gencode = list()
     population_barplots = list()
     guide_images = list()
     sample_images = list()
@@ -2674,7 +2677,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
         radar_href = ''
 
     if img_found:
-        radar_chart_images.append(
+        radar_chart_encode.append(
             dbc.Col(
                 html.A(
                     html.Img(src=radar_src_encode, id='radar-img-guide',
@@ -2684,7 +2687,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                 )
             )
         )
-        radar_chart_images.append(
+        radar_chart_gencode.append(
             dbc.Col(
                 html.A(
                     html.Img(src=radar_src_gencode, id='radar-img-guide',
@@ -2694,12 +2697,19 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                 )
             )
         )
-    else:
-        radar_chart_images.append(
+    if len(radar_chart_encode) == 0:
+        radar_chart_encode.append(
             html.H2(
                 "No result found for this combination of mismatches and bulges"
             )
         )
+    if len(radar_chart_gencode) == 0:
+        radar_chart_gencode.append(
+            html.H2(
+                "No result found for this combination of mismatches and bulges"
+            )
+        )
+
     class_images = [(sample, 'Samples'), (population, 'Population'),
                     (superpopulation, 'Superpopulation')]
 
@@ -2751,7 +2761,7 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
                 )
     # reverse list to ##print plots in correct order since they are append in reverse order into main sample_images list
     reversed_sample_images = sample_images[::-1]
-    return radar_chart_images, population_barplots, guide_images, reversed_sample_images
+    return radar_chart_encode, radar_chart_gencode, population_barplots, guide_images, reversed_sample_images
 
 
 # Open in browser the result directory
@@ -3766,18 +3776,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             )
         )
 
-        radar_chart_total_content = html.Div(id='div-radar-chart-total')
+        # radar_chart_total_content = html.Div(id='div-radar-chart-total')
+        radar_chart_encode = html.Div(id='div-radar-chart-encode')
+        radar_chart_gencode = html.Div(id='div-radar-chart-gencode')
         populations_barplots = html.Div(id='div-population-barplot')
         # radar_chart_sample_content = html.Div(id='div-radar-chart-sample')
         radar_chart_sample_content = dbc.Row(id='row-radar-chart-sample')
         sample_image_content = html.Div(id='div-sample-image')
 
         if genome_type != 'ref':
-            graph_summary_both = [
-                dbc.Col(populations_barplots), radar_chart_total_content]
+            graph_summary_both = [dbc.Col(populations_barplots), dbc.Col(
+                radar_chart_encode), dbc.Col(radar_chart_gencode)]
         else:
-            graph_summary_both = dbc.Col(radar_chart_total_content, width={
-                                         "size": 8, "offset": 2})
+            graph_summary_both = [
+                dbc.Col(radar_chart_encode), dbc.Col(radar_chart_gencode)]
 
         fl.append(
             html.Div(
