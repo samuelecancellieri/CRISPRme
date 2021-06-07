@@ -2341,7 +2341,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         ]
     else:
         out_1 = [html.P('No results found with this genomic coordinates')]
-    os.system(f"rm {pos_grep_result}")
+    #os.system(f"rm {pos_grep_result}")
     return out_1, '1/' + str(1)
 
 # Callback to update the hidden div filter position
