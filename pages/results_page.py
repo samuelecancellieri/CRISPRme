@@ -449,7 +449,7 @@ def downloadLinkSample(n, file_to_load, search):  # file to load =
     # file_to_load = file_to_load + '.zip'
     file_to_load = file_to_load + '.txt'
     file_to_load = file_to_load.strip().split('/')[-1]
-    # ##print(file_to_load)
+    # ###print(file_to_load)
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download file', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
@@ -468,7 +468,7 @@ def downloadGeneralTable(n, file_to_load, search):  # file to load =
         raise PreventUpdate
     job_id = search.split('=')[-1]
     file_to_load = file_to_load.split('/')[-1]
-    # ##print(file_to_load)
+    # ###print(file_to_load)
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download General Table', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
@@ -489,7 +489,7 @@ def downloadGeneralTable(n, file_to_load, search):  # file to load =
         raise PreventUpdate
     job_id = search.split('=')[-1]
     file_to_load = file_to_load.split('/')[-1]
-    # ##print(file_to_load)
+    # ###print(file_to_load)
     if os.path.exists(current_working_directory + 'Results/' + job_id + '/' + file_to_load):
         return html.A('Download Integrated Results', href=URL+'/Results/' + job_id + '/' + file_to_load, target='_blank'), True
 
@@ -538,8 +538,8 @@ def downloadLinkGuide(n, file_to_load, search):  # file to load = job_id.RNA.1.0
 
 @app.server.route('/Results/<path:path>')
 def download_file(path):
-    # ##print(current_working_directory)
-    # ##print('test', path)
+    # ###print(current_working_directory)
+    # ###print('test', path)
     return flask.send_from_directory(os.path.join(current_working_directory, 'Results/'), path, as_attachment=True)
 
 
@@ -799,13 +799,13 @@ def clusterPage(job_id, hash):
         cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
                 for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
         file_to_grep = '.bestMerge.txt'
-    # ##print('qui cluster before grep')
+    # ###print('qui cluster before grep')
 
     cluster_grep_result = current_working_directory + 'Results/' + job_id + \
         '/' + job_id + '.' + chromosome + '_' + position + '.' + guide + '.txt'
     put_header = 'head -1 ' + current_working_directory + 'Results/' + job_id + \
         '/.' + job_id + file_to_grep + ' > ' + cluster_grep_result + ' ; '
-    # ##print('esiste cluster?' , str(os.path.exists(cluster_grep_result)) )
+    # ###print('esiste cluster?' , str(os.path.exists(cluster_grep_result)) )
     # Example    job_id.chr3_100.guide.txt
     if not os.path.exists(cluster_grep_result):
         # os.system(f'touch {cluster_grep_result}')
@@ -817,9 +817,9 @@ def clusterPage(job_id, hash):
             out, err = get_annotation.communicate()
             annotation_type = out.decode('UTF-8').strip().split('\t')[-1]
             os.popen(put_header + ' fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep +
-                     ' | awk \'$6==' + position + ' && $4==\"' + chromosome + '\" {##print $0\"\\t' + annotation_type + '\"}\' >> ' + cluster_grep_result).read()
+                     ' | awk \'$6==' + position + ' && $4==\"' + chromosome + '\" {###print $0\"\\t' + annotation_type + '\"}\' >> ' + cluster_grep_result).read()
         else:
-            # ##print('qui cluster in grep')     #NOTE HEADER NON SALVATO
+            # ###print('qui cluster in grep')     #NOTE HEADER NON SALVATO
             os.popen(put_header + ' fgrep ' + guide + ' ' + current_working_directory + 'Results/' + job_id + '/' + job_id + file_to_grep + ' | awk \'$6==' + position + ' && $4==\"' + chromosome +
                      '\"\' >> ' + cluster_grep_result).read()  # NOTE top1 will have sample and annotation, other targets will have '.'-> 18/03 all samples and annotation are already writter for all targets
         os.system(
@@ -1047,7 +1047,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
 
 
 def samplePage(job_id, hash):
-    # ##print("SAMPLE PAGE LOADED FOR", job_id, hash)
+    # ###print("SAMPLE PAGE LOADED FOR", job_id, hash)
     guide = hash[:hash.find('-Sample-')]
     sample = str(hash[hash.rfind('-') + 1:])
     if (not isdir(current_working_directory + 'Results/' + job_id)):
@@ -1461,12 +1461,12 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     df = global_store_subset(value, bulge_t, bulge_s, mms, guide)
     dff = df
 
-    # ##print(dff, 'line 1392')
+    # ###print(dff, 'line 1392')
     # if genome_type == 'ref':
     #    dff.rename(columns = COL_REF_RENAME, inplace = True)
     # else:
     dff.rename(columns=COL_BOTH_RENAME, inplace=True)
-    # ##print(dff, 'line 1397')
+    # ###print(dff, 'line 1397')
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
         dff.drop(
@@ -1477,7 +1477,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # except:  # For REF
     #     pass
 
-    # print('tabella target prima', dff)
+    # #print('tabella target prima', dff)
 
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
@@ -1492,7 +1492,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
             # this is a simplification of the front-end filtering logic,
             # only works with complete fields in standard format
             dff = dff.loc[dff[col_name].str.startswith(filter_value)]
-    # print('tabella target dopo', dff)
+    # #print('tabella target dopo', dff)
     # if len(sort_by):
     #     dff = dff.sort_values(
     #         ['Samples' if col['column_id'] == 'Samples Summary' else col['column_id']
@@ -1539,7 +1539,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     #                 [str(summarized_sample_cell[sp]) + ' ' + sp for sp in summarized_sample_cell])
     #         else:
     #             row['Samples Summary'] = 'n'
-    # print('data nella tabella', data_to_send)
+    # #print('data nella tabella', data_to_send)
     return data_to_send  # , cells_style + style_data_table
 
 
@@ -1625,7 +1625,7 @@ def guidePagev3(job_id, hash):
               ' ' + guide_grep_result + " &")  # , shell = True)
     # global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
-    # print('table', cols)
+    # #print('table', cols)
 
     final_list.append(
         html.Div(
@@ -1683,7 +1683,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide):
     # Skiprows = 1 to skip header of file
     df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
                      bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
-    # ##print('df dei target', df)
+    # ###print('df dei target', df)
     return df
 
 # Load barplot of population distribution for selected guide
@@ -2139,7 +2139,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         df = pd.DataFrame(columns=header)
     df.rename(columns=COL_BOTH_RENAME, inplace=True)
     # df.columns = header
-    # #print(df, 'line 2126')
+    # ##print(df, 'line 2126')
     try:
         df = df[COL_BOTH]
         df_check = True
@@ -2153,7 +2153,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # df_cols.append('Samples')
     # # df_cols.insert(0, '')
     # df = df[df_cols]
-    # ##print(df, 'position df line 2065')
+    # ###print(df, 'position df line 2065')
     if df_check:
         out_1 = [
             dash_table.DataTable(
@@ -2573,7 +2573,7 @@ def check_existance_sample(job_directory, job_id, sample):
 def updateImagesTabs(mm, bulge, sel_cel, search, all_guides):
     # if sel_cel is None:
     #     raise PreventUpdate
-    print('entro update tab')
+    #print('entro update tab')
     # sample = str(sample)
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
@@ -2622,11 +2622,11 @@ def updateImagesTabs(mm, bulge, sel_cel, search, all_guides):
         guide + '_' + str(mm) + \
         '.' + str(bulge) + '_TOTAL.GENCODE.png'
 
-    print('faccio i radar')
+    #print('faccio i radar')
 
     # if not os.path.isfile(f"{job_directory}/{radar_img_encode}"):
     # try:
-    # ##print('faccio radar chart')
+    # ###print('faccio radar chart')
     os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
     # except:
     # pass
@@ -2729,7 +2729,7 @@ def updateImagesTabs(mm, bulge, sel_cel, search, all_guides):
     #                     )
     #                 )
     #             )
-    # reverse list to ##print plots in correct order since they are append in reverse order into main sample_images list
+    # reverse list to ###print plots in correct order since they are append in reverse order into main sample_images list
     reversed_sample_images = sample_images[::-1]
     return radar_chart_encode, radar_chart_gencode, population_barplots, guide_images, reversed_sample_images
 
@@ -2831,7 +2831,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         private = 0
         for line in open(sample_grep_result):
             private += 1
-        # ##print(personal, pam_creation, private)
+        # ###print(personal, pam_creation, private)
         results_table = pd.DataFrame([[personal, pam_creation, private]], columns=[
             'Personal', 'PAM Creation', 'Private']).astype(str)
         if int(private) > 0:
@@ -2875,7 +2875,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
     try:
         file_to_load = job_id + '.' + sample + '.' + guide + '.private.zip'
-        # #print(file_to_load)
+        # ##print(file_to_load)
         ans = ans[COL_BOTH]
         out_1 = [
             html.A('Download private targets', href=URL+'/Results/' +
@@ -3218,7 +3218,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 style={'width': '50%'}
             )
         )
-        # ##print('Position dataframe ready', time.time() - start_time)
+        # ###print('Position dataframe ready', time.time() - start_time)
         # Folr keep current filter:  chr,pos_start,pos_end
         fl.append(html.Div('None,None,None',
                            id='div-position-filter-query', style={'display': 'none'}))
@@ -3299,8 +3299,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     'CFD_ref', 'Highest_CFD_Risk_Score',
                                     'Var_uniq', 'SNP', 'AF', 'rsID', 'Samples', 'Seq_in_cluster', 'Annotation_Type'])
         # to define column names in the first empty table
-        # #print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
-        # #print('check col in query table', dff)
+        # ##print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
+        # ##print('check col in query table', dff)
         all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
                      'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
@@ -3583,7 +3583,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             ]
         )
         fl.append(query_tab_content)
-        # #print('table query', dff)
+        # ##print('table query', dff)
         # fl.append(
 
         return fl
@@ -3754,7 +3754,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         radar_chart_sample_content = dbc.Row(id='row-radar-chart-sample')
         sample_image_content = html.Div(id='div-sample-image')
 
-        print('radar chart')
+        #print('radar chart')
 
         if genome_type != 'ref':
             graph_summary_both = [populations_barplots,
@@ -3970,10 +3970,10 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
 
     target = target[0:7]
     """
-    # print(target)
+    # #print(target)
     # temporal guide for test file
-    # print(n_clicks)
-    # print(type(n_clicks))
+    # #print(n_clicks)
+    # #print(type(n_clicks))
     """
     if n_clicks > 0:
         if radio_order == None:
@@ -4020,7 +4020,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
                             } for row in snps]
     else:
         raise PreventUpdate
-    # #print('query table', data)
+    # ##print('query table', data)
     return data, tooltip_data, alert
 
 
@@ -4059,9 +4059,9 @@ def set_columns_options(selected_target):
         gi.append({'label': all_options[selected_target][count],
                    'value': all_value[selected_target][count]})
     # gi = [{'label': i, 'value': i} for i in all_options[selected_target]]
-    # ##print(gi)
+    # ###print(gi)
     # return gi
-    # ##print(main_order_dict)
+    # ###print(main_order_dict)
     return gi
 
 
@@ -4251,8 +4251,8 @@ def set_columns_value(available_options):
      Output('Radio-asc-1', 'value')],
     [Input('reset-val', 'n_clicks')])
 def resetbutton(n_clicks):
-    # ##print(n_clicks)
-    # ##print(type(n_clicks))
+    # ###print(n_clicks)
+    # ###print(type(n_clicks))
     if n_clicks > 0:
         return None, None, None, None
     else:
