@@ -221,12 +221,12 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     angles_gencode += angles_gencode[:1]
 
     annotation_name = 'ENCODE'
-    print('chiamo encode')
+    # print('chiamo encode')
     createWholePlot(guide, source, fontsize, titlesize, angles_encode, categories_encode,
                     values_encode, guideDataFrame_encode, motifDict, annotation_name)
 
     annotation_name = 'GENCODE'
-    print('chiamo gencode')
+    # print('chiamo gencode')
     createWholePlot(guide, source, fontsize, titlesize, angles_gencode, categories_gencode,
                     values_gencode, guideDataFrame_gencode, motifDict, annotation_name)
 
