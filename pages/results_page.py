@@ -3599,7 +3599,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             'Summary Graphical report collecting all the plots and images produced during the search'))
 
         opt_mm = []
-        for i in range(int(mms+max_bulges)+1):
+        total = int(mms)+int(max_bulges)
+        for i in range(int(total)+1):
             opt_mm.append({'label': str(i), 'value': str(i)})
         opt_blg = []
         for i in range(int(max_bulges)+1):
