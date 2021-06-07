@@ -178,7 +178,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     ax.plot(angles_encode, values_encode, linewidth=1, linestyle='solid')
 
     plt.subplot(2, 2, 2)
-    transpose_list = []
+    transpose_list = list()
     guideDataFrame_encode = guideDataFrame_encode.T
     for elem in categories_encode:
         transpose_list.append(list(guideDataFrame_encode.loc[elem]))
@@ -235,8 +235,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
                ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=fontsize, loc='upper left', ncol=6)
 
-    # plt.suptitle(str(mismatch)+" Mismatches + "+str(bulge)+" Bulge "+str(source),
-    #              horizontalalignment='center', color='black', size=titlesize)
+    plt.suptitle('Targets found in each ENCODE category - '+str(total)+' (Mismatches (MM) + Bulges(B))',
+                 horizontalalignment='center', color='black', size=titlesize)
 
     plt.tight_layout()
 
