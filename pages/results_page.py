@@ -2565,12 +2565,13 @@ def check_existance_sample(job_directory, job_id, sample):
      Output('div-sample-image', 'children'),
      Output('row-radar-chart-sample', 'children')],
     [Input('mm-dropdown', 'value'),
-     Input('blg-dropdown', 'value'),
+     #  Input('blg-dropdown', 'value'),
      Input('general-profile-table', 'selected_cells')],
     [State('url', 'search'),
      State('general-profile-table', 'data')]
 )
-def updateImagesTabs(mm, bulge, sel_cel, search, all_guides):
+def updateImagesTabs(mm, sel_cel, search, all_guides):
+    bulge = 0
     # if sel_cel is None:
     #     raise PreventUpdate
     #print('entro update tab')
@@ -3668,27 +3669,27 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select Mismatches"),
+                        html.P("Select Total (Mismatches+Bulge)"),
                         dcc.Dropdown(id='mm-dropdown',
                                      options=opt_mm,
                                      value='0',
                                      clearable=False,
                                      )
                     ]
-                ), width=4
-            ),
-            dbc.Col(
-                html.Div(
-                    [
-                        html.P("Select Bulges"),
-                        dcc.Dropdown(id='blg-dropdown',
-                                     options=opt_blg,
-                                     value='0',
-                                     clearable=False,
-                                     )
-                    ]
-                ), width=4
+                )
             )
+            # dbc.Col(
+            #     html.Div(
+            #         [
+            #             html.P("Select Bulges"),
+            #             dcc.Dropdown(id='blg-dropdown',
+            #                          options=opt_blg,
+            #                          value='0',
+            #                          clearable=False,
+            #                          )
+            #         ]
+            #     ), width=4
+            # )
         ]
         sample_buttons = [
             dbc.Col(
