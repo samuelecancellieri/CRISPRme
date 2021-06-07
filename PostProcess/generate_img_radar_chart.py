@@ -181,7 +181,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     transpose_list = []
     guideDataFrame_encode = guideDataFrame_encode.T
     for elem in categories_encode:
-        transpose_list.append(list(guideDataFrame.loc[elem]))
+        transpose_list.append(list(guideDataFrame_encode.loc[elem]))
     templist = list()
     for couple in transpose_list:
         couple[0] = int(couple[0])
