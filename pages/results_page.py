@@ -2680,25 +2680,23 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     if img_found:
         radar_chart_encode.append(
-            dbc.Col(
-                html.A(
-                    html.Img(src=radar_src_encode, id='radar-img-guide',
-                             width="100%", height="auto"),
-                    target="_blank",
-                    href=radar_href_encode
-                )
+            html.A(
+                html.Img(src=radar_src_encode, id='radar-img-guide',
+                         width="100%", height="auto"),
+                target="_blank",
+                href=radar_href_encode
             )
         )
+
         radar_chart_gencode.append(
-            dbc.Col(
-                html.A(
-                    html.Img(src=radar_src_gencode, id='radar-img-guide',
-                             width="100%", height="auto"),
-                    target="_blank",
-                    href=radar_href_gencode
-                )
+            html.A(
+                html.Img(src=radar_src_gencode, id='radar-img-guide',
+                         width="100%", height="auto"),
+                target="_blank",
+                href=radar_href_gencode
             )
         )
+
     if len(radar_chart_encode) == 0:
         radar_chart_encode.append(
             html.H2(
@@ -3779,8 +3777,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
 
         # radar_chart_total_content = html.Div(id='div-radar-chart-total')
-        radar_chart_encode = html.Div(id='div-radar-chart-encode')
-        radar_chart_gencode = html.Div(id='div-radar-chart-gencode')
+        radar_chart_encode = dbc.Col(html.Div(id='div-radar-chart-encode'))
+        radar_chart_gencode = dbc.Col(html.Div(id='div-radar-chart-gencode'))
         populations_barplots = html.Div(id='div-population-barplot')
         # radar_chart_sample_content = html.Div(id='div-radar-chart-sample')
         radar_chart_sample_content = dbc.Row(id='row-radar-chart-sample')
@@ -3793,13 +3791,18 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             graph_summary_both = [
                 dbc.Col(radar_chart_encode), dbc.Col(radar_chart_gencode)]
 
-        # fl.append(
-        #     html.Div(
-        #         [
-        #             dbc.Row(graph_summary_both)
-        #         ]
-        #     )
-        # )
+        fl.append(
+            html.Div(
+                [
+                    dbc.Row(
+                        [
+                            radar_chart_encode,
+                            radar_chart_gencode
+                        ]
+                    )
+                ]
+            )
+        )
 
         # uncomment to include samples charts
         # fl.append(
