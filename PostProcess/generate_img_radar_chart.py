@@ -84,18 +84,18 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     #         elem = 0
     #     percentage_list[count] = elem
 
-    print('data frame prima', guideDataFrame)
+    # print('data frame prima', guideDataFrame)
 
-    guideDataFrame.drop(['General', 'CTCF-only;CTCF-bound', 'dELS;CTCF-bound', 'DNase-H3K4me3;CTCF-bound', 'pELS;CTCF-bound',
-                         'PLS;CTCF-bound', 'start_codon', 'stop_codon', 'stop_codon_redefined_as_selenocysteine', 'transcript'], inplace=True)
-
-    print('data frame dopo', guideDataFrame)
+    # print('data frame dopo', guideDataFrame)
 
     guideDataFrame['Percentage'] = percentage_list
     guideDataFrame.columns = ['Total', 'Percentage']
     # convert to int total column
     # print('prima', guideDataFrame)
     # guideDataFrame['Total'] = guideDataFrame['Total'].astype('int32')
+    guideDataFrame.drop(['General', 'CTCF-only;CTCF-bound', 'dELS;CTCF-bound', 'DNase-H3K4me3;CTCF-bound', 'pELS;CTCF-bound',
+                         'PLS;CTCF-bound', 'start_codon', 'stop_codon', 'stop_codon_redefined_as_selenocysteine', 'transcript'], inplace=True)
+
     guideDataFrame = guideDataFrame.T
     # print('dopo', guideDataFrame)
     # number of variable
