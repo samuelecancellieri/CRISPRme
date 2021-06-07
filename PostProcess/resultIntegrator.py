@@ -121,6 +121,8 @@ empiricalList = []
 genomeDict = {}
 empiricalDict = {}
 valueDict = {}
+# check if a personal annotation is used in the search and preserve the column
+check_personal_existence = False
 # saveDict = {"real_guide": 'n', "genome": 'n', "chr": 'n', "prim_pos": 'n', "strand": 'n', "highest_CFD_guide_alignment": 'n', "highest_CFD_alignment(ref)": 'n',
 #             "highest_CFD_alignment(alt)": 'n', "ref_seq_length": 'n', "ref_pos_alt(aligned_strand)": 'n', "pam": 'n', "annotation": 'n', "CFD_score_(highest_CFD)": 'n',
 #             "CFD_score_(highest_CFD)(ref)": 'n', "CFD_score_(highest_CFD)(alt)": 'n', "risk_score": 'n', "absolute_risk_score": 'n', "highest_CFD_mismatch": 'n',
@@ -229,7 +231,7 @@ else:
     inCrispritzResults.seek(0)
 
 for nline, line in enumerate(inCrispritzResults):
-    x = line.strip().split('\t')
+    target = line.strip().split('\t')
     try:
         annotationLine = inAnnotationFile.readline().strip().split('\t')
     except:
@@ -274,29 +276,29 @@ for nline, line in enumerate(inCrispritzResults):
             saveDict['Annotation_GENCODE'] = 'intergenic'
 
     # origin = ''
-    # if 'n' in str(x[13]):
+    # if 'n' in str(target[13]):
     #     origin = 'ref'
     # else:
     #     origin = 'alt'
 
     variantList = ['NA']
-    if str(x[13]) != 'NA' and str(x[13]) != 'n' and str(x[20]) != str(x[21]):
-        variantList = str(x[18]).strip().split(',')
+    if str(target[13]) != 'NA' and str(target[13]) != 'n' and str(target[20]) != str(target[21]):
+        variantList = str(target[18]).strip().split(',')
         if len(variantList) > 1 and checkVCF:
-            samples = x[13]
-            x[17] = createBedforMultiAlternative(variantList, samples)
-            x[17] = str(x[17])[:7]
+            samples = target[13]
+            target[17] = createBedforMultiAlternative(variantList, samples)
+            target[17] = str(target[17])[:7]
         var_pos = []
         # generate variant position corrected to be in the positive strand
-        if '+' in str(x[7]):
-            refseq = str(x[3])
-            altseq = str(x[2])
+        if '+' in str(target[7]):
+            refseq = str(target[3])
+            altseq = str(target[2])
             for pos, nucleotide in enumerate(refseq):
                 if altseq[pos].lower() != nucleotide.lower():
                     var_pos.append(pos+1)
         else:
-            refseq = str(x[3])
-            altseq = str(x[2])
+            refseq = str(target[3])
+            altseq = str(target[2])
             for pos in range(len(refseq)-1, -1, -1):
                 if refseq[pos].lower() != altseq[pos].lower():
                     var_pos.append(pos+1)
@@ -308,7 +310,7 @@ for nline, line in enumerate(inCrispritzResults):
             correction = 0
             if split_one_len != split_second_len:
                 correction = split_second_len
-            if '+' in str(x[7]):
+            if '+' in str(target[7]):
                 variantList[count] = str(
                     split[2])+str(int(var_pos[count])+correction)+str(split[3])
             else:
@@ -323,23 +325,23 @@ for nline, line in enumerate(inCrispritzResults):
     variantList_highest_cfd = variantList
 
     variantList = ['NA']
-    if str(x[37]) != 'NA' and str(x[37]) != 'n' and str(x[44]) != str(x[45]):
-        variantList = str(x[42]).strip().split(',')
+    if str(target[37]) != 'NA' and str(target[37]) != 'n' and str(target[44]) != str(target[45]):
+        variantList = str(target[42]).strip().split(',')
         if len(variantList) > 1 and checkVCF:
-            samples = x[37]
-            x[41] = createBedforMultiAlternative(variantList, samples)
-            x[41] = str(x[41])[:7]
+            samples = target[37]
+            target[41] = createBedforMultiAlternative(variantList, samples)
+            target[41] = str(target[41])[:7]
         var_pos = []
         # generate variant position corrected to be in the positive strand
-        if '+' in str(x[31]):
-            refseq = str(x[27])
-            altseq = str(x[26])
+        if '+' in str(target[31]):
+            refseq = str(target[27])
+            altseq = str(target[26])
             for pos, nucleotide in enumerate(refseq):
                 if altseq[pos].lower() != nucleotide.lower():
                     var_pos.append(pos+1)
         else:
-            refseq = str(x[27])
-            altseq = str(x[26])
+            refseq = str(target[27])
+            altseq = str(target[26])
             for pos in range(len(refseq)-1, -1, -1):
                 if refseq[pos].lower() != altseq[pos].lower():
                     var_pos.append(pos+1)
@@ -351,7 +353,7 @@ for nline, line in enumerate(inCrispritzResults):
             correction = 0
             if split_one_len != split_second_len:
                 correction = split_second_len
-            if '+' in str(x[31]):
+            if '+' in str(target[31]):
                 variantList[count] = str(
                     split[2])+str(int(var_pos[count])+correction)+str(split[3])
             else:
@@ -365,60 +367,60 @@ for nline, line in enumerate(inCrispritzResults):
                     reversed(firstcomp))+str(int(var_pos[count])+correction)+''.join(reversed(secondcomp))
     variantList_fewest_mm_b = variantList
 
-    saveDict['Spacer+PAM'] = str(x[15])
-    saveDict['Strand_(highest_CFD)'] = str(x[7])
-    saveDict['Chromosome'] = str(x[4])
-    saveDict['Start_coordinate_(highest_CFD)'] = str(x[5])
-    saveDict['Aligned_spacer+PAM_(highest_CFD)'] = str(x[1])
-    saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = str(x[3])
-    saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = str(x[2])
+    saveDict['Spacer+PAM'] = str(target[15])
+    saveDict['Strand_(highest_CFD)'] = str(target[7])
+    saveDict['Chromosome'] = str(target[4])
+    saveDict['Start_coordinate_(highest_CFD)'] = str(target[5])
+    saveDict['Aligned_spacer+PAM_(highest_CFD)'] = str(target[1])
+    saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = str(target[3])
+    saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = str(target[2])
     saveDict['PAM_(highest_CFD)'] = 'NA'
-    saveDict['Mismatches_(highest_CFD)'] = str(x[8])
-    saveDict['Bulges_(highest_CFD)'] = str(x[9])
-    saveDict['Mismatches+bulges_(highest_CFD)'] = str(x[10])
-    saveDict['Bulge_type_(highest_CFD)'] = str(x[0])
+    saveDict['Mismatches_(highest_CFD)'] = str(target[8])
+    saveDict['Bulges_(highest_CFD)'] = str(target[9])
+    saveDict['Mismatches+bulges_(highest_CFD)'] = str(target[10])
+    saveDict['Bulge_type_(highest_CFD)'] = str(target[0])
     saveDict['REF/ALT_origin_(highest_CFD)'] = 'ref' if str(
-        x[13]) == 'NA' else 'alt'
-    saveDict['PAM_creation_(highest_CFD)'] = str(x[11])
-    saveDict['CFD_score_(highest_CFD)'] = str(x[20]) if float(
-        x[20]) > float(x[21]) else str(x[21])
-    saveDict['CFD_score_REF_(highest_CFD)'] = str(x[21])
-    saveDict['CFD_score_ALT_(highest_CFD)'] = str(x[20])
-    saveDict['CFD_risk_score_(highest_CFD)'] = str(x[22])
+        target[13]) == 'NA' else 'alt'
+    saveDict['PAM_creation_(highest_CFD)'] = str(target[11])
+    saveDict['CFD_score_(highest_CFD)'] = str(target[20]) if float(
+        target[20]) > float(target[21]) else str(target[21])
+    saveDict['CFD_score_REF_(highest_CFD)'] = str(target[21])
+    saveDict['CFD_score_ALT_(highest_CFD)'] = str(target[20])
+    saveDict['CFD_risk_score_(highest_CFD)'] = str(target[22])
     saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = ','.join(
         variantList_highest_cfd)
-    saveDict['Variant_info_genome_(highest_CFD)'] = str(x[18])
-    saveDict['Variant_MAF_(highest_CFD)'] = str(x[17])
+    saveDict['Variant_info_genome_(highest_CFD)'] = str(target[18])
+    saveDict['Variant_MAF_(highest_CFD)'] = str(target[17])
     saveDict['Variant_rsID_(highest_CFD)'] = 'NA' if str(
-        x[16]) == '.' else str(x[16])
-    saveDict['Variant_samples_(highest_CFD)'] = str(x[13])
-    saveDict['Not_found_in_REF'] = 'y' if str(x[12]) == 'y' else 'NA'
-    saveDict['Other_motifs'] = str(x[19])
-    saveDict['Strand_(fewest_mm+b)'] = str(x[31])
-    saveDict['Start_coordinate_(fewest_mm+b)'] = str(x[29])
-    saveDict['Aligned_spacer+PAM_(fewest_mm+b)'] = str(x[25])
-    saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'] = str(x[27])
-    saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = str(x[26])
+        target[16]) == '.' else str(target[16])
+    saveDict['Variant_samples_(highest_CFD)'] = str(target[13])
+    saveDict['Not_found_in_REF'] = 'y' if str(target[12]) == 'y' else 'NA'
+    saveDict['Other_motifs'] = str(target[19])
+    saveDict['Strand_(fewest_mm+b)'] = str(target[31])
+    saveDict['Start_coordinate_(fewest_mm+b)'] = str(target[29])
+    saveDict['Aligned_spacer+PAM_(fewest_mm+b)'] = str(target[25])
+    saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'] = str(target[27])
+    saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = str(target[26])
     saveDict['PAM_(fewest_mm+b)'] = 'NA'
-    saveDict['Mismatches_(fewest_mm+b)'] = str(x[32])
-    saveDict['Bulges_(fewest_mm+b)'] = str(x[33])
-    saveDict['Mismatches+bulges_(fewest_mm+b)'] = str(x[34])
-    saveDict['Bulge_type_(fewest_mm+b)'] = str(x[24])
+    saveDict['Mismatches_(fewest_mm+b)'] = str(target[32])
+    saveDict['Bulges_(fewest_mm+b)'] = str(target[33])
+    saveDict['Mismatches+bulges_(fewest_mm+b)'] = str(target[34])
+    saveDict['Bulge_type_(fewest_mm+b)'] = str(target[24])
     saveDict['REF/ALT_origin_(fewest_mm+b)'] = 'ref' if str(
-        x[37]) == 'NA' else 'alt'
-    saveDict['PAM_creation_(fewest_mm+b)'] = str(x[35])
-    saveDict['CFD_score_(fewest_mm+b)'] = str(x[44]
-                                              ) if float(x[44]) > float(x[45]) else str(x[45])
-    saveDict['CFD_score_REF_(fewest_mm+b)'] = str(x[45])
-    saveDict['CFD_score_ALT_(fewest_mm+b)'] = str(x[44])
-    saveDict['CFD_risk_score_(fewest_mm+b)'] = str(x[46])
+        target[37]) == 'NA' else 'alt'
+    saveDict['PAM_creation_(fewest_mm+b)'] = str(target[35])
+    saveDict['CFD_score_(fewest_mm+b)'] = str(target[44]
+                                              ) if float(target[44]) > float(target[45]) else str(target[45])
+    saveDict['CFD_score_REF_(fewest_mm+b)'] = str(target[45])
+    saveDict['CFD_score_ALT_(fewest_mm+b)'] = str(target[44])
+    saveDict['CFD_risk_score_(fewest_mm+b)'] = str(target[46])
     saveDict['Variant_info_spacer+PAM_(fewest_mm+b)'] = ','.join(
         variantList_fewest_mm_b)
-    saveDict['Variant_info_genome_(fewest_mm+b)'] = str(x[42])
-    saveDict['Variant_MAF_(fewest_mm+b)'] = str(x[41])
+    saveDict['Variant_info_genome_(fewest_mm+b)'] = str(target[42])
+    saveDict['Variant_MAF_(fewest_mm+b)'] = str(target[41])
     saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA' if str(
-        x[40]) == '.' else str(x[40])
-    saveDict['Variant_samples_(fewest_mm+b)'] = str(x[37])
+        target[40]) == '.' else str(target[40])
+    saveDict['Variant_samples_(fewest_mm+b)'] = str(target[37])
 
     if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
         saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)']
@@ -494,7 +496,7 @@ for nline, line in enumerate(inCrispritzResults):
     count_N_in_guide = 0  # check how long is the pam counting Ns in the guide
     pam_at_start = False  # check if pam is at start of the sequence
     # count number of Ns in the guide
-    for count, elem in enumerate(str(x[15])):
+    for count, elem in enumerate(str(target[15])):
         if elem == 'N':
             count_N_in_guide += 1
             if count == 0:  # if N is at start of the guide, pam_at_start = true
@@ -522,11 +524,11 @@ for nline, line in enumerate(inCrispritzResults):
         else:
             saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][-count_N_in_guide:]
 
-    annotationList = x[14].split(',')
+    annotationList = target[14].split(',')
     personal_annotations = set()
     encode_annotations = set()
     gencode_annotations = set()
-    check_personal_existence = False
+
     for elem in annotationList:
         if '_personal' in elem:
             personal_annotations.add(elem.replace('_personal', ''))
@@ -545,7 +547,7 @@ for nline, line in enumerate(inCrispritzResults):
     if len(gencode_annotations) > 0:
         saveDict['Annotation_GENCODE'] = ','.join(gencode_annotations)
 
-    foundEmpirical = sorted(empiricalTree[int(x[6])-4:int(x[6])+4])
+    foundEmpirical = sorted(empiricalTree[int(target[6])-4:int(target[6])+4])
 
     for found in range(0, len(foundEmpirical)):
         empirical = foundEmpirical[found].data
