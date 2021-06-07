@@ -2563,7 +2563,6 @@ def check_existance_sample(job_directory, job_id, sample):
      Output('div-radar-chart-gencode', 'children'),
      Output('div-population-barplot', 'children'),
      Output('div-sample-image', 'children'),
-     #  Output('div-radar-chart-sample', 'children')],
      Output('row-radar-chart-sample', 'children')],
     [Input('mm-dropdown', 'value'),
      Input('blg-dropdown', 'value'),
@@ -2619,32 +2618,6 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
             )
         ]
 
-    # try:
-    #     guide_images.extend(  # population barplot
-    #         [
-    #             html.A(
-    #                 html.Img(
-    #                     src='data:image/png;base64,{}'.format(base64.b64encode(open(
-    #                         current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
-    #                     id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
-    #                 ),
-    #                 target="_blank",
-    #                 href='/Results/' + job_id + '/imgs/' + 'populations_distribution_' +
-    #                 guide + '_' +
-    #                 str(int(mm)+int(bulge)) + 'total.png'
-    #             ),
-    #             html.Div(html.P('Distribution ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges ', style={
-    #                 'display': 'inline-block'}), style={'text-align': 'center'})
-    #         ]
-    #     )
-    # except:
-    #     guide_images.append(
-    #         html.Div(html.P('No Targets found with ' + str(int(mm)+int(bulge)) + ' Mismatches + Bulges', style={
-    #             'display': 'inline-block'}), style={'text-align': 'center'}),
-    #         # html.Div(html.P('Distribution ' + str(mm) + ' Mismatches + Bulges ', style = {'display':'inline-block'} ),style = {'text-align':'center'})
-    #     )
-
-    # guide = guide.replace("N", "")
     radar_img_encode = '/imgs/summary_single_guide_' + \
         guide + '_' + str(mm) + \
         '.' + str(bulge) + '_TOTAL.ENCODE.png'
@@ -2654,12 +2627,12 @@ def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, se
 
     print('faccio i radar')
 
-    if not os.path.isfile(f"{job_directory}/{radar_img_encode}"):
-        # try:
-        # ##print('faccio radar chart')
-        os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
-        # except:
-        # pass
+    # if not os.path.isfile(f"{job_directory}/{radar_img_encode}"):
+    # try:
+    # ##print('faccio radar chart')
+    os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
+    # except:
+    # pass
 
     img_found = False
     try:
