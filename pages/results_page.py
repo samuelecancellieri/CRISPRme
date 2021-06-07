@@ -1780,7 +1780,7 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page):
         current_working_directory + 'Results/' +
         value + '/'+value + '*integrated*.jay')[0]
     integrated_file_name = str(integrated_file_name)
-    df = dt.fread(integrated_file_name)
+    df = dt.fread(integrated_file_name, na_strings='NA')
     result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) &
                  (f['Bulges_(highest_CFD)'] == int(bulge_s)) & (f['Mismatches_(highest_CFD)'] == int(mms)) 
                  & (f['Variant_samples_(highest_CFD)'] != 'NA'), 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[page *PAGE_SIZE:(page + 1)*PAGE_SIZE, :].to_pandas().fillna('NA')
