@@ -98,6 +98,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     guideDataFrame_encode = guideDataFrame.loc[[
         'CTCF-only', 'pELS', 'dELS', 'PLS', 'DNase-H3K4me3']]
+    guideDataFrame_encode.rename(index={'CTCF-only': 'CTCF'}, inplace=True)
     guideDataFrame_gencode = guideDataFrame.loc[[
         'exon', 'gene', 'CDS', 'three_prime_UTR', 'five_prime_UTR']]
     # guideDataFrame = guideDataFrame.T
