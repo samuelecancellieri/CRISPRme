@@ -2293,7 +2293,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # except:
     #     df = pd.DataFrame(columns=header)
     #     df_check = False
-    if result.shape[0] != 0:
+    if result.shape[0] == 0:
         df_check = False
     else:
         df_check = True
