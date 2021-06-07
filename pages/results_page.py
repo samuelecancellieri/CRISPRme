@@ -3798,8 +3798,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                 [
                     dbc.Row(
                         [
-                            radar_chart_encode,
-                            radar_chart_gencode
+                            dbc.Col('TEST')
+                            # radar_chart_encode,
+                            # radar_chart_gencode
                         ]
                     )
                 ]
