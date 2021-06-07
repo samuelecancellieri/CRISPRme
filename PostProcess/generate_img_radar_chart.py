@@ -96,9 +96,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # guideDataFrame.drop(['General', 'CTCF-only;CTCF-bound', 'dELS;CTCF-bound', 'DNase-H3K4me3;CTCF-bound', 'pELS;CTCF-bound',
     #                      'PLS;CTCF-bound', 'start_codon', 'stop_codon', 'stop_codon_redefined_as_selenocysteine', 'transcript'], inplace=True)
 
-    guideDataFrame_encode = guideDataFrame[[
+    guideDataFrame_encode = guideDataFrame.loc[[
         'CTCF-only', 'pELS', 'dELS', 'PLS', 'DNase-H3K4me3']]
-    guideDataFrame_gencode = guideDataFrame[[
+    guideDataFrame_gencode = guideDataFrame.loc[[
         'exon', 'gene', 'CDS', 'three_prime_UTR', 'five_prime_UTR']]
     # guideDataFrame = guideDataFrame.T
     guideDataFrame_encode = guideDataFrame_encode.T
