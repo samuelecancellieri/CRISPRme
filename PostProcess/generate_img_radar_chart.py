@@ -41,8 +41,8 @@ try:
     motifDictFile = open(sys.argv[3])
 except:
     sys.exit()
-mismatch = sys.argv[4]
-bulge = sys.argv[5]
+mismatch = int(sys.argv[4])
+bulge = int(sys.argv[5])
 elem = sys.argv[6]
 outDir = sys.argv[7]  # directory to output the figures
 # threads = int(sys.argv[6])  # number of concurrent execution of image creation
@@ -59,8 +59,8 @@ if web_server:
 
 
 def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
-
     # check if no targets are found for that combination source/totalcount and skip the execution
+    total = mismatch+bulge  # count total of mismatch and bulge requested
     if guideDict['General'] == 0:
         return
 
@@ -242,8 +242,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # table.yticks = ([])
     # plt.xticks
 
-    plt.suptitle(str(mismatch)+" Mismatches + "+str(bulge)+" Bulge "+str(source),
-                 horizontalalignment='center', color='black', size=titlesize)
+    # plt.suptitle(str(mismatch)+" Mismatches + "+str(bulge)+" Bulge "+str(source),
+    #              horizontalalignment='center', color='black', size=titlesize)
 
     plt.tight_layout()
     # plt.subplots_adjust(wspace=0.1)
@@ -259,11 +259,14 @@ guide = guide.strip()
 guideDict = json.load(guideDictFile)
 motifDict = json.load(motifDictFile)
 if __name__ == '__main__':
+    total = mismatch+bulge
     # skip creation if no target in global category
-    if guideDict[mismatch][bulge]['TOTAL']['General'] == 0:
+    # if guideDict[mismatch][bulge]['TOTAL']['General'] == 0:
+    if guideDict[total]['General'] == 0:
         sys.exit()
-    try:
-        generatePlot(guide, guideDict[mismatch][bulge][elem],
-                     motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
-    except:
-        sys.exit()
+    # try:
+        # generatePlot(guide, guideDict[mismatch][bulge][elem], motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
+    generatePlot(guide, guideDict[total],
+                 motifDict[total], mismatch, bulge, elem)
+    # except:
+    #     sys.exit()
