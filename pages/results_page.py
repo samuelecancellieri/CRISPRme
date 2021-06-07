@@ -2566,9 +2566,6 @@ def check_existance_sample(job_directory, job_id, sample):
      Output('row-radar-chart-sample', 'children')],
     [Input('mm-dropdown', 'value'),
      Input('blg-dropdown', 'value'),
-     Input('dropdown-superpopulation-sample', 'value'),
-     Input('dropdown-population-sample', 'value'),
-     Input('dropdown-sample', 'value'),
      Input('general-profile-table', 'selected_cells')],
     [State('url', 'search'),
      State('general-profile-table', 'data')]
