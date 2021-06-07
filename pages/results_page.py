@@ -3776,13 +3776,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             graph_summary_both = dbc.Col(radar_chart_total_content, width={
                                          "size": 8, "offset": 2})
 
-        fl.append(
-            html.Div(
-                [
-                    dbc.Row(graph_summary_both)
-                ]
-            )
-        )
+        # fl.append(
+        #     html.Div(
+        #         [
+        #             dbc.Row(graph_summary_both)
+        #         ]
+        #     )
+        # )
 
         # uncomment to include samples charts
         # fl.append(
