@@ -2577,7 +2577,7 @@ def check_existance_sample(job_directory, job_id, sample):
 def updateImagesTabs(mm, bulge, superpopulation, population, sample, sel_cel, search, all_guides):
     # if sel_cel is None:
     #     raise PreventUpdate
-    # ##print('entro update tab')
+    print('entro update tab')
     sample = str(sample)
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
