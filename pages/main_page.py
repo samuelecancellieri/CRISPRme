@@ -1274,7 +1274,7 @@ def indexPage():
                      'value': '1000G', 'disabled': True},
                     {'label': ' plus HGDP variants',
                      'value': 'HGDP', 'disabled': True},
-                    {'label': ' plus Personal Variants*',
+                    {'label': ' plus personal variants*',
                      'value': 'PV', 'disabled': True}
                 ],
                     id='checklist-variants', value=[])
