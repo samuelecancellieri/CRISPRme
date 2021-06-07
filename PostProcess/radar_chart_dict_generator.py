@@ -487,7 +487,7 @@ populationDict = dict()
 for line in inAnnotationsFile:
     annotation = line.strip().split('\t')[3]
     if '_personal' not in annotation:
-        annotationsSet.add(annotation)
+        annotationsSet.add(annotation.replace('_gencode', ''))
 
 annotationsSet.add('CTCF-only')
 annotationsSet = sorted(annotationsSet)
