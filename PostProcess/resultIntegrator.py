@@ -7,6 +7,7 @@ import sys
 import time
 import glob
 import subprocess
+import os
 
 
 def rev_comp(a):
@@ -101,6 +102,8 @@ originFileName = crispritzResultFile.split('/')
 originFileName = originFileName[len(originFileName)-1]
 outFile = open(outputDir + originFileName +
                '.integrated_results.tsv', 'w')
+outFile_name = outputDir+originFileName+'.integrated_results.tsv'
+
 # list file in vcf directory
 checkVCF = False
 if 'vuota' not in vcfFileDirectory:
@@ -118,9 +121,11 @@ empiricalList = []
 genomeDict = {}
 empiricalDict = {}
 valueDict = {}
+# check if a personal annotation is used in the search and preserve the column
+check_personal_existence = False
 # saveDict = {"real_guide": 'n', "genome": 'n', "chr": 'n', "prim_pos": 'n', "strand": 'n', "highest_CFD_guide_alignment": 'n', "highest_CFD_alignment(ref)": 'n',
-#             "highest_CFD_alignment(alt)": 'n', "ref_seq_length": 'n', "ref_pos_alt(aligned_strand)": 'n', "pam": 'n', "annotation": 'n', "highest_CFD_score": 'n',
-#             "highest_CFD_score(ref)": 'n', "highest_CFD_score(alt)": 'n', "risk_score": 'n', "absolute_risk_score": 'n', "highest_CFD_mismatch": 'n',
+#             "highest_CFD_alignment(alt)": 'n', "ref_seq_length": 'n', "ref_pos_alt(aligned_strand)": 'n', "pam": 'n', "annotation": 'n', "CFD_score_(highest_CFD)": 'n',
+#             "CFD_score_(highest_CFD)(ref)": 'n', "CFD_score_(highest_CFD)(alt)": 'n', "risk_score": 'n', "absolute_risk_score": 'n', "highest_CFD_mismatch": 'n',
 #             "highest_CFD_bulge": 'n', "highest_CFD_mismatch+bulge": 'n', "fewest_mm+bulge_guide_alignment": 'n', "fewest_mm+bulge_alignment(ref)": 'n',
 #             "fewest_mm+bulge_alignment(alt)": 'n', "fewest_mm+bulge_CFD_score(ref)": 'n', "fewest_mm+bulge_CFD_score(alt)": 'n', "fewest_mismatch": 'n',
 #             "fewest_bulge": 'n', "fewest_mismatch+bulge": 'n', "alt_haplotypes": 'n', "prim_origin": 'n', "prim_AF": 'n', "prim_samples": 'n',
@@ -130,60 +135,60 @@ valueDict = {}
 #             "GUIDEseq_mm+bul": 'n'}
 
 # saveDict = {"real_guide": 'n', "genome": 'n', "chr": 'n', "prim_pos": 'n', "strand": 'n', "highest_CFD_guide_alignment": 'n', "highest_CFD_alignment(ref)": 'n',
-#             "highest_CFD_alignment(alt)": 'n', "ref_seq_length": 'n', "ref_pos_alt(aligned_strand)": 'n', "pam": 'n', "annotation": 'n', "highest_CFD_score": 'n',
-#             "highest_CFD_score(ref)": 'n', "highest_CFD_score(alt)": 'n', "risk_score": 'n', "absolute_risk_score": 'n', "highest_CFD_mismatch": 'n',
+#             "highest_CFD_alignment(alt)": 'n', "ref_seq_length": 'n', "ref_pos_alt(aligned_strand)": 'n', "pam": 'n', "annotation": 'n', "CFD_score_(highest_CFD)": 'n',
+#             "CFD_score_(highest_CFD)(ref)": 'n', "CFD_score_(highest_CFD)(alt)": 'n', "risk_score": 'n', "absolute_risk_score": 'n', "highest_CFD_mismatch": 'n',
 #             "highest_CFD_bulge": 'n', "highest_CFD_mismatch+bulge": 'n', "fewest_mm+bulge_guide_alignment": 'n', "fewest_mm+bulge_alignment(ref)": 'n',
 #             "fewest_mm+bulge_alignment(alt)": 'n', "fewest_mm+bulge_CFD_score(ref)": 'n', "fewest_mm+bulge_CFD_score(alt)": 'n', "fewest_mismatch": 'n',
 #             "fewest_bulge": 'n', "fewest_mismatch+bulge": 'n', "alt_haplotypes": 'n', "prim_origin": 'n', "prim_AF": 'n', "prim_samples": 'n',
 #             "prim_SNP_ID(positive_strand)": 'n', "gene_name": 'n', "gene_ID": 'n', "gene_annotation": 'n', "gene_distance(kb)": 'n', "lowest_empirical": 'n'}
 
 saveDict = {
-    'Highest_CFD_Strand': 'NA',
+    'Spacer+PAM': 'NA',
     'Chromosome': 'NA',
-    'Highest_CFD_start_coordinate': 'NA',
-    'Highest_CFD_aligned_spacer+PAM': 'NA',
-    'Highest_CFD_aligned_protospacer+PAM_REF': 'NA',
-    'Highest_CFD_aligned_protospacer+PAM_ALT': 'NA',
-    'Highest_CFD_PAM': 'NA',
-    'Highest_CFD_mismatches': 'NA',
-    'Highest_CFD_bulges': 'NA',
-    'Highest_CFD_mismatches+bulges': 'NA',
-    'Highest_CFD_bulge_type': 'NA',
-    'Highest_CFD_REF/ALT_origin': 'NA',
-    'Highest_CFD_PAM_gen': 'NA',
-    'Highest_CFD_score': 'NA',
-    'Highest_CFD_score_REF': 'NA',
-    'Highest_CFD_score_ALT': 'NA',
-    'Highest_CFD_risk_score': 'NA',
-    'Highest_CFD_variant_info_spacer+PAM': 'NA',
-    'Highest_CFD_variant_info_genome': 'NA',
-    'Highest_CFD_variant_MAF': 'NA',
-    'Highest_CFD_variant_rsID': 'NA',
-    'Highest_CFD_variant_samples': 'NA',
+    'Start_coordinate_(highest_CFD)': 'NA',
+    'Strand_(highest_CFD)': 'NA',
+    'Aligned_spacer+PAM_(highest_CFD)': 'NA',
+    'Aligned_protospacer+PAM_REF_(highest_CFD)': 'NA',
+    'Aligned_protospacer+PAM_ALT_(highest_CFD)': 'NA',
+    'PAM_(highest_CFD)': 'NA',
+    'Mismatches_(highest_CFD)': 'NA',
+    'Bulges_(highest_CFD)': 'NA',
+    'Mismatches+bulges_(highest_CFD)': 'NA',
+    'Bulge_type_(highest_CFD)': 'NA',
+    'REF/ALT_origin_(highest_CFD)': 'NA',
+    'PAM_creation_(highest_CFD)': 'NA',
+    'CFD_score_(highest_CFD)': 'NA',
+    'CFD_score_REF_(highest_CFD)': 'NA',
+    'CFD_score_ALT_(highest_CFD)': 'NA',
+    'CFD_risk_score_(highest_CFD)': 'NA',
+    'Variant_info_spacer+PAM_(highest_CFD)': 'NA',
+    'Variant_info_genome_(highest_CFD)': 'NA',
+    'Variant_MAF_(highest_CFD)': 'NA',
+    'Variant_rsID_(highest_CFD)': 'NA',
+    'Variant_samples_(highest_CFD)': 'NA',
     'Not_found_in_REF': 'NA',
     'Other_motifs': 'NA',
-    'Fewest_mm+b_Strand': 'NA',
-    'Fewest_mm+b_start_coordinate': 'NA',
-    'Fewest_mm+b_start_coordinate': 'NA',
-    'Fewest_mm+b_aligned_spacer+PAM': 'NA',
-    'Fewest_mm+b_aligned_protospacer+PAM_REF': 'NA',
-    'Fewest_mm+b_aligned_protospacer+PAM_ALT': 'NA',
-    'Fewest_mm+b_PAM': 'NA',
-    'Fewest_mm+b_mismatches': 'NA',
-    'Fewest_mm+b_bulges': 'NA',
-    'Fewest_mm+b_mismatches+bulges': 'NA',
-    'Fewest_mm+b_bulge_type': 'NA',
-    'Fewest_mm+b_REF/ALT_origin': 'NA',
-    'Fewest_mm+b_PAM_gen': 'NA',
-    'Fewest_mm+b_CFD_score': 'NA',
-    'Fewest_mm+b_CFD_score_REF': 'NA',
-    'Fewest_mm+b_CFD_score_ALT': 'NA',
-    'Fewest_mm+b_CFD_risk_score': 'NA',
-    'Fewest_mm+b_variant_info_spacer+PAM': 'NA',
-    'Fewest_mm+b_variant_info_genome': 'NA',
-    'Fewest_mm+b_variant_MAF': 'NA',
-    'Fewest_mm+b_variant_rsID': 'NA',
-    'Fewest_mm+b_variant_samples': 'NA',
+    'Start_coordinate_(fewest_mm+b)': 'NA',
+    'Strand_(fewest_mm+b)': 'NA',
+    'Aligned_spacer+PAM_(fewest_mm+b)': 'NA',
+    'Aligned_protospacer+PAM_REF_(fewest_mm+b)': 'NA',
+    'Aligned_protospacer+PAM_ALT_(fewest_mm+b)': 'NA',
+    'PAM_(fewest_mm+b)': 'NA',
+    'Mismatches_(fewest_mm+b)': 'NA',
+    'Bulges_(fewest_mm+b)': 'NA',
+    'Mismatches+bulges_(fewest_mm+b)': 'NA',
+    'Bulge_type_(fewest_mm+b)': 'NA',
+    'REF/ALT_origin_(fewest_mm+b)': 'NA',
+    'PAM_creation_(fewest_mm+b)': 'NA',
+    'CFD_score_(fewest_mm+b)': 'NA',
+    'CFD_score_REF_(fewest_mm+b)': 'NA',
+    'CFD_score_ALT_(fewest_mm+b)': 'NA',
+    'CFD_risk_score_(fewest_mm+b)': 'NA',
+    'Variant_info_spacer+PAM_(fewest_mm+b)': 'NA',
+    'Variant_info_genome_(fewest_mm+b)': 'NA',
+    'Variant_MAF_(fewest_mm+b)': 'NA',
+    'Variant_rsID_(fewest_mm+b)': 'NA',
+    'Variant_samples_(fewest_mm+b)': 'NA',
     'Annotation_GENCODE': 'NA',
     'Annotation_closest_gene_name': 'NA',
     'Annotation_closest_gene_ID': 'NA',
@@ -213,10 +218,8 @@ for count, line in enumerate(inEmpiricalResults):
     # saveDict[newkey] = 'NA'
 
 # writing header in file
-save = '#'
+save = ''
 save += '\t'.join(list(saveDict.keys()))
-# for key in saveDict:
-#     save += str(key)+'\t'
 save += '\n'
 outFile.write(save)
 
@@ -228,11 +231,12 @@ else:
     inCrispritzResults.seek(0)
 
 for nline, line in enumerate(inCrispritzResults):
-    x = line.strip().split('\t')
+    target = line.strip().split('\t')
     try:
         annotationLine = inAnnotationFile.readline().strip().split('\t')
     except:
         annotationFile = 'NA'
+    # print(annotationLine)
     lowestEmpirical = 100
 
     for key in saveDict:
@@ -253,47 +257,48 @@ for nline, line in enumerate(inCrispritzResults):
                     if 'gene_name' in name:
                         saveDict['Annotation_closest_gene_name'] = name.strip().split('=')[
                             1]
-                    if 'gene_type' in name:
-                        tipo = str(annotationLine[11])
-                        if 'codon' in tipo or 'exon' in tipo:
-                            tipo = 'CDS'
-                        elif 'gene' in tipo or 'transcript' in tipo:
-                            tipo = 'intron'
-                        elif 'five_prime_UTR' in tipo:
-                            tipo = "5'UTR"
-                        elif 'three_prime_UTR' in tipo:
-                            tipo = "3'UTR"
+                    # if 'gene_type' in name:
+                    #     tipo = str(annotationLine[11])
+                    #     if 'codon' in tipo or 'exon' in tipo:
+                    #         tipo = 'CDS'
+                    #     elif 'gene' in tipo or 'transcript' in tipo:
+                    #         tipo = 'intron'
+                    #     elif 'five_prime_UTR' in tipo:
+                    #         tipo = "5'UTR"
+                    #     elif 'three_prime_UTR' in tipo:
+                    #         tipo = "3'UTR"
                     # saveDict['gene_annotation'] = str(annotationLine[11])
-                        saveDict['Annotation_GENCODE'] = tipo
+                        # saveDict['Annotation_GENCODE'] = str(
+                        #     annotationLine[11])
         saveDict['Annotation_closest_gene_distance_(kb)'] = str(
             float(annotationLine[len(annotationLine)-1])/1000)
         if float(annotationLine[len(annotationLine)-1]) != 0:
             saveDict['Annotation_GENCODE'] = 'intergenic'
 
     # origin = ''
-    # if 'n' in str(x[13]):
+    # if 'n' in str(target[13]):
     #     origin = 'ref'
     # else:
     #     origin = 'alt'
 
     variantList = ['NA']
-    if str(x[13]) != 'NA' and str(x[13]) != 'n':
-        variantList = str(x[18]).strip().split(',')
+    if str(target[13]) != 'NA' and str(target[13]) != 'n' and str(target[20]) != str(target[21]):
+        variantList = str(target[18]).strip().split(',')
         if len(variantList) > 1 and checkVCF:
-            samples = x[13]
-            x[17] = createBedforMultiAlternative(variantList, samples)
-            x[17] = str(x[17])[:7]
+            samples = target[13]
+            target[17] = createBedforMultiAlternative(variantList, samples)
+            target[17] = str(target[17])[:7]
         var_pos = []
         # generate variant position corrected to be in the positive strand
-        if '+' in str(x[7]):
-            refseq = str(x[3])
-            altseq = str(x[2])
+        if '+' in str(target[7]):
+            refseq = str(target[3])
+            altseq = str(target[2])
             for pos, nucleotide in enumerate(refseq):
                 if altseq[pos].lower() != nucleotide.lower():
                     var_pos.append(pos+1)
         else:
-            refseq = str(x[3])
-            altseq = str(x[2])
+            refseq = str(target[3])
+            altseq = str(target[2])
             for pos in range(len(refseq)-1, -1, -1):
                 if refseq[pos].lower() != altseq[pos].lower():
                     var_pos.append(pos+1)
@@ -305,7 +310,7 @@ for nline, line in enumerate(inCrispritzResults):
             correction = 0
             if split_one_len != split_second_len:
                 correction = split_second_len
-            if '+' in str(x[7]):
+            if '+' in str(target[7]):
                 variantList[count] = str(
                     split[2])+str(int(var_pos[count])+correction)+str(split[3])
             else:
@@ -320,23 +325,23 @@ for nline, line in enumerate(inCrispritzResults):
     variantList_highest_cfd = variantList
 
     variantList = ['NA']
-    if str(x[37]) != 'NA' and str(x[37]) != 'n':
-        variantList = str(x[42]).strip().split(',')
+    if str(target[37]) != 'NA' and str(target[37]) != 'n' and str(target[44]) != str(target[45]):
+        variantList = str(target[42]).strip().split(',')
         if len(variantList) > 1 and checkVCF:
-            samples = x[37]
-            x[41] = createBedforMultiAlternative(variantList, samples)
-            x[41] = str(x[41])[:7]
+            samples = target[37]
+            target[41] = createBedforMultiAlternative(variantList, samples)
+            target[41] = str(target[41])[:7]
         var_pos = []
         # generate variant position corrected to be in the positive strand
-        if '+' in str(x[31]):
-            refseq = str(x[27])
-            altseq = str(x[26])
+        if '+' in str(target[31]):
+            refseq = str(target[27])
+            altseq = str(target[26])
             for pos, nucleotide in enumerate(refseq):
                 if altseq[pos].lower() != nucleotide.lower():
                     var_pos.append(pos+1)
         else:
-            refseq = str(x[27])
-            altseq = str(x[26])
+            refseq = str(target[27])
+            altseq = str(target[26])
             for pos in range(len(refseq)-1, -1, -1):
                 if refseq[pos].lower() != altseq[pos].lower():
                     var_pos.append(pos+1)
@@ -348,7 +353,7 @@ for nline, line in enumerate(inCrispritzResults):
             correction = 0
             if split_one_len != split_second_len:
                 correction = split_second_len
-            if '+' in str(x[7]):
+            if '+' in str(target[31]):
                 variantList[count] = str(
                     split[2])+str(int(var_pos[count])+correction)+str(split[3])
             else:
@@ -362,177 +367,187 @@ for nline, line in enumerate(inCrispritzResults):
                     reversed(firstcomp))+str(int(var_pos[count])+correction)+''.join(reversed(secondcomp))
     variantList_fewest_mm_b = variantList
 
-    saveDict['Highest_CFD_Strand'] = str(x[7])
-    saveDict['Chromosome'] = str(x[4])
-    saveDict['Highest_CFD_start_coordinate'] = str(x[5])
-    saveDict['Highest_CFD_aligned_spacer+PAM'] = str(x[1])
-    saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = str(x[3])
-    saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = str(x[2])
-    saveDict['Highest_CFD_PAM'] = 'NA'
-    saveDict['Highest_CFD_mismatches'] = str(x[8])
-    saveDict['Highest_CFD_bulges'] = str(x[9])
-    saveDict['Highest_CFD_mismatches+bulges'] = str(x[10])
-    saveDict['Highest_CFD_bulge_type'] = str(x[0])
-    saveDict['Highest_CFD_REF/ALT_origin'] = 'ref' if str(
-        x[13]) == 'NA' else 'alt'
-    saveDict['Highest_CFD_PAM_gen'] = str(x[11])
-    saveDict['Highest_CFD_score'] = str(x[20]) if float(
-        x[20]) > float(x[21]) else str(x[21])
-    saveDict['Highest_CFD_score_REF'] = str(x[21])
-    saveDict['Highest_CFD_score_ALT'] = str(x[20])
-    saveDict['Highest_CFD_risk_score'] = str(x[22])
-    saveDict['Highest_CFD_variant_info_spacer+PAM'] = ','.join(
+    saveDict['Spacer+PAM'] = str(target[15])
+    saveDict['Strand_(highest_CFD)'] = str(target[7])
+    saveDict['Chromosome'] = str(target[4])
+    saveDict['Start_coordinate_(highest_CFD)'] = str(target[5])
+    saveDict['Aligned_spacer+PAM_(highest_CFD)'] = str(target[1])
+    saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = str(target[3])
+    saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = str(target[2])
+    saveDict['PAM_(highest_CFD)'] = 'NA'
+    saveDict['Mismatches_(highest_CFD)'] = str(target[8])
+    saveDict['Bulges_(highest_CFD)'] = str(target[9])
+    saveDict['Mismatches+bulges_(highest_CFD)'] = str(target[10])
+    saveDict['Bulge_type_(highest_CFD)'] = str(target[0])
+    saveDict['REF/ALT_origin_(highest_CFD)'] = 'ref' if str(
+        target[13]) == 'NA' else 'alt'
+    saveDict['PAM_creation_(highest_CFD)'] = str(target[11])
+    saveDict['CFD_score_(highest_CFD)'] = str(target[20]) if float(
+        target[20]) > float(target[21]) else str(target[21])
+    saveDict['CFD_score_REF_(highest_CFD)'] = str(target[21])
+    saveDict['CFD_score_ALT_(highest_CFD)'] = str(target[20])
+    saveDict['CFD_risk_score_(highest_CFD)'] = str(target[22])
+    saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = ','.join(
         variantList_highest_cfd)
-    saveDict['Highest_CFD_variant_info_genome'] = str(x[18])
-    saveDict['Highest_CFD_variant_MAF'] = str(x[17])
-    saveDict['Highest_CFD_variant_rsID'] = 'NA' if str(
-        x[16]) == '.' else str(x[16])
-    saveDict['Highest_CFD_variant_samples'] = str(x[13])
-    saveDict['Not_found_in_REF'] = 'y' if str(x[12]) == 'y' else 'NA'
-    saveDict['Other_motifs'] = str(x[19])
-    saveDict['Fewest_mm+b_Strand'] = str(x[31])
-    saveDict['Fewest_mm+b_start_coordinate'] = str(x[29])
-    saveDict['Fewest_mm+b_aligned_spacer+PAM'] = str(x[25])
-    saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = str(x[27])
-    saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = str(x[26])
-    saveDict['Fewest_mm+b_PAM'] = 'NA'
-    saveDict['Fewest_mm+b_mismatches'] = str(x[32])
-    saveDict['Fewest_mm+b_bulges'] = str(x[33])
-    saveDict['Fewest_mm+b_mismatches+bulges'] = str(x[34])
-    saveDict['Fewest_mm+b_bulge_type'] = str(x[24])
-    saveDict['Fewest_mm+b_REF/ALT_origin'] = 'ref' if str(
-        x[37]) == 'NA' else 'alt'
-    saveDict['Fewest_mm+b_PAM_gen'] = str(x[35])
-    saveDict['Fewest_mm+b_CFD_score'] = str(x[44]
-                                            ) if float(x[44]) > float(x[45]) else str(x[45])
-    saveDict['Fewest_mm+b_CFD_score_REF'] = str(x[45])
-    saveDict['Fewest_mm+b_CFD_score_ALT'] = str(x[44])
-    saveDict['Fewest_mm+b_CFD_risk_score'] = str(x[46])
-    saveDict['Fewest_mm+b_variant_info_spacer+PAM'] = ','.join(
+    saveDict['Variant_info_genome_(highest_CFD)'] = str(target[18])
+    saveDict['Variant_MAF_(highest_CFD)'] = str(target[17])
+    saveDict['Variant_rsID_(highest_CFD)'] = 'NA' if str(
+        target[16]) == '.' else str(target[16])
+    saveDict['Variant_samples_(highest_CFD)'] = str(target[13])
+    saveDict['Not_found_in_REF'] = 'y' if str(target[12]) == 'y' else 'NA'
+    saveDict['Other_motifs'] = str(target[19])
+    saveDict['Strand_(fewest_mm+b)'] = str(target[31])
+    saveDict['Start_coordinate_(fewest_mm+b)'] = str(target[29])
+    saveDict['Aligned_spacer+PAM_(fewest_mm+b)'] = str(target[25])
+    saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'] = str(target[27])
+    saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = str(target[26])
+    saveDict['PAM_(fewest_mm+b)'] = 'NA'
+    saveDict['Mismatches_(fewest_mm+b)'] = str(target[32])
+    saveDict['Bulges_(fewest_mm+b)'] = str(target[33])
+    saveDict['Mismatches+bulges_(fewest_mm+b)'] = str(target[34])
+    saveDict['Bulge_type_(fewest_mm+b)'] = str(target[24])
+    saveDict['REF/ALT_origin_(fewest_mm+b)'] = 'ref' if str(
+        target[37]) == 'NA' else 'alt'
+    saveDict['PAM_creation_(fewest_mm+b)'] = str(target[35])
+    saveDict['CFD_score_(fewest_mm+b)'] = str(target[44]
+                                              ) if float(target[44]) > float(target[45]) else str(target[45])
+    saveDict['CFD_score_REF_(fewest_mm+b)'] = str(target[45])
+    saveDict['CFD_score_ALT_(fewest_mm+b)'] = str(target[44])
+    saveDict['CFD_risk_score_(fewest_mm+b)'] = str(target[46])
+    saveDict['Variant_info_spacer+PAM_(fewest_mm+b)'] = ','.join(
         variantList_fewest_mm_b)
-    saveDict['Fewest_mm+b_variant_info_genome'] = str(x[42])
-    saveDict['Fewest_mm+b_variant_MAF'] = str(x[41])
-    saveDict['Fewest_mm+b_variant_rsID'] = 'NA' if str(
-        x[40]) == '.' else str(x[40])
-    saveDict['Fewest_mm+b_variant_samples'] = str(x[37])
+    saveDict['Variant_info_genome_(fewest_mm+b)'] = str(target[42])
+    saveDict['Variant_MAF_(fewest_mm+b)'] = str(target[41])
+    saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA' if str(
+        target[40]) == '.' else str(target[40])
+    saveDict['Variant_samples_(fewest_mm+b)'] = str(target[37])
 
-    if saveDict['Highest_CFD_REF/ALT_origin'] == 'ref':
-        saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
-        saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = 'NA'
-    if saveDict['Fewest_mm+b_REF/ALT_origin'] == 'ref':
-        saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT']
-        saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = 'NA'
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
+        saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)']
+        saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = 'NA'
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
+        saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)']
+        saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = 'NA'
 
     change_alt_ref_highest_cfd = False
-    if saveDict['Highest_CFD_REF/ALT_origin'] == 'alt' and saveDict['Highest_CFD_score_REF'] == saveDict['Highest_CFD_score_ALT']:
-        if 'DNA' in saveDict['Highest_CFD_bulge_type']:
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
+        if 'DNA' in saveDict['Bulge_type_(highest_CFD)']:
             mm = 0
             bulge = 0
-            for nt in saveDict['Highest_CFD_aligned_protospacer+PAM_REF']:
+            for nt in saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)']:
                 if nt.islower():
                     mm += 1
-            for nt in saveDict['Highest_CFD_aligned_spacer+PAM']:
+            for nt in saveDict['Aligned_spacer+PAM_(highest_CFD)']:
                 if nt == '-':
                     bulge += 1
         else:
             mm = 0
             bulge = 0
-            for nt in saveDict['Highest_CFD_aligned_protospacer+PAM_REF']:
+            for nt in saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)']:
                 if nt.islower():
                     mm += 1
                 if nt == '-':
                     bulge += 1
-        if mm <= int(saveDict['Highest_CFD_mismatches']) and bulge <= int(saveDict['Highest_CFD_bulges']):
+        if mm <= int(saveDict['Mismatches_(highest_CFD)']) and bulge <= int(saveDict['Bulges_(highest_CFD)']):
             change_alt_ref_highest_cfd = True
 
     change_alt_ref_fewest_mm_b = False
-    if saveDict['Fewest_mm+b_REF/ALT_origin'] == 'alt' and saveDict['Fewest_mm+b_CFD_score_REF'] == saveDict['Fewest_mm+b_CFD_score_ALT']:
-        if 'DNA' in saveDict['Fewest_mm+b_bulge_type']:
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'alt' and saveDict['CFD_score_REF_(fewest_mm+b)'] == saveDict['CFD_score_ALT_(fewest_mm+b)']:
+        if 'DNA' in saveDict['Bulge_type_(fewest_mm+b)']:
             mm = 0
             bulge = 0
-            for nt in saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF']:
+            for nt in saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)']:
                 if nt.islower():
                     mm += 1
-            for nt in saveDict['Fewest_mm+b_aligned_spacer+PAM']:
+            for nt in saveDict['Aligned_spacer+PAM_(fewest_mm+b)']:
                 if nt == '-':
                     bulge += 1
         else:
             mm = 0
             bulge = 0
-            for nt in saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF']:
+            for nt in saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)']:
                 if nt.islower():
                     mm += 1
                 if nt == '-':
                     bulge += 1
-        if mm <= int(saveDict['Fewest_mm+b_mismatches']) and bulge <= int(saveDict['Fewest_mm+b_bulges']):
+        if mm <= int(saveDict['Mismatches_(fewest_mm+b)']) and bulge <= int(saveDict['Bulges_(fewest_mm+b)']):
             change_alt_ref_fewest_mm_b = True
 
     if change_alt_ref_highest_cfd:
-        saveDict['Highest_CFD_aligned_protospacer+PAM_REF'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT']
-        saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'] = 'NA'
-        saveDict['Highest_CFD_REF/ALT_origin'] = 'ref'
-        saveDict['Highest_CFD_variant_info_spacer+PAM'] = 'NA'
-        saveDict['Highest_CFD_variant_info_genome'] = 'NA'
-        saveDict['Highest_CFD_variant_MAF'] = 'NA'
-        saveDict['Highest_CFD_variant_rsID'] = 'NA'
-        saveDict['Highest_CFD_variant_samples'] = 'NA'
+        saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)']
+        saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = 'NA'
+        saveDict['REF/ALT_origin_(highest_CFD)'] = 'ref'
+        saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = 'NA'
+        saveDict['Variant_info_genome_(highest_CFD)'] = 'NA'
+        saveDict['Variant_MAF_(highest_CFD)'] = 'NA'
+        saveDict['Variant_rsID_(highest_CFD)'] = 'NA'
+        saveDict['Variant_samples_(highest_CFD)'] = 'NA'
 
     if change_alt_ref_fewest_mm_b:
-        saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT']
-        saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = 'NA'
-        saveDict['Fewest_mm+b_REF/ALT_origin'] = 'ref'
-        saveDict['Fewest_mm+b_variant_info_spacer+PAM'] = 'NA'
-        saveDict['Fewest_mm+b_variant_info_genome'] = 'NA'
-        saveDict['Fewest_mm+b_variant_MAF'] = 'NA'
-        saveDict['Fewest_mm+b_variant_rsID'] = 'NA'
-        saveDict['Fewest_mm+b_variant_samples'] = 'NA'
+        saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)']
+        saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = 'NA'
+        saveDict['REF/ALT_origin_(fewest_mm+b)'] = 'ref'
+        saveDict['Variant_info_spacer+PAM_(fewest_mm+b)'] = 'NA'
+        saveDict['Variant_info_genome_(fewest_mm+b)'] = 'NA'
+        saveDict['Variant_MAF_(fewest_mm+b)'] = 'NA'
+        saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA'
+        saveDict['Variant_samples_(fewest_mm+b)'] = 'NA'
 
     count_N_in_guide = 0  # check how long is the pam counting Ns in the guide
     pam_at_start = False  # check if pam is at start of the sequence
     # count number of Ns in the guide
-    for count, elem in enumerate(str(x[15])):
+    for count, elem in enumerate(str(target[15])):
         if elem == 'N':
             count_N_in_guide += 1
             if count == 0:  # if N is at start of the guide, pam_at_start = true
                 pam_at_start = True
 
-    if saveDict['Highest_CFD_REF/ALT_origin'] == 'ref':
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
         if pam_at_start:  # save pam sequence extracting directly from the ref sequence
-            saveDict['Highest_CFD_PAM'] = saveDict['Highest_CFD_aligned_protospacer+PAM_REF'][:count_N_in_guide]
+            saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][:count_N_in_guide]
         else:
-            saveDict['Highest_CFD_PAM'] = saveDict['Highest_CFD_aligned_protospacer+PAM_REF'][-count_N_in_guide:]
+            saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][-count_N_in_guide:]
     else:
         if pam_at_start:  # save pam sequence extracting directly from the var sequence
-            saveDict['Highest_CFD_PAM'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'][:count_N_in_guide]
+            saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][:count_N_in_guide]
         else:
-            saveDict['Highest_CFD_PAM'] = saveDict['Highest_CFD_aligned_protospacer+PAM_ALT'][-count_N_in_guide:]
+            saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][-count_N_in_guide:]
 
-    if saveDict['Fewest_mm+b_REF/ALT_origin'] == 'ref':
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
         if pam_at_start:  # save pam sequence extracting directly from the ref sequence
-            saveDict['Fewest_mm+b_PAM'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'][:count_N_in_guide]
+            saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][:count_N_in_guide]
         else:
-            saveDict['Fewest_mm+b_PAM'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_REF'][-count_N_in_guide:]
+            saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][-count_N_in_guide:]
     else:
         if pam_at_start:  # save pam sequence extracting directly from the var sequence
-            saveDict['Fewest_mm+b_PAM'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'][:count_N_in_guide]
+            saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][:count_N_in_guide]
         else:
-            saveDict['Fewest_mm+b_PAM'] = saveDict['Fewest_mm+b_aligned_protospacer+PAM_ALT'][-count_N_in_guide:]
+            saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][-count_N_in_guide:]
 
-    annotationList = x[14].split(',')
-    personal_annotations = list()
-    encode_annotations = list()
+    annotationList = target[14].split(',')
+    personal_annotations = set()
+    encode_annotations = set()
+    gencode_annotations = set()
+
     for elem in annotationList:
-        if '_personal' not in elem:
-            encode_annotations.append(elem)
+        if '_personal' in elem:
+            personal_annotations.add(elem.replace('_personal', ''))
+        elif '_gencode' in elem:
+            gencode_annotations.add(elem.replace('_gencode', ''))
         else:
-            personal_annotations.append(elem)
+            encode_annotations.add(elem)
 
     if len(personal_annotations) > 0:
         saveDict['Annotation_personal'] = ','.join(personal_annotations)
+        check_personal_existence = True
+
     if len(encode_annotations) > 0:
         saveDict['Annotation_ENCODE'] = ','.join(encode_annotations)
 
-    foundEmpirical = sorted(empiricalTree[int(x[6])-4:int(x[6])+4])
+    if len(gencode_annotations) > 0:
+        saveDict['Annotation_GENCODE'] = ','.join(gencode_annotations)
+
+    foundEmpirical = sorted(empiricalTree[int(target[6])-4:int(target[6])+4])
 
     for found in range(0, len(foundEmpirical)):
         empirical = foundEmpirical[found].data
@@ -555,6 +570,12 @@ for nline, line in enumerate(inCrispritzResults):
     save += '\n'
 
     outFile.write(save)
+
+if check_personal_existence:
+    pass
+else:
+    os.system(f'cut -f52 --complement {outFile_name} > {outFile_name}.tmp')
+    os.system(f'mv {outFile_name}.tmp {outFile_name}')
 
 print('CHECKING MISSING RESULTS')
 

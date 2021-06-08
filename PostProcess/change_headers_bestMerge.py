@@ -35,12 +35,13 @@ to_remove = ['Real_Guide', 'Cluster_Position', 'Highest_CFD_Absolute_Risk_Score'
              ]
 # print(len(to_remove))
 
-new_names = ['Highest_CFD_Strand', 'Chromosome', 'Highest_CFD_start_coordinate', 'Highest_CFD_aligned_spacer+PAM', 'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
-             'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges', 'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
-             'Highest_CFD_risk_score', 'Not_found_in_REF', 'Highest_CFD_variant_info_genome', 'Highest_CFD_variant_MAF', 'Highest_CFD_variant_rsID', 'Highest_CFD_variant_samples', 'Other_motifs', 'Fewest_mm+b_Strand', 'Fewest_mm+b_start_coordinate',
-             'Fewest_mm+b_aligned_spacer+PAM', 'Fewest_mm+b_aligned_protospacer+PAM_REF', 'Fewest_mm+b_aligned_protospacer+PAM_ALT', 'Fewest_mm+b_mismatches', 'Fewest_mm+b_bulges',
-             'Fewest_mm+b_mismatches+bulges', 'Fewest_mm+b_bulge_type', 'Fewest_mm+b_PAM_gen', 'Fewest_mm+b_CFD_score', 'Fewest_mm+b_CFD_score_REF', 'Fewest_mm+b_CFD_risk_score',
-             'Fewest_mm+b_variant_info_genome', 'Fewest_mm+b_variant_MAF', 'Fewest_mm+b_variant_rsID', 'Fewest_mm+b_variant_samples', 'Annotation_ENCODE']
+new_names = ['Chromosome', 'Start_coordinate_highest_CFD', 'Strand_highest_CFD', 'Aligned_spacer+PAM_highest_CFD', 'Aligned_protospacer+PAM_REF_highest_CFD', 'Aligned_protospacer+PAM_ALT_highest_CFD',
+             'Mismatches_highest_CFD', 'Bulges_highest_CFD', 'Mismatches+bulges_highest_CFD', 'Bulge_type_highest_CFD', 'PAM_creation_highest_CFD', 'CFD_score_highest_CFD', 'CFD_score_REF_highest_CFD',
+             'CFD_risk_score_highest_CFD', 'Variant_info_genome_highest_CFD', 'Variant_MAF_highest_CFD', 'Variant_rsID_highest_CFD', 'Variant_samples_highest_CFD', 'Not_found_in_REF', 'Other_motifs', 
+             'Start_coordinate_fewest_mm+b', 'Strand_fewest_mm+b', 'Aligned_spacer+PAM_fewest_mm+b', 'Aligned_protospacer+PAM_REF_fewest_mm+b', 'Aligned_protospacer+PAM_ALT_fewest_mm+b', 
+             'Mismatches_fewest_mm+b', 'Bulges_fewest_mm+b', 'Mismatches+bulges_fewest_mm+b', 'Bulge_type_fewest_mm+b', 'PAM_creation_fewest_mm+b', 'CFD_score_fewest_mm+b', 
+             'CFD_score_REF_fewest_mm+b', 'CFD_risk_score_fewest_mm+b', 'Variant_info_genome_fewest_mm+b', 'Variant_MAF_fewest_mm+b', 'Variant_rsID_fewest_mm+b', 
+             'Variant_samples_fewest_mm+b', 'Annotation_ENCODE']
 
 
 header = True
@@ -52,26 +53,26 @@ for chunk in chunks:
     #chunk[chunk.columns.difference(['Not_found_in_REF'])] = chunk[chunk.columns.difference(['Not_found_in_REF'])].replace('n', 'NA')
     chunk = chunk.replace('n', 'NA')
     #chunk = chunk.replace(regex=['\*.,\*', '\*,.\*'], value='NA')
-    chunk['Highest_CFD_variant_rsID'] = chunk['Highest_CFD_variant_rsID'].str.replace(
+    chunk['Variant_rsID_highest_CFD'] = chunk['Variant_rsID_highest_CFD'].str.replace(
         '.', 'NA')
-    mask = chunk['Highest_CFD_aligned_protospacer+PAM_REF'] == 'NA'
-    chunk['Highest_CFD_aligned_protospacer+PAM_REF_corrected'] = np.where(
-        mask, chunk['Highest_CFD_aligned_protospacer+PAM_ALT'], chunk['Highest_CFD_aligned_protospacer+PAM_REF'])
-    chunk['Highest_CFD_aligned_protospacer+PAM_ALT'] = np.where(
-        mask, chunk['Highest_CFD_aligned_protospacer+PAM_REF'], chunk['Highest_CFD_aligned_protospacer+PAM_ALT'])
+    mask = chunk['Aligned_protospacer+PAM_REF_highest_CFD'] == 'NA'
+    chunk['Aligned_protospacer+PAM_REF_corrected_highest_CFD'] = np.where(
+        mask, chunk['Aligned_protospacer+PAM_ALT_highest_CFD'], chunk['Aligned_protospacer+PAM_REF_highest_CFD'])
+    chunk['Aligned_protospacer+PAM_ALT_highest_CFD'] = np.where(
+        mask, chunk['Aligned_protospacer+PAM_REF_highest_CFD'], chunk['Aligned_protospacer+PAM_ALT_highest_CFD'])
 
-    chunk['Highest_CFD_aligned_protospacer+PAM_REF'] = chunk['Highest_CFD_aligned_protospacer+PAM_REF_corrected']
-    chunk.drop('Highest_CFD_aligned_protospacer+PAM_REF_corrected',
+    chunk['Aligned_protospacer+PAM_REF_highest_CFD'] = chunk['Aligned_protospacer+PAM_REF_corrected_highest_CFD']
+    chunk.drop('Aligned_protospacer+PAM_REF_corrected_highest_CFD',
                axis=1, inplace=True)
 
-    mask = chunk['Fewest_mm+b_aligned_protospacer+PAM_REF'] == 'NA'
-    chunk['Fewest_mm+b_aligned_protospacer+PAM_REF_corrected'] = np.where(
-        mask, chunk['Fewest_mm+b_aligned_protospacer+PAM_ALT'], chunk['Fewest_mm+b_aligned_protospacer+PAM_REF'])
-    chunk['Fewest_mm+b_aligned_protospacer+PAM_ALT'] = np.where(
-        mask, chunk['Fewest_mm+b_aligned_protospacer+PAM_REF'], chunk['Fewest_mm+b_aligned_protospacer+PAM_ALT'])
+    mask = chunk['Aligned_protospacer+PAM_REF_fewest_mm+b'] == 'NA'
+    chunk['Aligned_protospacer+PAM_REF_corrected_fewest_mm+b'] = np.where(
+        mask, chunk['Aligned_protospacer+PAM_ALT_fewest_mm+b'], chunk['Aligned_protospacer+PAM_REF_fewest_mm+b'])
+    chunk['Aligned_protospacer+PAM_ALT_fewest_mm+b'] = np.where(
+        mask, chunk['Aligned_protospacer+PAM_REF_fewest_mm+b'], chunk['Aligned_protospacer+PAM_ALT_fewest_mm+b'])
 
-    chunk['Fewest_mm+b_aligned_protospacer+PAM_REF'] = chunk['Fewest_mm+b_aligned_protospacer+PAM_REF_corrected']
-    chunk.drop('Fewest_mm+b_aligned_protospacer+PAM_REF_corrected',
+    chunk['Aligned_protospacer+PAM_REF_fewest_mm+b'] = chunk['Aligned_protospacer+PAM_REF_corrected_fewest_mm+b']
+    chunk.drop('Aligned_protospacer+PAM_REF_corrected_fewest_mm+b',
                axis=1, inplace=True)
 
     chunk.to_csv(out_path, header=header, mode='w',

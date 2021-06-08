@@ -5,6 +5,7 @@ from operator import itemgetter
 from os.path import isfile, join
 from os import listdir
 import os
+from posixpath import split
 import warnings
 import glob
 from itertools import islice
@@ -40,8 +41,8 @@ try:
     motifDictFile = open(sys.argv[3])
 except:
     sys.exit()
-mismatch = sys.argv[4]
-bulge = sys.argv[5]
+mismatch = int(sys.argv[4])
+bulge = int(sys.argv[5])
 elem = sys.argv[6]
 outDir = sys.argv[7]  # directory to output the figures
 # threads = int(sys.argv[6])  # number of concurrent execution of image creation
@@ -63,6 +64,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     if guideDict['General'] == 0:
         return
 
+    total = mismatch+bulge  # count total of mismatch and bulge requested
     titlesize = 18
     fontsize = 17
 
@@ -75,38 +77,44 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             percentage_list.append(float(0))
 
     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
-    # for count, elem in enumerate(percentage_list):  # correct to 100 based scale
-    #     print(elem)
-    #     if elem != 0:
-    #         elem = elem*100
-    #     else:
-    #         elem = 0
-    #     percentage_list[count] = elem
 
     guideDataFrame['Percentage'] = percentage_list
-    guideDataFrame.columns = ['Total', 'Percentage']
-    # convert to int total column
-    # print('prima', guideDataFrame)
-    # guideDataFrame['Total'] = guideDataFrame['Total'].astype('int32')
-    guideDataFrame = guideDataFrame.T
-    # print('dopo', guideDataFrame)
-    # number of variable
-    categories = list(guideDataFrame)[0:]
-    N = len(categories)
+    guideDataFrame.columns = ['Count', 'Percentage']
+
+    # dataframe for table creation
+    dataframe_table = guideDataFrame.loc[['General', 'three_prime_UTR', 'five_prime_UTR',
+                                          'exon', 'CDS', 'gene', 'DNase-H3K4me3', 'CTCF-only', 'dELS', 'pELS', 'PLS']]
+    # dataframe_table = guideDataFrame.loc[[
+    #     'General', '', 'pELS', 'dELS', 'PLS', '', 'exon', 'gene', 'CDS', '', '']]
+    dataframe_table.rename(
+        index={'CTCF-only': 'CTCF', 'General': 'Total'}, inplace=True)
+
+    # print(dataframe_table)
+
+    # dataframe for radar chart, drop total column
+    dataframe_radar_chart = dataframe_table.drop(['Total'])
+    dataframe_radar_chart = dataframe_radar_chart.T
+
+    categories_radar_chart = list(dataframe_radar_chart)[0:]
+    categories_table = list(dataframe_table.T)[0:]
+
+    count_radar_chart_categories = len(categories_radar_chart)
 
     # We are going to plot the first line of the data frame.
     # But we need to repeat the first value to close the circular graph:
-    values = guideDataFrame.loc['Percentage'].values.flatten().tolist()
-    values += values[:1]
+    values_radar_chart = dataframe_radar_chart.loc['Percentage'].values.flatten(
+    ).tolist()
+    values_radar_chart += values_radar_chart[:1]
 
     # What will be the angle of each axis in the plot? (we divide the plot / number of variable)
-    angles = [n / float(N) * 2 * pi for n in range(N)]
-    angles += angles[:1]
+    angles_radar_chart = [n / float(count_radar_chart_categories) * 2 *
+                          pi for n in range(count_radar_chart_categories)]
+    angles_radar_chart += angles_radar_chart[:1]
 
     # Initialise the spider plot
     ax = plt.subplot(2, 2, 1, polar=True)
 
-    for label, rot in zip(ax.get_xticklabels(), angles):
+    for label, rot in zip(ax.get_xticklabels(), angles_radar_chart):
         if (rot == 0):
             label.set_horizontalalignment("center")
         if (rot > 0):
@@ -117,7 +125,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             label.set_horizontalalignment("right")
 
     # Draw one axe per variable + add labels labels yet
-    plt.xticks(angles[:-1], categories, color='black', size=fontsize)
+    # plt.xticks(angles[:-1], categories, color='black', size=fontsize)
+    plt.xticks(angles_radar_chart[:-1], categories_radar_chart,
+               color='black', size=fontsize-1)
 
     # Draw ylabels
     # # # Draw ylabels
@@ -129,25 +139,20 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.ylim(0, 100)
 
     # Fill area
-    ax.fill(angles, values, 'b', alpha=0.1)
+    ax.fill(angles_radar_chart, values_radar_chart, 'b', alpha=0.1)
 
     # # # offset posizione y-axis
     ax.set_theta_offset(pi / 2)
     ax.set_theta_direction(-1)
     # Plot data
-    ax.plot(angles, values, linewidth=1, linestyle='solid')
+    ax.plot(angles_radar_chart, values_radar_chart,
+            linewidth=1, linestyle='solid')
 
     plt.subplot(2, 2, 2)
-    transpose_list = []
-    guideDataFrame = guideDataFrame.T
-    # guideDataFrame['Total'] = to_numeric(
-    #     guideDataFrame['Total'], downcast='integer')
-    # print('lamadonna', guideDataFrame)
-    for elem in categories:
-        transpose_list.append(list(guideDataFrame.loc[elem]))
-        # transpose_list.append(
-        #     [guideDataFrame.loc[elem, 'Total'], guideDataFrame.loc[elem, 'Percentage']])
-    # print(transpose_list)
+    transpose_list = list()
+    # dataframe_table = dataframe_table.T
+    for elem in categories_table:
+        transpose_list.append(list(dataframe_table.loc[elem]))
     templist = list()
     for couple in transpose_list:
         couple[0] = int(couple[0])
@@ -155,12 +160,14 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # templist to convert into only the total column
     transpose_list = templist
 
+    # print('transp list', transpose_list)
+
     plt.axis('off')
-    table = plt.table(cellText=transpose_list, rowLabels=categories, colLabels=['Total', 'Percentage'],
-                      loc='best', colWidths=[0.25, 0.30])
+    table = plt.table(cellText=transpose_list, rowLabels=categories_table, colLabels=['Count', 'Percentage'],
+                      loc='best', colWidths=[0.25, 0.35])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
-    table.scale(1, 2.2)
+    table.scale(1, 1.5)
 
     totalMotif = [0]*len(guide)
     for count in range(len(guide)):
@@ -173,8 +180,6 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
             if maxmax != 0:
                 motifDict[nuc][count] = float(
                     motifDict[nuc][count]/float(maxmax))
-                # motifDict[nuc][count] = float(
-                #     str(float(motifDict[nuc][count])/float(maxmax))[0:5])
 
     # ind = np.arange(0, len(guide), 1) + 0.15
     ind = np.arange(0, len(guide), 1)
@@ -197,32 +202,19 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     p6 = plt.bar(ind, DNA, width, bottom=C+G+A+T+RNA,
                  align='center')
 
-    # plt.xlim(0, len(guide))
-    # strArray = np.array([list(guide)])
     plt.xticks(ticks=ind, labels=list(guide), size=fontsize)
     plt.yticks(size=fontsize)
 
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
                ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=fontsize, loc='upper left', ncol=6)
 
-    # strArray = np.array([list(guide)])
-    # table = plt.table(cellText=strArray, loc='bottom',
-    #                   cellLoc='center', rowLoc='bottom')
-    # table.auto_set_font_size(False)
-    # table.set_fontsize(12)
-    # # table.scale(1, 1.6)
-    # table.xticks = ([])
-    # table.yticks = ([])
-    # plt.xticks
-
-    plt.suptitle(str(mismatch)+" Mismatches + "+str(bulge)+" Bulge "+str(source),
+    plt.suptitle('Targets found in each ' + 'ENCODE+GENCODE'+' category - '+str(total)+' (Mismatches (MM) + Bulges(B))',
                  horizontalalignment='center', color='black', size=titlesize)
 
     plt.tight_layout()
-    # plt.subplots_adjust(top=0.85, bottom=0.05, left=0.06,
-    #                     right=0.95, wspace=0.1)
-    plt.savefig(outDir+"/summary_single_guide_" + str(guide) + "_" + str(mismatch) +
-                "."+str(bulge) + '_' + str(source) + "." + file_extension, format=file_extension)
+
+    plt.savefig(outDir+'/summary_single_guide_' + str(guide) + '_' + str(mismatch) +
+                '.' + str(bulge) + '_' + str(source) + '.ENCODE+GENCODE.' + file_extension, format=file_extension)
 
     plt.close('all')
 
@@ -231,11 +223,15 @@ guide = guide.strip()
 guideDict = json.load(guideDictFile)
 motifDict = json.load(motifDictFile)
 if __name__ == '__main__':
+    total = mismatch+bulge
+    total = str(total)
     # skip creation if no target in global category
-    if guideDict[mismatch][bulge]['TOTAL']['General'] == 0:
+    # if guideDict[mismatch][bulge]['TOTAL']['General'] == 0:
+    if guideDict[total]['General'] == 0:
         sys.exit()
-    try:
-        generatePlot(guide, guideDict[mismatch][bulge][elem],
-                     motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
-    except:
-        sys.exit()
+    # try:
+        # generatePlot(guide, guideDict[mismatch][bulge][elem], motifDict[mismatch][bulge][elem], mismatch, bulge, elem)
+    generatePlot(guide, guideDict[total],
+                 motifDict[total], mismatch, bulge, elem)
+    # except:
+    #     sys.exit()
