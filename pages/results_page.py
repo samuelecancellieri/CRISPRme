@@ -98,6 +98,16 @@ COL_BOTH_RENAME = {0: 'Highest_CFD_Strand', 1: 'Chromosome', 2: 'Highest_CFD_sta
 #                    22: 'Highest_CFD_risk_score'}
 GENOME_DATABASE = ['Reference', 'Enriched',
                    'Samples', 'Dictionary', 'Annotation']
+GUIDE_COLUMN = 'Spacer+PAM'
+CHR_COLUMN = 'Chromosome'
+POS_COLUMN = 'Start_coordinate_(highest_CFD)'
+MM_COLUMN = 'Mismatches_(highest_CFD)'
+BLG_COLUMN = 'Bulges_(highest_CFD)'
+TOTAL_COLUMN = 'Mismatches+bulges_(highest_CFD)'
+BLG_T_COLUMN = 'Bulge_type_(highest_CFD)'
+CFD_COLUMN = 'CFD_score_(highest_CFD)'
+RISK_COLUMN = 'CFD_risk_score_(highest_CFD)'
+SAMPLES_COLUMN = 'Variant_samples_(highest_CFD)'
 
 
 def resultPage(job_id):
@@ -967,17 +977,25 @@ def global_get_sample_targets(job_id, sample, guide, page):
 
     if job_id is None:
         return ''
-    integrated_file_name = glob.glob(
+    path_db = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*.jay')[0]
-    integrated_file_name = str(integrated_file_name)
-    df = dt.fread(integrated_file_name)
-    result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*' +
-                                                                                          str(sample)+'.*')), 1:][page * PAGE_SIZE:(page + 1)*PAGE_SIZE, :].to_pandas().fillna('NA')
+        job_id + '/'+job_id + '*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\' LIMIT {} OFFSET {}".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN,sample, PAGE_SIZE, page * PAGE_SIZE),conn)
+    result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+    conn.commit()
+    conn.close()
+    
+    # df = dt.fread(integrated_file_name)
+
+    # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*' +
+    #                                                                                       str(sample)+'.*')), 1:][page * PAGE_SIZE:(page + 1)*PAGE_SIZE, :].to_pandas().fillna('NA')
 
     return result
 
-    '''
+    
 @app.callback(
     Output('table-sample-target', 'data'),
     [Input('table-sample-target', "page_current"),
@@ -1065,7 +1083,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
     #     else:
     #         row['Samples Summary'] = 'n'
     return data_to_send
-    '''
+    
 # Return the targets found for the selected sample
 
 
@@ -1117,7 +1135,7 @@ def samplePage(job_id, hash):
     #     job_id + '/.' + job_id + '.bestMerge.txt'
     integrated_file_name = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*.jay')[0]
+        job_id + '/'+job_id + '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
     file_to_grep = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
@@ -1163,27 +1181,30 @@ def samplePage(job_id, hash):
     #                                                       '.zip') + ' ' + sample_grep_result + " &")
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
-    df = dt.fread(integrated_file_name)
-    result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
-    result = pd.DataFrame(result.to_dict()).fillna('NA')
+    # df = dt.fread(integrated_file_name)
+    # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
+    # result = pd.DataFrame(result.to_dict()).fillna('NA')
+    with open(integrated_file_name, 'r') as f:
+        header = f.readline().strip().split()[1:]
+
     cols = [{"name": i, "id": i, 'hideable': True}
-            for i in result.columns]
+            for i in header]
 
     final_list.append(
         html.Div(
             dash_table.DataTable(
                 id='table-sample-target',
                 columns=cols,
-                data=result.to_dict('records'),
+                # data=result.to_dict('records'),
                 export_format='csv',
                 # data = result.to_dict('records'),
                 # virtualization=True,
                 # fixed_rows={'headers': True, 'data': 0},
                 # fixed_columns = {'headers': True, 'data':1},
                 style_cell={'textAlign': 'left'},
-                # page_current=0,
+                page_current=0,
                 page_size=PAGE_SIZE,
-                # page_action='custom',
+                page_action='custom',
                 # sort_action='custom',
                 # sort_mode='multi',
                 # sort_by=[],
@@ -1515,10 +1536,10 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     else:
         bulge_t = 'X'
     # df = global_store_subset(value, bulge_t, bulge_s, mms, guide)
-    integrated_file_name = glob.glob(
-        current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*.jay')[0]
-    integrated_file_name = str(integrated_file_name)
+    # integrated_file_name = glob.glob(
+    #     current_working_directory + 'Results/' +
+    #     job_id + '/'+job_id + '*integrated*.jay')[0]
+    # integrated_file_name = str(integrated_file_name)
     #df = dt.fread(integrated_file_name)
     #print('read file')
     #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort('CFD_score_(highest_CFD)', 'Mismatches+bulges_(highest_CFD)', reversed=[True, False])
@@ -1534,14 +1555,14 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # ##print(dff, 'line 1397')
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
-        print('going to call no ref', genome_type, hide_reference)
+        #print('going to call no ref', genome_type, hide_reference)
         #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)) & (f['Variant_samples_(highest_CFD)'] != 'NA'), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
         result = global_store_subset_no_ref(
             value, bulge_t, bulge_s, mms, guide, page_current)
         # dff.drop(
         #     df[(df['Variant_samples_(highest_CFD)'] == 'NA')].index, inplace=True)
     else:
-        print('going to call ref', genome_type, hide_reference)
+        #print('going to call ref', genome_type, hide_reference)
         result = global_store_subset(
             value, bulge_t, bulge_s, mms, guide, page_current)
         #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
@@ -1675,7 +1696,7 @@ def guidePagev3(job_id, hash):
     )
     integrated_file_name = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*.jay')[0]
+        job_id + '/'+job_id + '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
     file_to_grep = job_directory + job_id + '.bestMerge.txt.integrated_results.tsv'
     # file_to_grep_alt = job_directory + job_id + '.altMerge.txt'
@@ -1713,7 +1734,7 @@ def guidePagev3(job_id, hash):
     #     result = pd.concat([result, partial])
 
     # result.to_csv(guide_grep_result, sep='\t', index=False)
-    result = dt.fread(integrated_file_name)
+    #result = dt.fread(integrated_file_name)
     #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :]
 
     # result.to_csv(guide_grep_result)
@@ -1726,8 +1747,11 @@ def guidePagev3(job_id, hash):
     #print('table', cols)
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
+    with open(integrated_file_name, 'r') as f:
+        header = f.readline().strip().split()[1:]
+
     cols = [{"name": i, "id": i, 'hideable': True}
-            for i in result.names[1:]]
+            for i in header]
     final_list.append(
         html.Div(
             dash_table.DataTable(
@@ -1781,15 +1805,25 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page):
     '''
     if value is None:
         return ''
-    integrated_file_name = glob.glob(
+    path_db = glob.glob(
         current_working_directory + 'Results/' +
-        value + '/'+value + '*integrated*.jay')[0]
-    integrated_file_name = str(integrated_file_name)
-    df = dt.fread(integrated_file_name)
-    result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) &
-                (f['Bulges_(highest_CFD)'] == int(bulge_s)) & (
-                    f['Mismatches_(highest_CFD)'] == int(mms))
-                & (f['Variant_samples_(highest_CFD)'] != None), 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[(page * PAGE_SIZE):((page + 1)*PAGE_SIZE), :].to_pandas().fillna('NA')
+        value + '/'+value + '*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} AND \"{}\"<>\'NA\' LIMIT {} OFFSET {}".format(GUIDE_COLUMN,guide,BLG_T_COLUMN,bulge_t, BLG_COLUMN, bulge_s,MM_COLUMN,mms, SAMPLES_COLUMN, PAGE_SIZE, page * PAGE_SIZE),conn)
+    result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+    conn.commit()
+    conn.close()
+    # integrated_file_name = glob.glob(
+    #     current_working_directory + 'Results/' +
+    #     value + '/'+value + '*integrated*.jay')[0]
+    # integrated_file_name = str(integrated_file_name)
+    # df = dt.fread(integrated_file_name)
+    # result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) &
+    #             (f['Bulges_(highest_CFD)'] == int(bulge_s)) & (
+    #                 f['Mismatches_(highest_CFD)'] == int(mms))
+    #             & (f['Variant_samples_(highest_CFD)'] != None), 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[(page * PAGE_SIZE):((page + 1)*PAGE_SIZE), :].to_pandas().fillna('NA')
     # Skiprows = 1 to skip header of file
     # df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
     #                  bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
@@ -1807,13 +1841,23 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page):
     '''
     if value is None:
         return ''
-    integrated_file_name = glob.glob(
+    path_db = glob.glob(
         current_working_directory + 'Results/' +
-        value + '/'+value + '*integrated*.jay')[0]
-    integrated_file_name = str(integrated_file_name)
-    df = dt.fread(integrated_file_name)
-    result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) &
-                (f['Bulges_(highest_CFD)'] == int(bulge_s)) & (f['Mismatches_(highest_CFD)'] == int(mms)), 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[(page * PAGE_SIZE):((page + 1)*PAGE_SIZE), :].to_pandas().fillna('NA')
+        value + '/'+value + '*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} LIMIT {} OFFSET {}".format(GUIDE_COLUMN,guide,BLG_T_COLUMN,bulge_t, BLG_COLUMN, bulge_s,MM_COLUMN,mms, PAGE_SIZE, page * PAGE_SIZE),conn)
+    result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+    conn.commit()
+    conn.close()
+    # integrated_file_name = glob.glob(
+    #     current_working_directory + 'Results/' +
+    #     value + '/'+value + '*integrated*.jay')[0]
+    # integrated_file_name = str(integrated_file_name)
+    # df = dt.fread(integrated_file_name)
+    # result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) &
+    #             (f['Bulges_(highest_CFD)'] == int(bulge_s)) & (f['Mismatches_(highest_CFD)'] == int(mms)), 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[(page * PAGE_SIZE):((page + 1)*PAGE_SIZE), :].to_pandas().fillna('NA')
     # Skiprows = 1 to skip header of file
     # df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
     #                  bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
@@ -2244,10 +2288,14 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
-    integrated_file_name = glob.glob(
+    # integrated_file_name = glob.glob(
+    #     current_working_directory + 'Results/' +
+    #     job_id + '/'+job_id + '*integrated*.jay')[0]
+    # integrated_file_name = str(integrated_file_name)
+    path_db = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*.jay')[0]
-    integrated_file_name = str(integrated_file_name)
+        job_id + '/'+job_id + '*.db')[0]
+    path_db = str(path_db)
     file_to_grep = job_directory + job_id + '.bestMerge.txt.integrated_results.tsv'
     # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
     pos_grep_result = current_working_directory + \
@@ -2285,10 +2333,15 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # with open(file_to_grep, 'r') as ftg:
     #     header = ftg.readline().split('\t')[:24]
 
-    df = dt.fread(integrated_file_name)
-    result = df[(f['Spacer+PAM'] == guide) & (f['Start_coordinate_(highest_CFD)'] >= int(start)) &
-                (f['Start_coordinate_(highest_CFD)'] <= int(end)) & (f['Chromosome'] == chrom), 1:].to_pandas().fillna('NA')
-
+    # df = dt.fread(integrated_file_name)
+    # result = df[(f['Spacer+PAM'] == guide) & (f['Start_coordinate_(highest_CFD)'] >= int(start)) &
+    #             (f['Start_coordinate_(highest_CFD)'] <= int(end)) & (f['Chromosome'] == chrom), 1:].to_pandas().fillna('NA')
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\">={} AND \"{}\"<={} AND \"{}\"=\'{}\'".format(GUIDE_COLUMN,guide,POS_COLUMN,start,POS_COLUMN,end,CHR_COLUMN,chrom),conn)
+    result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+    conn.commit()
+    conn.close()
     # try:
     #     df = pd.read_csv(pos_grep_result, sep='\t',
     #                      index_col=False, na_filter=False)
@@ -2999,11 +3052,27 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         #     partial_private = chunk[(chunk['Variant_samples_(highest_CFD)'] == sample) & (chunk['Spacer+PAM'] == guide)]
         #     result_private = pd.concat([result_private, partial_private])
 
-        df = dt.fread(integrated_file_name)
-        result_personal = df[(f['Spacer+PAM'] == guide) & (
-            f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:].to_pandas().fillna('NA')
-        result_private = df[(f['Spacer+PAM'] == guide) & (
-            f['Variant_samples_(highest_CFD)'] == str(sample)), 1:].to_pandas().fillna('NA')
+        # df = dt.fread(integrated_file_name)
+        # result_personal = df[(f['Spacer+PAM'] == guide) & (
+        #     f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:].to_pandas().fillna('NA')
+        # result_private = df[(f['Spacer+PAM'] == guide) & (
+        #     f['Variant_samples_(highest_CFD)'] == str(sample)), 1:].to_pandas().fillna('NA')
+
+        path_db = glob.glob(
+        current_working_directory + 'Results/' +
+            job_id + '/'+job_id + '*.db')[0]
+        path_db = str(path_db)
+        conn = sqlite3.connect(path_db)
+        c = conn.cursor()
+        #print('start queries sample card')
+        result_personal = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN, sample),conn)
+        #print('done personal')
+        result_private = result_personal[result_personal[SAMPLES_COLUMN]==sample]#pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\'".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN, sample),conn)
+        #print('done private')
+        #result_personal.drop([GUIDE_COLUMN], axis=1, inplace=True)
+        #result_private.drop([GUIDE_COLUMN], axis=1, inplace=True)
+        conn.commit()
+        conn.close()
 
         result_personal.to_csv(integrated_personal, sep='\t', index=False)
         result_private.to_csv(integrated_private, sep='\t', index=False)
@@ -3481,22 +3550,29 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        dff_view_names = COL_BOTH
+        integrated_file_name = glob.glob(
+            current_working_directory + 'Results/' +
+            job_id + '/'+job_id + '*integrated*')[0]
+        integrated_file_name = str(integrated_file_name)
+        with open(integrated_file_name, 'r') as f:
+            header = f.readline().strip().split()[1:]
+        #dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
         #                   'Position', 'Direction', 'Mismatches',
         #                   'Bulge Size', 'PAM gen', 'Samples', 'SNP',
         #                   'CFD', 'CFD ref', 'Highest CFD Risk Score',
         #                   'AF', 'Annotation Type']
-        dff = pd.DataFrame(columns=['Direction', 'Chromosome', 'Position', 'crRNA', 'Reference',
-                                    'DNA', 'Mismatches', 'Bulge_Size',
-                                    'Total', 'Bulge_type', 'PAM_gen', 'CFD',
-                                    'CFD_ref', 'Highest_CFD_Risk_Score',
-                                    'Var_uniq', 'SNP', 'AF', 'rsID', 'Samples', 'Seq_in_cluster', 'Annotation_Type'])
+        # dff = pd.DataFrame(columns=['Direction', 'Chromosome', 'Position', 'crRNA', 'Reference',
+        #                             'DNA', 'Mismatches', 'Bulge_Size',
+        #                             'Total', 'Bulge_type', 'PAM_gen', 'CFD',
+        #                             'CFD_ref', 'Highest_CFD_Risk_Score',
+        #                             'Var_uniq', 'SNP', 'AF', 'rsID', 'Samples', 'Seq_in_cluster', 'Annotation_Type'])
+        dff = pd.DataFrame(columns = header)
         # to define column names in the first empty table
         # ##print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
         # ##print('check col in query table', dff)
-        all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
-                     'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']}  # , 'CFD_Absolute_Risk_Score'
+        all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulges', 'Mismatches+bulges', 'CFD_score', 'CFD_risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
+                     'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulges', 'Mismatches+bulges', 'CFD_score', 'CFD_risk_Score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
         all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'],  # , ' Absolute Risk Score'
@@ -3684,7 +3760,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     },
                                     export_format="csv",
                                     id='live_table',
-                                    columns=[{"name": dff_view_names[count], "id": i, 'hideable':True}
+                                    # columns=[{"name": dff_view_names[count], "id": i, 'hideable':True}
+                                    #          for count, i in enumerate(dff.columns)],
+                                    columns=[{"name": i, "id": i, 'hideable':True}
                                              for count, i in enumerate(dff.columns)],
                                     # tooltip_data=[
                                     #     {
@@ -4184,31 +4262,32 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
             else:
                 data = query_manager.noshold(target, n_clicks, page_current, page_size,
                                              radio_order, orderdrop, asc1, url, guide, current_working_directory)
-            if target[-1] == '1':
+            # if target[-1] == '1':
 
-                # sub_cols = ['Bulge_type_1', 'crRNA_1', 'DNA_1', 'Reference_1', 'Chromosome_1',
-                #             'Position_1', 'Direction_1', 'Mismatches_1',
-                #             'Bulge_Size_1', 'PAM_gen_1', 'Samples_1', 'SNP_1',
-                #             'CFD_1', 'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
-                #             'AF_1', 'Annotation_Type_1']
-                sub_cols = ['Direction_1', 'Chromosome_1', 'Position_1', 'crRNA_1', 'Reference_1',
-                            'DNA_1', 'Mismatches_1', 'Bulge_Size_1',
-                            'Total_1', 'Bulge_type_1', 'PAM_gen_1', 'CFD_1',
-                            'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
-                            'Var_uniq_1', 'SNP_1', 'AF_1', 'rsID_1', 'Samples_1', 'Seq_in_cluster_1', 'Annotation_Type_1']
+            #     # sub_cols = ['Bulge_type_1', 'crRNA_1', 'DNA_1', 'Reference_1', 'Chromosome_1',
+            #     #             'Position_1', 'Direction_1', 'Mismatches_1',
+            #     #             'Bulge_Size_1', 'PAM_gen_1', 'Samples_1', 'SNP_1',
+            #     #             'CFD_1', 'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
+            #     #             'AF_1', 'Annotation_Type_1']
+            #     sub_cols = ['Direction_1', 'Chromosome_1', 'Position_1', 'crRNA_1', 'Reference_1',
+            #                 'DNA_1', 'Mismatches_1', 'Bulge_Size_1',
+            #                 'Total_1', 'Bulge_type_1', 'PAM_gen_1', 'CFD_1',
+            #                 'CFD_ref_1', 'Highest_CFD_Risk_Score_1',
+            #                 'Var_uniq_1', 'SNP_1', 'AF_1', 'rsID_1', 'Samples_1', 'Seq_in_cluster_1', 'Annotation_Type_1']
 
-                data = data[sub_cols]
-                data.columns = [x[:-2] for x in sub_cols]
-                # data[' '] = [' '] * data.shape[0]
-                data_cols = data.columns.tolist()
-                # data_cols.remove(' ')
-                # data_cols.insert(0, ' ')
+            #     data = data[sub_cols]
+            #     data.columns = [x[:-2] for x in sub_cols]
+            #     # data[' '] = [' '] * data.shape[0]
+            #     data_cols = data.columns.tolist()
+            #     # data_cols.remove(' ')
+            #     # data_cols.insert(0, ' ')
 
-            mask = data['Reference'] == 'NA'
-            data.loc[mask, 'Reference'] = data['DNA']
-            data.loc[mask, 'DNA'] = 'NA'
+            # mask = data['Reference'] == 'NA'
+            # data.loc[mask, 'Reference'] = data['DNA']
+            # data.loc[mask, 'DNA'] = 'NA'
             # data.loc[mask, 'DNA'] = data['Reference']
-            snps = pd.DataFrame(data['SNP']).to_dict('records')
+            data = data.drop(['Spacer+PAM'], axis=1)
+            snps = pd.DataFrame(data['Variant_info_genome_(highest_CFD)']).to_dict('records')
             data = data.to_dict('records')
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
@@ -4237,8 +4316,8 @@ def reset_pagenumber(n):
     Output('order', 'options'),
     [Input('target', 'value')])
 def set_columns_options(selected_target):
-    all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'Highest_CFD_Risk_Score'],  # , 'Highest_CFD_Absolute_Risk_Score'
-                 'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulge_Size', 'Total', 'CFD', 'CFD_Risk_Score']}  # , 'CFD_Absolute_Risk_Score'
+    all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulges', 'Mismatches+bulges', 'CFD_score', 'CFD_risk_score'],  # , 'Highest_CFD_Absolute_Risk_Score'
+                 'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulges', 'Mismatches+bulges', 'CFD_score', 'CFD_risk_score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
     all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'],  # , ' Absolute Risk Score'
@@ -4294,10 +4373,10 @@ def set_columns_value(available_options):
 )
 def set_display_children(selected_order):
     # all_options = {'Target1': ['Mismatches', 'Bulge_Size', 'Total','CFD'],'Target2': ['Mismatches', 'Bulge_Size', 'Total','CFD']}
-    target_value = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
-        'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-    target_label = {'Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], 'Bulge_Size': [' Mismatches', ' Mismatch+Bulges', ' CFD'], 'Total': [' Mismatches', ' Bulges', ' CFD'],
-                    'CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges'], 'Highest CFD Risk Score': [], 'Highest CFD Absolute Risk Score': [], 'CFD Risk Score': [], 'CFD Absolute Risk Score': []}
+    target_value = {'Mismatches': ['Bulges', 'Mismatches+bulges', 'CFD'], 'Bulges': ['Mismatches', 'Mismatches+bulges', 'CFD_score'], 'Mismatches+bulges': ['Mismatches', 'Bulges', 'CFD_score'], 'CFD_score': [
+        'Mismatches', 'Bulges', 'Mismatches+bulges'], 'CFD_risk_score': []}
+    target_label = {'Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], 'Bulges': [' Mismatches', ' Mismatch+Bulges', ' CFD'], 'Mismatches+bulges': [' Mismatches', ' Bulges', ' CFD'],
+                    'CFD_score': [' Mismatches', ' Bulges', ' Mismatch+Bulges'], 'Highest CFD Risk Score': [], 'Highest CFD Absolute Risk Score': [], 'CFD_risk_score': [], 'CFD Absolute Risk Score': []}
 
     gi = []
     if selected_order is not None:
@@ -4312,18 +4391,18 @@ def set_display_children(selected_order):
             'label': '3', 'value': '3'}, {'label': '4', 'value': '4'}, {'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}]
         # return [{'label': i, 'value': i} for i in target_options[selected_order]], data, {'display': 'none'}
         return gi, data, {'display': 'none'}
-    elif selected_order == "CFD":
-        data = [{'label': '0.001', 'value': '0.001'}, {'label': '0.01', 'value': '0.01'}, {'label': '0.1', 'value': '0.1'}, {'label': '0.2', 'value': '0.2'}, {'label': '0.3', 'value': '0.3'}, {
+    elif selected_order == "CFD_score":
+        data = [{'label': '0.01', 'value': '0.01'}, {'label': '0.1', 'value': '0.1'}, {'label': '0.2', 'value': '0.2'}, {'label': '0.3', 'value': '0.3'}, {
             'label': '0.4', 'value': '0.4'}, {'label': '0.5', 'value': '0.5'}, {'label': '0.6', 'value': '0.6'}, {'label': '0.7', 'value': '0.7'}, {'label': '0.8', 'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
         # return [{'label': i, 'value': i} for i in target_options[selected_order]], data, {'display': 'none'}
         return gi, data, {'display': 'none'}
-    elif selected_order == "Total":
+    elif selected_order == "Mismatches+bulges":
         data = [{'label': '0', 'value': '0'}, {'label': '1', 'value': '1'}, {'label': '2', 'value': '2'}, {'label': '3', 'value': '3'}, {
             'label': '4', 'value': '4'}, {'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}, {'label': '7', 'value': '7'}, {'label': '8', 'value': '8'}]
         # return [{'label': i, 'value': i} for i in target_options[selected_order]], data, {'display': 'none'}
         return gi, data, {'display': 'none'}
-    elif selected_order == "Bulge_Size":
-        data = [{'label': '1', 'value': '1'}, {'label': '2', 'value': '2'}]
+    elif selected_order == "Bulges":
+        data = [{'label': '0', 'value': '0'}, {'label': '1', 'value': '1'}, {'label': '2', 'value': '2'}]
         # return [{'label': i, 'value': i} for i in target_options[selected_order]], data, {'display': 'none'}
         return gi, data, {'display': 'none'}
     else:
@@ -4337,89 +4416,41 @@ def set_display_children(selected_order):
 )
 def maxdrop(sholddrop, order):
     if order == 'Mismatches':
-        if sholddrop == '0':
-            data = [{'label': '1', 'value': '1'}, {'label': '2', 'value': '2'}, {'label': '3', 'value': '3'}, {
-                'label': '4', 'value': '4'}, {'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}]
-        elif sholddrop == '1':
-            data = [{'label': '2', 'value': '2'}, {'label': '3', 'value': '3'}, {
-                'label': '4', 'value': '4'}, {'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}]
-        elif sholddrop == '2':
-            data = [{'label': '3', 'value': '3'}, {'label': '4', 'value': '4'}, {
-                'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}]
-        elif sholddrop == '3':
-            data = [{'label': '4', 'value': '4'}, {
-                'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}]
-        elif sholddrop == '4':
-            data = [{'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}]
-        elif sholddrop == '5':
-            data = [{'label': '6', 'value': '6'}]
+        if sholddrop:
+            start_value = int(sholddrop)
+            data = [{'label': str(i), 'value': str(i)} for i in range(start_value, 7)]
         else:
             data = []
 
-    elif order == 'CFD':
-        if sholddrop == '0.001':
-            data = [{'label': '0.01', 'value': '0.01'}, {'label': '0.1', 'value': '0.1'}, {'label': '0.2', 'value': '0.2'}, {'label': '0.3', 'value': '0.3'}, {'label': '0.4', 'value': '0.4'}, {
-                'label': '0.5', 'value': '0.5'}, {'label': '0.6', 'value': '0.6'}, {'label': '0.7', 'value': '0.7'}, {'label': '0.8', 'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.01':
-            data = [{'label': '0.1', 'value': '0.1'}, {'label': '0.2', 'value': '0.2'}, {'label': '0.3', 'value': '0.3'}, {'label': '0.4', 'value': '0.4'}, {
-                'label': '0.5', 'value': '0.5'}, {'label': '0.6', 'value': '0.6'}, {'label': '0.7', 'value': '0.7'}, {'label': '0.8', 'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.1':
-            data = [{'label': '0.2', 'value': '0.2'}, {'label': '0.3', 'value': '0.3'}, {'label': '0.4', 'value': '0.4'}, {'label': '0.5', 'value': '0.5'}, {
-                'label': '0.6', 'value': '0.6'}, {'label': '0.7', 'value': '0.7'}, {'label': '0.8', 'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.2':
-            data = [{'label': '0.3', 'value': '0.3'}, {'label': '0.4', 'value': '0.4'}, {'label': '0.5', 'value': '0.5'}, {
-                'label': '0.6', 'value': '0.6'}, {'label': '0.7', 'value': '0.7'}, {'label': '0.8', 'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.3':
-            data = [{'label': '0.4', 'value': '0.4'}, {'label': '0.5', 'value': '0.5'}, {'label': '0.6', 'value': '0.6'}, {
-                'label': '0.7', 'value': '0.7'}, {'label': '0.8', 'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.4':
-            data = [{'label': '0.5', 'value': '0.5'}, {'label': '0.6', 'value': '0.6'}, {
-                'label': '0.7', 'value': '0.7'}, {'label': '0.8', 'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.5':
-            data = [{'label': '0.6', 'value': '0.6'}, {'label': '0.7', 'value': '0.7'}, {
-                'label': '0.8', 'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.6':
-            data = [{'label': '0.7', 'value': '0.7'}, {'label': '0.8',
-                                                       'value': '0.8'}, {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.7':
-            data = [{'label': '0.8', 'value': '0.8'},
-                    {'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.8':
-            data = [{'label': '0.9', 'value': '0.9'}]
-        elif sholddrop == '0.9':
-            data = [{'label': '1', 'value': '1'}]
+    elif order == 'CFD_score':
+        if sholddrop:
+            start_value = int(float(sholddrop)*10)
+            if start_value < 1:
+                start_value = 1
+                small = True
+            else:
+                small = False
+            if start_value < 10:
+                data = [{'label': f'0.{i}', 'value': f'0.{i}'} for i in range(start_value, 10)]
+                data.append({'label': '1', 'value': '1'})
+                if small:
+                    data.insert(0, {'label': '0.01', 'value': '0.01'})
+            else:
+                data = []
         else:
             data = []
 
-    elif order == 'Bulge_Size':
-        if sholddrop == '1':
-            data = [{'label': '2', 'value': '2'}]
+    elif order == 'Bulges':
+        if sholddrop:
+            start_value = int(sholddrop)
+            data = [{'label': str(i), 'value': str(i)} for i in range(start_value, 3)]
         else:
             data = []
 
-    elif order == 'Total':
-        if sholddrop == '0':
-            data = [{'label': '1', 'value': '1'}, {'label': '2', 'value': '2'}, {'label': '3', 'value': '3'}, {'label': '4', 'value': '4'}, {
-                'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}, {'label': '7', 'value': '7'}, {'label': '8', 'value': '8'}]
-        elif sholddrop == '1':
-            data = [{'label': '2', 'value': '2'}, {'label': '3', 'value': '3'}, {'label': '4', 'value': '4'}, {
-                'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}, {'label': '7', 'value': '7'}, {'label': '8', 'value': '8'}]
-        elif sholddrop == '2':
-            data = [{'label': '3', 'value': '3'}, {'label': '4', 'value': '4'}, {'label': '5', 'value': '5'}, {
-                'label': '6', 'value': '6'}, {'label': '7', 'value': '7'}, {'label': '8', 'value': '8'}]
-        elif sholddrop == '3':
-            data = [{'label': '4', 'value': '4'}, {'label': '5', 'value': '5'}, {
-                'label': '6', 'value': '6'}, {'label': '7', 'value': '7'}, {'label': '8', 'value': '8'}]
-        elif sholddrop == '4':
-            data = [{'label': '5', 'value': '5'}, {'label': '6', 'value': '6'}, {
-                'label': '7', 'value': '7'}, {'label': '8', 'value': '8'}]
-        elif sholddrop == '5':
-            data = [{'label': '6', 'value': '6'}, {
-                'label': '7', 'value': '7'}, {'label': '8', 'value': '8'}]
-        elif sholddrop == '6':
-            data = [{'label': '7', 'value': '7'}, {'label': '8', 'value': '8'}]
-        elif sholddrop == '7':
-            data = [{'label': '8', 'value': '8'}]
+    elif order == 'Mismatches+bulges':
+        if sholddrop:
+            start_value = int(sholddrop)
+            data = [{'label': str(i), 'value': str(i)} for i in range(start_value, 9)]
         else:
             data = []
 
