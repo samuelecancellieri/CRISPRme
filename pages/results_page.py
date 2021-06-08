@@ -1166,7 +1166,8 @@ def samplePage(job_id, hash):
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
     df = dt.fread(integrated_file_name)
-    result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:].to_pandas().fillna('NA')
+    result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
+    result = pd.DataFrame(result.to_dict()).fillna('NA')
     cols = [{"name": i, "id": i, 'hideable': True}
              for i in result.columns]
 
