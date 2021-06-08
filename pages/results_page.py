@@ -3793,7 +3793,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
         opt_mm = []
         total = int(mms)+int(max_bulges)
-        for i in range(int(total)+1):
+        for i in range(int(total)):
             opt_mm.append({'label': str(i), 'value': str(i)})
         opt_blg = []
         for i in range(int(max_bulges)+1):
