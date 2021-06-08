@@ -160,7 +160,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # templist to convert into only the total column
     transpose_list = templist
 
-    print('transp list', transpose_list)
+    # print('transp list', transpose_list)
 
     plt.axis('off')
     table = plt.table(cellText=transpose_list, rowLabels=categories_table, colLabels=['Count', 'Percentage'],
