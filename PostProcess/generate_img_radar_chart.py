@@ -82,7 +82,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     guideDataFrame.columns = ['Count', 'Percentage']
 
     # dataframe for table creation
-    dataframe_table = guideDataFrame.loc[['three_prime_UTR', 'five_prime_UTR',
+    dataframe_table = guideDataFrame.loc[['General', 'three_prime_UTR', 'five_prime_UTR',
                                           'exon', 'CDS', 'gene', 'DNase-H3K4me3', 'CTCF-only', 'dELS', 'pELS', 'PLS']]
     # dataframe_table = guideDataFrame.loc[[
     #     'General', '', 'pELS', 'dELS', 'PLS', '', 'exon', 'gene', 'CDS', '', '']]
