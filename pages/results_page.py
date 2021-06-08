@@ -3,9 +3,11 @@ from sqlite3.dbapi2 import Row
 import sys
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
+from numpy.lib.function_base import _diff_dispatcher
 from app import URL, app
 # from app import app
 import pandas as pd
+from datatable import dt, f, sort
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
@@ -960,7 +962,22 @@ def clusterPage(job_id, hash):
 
 # Filter and sorting sample targets
 
+def global_get_sample_targets(job_id, sample, guide, page):
 
+    if job_id is None:
+        return ''
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/'+job_id + '*integrated*.jay')[0]
+    integrated_file_name = str(integrated_file_name)
+    df = dt.fread(integrated_file_name)
+    result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:][page *PAGE_SIZE:(page + 1)*PAGE_SIZE, :].to_pandas().fillna('NA')
+
+    return result
+
+
+
+    '''
 @app.callback(
     Output('table-sample-target', 'data'),
     [Input('table-sample-target', "page_current"),
@@ -988,17 +1005,22 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
         genome_type = 'var'
     if 'True' in ref_comp:
         genome_type = 'both'
-
-    filtering_expressions = filter.split(' && ')
+    if not(filter is None):
+        filtering_expressions = filter.split(' && ')
+    
+    df = global_get_sample_targets(job_id, sample, guide, page_current)
+    return df.to_dict('records')
+    '''
+    '''
     dff = global_store_general(current_working_directory + 'Results/' +
                                job_id + '/' + job_id + '.' + sample + '.' + guide + '.txt')
     if dff is None:
         raise PreventUpdate
 
-    dff.rename(columns=COL_BOTH_RENAME, inplace=True)
+    # dff.rename(columns=COL_BOTH_RENAME, inplace=True)
     # del dff['Real_Guide']  # NOTE Drop the Correct Guide column
     # del dff['Variant Unique']
-    dff = dff[COL_BOTH]
+    # dff = dff[COL_BOTH]
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
 
@@ -1043,6 +1065,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
     #     else:
     #         row['Samples Summary'] = 'n'
     return data_to_send
+    '''
 # Return the targets found for the selected sample
 
 
@@ -1090,8 +1113,14 @@ def samplePage(job_id, hash):
 
     header = current_working_directory + 'Results/'+job_id+'/header.txt'
 
+    # file_to_grep = current_working_directory + 'Results/' + \
+    #     job_id + '/.' + job_id + '.bestMerge.txt'
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/'+job_id + '*integrated*.jay')[0]
+    integrated_file_name = str(integrated_file_name)
     file_to_grep = current_working_directory + 'Results/' + \
-        job_id + '/.' + job_id + '.bestMerge.txt'
+        job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
     sample_grep_result = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.' + sample + '.' + guide + '.txt'
     final_list.append(
@@ -1100,42 +1129,67 @@ def samplePage(job_id, hash):
     )
     # if not os.path.exists(sample_grep_result):
     # os.system(f"touch {sample_grep_result}")
-    os.system(f"head -1 {file_to_grep} > {header}")
-    os.system(' fgrep ' + guide + ' ' + file_to_grep +
-              ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
-    os.system(
-        f'cat {header} {sample_grep_result} > {sample_grep_result}.tmp')
-    os.system(
-        f'mv -f {sample_grep_result}.tmp {sample_grep_result} > /dev/null 2>&1')
 
-    os.system(
-        f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp')
-    os.system(
-        f'mv -f {sample_grep_result}.tmp {sample_grep_result} > /dev/null 2>&1')
-    os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
-                                                        '.zip') + ' ' + sample_grep_result + " &")
 
-    cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
-            for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
+    # os.system(f"head -1 {file_to_grep} > {header}")
+    # os.system(' fgrep ' + guide + ' ' + file_to_grep +
+    #           ' | awk \'$14~\"' + sample + '\"\' > ' + sample_grep_result)
+    # os.system(
+    #     f'cat {header} {sample_grep_result} > {sample_grep_result}.tmp')
+    # os.system(
+    #     f'mv -f {sample_grep_result}.tmp {sample_grep_result} > /dev/null 2>&1')
+
+    # os.system(
+    #     f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result} {sample_grep_result}.tmp')
+    # os.system(
+    #     f'mv -f {sample_grep_result}.tmp {sample_grep_result} > /dev/null 2>&1')
+    
+    
+    # result = pd.DataFrame()
+    # chunks = pd.read_csv(file_to_grep, sep='\t', chunksize=1000000, na_filter=False, index_col=False)
+    # for chunk in chunks:
+    #     #print(chunk.columns, chunk.shape)
+    #     partial = chunk[(chunk['Variant_samples_(highest_CFD)'].str.contains(sample)) & (chunk['Spacer+PAM'] == guide)]
+    #     #print(partial.shape)
+    #     result = pd.concat([result, partial])
+    
+    # result.to_csv(sample_grep_result, sep='\t', index=False)
+    # os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
+    #                                                      '.zip') + ' ' + sample_grep_result + " &")
+    # if not os.path.exists(sample_grep_result):
+    #     df = dt.fread(integrated_file_name)
+    #     result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:] #.to_pandas().fillna('NA')
+    #     result.to_csv(sample_grep_result)
+    # result = dt.fread(sample_grep_result).to_pandas().fillna('NA')
+    # os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
+    #                                                       '.zip') + ' ' + sample_grep_result + " &")
+    # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
+    #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
+    df = dt.fread(integrated_file_name)
+    result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:].to_pandas().fillna('NA')
+    cols = [{"name": i, "id": i, 'hideable': True}
+             for i in result.columns]
 
     final_list.append(
         html.Div(
             dash_table.DataTable(
                 id='table-sample-target',
                 columns=cols,
-                # data = df.to_dict('records'),
+                data = result.to_dict('records'),
+                export_format='csv',
+                # data = result.to_dict('records'),
                 # virtualization=True,
                 # fixed_rows={'headers': True, 'data': 0},
                 # fixed_columns = {'headers': True, 'data':1},
-                # style_cell={'width': '150px'},
-                page_current=0,
+                style_cell={'textAlign': 'left'},
+                #page_current=0,
                 page_size=PAGE_SIZE,
-                page_action='custom',
-                sort_action='custom',
-                sort_mode='multi',
-                sort_by=[],
-                filter_action='custom',
-                filter_query='',
+                #page_action='custom',
+                #sort_action='custom',
+                #sort_mode='multi',
+                #sort_by=[],
+                #filter_action='custom',
+                #filter_query='',
                 style_table={
                     'max-height': '600px',
                     'overflowY': 'scroll',
@@ -1172,8 +1226,9 @@ def global_store_general(path_file_to_load):
         return ''
     if os.path.getsize(path_file_to_load) > 0:
         # df = pd.read_csv(path_file_to_load, sep='\t', header=None, skiprows=rows_to_skip, usecols=range(0, 16))
-        df = pd.read_csv(path_file_to_load, sep='\t', header=None,
-                         skiprows=1, usecols=range(0, 38), na_filter=False)
+        # df = pd.read_csv(path_file_to_load, sep='\t', header=None,
+        #                  skiprows=1, usecols=range(0, 38), na_filter=False)
+        df = pd.read_csv(path_file_to_load, sep='\t', index_col=False, na_filter=False)
     else:
         df = None
     return df
@@ -1447,7 +1502,8 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     value = job_id
     if search is None:
         raise PreventUpdate
-    filtering_expressions = filter.split(' && ')
+    if not (filter is None):
+        filtering_expressions = filter.split(' && ')
     # filtering_expressions.append(['{crRNA} = ' + guide])
     guide = hash_guide[1:hash_guide.find('new')]
     mms = hash_guide[-1:]
@@ -1458,27 +1514,46 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
         bulge_t = 'RNA'
     else:
         bulge_t = 'X'
-    df = global_store_subset(value, bulge_t, bulge_s, mms, guide)
-    dff = df
+    # df = global_store_subset(value, bulge_t, bulge_s, mms, guide)
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/'+job_id + '*integrated*.jay')[0]
+    integrated_file_name = str(integrated_file_name)
+    #df = dt.fread(integrated_file_name)
+    #print('read file')
+    #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort('CFD_score_(highest_CFD)', 'Mismatches+bulges_(highest_CFD)', reversed=[True, False])
+    #dff = df
 
     # ###print(dff, 'line 1392')
     # if genome_type == 'ref':
     #    dff.rename(columns = COL_REF_RENAME, inplace = True)
     # else:
-    dff.rename(columns=COL_BOTH_RENAME, inplace=True)
-    # ###print(dff, 'line 1397')
+    
+    # dff.rename(columns=COL_BOTH_RENAME, inplace=True)
+    
+    # ##print(dff, 'line 1397')
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
-        dff.drop(
-            df[(df['Highest_CFD_variant_samples'] == 'NA')].index, inplace=True)
-
+        print('going to call no ref', genome_type, hide_reference)
+        #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)) & (f['Variant_samples_(highest_CFD)'] != 'NA'), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
+        result = global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page_current)
+        # dff.drop(
+        #     df[(df['Variant_samples_(highest_CFD)'] == 'NA')].index, inplace=True)
+    else:
+        print('going to call ref', genome_type, hide_reference)
+        result = global_store_subset(value, bulge_t, bulge_s, mms, guide, page_current)
+        #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
+    #print('filtered and sorted')
+    data_to_send = result.to_dict('records')
+    #print('data converted')
+    return data_to_send
     # try:  # For VAR and BOTH
     #     del dff['Variant Unique']
     # except:  # For REF
     #     pass
 
-    # #print('tabella target prima', dff)
-
+    #print('tabella target prima', dff)
+    '''
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
         if col_name == 'Samples Summary':
@@ -1541,7 +1616,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     #             row['Samples Summary'] = 'n'
     # #print('data nella tabella', data_to_send)
     return data_to_send  # , cells_style + style_data_table
-
+    '''
 
 def guidePagev3(job_id, hash):
     guide = hash[:hash.find('new')]
@@ -1595,9 +1670,11 @@ def guidePagev3(job_id, hash):
             ]
         )
     )
-    cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
-            for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
-    file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/'+job_id + '*integrated*.jay')[0]
+    integrated_file_name = str(integrated_file_name)
+    file_to_grep = job_directory + job_id + '.bestMerge.txt.integrated_results.tsv'
     # file_to_grep_alt = job_directory + job_id + '.altMerge.txt'
 
     guide_grep_result = job_directory + job_id + '.' + \
@@ -1610,23 +1687,44 @@ def guidePagev3(job_id, hash):
 
     # if not os.path.exists(guide_grep_result):
     # os.system(f'touch {guide_grep_result}')
-    os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-    os.system('fgrep ' + guide + ' ' + file_to_grep + ' | fgrep ' +
-              bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' > ' + guide_grep_result)
-    os.system(
-        f'cat {job_directory}/header.txt {guide_grep_result} > {guide_grep_result}.tmp')
-    os.system(
-        f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result}.tmp {guide_grep_result}.tmp2')
-    os.system(
-        f'mv -f {guide_grep_result}.tmp2 {guide_grep_result} > /dev/null 2>&1')
-    os.system(
-        f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2 {job_directory}/header.txt')
-    os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
-              ' ' + guide_grep_result + " &")  # , shell = True)
+    # os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
+    # os.system('fgrep ' + guide + ' ' + file_to_grep + ' | fgrep ' +
+    #           bulge_t + ' | awk \'$9==' + mms + ' && $10==' + bulge_s + '\' > ' + guide_grep_result)
+    # os.system(
+    #     f'cat {job_directory}/header.txt {guide_grep_result} > {guide_grep_result}.tmp')
+    # os.system(
+    #     f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {guide_grep_result}.tmp {guide_grep_result}.tmp2')
+    # os.system(
+    #     f'mv -f {guide_grep_result}.tmp2 {guide_grep_result} > /dev/null 2>&1')
+    # os.system(
+    #     f'rm -f {guide_grep_result}.tmp {guide_grep_result}.tmp2 {job_directory}/header.txt')
+    
+    # result = pd.DataFrame()
+    # chunks = pd.read_csv(file_to_grep, sep='\t', na_filter=False, index_col=False) #, chunksize=1000000
+    # for chunk in chunks:
+    #     #print(chunk.columns, chunk.shape)
+    #     # Mismatches_(highest_CFD)	Bulges_(highest_CFD) Bulge_type_(highest_CFD)
+    #     #(chunk['Spacer+PAM'] == guide) & (chunk['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (chunk['Bulges_(highest_CFD)'] == str(bulge_s)) & (chunk['Mismatches_(highest_CFD)'] == str(mms))
+    #     partial = chunk[(chunk['Spacer+PAM'] == guide) & (chunk['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (chunk['Bulges_(highest_CFD)'] == int(bulge_s)) & (chunk['Mismatches_(highest_CFD)'] == int(mms))]
+    #     #print(partial.shape)
+    #     result = pd.concat([result, partial])
+    
+    # result.to_csv(guide_grep_result, sep='\t', index=False)
+    result = dt.fread(integrated_file_name)
+    #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :]
+
+    #result.to_csv(guide_grep_result)
+
+    #os.system('zip '+'-j ' + guide_grep_result.replace('.txt', '.zip') +
+    #          ' ' + guide_grep_result + " &")  # , shell = True)
+    
     # global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
-    # #print('table', cols)
-
+    #print('table', cols)
+    # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
+    #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
+    cols = [{"name": i, "id": i, 'hideable': True}
+            for i in result.names[1:]]
     final_list.append(
         html.Div(
             dash_table.DataTable(
@@ -1636,22 +1734,22 @@ def guidePagev3(job_id, hash):
                 # virtualization=True,
                 # fixed_rows={'headers': True, 'data': 0},
                 # fixed_columns = {'headers': True, 'data':1},
-                # style_cell={'width': '150px'},
+                style_cell={'textAlign': 'left'},
                 page_current=0,
                 page_size=PAGE_SIZE,
                 page_action='custom',
-                sort_action='custom',
-                sort_mode='multi',
-                sort_by=[],
-                filter_action='custom',
-                filter_query='',
+                #sort_action='custom',
+                #sort_mode='multi',
+                #sort_by=[],
+                #filter_action='custom',
+                #filter_query='',
                 style_table={
                     'max-height': '600px',
                     'overflowX': 'scroll'
                 },
                 style_cell_conditional=[
                     {
-                        'if': {'column_id': 'Highest_CFD_variant_samples'},
+                        'if': {'column_id': 'Variant_samples_(highest_CFD)'},
                         'textAlign': 'left'
                     }
                 ],
@@ -1673,18 +1771,54 @@ def guidePagev3(job_id, hash):
     return html.Div(final_list, style={'margin': '1%'})
 
 
-# @ cache.memoize()
-def global_store_subset(value, bulge_t, bulge_s, mms, guide):
+#@cache.memoize()
+def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page):
     '''
     Caching dei file targets per una miglior performance di visualizzazione
     '''
     if value is None:
         return ''
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        value + '/'+value + '*integrated*.jay')[0]
+    integrated_file_name = str(integrated_file_name)
+    df = dt.fread(integrated_file_name)
+    result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) &
+                 (f['Bulges_(highest_CFD)'] == int(bulge_s)) & (f['Mismatches_(highest_CFD)'] == int(mms)) 
+                 & (f['Variant_samples_(highest_CFD)'] != None), 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[(page *PAGE_SIZE):((page + 1)*PAGE_SIZE), :].to_pandas().fillna('NA')
     # Skiprows = 1 to skip header of file
-    df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
-                     bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
-    # ###print('df dei target', df)
-    return df
+    # df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
+    #                  bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
+    #df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
+    #                 bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', na_filter=False, index_col=False)
+
+    # ##print('df dei target', df)
+    return result
+
+
+#@cache.memoize()
+def global_store_subset(value, bulge_t, bulge_s, mms, guide, page):
+    '''
+    Caching dei file targets per una miglior performance di visualizzazione
+    '''
+    if value is None:
+        return ''
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        value + '/'+value + '*integrated*.jay')[0]
+    integrated_file_name = str(integrated_file_name)
+    df = dt.fread(integrated_file_name)
+    result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) &
+                 (f['Bulges_(highest_CFD)'] == int(bulge_s)) & (f['Mismatches_(highest_CFD)'] == int(mms)) 
+                 , 1:].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])[(page *PAGE_SIZE):((page + 1)*PAGE_SIZE), :].to_pandas().fillna('NA')
+    # Skiprows = 1 to skip header of file
+    # df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
+    #                  bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
+    #df = pd.read_csv(current_working_directory + 'Results/' + value + '/' + value + '.' + bulge_t + '.' +
+    #                 bulge_s + '.' + mms + '.' + guide + '.txt', sep='\t', na_filter=False, index_col=False)
+
+    # ##print('df dei target', df)
+    return result
 
 # Load barplot of population distribution for selected guide
 
@@ -2107,7 +2241,11 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
-    file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
+    integrated_file_name = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/'+job_id + '*integrated*.jay')[0]
+    integrated_file_name = str(integrated_file_name)
+    file_to_grep = job_directory + job_id + '.bestMerge.txt.integrated_results.tsv'
     # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
     pos_grep_result = current_working_directory + \
         'Results/' + job_id + '/' + job_id + '.' + start + "." + end + '.txt'
@@ -2118,33 +2256,57 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     #     f' fgrep {guide} {file_to_grep} | awk \'$5 == \"{chrom}\" && ($6>={start} && $6<={end})\' | sort -k6,6n > {pos_grep_result}')
     # if not os.path.exists(pos_grep_result):
     # os.system(f'touch {pos_grep_result}')
-    os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-    os.system(
-        f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
-    os.system(
-        f'cat {job_directory}/header.txt {pos_grep_result} > {pos_grep_result}.tmp')
-    os.system(
-        f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {pos_grep_result}.tmp {pos_grep_result}.tmp2')
-    os.system(f'mv {pos_grep_result}.tmp2 {pos_grep_result} > /dev/null 2>&1')
+    # os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
+    # os.system(
+    #     f'awk \'$16 == \"{guide}\" && $5 == \"{chrom}\" && ($6>={start} && $6<={end})\' {file_to_grep} | sort -k6,6n > {pos_grep_result}')
+    # os.system(
+    #     f'cat {job_directory}/header.txt {pos_grep_result} > {pos_grep_result}.tmp')
+    # os.system(
+    #     f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {pos_grep_result}.tmp {pos_grep_result}.tmp2')
+    # os.system(f'mv {pos_grep_result}.tmp2 {pos_grep_result} > /dev/null 2>&1')
     # pos_grep_result_zip = pos_grep_result.replace('txt', 'zip')
     # os.system(f'zip -j {pos_grep_result_zip} {pos_grep_result}')
 
-    with open(file_to_grep, 'r') as ftg:
-        header = ftg.readline().split('\t')[:24]
-        # header = ftg.readline().split('\t')[:24]
-    try:
-        df = pd.read_csv(pos_grep_result, sep='\t',
-                         header=None, usecols=range(0, 38), skiprows=1, na_filter=False)
-    except:
-        df = pd.DataFrame(columns=header)
-    df.rename(columns=COL_BOTH_RENAME, inplace=True)
-    # df.columns = header
-    # ##print(df, 'line 2126')
-    try:
-        df = df[COL_BOTH]
+    # result = pd.DataFrame()
+    # chunks = pd.read_csv(file_to_grep, sep='\t', chunksize=1000000, na_filter=False, index_col=False)
+    # for chunk in chunks:
+    #     #print(chunk.columns, chunk.shape)
+    #     # Mismatches_(highest_CFD)	Bulges_(highest_CFD) Bulge_type_(highest_CFD)
+    #     #(chunk['Spacer+PAM'] == guide) & (chunk['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (chunk['Bulges_(highest_CFD)'] == str(bulge_s)) & (chunk['Mismatches_(highest_CFD)'] == str(mms))
+    #     partial = chunk[(chunk['Spacer+PAM'] == guide) & (chunk['Start_coordinate_(highest_CFD)'] >= int(start)) & (chunk['Start_coordinate_(highest_CFD)'] <= int(end)) & (chunk['Chromosome'] == chrom)]
+    #     #print(partial.shape)
+    #     result = pd.concat([result, partial])
+    
+    # result.to_csv(pos_grep_result, sep='\t', index=False)
+
+    # with open(file_to_grep, 'r') as ftg:
+    #     header = ftg.readline().split('\t')[:24]
+
+    df = dt.fread(integrated_file_name)
+    result = df[(f['Spacer+PAM'] == guide) & (f['Start_coordinate_(highest_CFD)'] >= int(start)) & (f['Start_coordinate_(highest_CFD)'] <= int(end)) & (f['Chromosome'] == chrom), 1:].to_pandas().fillna('NA')
+
+    # try:
+    #     df = pd.read_csv(pos_grep_result, sep='\t',
+    #                      index_col=False, na_filter=False)
+    #     if df.shape[0] != 0:
+    #         df_check = True
+    #     else:
+    #         df_check = False
+    # except:
+    #     df = pd.DataFrame(columns=header)
+    #     df_check = False
+    if result.shape[0] == 0:
+        df_check = False
+    else:
         df_check = True
-    except:
-        df_check = False  # skip df parsing and report no results found
+    # df.rename(columns=COL_BOTH_RENAME, inplace=True)
+    # df.columns = header
+    # #print(df, 'line 2126')
+    #try:
+    #    df = df[COL_BOTH]
+    #    df_check = True
+    #except:
+    #    df_check = False  # skip df parsing and report no results found
     # df.columns = COL_BOTH
     # df[''] = [''] * df.shape[0]
     # df_cols = df.columns.tolist()
@@ -2161,10 +2323,13 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                       'rule': 'margin: 0'}],
                 id="table-position",
                 export_format="csv",
-                columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
-                         for count, i in enumerate(df.columns)],
+                # columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
+                #          for count, i in enumerate(df.columns)],
+                columns=[{"name": i, "id": i, 'hideable':True}
+                         for count, i in enumerate(result.columns)],
                 # columns=[{"name": i, "id": i} for i in df.columns],
-                data=df.to_dict('records'),
+                data=result.to_dict('records'),
+                style_cell = {'textAlign': 'left'},
                 style_cell_conditional=[{
                     'if': {'column_id': 'Samples'},
                     'textAlign': 'left'
@@ -2172,13 +2337,13 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                 style_table={
                     'overflowX': 'scroll',
                 },
-                page_size=10,
+                page_size=PAGE_SIZE,
 
             )
         ]
     else:
         out_1 = [html.P('No results found with this genomic coordinates')]
-    os.system(f"rm {pos_grep_result}")
+    #os.system(f"rm {pos_grep_result}")
     return out_1, '1/' + str(1)
 
 # Callback to update the hidden div filter position
@@ -2802,24 +2967,41 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         integrated_private = job_directory + job_id + '.' + \
             sample + '.' + guide + '.integrated.private.txt'
 
-        os.system(f'head -1 {integrated_to_grep} > {job_directory}/header.txt')
-        # grep guide and then sample into personal card data
-        os.system(
-            f"fgrep {guide} {integrated_to_grep} | awk \'$22~\"{sample}\"\' > {integrated_personal}")
-        os.system(
-            f'cat {job_directory}/header.txt {integrated_personal} > {integrated_personal}.tmp')
-        os.system(
-            f'mv {integrated_personal}.tmp {integrated_personal} > /dev/null 2>&1')
-        # grep private targets from personal targets
-        os.system(
-            f"awk \'$22==\"{sample}\"\' {integrated_personal} > {integrated_private}")
-        os.system(
-            f'cat {job_directory}/header.txt {integrated_private} > {integrated_private}.tmp')
-        os.system(
-            f'mv {integrated_private}.tmp {integrated_private} > /dev/null 2>&1')
-        # grep private targets to generate table and file
-        os.system(
-            f"fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
+        # os.system(f'head -1 {integrated_to_grep} > {job_directory}/header.txt')
+        # # grep guide and then sample into personal card data
+        # os.system(
+        #     f"fgrep {guide} {integrated_to_grep} | awk \'$22~\"{sample}\"\' > {integrated_personal}")
+        # os.system(
+        #     f'cat {job_directory}/header.txt {integrated_personal} > {integrated_personal}.tmp')
+        # os.system(
+        #     f'mv {integrated_personal}.tmp {integrated_personal} > /dev/null 2>&1')
+        # # grep private targets from personal targets
+        # os.system(
+        #     f"awk \'$22==\"{sample}\"\' {integrated_personal} > {integrated_private}")
+        # os.system(
+        #     f'cat {job_directory}/header.txt {integrated_private} > {integrated_private}.tmp')
+        # os.system(
+        #     f'mv {integrated_private}.tmp {integrated_private} > /dev/null 2>&1')
+        # # grep private targets to generate table and file
+        # os.system(
+        #     f"fgrep {guide} {file_to_grep} | awk \'$14==\"{sample}\"\' > {sample_grep_result}")
+
+        # result_personal = pd.DataFrame()
+        # result_private = pd.DataFrame()
+        # chunks = pd.read_csv(integrated_to_grep, sep='\t', chunksize=1000000, na_filter=False, index_col=False)
+        # for chunk in chunks:
+        #     #print(chunk.columns, chunk.shape)
+        #     partial_personal = chunk[(chunk['Variant_samples_(highest_CFD)'].str.contains(sample)) & (chunk['Spacer+PAM'] == guide)]
+        #     result_personal = pd.concat([result_personal, partial_personal])
+        #     partial_private = chunk[(chunk['Variant_samples_(highest_CFD)'] == sample) & (chunk['Spacer+PAM'] == guide)]
+        #     result_private = pd.concat([result_private, partial_private])
+
+        df = dt.fread(integrated_file_name)
+        result_personal = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:].to_pandas().fillna('NA')
+        result_private = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'] == str(sample)), 1:].to_pandas().fillna('NA')
+
+        result_personal.to_csv(integrated_personal, sep='\t', index=False)
+        result_private.to_csv(integrated_private, sep='\t', index=False)
 
         # plot for images in personal card
         os.system(
@@ -2829,22 +3011,25 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         os.system(
             f"rm -f {integrated_private} {integrated_personal}")
 
-        private = 0
-        for line in open(sample_grep_result):
-            private += 1
-        # ###print(personal, pam_creation, private)
+        private = result_private.shape[0]
+        #private = 0
+        #for line in open(sample_grep_result):
+        #    private += 1
+        # ##print(personal, pam_creation, private)
         results_table = pd.DataFrame([[personal, pam_creation, private]], columns=[
             'Personal', 'PAM Creation', 'Private']).astype(str)
-        if int(private) > 0:
-            os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
-            os.system(
-                f' sort -k21,21rg {sample_grep_result} > {sample_grep_result}.tmp2')
-            os.system(
-                f'cat {job_directory}/header.txt {sample_grep_result}.tmp2 > {sample_grep_result}.tmp')
-            os.system(
-                f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result}.tmp {sample_grep_result}')
-            os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
-                                                                '.zip') + ' ' + sample_grep_result)
+        #if int(private) > 0:
+            # os.system(f'head -1 {file_to_grep} > {job_directory}/header.txt')
+            # os.system(
+            #    f' sort -k21,21rg {sample_grep_result} > {sample_grep_result}.tmp2')
+            # os.system(
+            #    f'cat {job_directory}/header.txt {sample_grep_result}.tmp2 > {sample_grep_result}.tmp')
+            # os.system(
+            #    f'python {app_main_directory}/PostProcess/change_headers_bestMerge.py {sample_grep_result}.tmp {sample_grep_result}')
+            # os.system('zip '+'-j ' + sample_grep_result.replace('.txt',
+            #                                                     '.zip') + ' ' + sample_grep_result)
+            #os.system('zip '+'-j ' + integrated_private.replace('.txt',
+            #                                                    '.zip') + ' ' + integrated_private)                                                                
 
         with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "w") as file_out:
             file_out.write(
@@ -2860,8 +3045,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     targets.append(line.strip().split('\t'))
 
     try:  # to read the private targets file, if not created, pass
-        ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
-            0, 38), skiprows=0, na_filter=False, nrows=5)
+        # ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
+        #     0, 38), skiprows=0, na_filter=False, nrows=5)
+        ans = result_private
     except:
         pass
 
@@ -2876,8 +3062,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
     try:
         file_to_load = job_id + '.' + sample + '.' + guide + '.private.zip'
-        # ##print(file_to_load)
-        ans = ans[COL_BOTH]
+        # #print(file_to_load)
+        # ans = ans[COL_BOTH]
         out_1 = [
             html.A('Download private targets', href=URL+'/Results/' +
                    job_id + '/' + file_to_load, target='_blank'),
@@ -2912,7 +3098,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}],
                 id="results-table-risk",
-                columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
+                # columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
+                #          for count, i in enumerate(ans.columns)],
+                columns=[{"name": i, "id": i, 'hideable':True}
                          for count, i in enumerate(ans.columns)],
                 data=ans.to_dict('records'),
                 # style_cell_conditional=[
