@@ -983,11 +983,12 @@ def global_get_sample_targets(job_id, sample, guide, page):
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
-    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\' LIMIT {} OFFSET {}".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN,sample, PAGE_SIZE, page * PAGE_SIZE),conn)
+    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\' LIMIT {} OFFSET {}".format(
+        GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample, PAGE_SIZE, page * PAGE_SIZE), conn)
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
     conn.commit()
     conn.close()
-    
+
     # df = dt.fread(integrated_file_name)
 
     # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*' +
@@ -995,7 +996,7 @@ def global_get_sample_targets(job_id, sample, guide, page):
 
     return result
 
-    
+
 @app.callback(
     Output('table-sample-target', 'data'),
     [Input('table-sample-target', "page_current"),
@@ -1025,7 +1026,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
         genome_type = 'both'
     if not(filter is None):
         filtering_expressions = filter.split(' && ')
-    
+
     df = global_get_sample_targets(job_id, sample, guide, page_current)
     return df.to_dict('records')
     '''
@@ -1083,7 +1084,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
     #     else:
     #         row['Samples Summary'] = 'n'
     return data_to_send
-    
+
 # Return the targets found for the selected sample
 
 
@@ -1811,7 +1812,8 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page):
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
-    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} AND \"{}\"<>\'NA\' LIMIT {} OFFSET {}".format(GUIDE_COLUMN,guide,BLG_T_COLUMN,bulge_t, BLG_COLUMN, bulge_s,MM_COLUMN,mms, SAMPLES_COLUMN, PAGE_SIZE, page * PAGE_SIZE),conn)
+    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} AND \"{}\"<>\'NA\' LIMIT {} OFFSET {}".format(
+        GUIDE_COLUMN, guide, BLG_T_COLUMN, bulge_t, BLG_COLUMN, bulge_s, MM_COLUMN, mms, SAMPLES_COLUMN, PAGE_SIZE, page * PAGE_SIZE), conn)
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
     conn.commit()
     conn.close()
@@ -1847,7 +1849,8 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page):
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
-    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} LIMIT {} OFFSET {}".format(GUIDE_COLUMN,guide,BLG_T_COLUMN,bulge_t, BLG_COLUMN, bulge_s,MM_COLUMN,mms, PAGE_SIZE, page * PAGE_SIZE),conn)
+    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} LIMIT {} OFFSET {}".format(
+        GUIDE_COLUMN, guide, BLG_T_COLUMN, bulge_t, BLG_COLUMN, bulge_s, MM_COLUMN, mms, PAGE_SIZE, page * PAGE_SIZE), conn)
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
     conn.commit()
     conn.close()
@@ -2338,7 +2341,8 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     #             (f['Start_coordinate_(highest_CFD)'] <= int(end)) & (f['Chromosome'] == chrom), 1:].to_pandas().fillna('NA')
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
-    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\">={} AND \"{}\"<={} AND \"{}\"=\'{}\'".format(GUIDE_COLUMN,guide,POS_COLUMN,start,POS_COLUMN,end,CHR_COLUMN,chrom),conn)
+    result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\">={} AND \"{}\"<={} AND \"{}\"=\'{}\'".format(
+        GUIDE_COLUMN, guide, POS_COLUMN, start, POS_COLUMN, end, CHR_COLUMN, chrom), conn)
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
     conn.commit()
     conn.close()
@@ -3059,16 +3063,19 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         #     f['Variant_samples_(highest_CFD)'] == str(sample)), 1:].to_pandas().fillna('NA')
 
         path_db = glob.glob(
-        current_working_directory + 'Results/' +
+            current_working_directory + 'Results/' +
             job_id + '/'+job_id + '*.db')[0]
         path_db = str(path_db)
         conn = sqlite3.connect(path_db)
         c = conn.cursor()
         #print('start queries sample card')
-        result_personal = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN, sample),conn)
-        result_personal = result_personal.sort_values([CFD_COLUMN, TOTAL_COLUMN], ascending=[False, True])
+        result_personal = pd.read_sql_query(
+            "SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample), conn)
+        result_personal = result_personal.sort_values(
+            [CFD_COLUMN, TOTAL_COLUMN], ascending=[False, True])
         #print('done personal')
-        result_private = result_personal[result_personal[SAMPLES_COLUMN]==sample]#pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\'".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN, sample),conn)
+        # pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\'".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN, sample),conn)
+        result_private = result_personal[result_personal[SAMPLES_COLUMN] == sample]
         #print('done private')
         #result_personal.drop([GUIDE_COLUMN], axis=1, inplace=True)
         #result_private.drop([GUIDE_COLUMN], axis=1, inplace=True)
@@ -3568,7 +3575,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #                             'Total', 'Bulge_type', 'PAM_gen', 'CFD',
         #                             'CFD_ref', 'Highest_CFD_Risk_Score',
         #                             'Var_uniq', 'SNP', 'AF', 'rsID', 'Samples', 'Seq_in_cluster', 'Annotation_Type'])
-        dff = pd.DataFrame(columns = header)
+        dff = pd.DataFrame(columns=header)
         # to define column names in the first empty table
         # ##print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
         # ##print('check col in query table', dff)
@@ -3763,7 +3770,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     id='live_table',
                                     # columns=[{"name": dff_view_names[count], "id": i, 'hideable':True}
                                     #          for count, i in enumerate(dff.columns)],
-                                    columns=[{"name": i, "id": i, 'hideable':True}
+                                    columns=[{"name": i, "id": i, 'hideable': True}
                                              for count, i in enumerate(dff.columns)],
                                     # tooltip_data=[
                                     #     {
@@ -3872,7 +3879,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
         opt_mm = []
         total = int(mms)+int(max_bulges)
-        for i in range(int(total)):
+        for i in range(total+1):
             opt_mm.append({'label': str(i), 'value': str(i)})
         opt_blg = []
         for i in range(int(max_bulges)+1):
@@ -4288,7 +4295,8 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
             # data.loc[mask, 'DNA'] = 'NA'
             # data.loc[mask, 'DNA'] = data['Reference']
             data = data.drop(['Spacer+PAM'], axis=1)
-            snps = pd.DataFrame(data['Variant_info_genome_(highest_CFD)']).to_dict('records')
+            snps = pd.DataFrame(
+                data['Variant_info_genome_(highest_CFD)']).to_dict('records')
             data = data.to_dict('records')
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
@@ -4403,7 +4411,8 @@ def set_display_children(selected_order):
         # return [{'label': i, 'value': i} for i in target_options[selected_order]], data, {'display': 'none'}
         return gi, data, {'display': 'none'}
     elif selected_order == "Bulges":
-        data = [{'label': '0', 'value': '0'}, {'label': '1', 'value': '1'}, {'label': '2', 'value': '2'}]
+        data = [{'label': '0', 'value': '0'}, {
+            'label': '1', 'value': '1'}, {'label': '2', 'value': '2'}]
         # return [{'label': i, 'value': i} for i in target_options[selected_order]], data, {'display': 'none'}
         return gi, data, {'display': 'none'}
     else:
@@ -4419,7 +4428,8 @@ def maxdrop(sholddrop, order):
     if order == 'Mismatches':
         if sholddrop:
             start_value = int(sholddrop)
-            data = [{'label': str(i), 'value': str(i)} for i in range(start_value, 7)]
+            data = [{'label': str(i), 'value': str(i)}
+                    for i in range(start_value, 7)]
         else:
             data = []
 
@@ -4432,7 +4442,8 @@ def maxdrop(sholddrop, order):
             else:
                 small = False
             if start_value < 10:
-                data = [{'label': f'0.{i}', 'value': f'0.{i}'} for i in range(start_value, 10)]
+                data = [{'label': f'0.{i}', 'value': f'0.{i}'}
+                        for i in range(start_value, 10)]
                 data.append({'label': '1', 'value': '1'})
                 if small:
                     data.insert(0, {'label': '0.01', 'value': '0.01'})
@@ -4444,14 +4455,16 @@ def maxdrop(sholddrop, order):
     elif order == 'Bulges':
         if sholddrop:
             start_value = int(sholddrop)
-            data = [{'label': str(i), 'value': str(i)} for i in range(start_value, 3)]
+            data = [{'label': str(i), 'value': str(i)}
+                    for i in range(start_value, 3)]
         else:
             data = []
 
     elif order == 'Mismatches+bulges':
         if sholddrop:
             start_value = int(sholddrop)
-            data = [{'label': str(i), 'value': str(i)} for i in range(start_value, 9)]
+            data = [{'label': str(i), 'value': str(i)}
+                    for i in range(start_value, 9)]
         else:
             data = []
 
