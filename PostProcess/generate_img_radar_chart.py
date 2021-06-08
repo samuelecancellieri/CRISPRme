@@ -206,7 +206,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
                ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=fontsize, loc='upper left', ncol=6)
 
-    plt.suptitle('Targets found in each ' + str(name)+' category - '+str(total)+' (Mismatches (MM) + Bulges(B))',
+    plt.suptitle('Targets found in each ' + 'ENCODE+GENCODE'+' category - '+str(total)+' (Mismatches (MM) + Bulges(B))',
                  horizontalalignment='center', color='black', size=titlesize)
 
     plt.tight_layout()
