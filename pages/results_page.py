@@ -3066,6 +3066,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         c = conn.cursor()
         #print('start queries sample card')
         result_personal = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN, sample),conn)
+        result_personal = result_personal.sort_values([CFD_COLUMN, TOTAL_COLUMN], ascending=[False, True])
         #print('done personal')
         result_private = result_personal[result_personal[SAMPLES_COLUMN]==sample]#pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\'".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN, sample),conn)
         #print('done private')
