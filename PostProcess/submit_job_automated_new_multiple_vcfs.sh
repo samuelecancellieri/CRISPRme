@@ -541,7 +541,7 @@ if [ $gene_proximity != "_" ]; then
 		head -1 "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >>"${output_folder}/tmp_linda_plot_file_${guide}.txt"
 		fgrep "$guide" "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >>"${output_folder}/tmp_linda_plot_file_${guide}.txt"
 		python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &>"${output_folder}/warnings.txt"
-		# rm -f "${output_folder}/warnings.txt"
+		rm -f "${output_folder}/warnings.txt"
 		rm "${output_folder}/tmp_linda_plot_file_${guide}.txt"
 	done <$guide_file
 fi
