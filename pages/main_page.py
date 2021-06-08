@@ -1120,8 +1120,8 @@ def changeVariantsChecklistState(genome_value):
                                            'value': '1000G', 'disabled': False})
         checklist_variants_options.append({'label': ' plus HGDP variants',
                                            'value': 'HGDP', 'disabled': False})
-        checklist_variants_options.append({'label': ' plus personal variants*',
-                                           'value': 'PV', 'disabled': True})
+        checklist_variants_options.append({'label': ' plus personal variants',
+                                           'value': 'PV', 'disabled': False})
     personal_vcf = get_more_VCF(genome_value)
     return [checklist_variants_options, personal_vcf]
 
@@ -1184,10 +1184,10 @@ def indexPage():
         [
             # html.Div('CRISPRme is a web application, also available offline or command-line for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:spacer mismatches and bulges, and is suitable for population and personal genome analyses.'),
             html.Div('CRISPRme is a web application, also available offline or command line, for comprehensive off-target assessment. It integrates human genetic variant datasets with orthogonal genomic annotations to predict and prioritize CRISPR-Cas off-target sites at scale. The method considers both single-nucleotide variants (SNVs) and indels, accounts for bona fide haplotypes, accepts spacer:protospacer mismatches and bulges, and is suitable for population and personal genome analyses.'),
-            html.Div(['Check out our preprint on bioRxiv ', html.A(
-                'here!', target='_blank', href='https://www.biorxiv.org/content/10.1101/2021.05.20.445054v1')]),
-            html.Div(['CRISPRme offline version can be downloaded from ', html.A(
-                'Github', target='_blank', href='https://github.com/pinellolab/CRISPRme')]),
+            # html.Div(['Check out our preprint on bioRxiv ', html.A(
+            #     'here!', target='_blank', href='https://www.biorxiv.org/content/10.1101/2021.05.20.445054v1')]),
+            # html.Div(['CRISPRme offline version can be downloaded from ', html.A(
+            #     'Github', target='_blank', href='https://github.com/pinellolab/CRISPRme')]),
             html.Br()
         ]
     )
@@ -1278,7 +1278,7 @@ def indexPage():
                      'value': '1000G', 'disabled': True},
                     {'label': ' plus HGDP variants',
                      'value': 'HGDP', 'disabled': True},
-                    {'label': ' plus personal variants*',
+                    {'label': ' plus personal variants',
                      'value': 'PV', 'disabled': True}
                 ],
                     id='checklist-variants', value=[])
@@ -1482,8 +1482,8 @@ def indexPage():
         )
     )
     final_list.append(html.Br())
-    final_list.append(
-        html.P('*The offline version of CRISPRme can be downloaded from GitHub and offers additional functionalities, including the option to input personal data (such as genetic variants, annotations, and/or empirical off-target results) as well as custom PAMs and genomes. There is no limit on the number of spacers, mismatches, and/or bulges used in the offline search.'))
+    # final_list.append(
+    #     html.P('*The offline version of CRISPRme can be downloaded from GitHub and offers additional functionalities, including the option to input personal data (such as genetic variants, annotations, and/or empirical off-target results) as well as custom PAMs and genomes. There is no limit on the number of spacers, mismatches, and/or bulges used in the offline search.'))
     # final_list.append(html.P(
     #     '[1] Cancellieri, Samuele, et al. \"Crispritz: rapid, high-throughput, and variant-aware in silico off-target site identification for crispr genome editing.\" Bioinformatics (2019).'))
     # final_list.append(
