@@ -87,14 +87,14 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     dataframe_table.rename(
         index={'CTCF-only': 'CTCF', 'General': 'Total'}, inplace=True)
 
-    print(dataframe_table)
+    # print(dataframe_table)
 
     # dataframe for radar chart, drop total column
     dataframe_radar_chart = dataframe_table.drop(['Total'])
     dataframe_radar_chart = dataframe_radar_chart.T
 
     categories_radar_chart = list(dataframe_radar_chart)[0:]
-    categories_table = list(dataframe_table)[0:]
+    categories_table = list(dataframe_table.T)[0:]
 
     count_radar_chart_categories = len(categories_radar_chart)
 
@@ -148,7 +148,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     plt.subplot(2, 2, 2)
     transpose_list = list()
-    dataframe_table = dataframe_table.T
+    # dataframe_table = dataframe_table.T
     for elem in categories_table:
         transpose_list.append(list(dataframe_table.loc[elem]))
     templist = list()
