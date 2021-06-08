@@ -79,7 +79,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
 
     guideDataFrame['Percentage'] = percentage_list
-    guideDataFrame.columns = ['Total', 'Percentage']
+    guideDataFrame.columns = ['Count', 'Percentage']
 
     # dataframe for table creation
     dataframe_table = guideDataFrame.loc[[
