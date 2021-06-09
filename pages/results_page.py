@@ -109,6 +109,61 @@ CFD_COLUMN = 'CFD_score_(highest_CFD)'
 RISK_COLUMN = 'CFD_risk_score_(highest_CFD)'
 SAMPLES_COLUMN = 'Variant_samples_(highest_CFD)'
 
+header_integrated = [
+    'Spacer+PAM',
+    'Chromosome',
+    'Start_coordinate_(highest_CFD)',
+    'Strand_(highest_CFD)',
+    'Aligned_spacer+PAM_(highest_CFD)',
+    'Aligned_protospacer+PAM_REF_(highest_CFD)',
+    'Aligned_protospacer+PAM_ALT_(highest_CFD)',
+    'PAM_(highest_CFD)',
+    'Mismatches_(highest_CFD)',
+    'Bulges_(highest_CFD)',
+    'Mismatches+bulges_(highest_CFD)',
+    'Bulge_type_(highest_CFD)',
+    'REF/ALT_origin_(highest_CFD)',
+    'PAM_creation_(highest_CFD)',
+    'CFD_score_(highest_CFD)',
+    'CFD_score_REF_(highest_CFD)',
+    'CFD_score_ALT_(highest_CFD)',
+    'CFD_risk_score_(highest_CFD)',
+    'Variant_info_spacer+PAM_(highest_CFD)',
+    'Variant_info_genome_(highest_CFD)',
+    'Variant_MAF_(highest_CFD)',
+    'Variant_rsID_(highest_CFD)',
+    'Variant_samples_(highest_CFD)',
+    'Not_found_in_REF',
+    'Other_motifs',
+    'Start_coordinate_(fewest_mm+b)',
+    'Strand_(fewest_mm+b)',
+    'Aligned_spacer+PAM_(fewest_mm+b)',
+    'Aligned_protospacer+PAM_REF_(fewest_mm+b)',
+    'Aligned_protospacer+PAM_ALT_(fewest_mm+b)',
+    'PAM_(fewest_mm+b)',
+    'Mismatches_(fewest_mm+b)',
+    'Bulges_(fewest_mm+b)',
+    'Mismatches+bulges_(fewest_mm+b)',
+    'Bulge_type_(fewest_mm+b)',
+    'REF/ALT_origin_(fewest_mm+b)',
+    'PAM_creation_(fewest_mm+b)',
+    'CFD_score_(fewest_mm+b)',
+    'CFD_score_REF_(fewest_mm+b)',
+    'CFD_score_ALT_(fewest_mm+b)',
+    'CFD_risk_score_(fewest_mm+b)',
+    'Variant_info_spacer+PAM_(fewest_mm+b)',
+    'Variant_info_genome_(fewest_mm+b)',
+    'Variant_MAF_(fewest_mm+b)',
+    'Variant_rsID_(fewest_mm+b)',
+    'Variant_samples_(fewest_mm+b)',
+    'Annotation_GENCODE',
+    'Annotation_closest_gene_name',
+    'Annotation_closest_gene_ID',
+    'Annotation_closest_gene_distance_(kb)',
+    'Annotation_ENCODE',
+    'Annotation_personal'
+]
+
 
 def resultPage(job_id):
     '''
@@ -987,12 +1042,13 @@ def global_get_sample_targets(job_id, sample, guide, page):
         GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample, PAGE_SIZE, page * PAGE_SIZE), conn)
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
 
-    total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Variant_samples_(highest_CFD)\"=\'{sample}\'"
-    with open(current_working_directory+'/Results/'+job_id+'/prova_sample_private.tsv', 'w') as f_out:
+    total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Variant_samples_(highest_CFD)\" LIKE \'%{sample}%\'"
+    with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(sample)+'.'+guide+'.personal_targets.csv', 'w') as f_out:
+        f_out.write(','.join(header_integrated)+'\n')
         rows = c.execute(total_private_sample)
         for row in rows:
             row = [str(ele) for ele in row]
-            f_out.write('\t'.join(row)+'\n')
+            f_out.write(','.join(row)+'\n')
 
     conn.commit()
     conn.close()
@@ -3098,8 +3154,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
-        # os.system(
-        #     f"rm -f {integrated_private} {integrated_personal}")
+        os.system(
+            f"rm -f {integrated_private} {integrated_personal}")
 
         private = result_private.shape[0]
         #private = 0
