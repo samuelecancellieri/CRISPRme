@@ -3090,8 +3090,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
-        os.system(
-            f"rm -f {integrated_private} {integrated_personal}")
+        # os.system(
+        #     f"rm -f {integrated_private} {integrated_personal}")
 
         private = result_private.shape[0]
         #private = 0
