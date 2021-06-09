@@ -1971,7 +1971,7 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
 
 
 # @cache.memoize()
-def global_store_subset(value, bulge_t, bulge_s, mms, guide, page):
+def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
     '''
     Caching dei file targets per una miglior performance di visualizzazione
     '''
@@ -1986,6 +1986,22 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page):
     result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} LIMIT {} OFFSET {}".format(
         GUIDE_COLUMN, guide, BLG_T_COLUMN, bulge_t, BLG_COLUMN, bulge_s, MM_COLUMN, mms, PAGE_SIZE, page * PAGE_SIZE), conn)
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+
+    target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Mismatches_(highest_CFD)\"=\'{mms}\' AND \"Bulges_(highest_CFD)\"=\'{bulge_s}\' AND \"Bulge_type_(highest_CFD)\"=\'{bulge_t}\'"
+    with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv', 'w') as f_out:
+        f_out.write('\t'.join(header_integrated)+'\n')
+        rows = c.execute(target_with_mm_b)
+        for row in rows:
+            row = [str(ele) for ele in row]
+            f_out.write('\t'.join(row)+'\n')
+    conn.commit()
+    conn.close()
+
+    targets_with_mm_bul = current_working_directory + 'Results/' + job_id + '/'+job_id+'.' + \
+        str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv'
+    targets_with_mm_bul_zip = targets_with_mm_bul.replace('tsv', 'zip')
+
+    os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
     conn.commit()
     conn.close()
     # integrated_file_name = glob.glob(
