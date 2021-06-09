@@ -4262,11 +4262,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             html.Div(
                 [
                     html.P(
-                        'The GENCODE and ENCODE(SCREEN) annotations are defined in details here: '),
-                    html.A(target='_blank',
+                        'The GENCODE and ENCODE(SCREEN) annotations are defined in details'),
+                    html.A('here', target='_blank',
                            href='https://www.gencodegenes.org/human/'),
-                    html.P('and here: '),
-                    html.A(target='_blank',
+                    html.P('and '),
+                    html.A('here', target='_blank',
                            href='https://screen.encodeproject.org/'),
                 ]
             )
