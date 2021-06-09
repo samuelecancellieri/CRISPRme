@@ -1043,12 +1043,12 @@ def global_get_sample_targets(job_id, sample, guide, page):
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
 
     total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Variant_samples_(highest_CFD)\" LIKE \'%{sample}%\'"
-    with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(sample)+'.'+guide+'.personal_targets.csv', 'w') as f_out:
-        f_out.write(','.join(header_integrated)+'\n')
+    with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(sample)+'.'+guide+'.personal_targets.tsv', 'w') as f_out:
+        f_out.write('\t'.join(header_integrated)+'\n')
         rows = c.execute(total_private_sample)
         for row in rows:
             row = [str(ele) for ele in row]
-            f_out.write(','.join(row)+'\n')
+            f_out.write('\t'.join(row)+'\n')
 
     conn.commit()
     conn.close()
@@ -1206,10 +1206,14 @@ def samplePage(job_id, hash):
         job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
     sample_grep_result = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.' + sample + '.' + guide + '.txt'
+    integrated_sample_personal = job_id + '.' + sample + '.' + guide+'.personal_targets.tsv'
+    integrated_sample_personal_zip = job_id + '.' + sample + '.' + guide+'.personal_targets.zip'
     final_list.append(
-        html.Div(job_id + '.' + sample + '.' + guide,
+        html.Div(job_id + '.' + sample + '.' + guide+'.personal_targets',
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
+    os.system(
+        f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal}")
     # if not os.path.exists(sample_grep_result):
     # os.system(f"touch {sample_grep_result}")
 
