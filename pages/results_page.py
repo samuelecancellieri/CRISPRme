@@ -1287,7 +1287,7 @@ def samplePage(job_id, hash):
     # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
     # result = pd.DataFrame(result.to_dict()).fillna('NA')
     with open(integrated_file_name, 'r') as f:
-        header = f.readline().strip().split()#[1:]
+        header = f.readline().strip().split()  # [1:]
 
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
@@ -1863,7 +1863,7 @@ def guidePagev3(job_id, hash):
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
     with open(integrated_file_name, 'r') as f:
-        header = f.readline().strip().split()#[1:]
+        header = f.readline().strip().split()  # [1:]
 
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
@@ -3754,7 +3754,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             job_id + '/'+job_id + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
         with open(integrated_file_name, 'r') as f:
-            header = f.readline().strip().split()#[1:]
+            header = f.readline().strip().split()  # [1:]
         #dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
         #                   'Position', 'Direction', 'Mismatches',
@@ -4152,7 +4152,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Col(
                 html.Div(
                     [
-                        html.P("Select Total (Mismatches+Bulge)"),
+                        html.P(
+                            "Select total number of mismatches and/or bulges to consider, up to"),
                         dcc.Dropdown(id='mm-dropdown',
                                      options=opt_mm,
                                      value='0',
@@ -4253,6 +4254,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                     dbc.Row(
                         graph_summary_both
                     )
+                ]
+            )
+        )
+
+        fl.append(
+            html.Div(
+                [
+                    html.P(
+                        'The GENCODE and ENCODE(SCREEN) annotations are defined in details here: '),
+                    html.A(target='_blank',
+                           href='https://www.gencodegenes.org/human/'),
+                    html.P('and here: '),
+                    html.A(target='_blank',
+                           href='https://screen.encodeproject.org/'),
                 ]
             )
         )
