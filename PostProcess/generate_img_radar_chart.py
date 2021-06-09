@@ -216,7 +216,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
                ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=fontsize, loc='upper left', ncol=6)
 
     plt.suptitle('Targets found with up to ' + str(total) + ' mismatches and / or bulges overlapping ENCODE and / or GENCODE annotations',
-                 horizontalalignment='center', color='black', size=titlesize)
+                 horizontalalignment='center', color='black', size=titlesize-2)
 
     plt.tight_layout()
 
