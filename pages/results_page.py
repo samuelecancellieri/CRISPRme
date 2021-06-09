@@ -3177,9 +3177,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         result_personal.to_csv(integrated_personal, sep='\t', index=False)
         result_private.to_csv(integrated_private, sep='\t', index=False)
 
-        result_private_zip = result_private.replace('tsv', 'zip')
+        integrated_private_zip = integrated_private.replace('tsv', 'zip')
 
-        os.system(f"zip -j {result_private_zip} {result_private}")
+        os.system(f"zip -j {integrated_private_zip} {integrated_private}")
 
         # plot for images in personal card
         os.system(
