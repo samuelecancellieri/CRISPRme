@@ -2002,8 +2002,6 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
     targets_with_mm_bul_zip = targets_with_mm_bul.replace('tsv', 'zip')
 
     os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
-    conn.commit()
-    conn.close()
     # integrated_file_name = glob.glob(
     #     current_working_directory + 'Results/' +
     #     value + '/'+value + '*integrated*.jay')[0]
