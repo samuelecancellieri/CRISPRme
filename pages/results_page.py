@@ -987,7 +987,7 @@ def global_get_sample_targets(job_id, sample, guide, page):
         GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample, PAGE_SIZE, page * PAGE_SIZE), conn)
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
 
-    total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Variant_samples_(highest_CFD)\=\'{sample}\'"
+    total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Variant_samples_(highest_CFD)\"=\'{sample}\'"
     with open('prova_sample_private.tsv', 'w') as f_out:
         rows = c.execute(total_private_sample)
         for row in rows:
