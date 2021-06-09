@@ -52,6 +52,7 @@ while read vcf_f; do
 	if [ -z "$vcf_f" ]; then
 		continue
 	fi
+	vcf_name+=$vcf_f"+"
 	vcf_folder="${current_working_directory}/VCFs/${vcf_f}"
 	ref_name=$(basename $1)
 	#folder_of_folders=$(dirname $1)
@@ -571,6 +572,15 @@ echo -e 'Integrating results\tEnd\t'$(date) >>$log
 echo -e 'Job\tDone\t'$(date) >>$log
 # echo -e 'Job\tDone\t'$(date) >&2
 # echo -e 'Job End' >  $output
+
+if [ $(wc -l <"$guide_file") -gt 1 ]; then
+	mv "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/Multiple_spacers+${true_pam}_$(basename ${ref_folder})+${vcf_name}_${mm}+${bMax}_CFD_integrated_results.tsv"
+	mv "${output_folder}/$(basename ${output_folder}).altMerge.txt" "${output_folder}/Multiple_spacers+${true_pam}_$(basename ${ref_folder})+${vcf_name}_${mm}+${bMax}_CFD_altMerge.tsv"
+else
+	guide_elem=$(head -1 $guide_file)
+	mv "${output_folder}/$(basename ${output_folder}).altMerge.txt" "${output_folder}/${guide_elem}+${true_pam}_$(basename ${ref_folder})+${vcf_name}_${mm}+${bMax}_CFD_altMerge.tsv"
+	mv "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/${guide_elem}+${true_pam}_$(basename ${ref_folder})+${vcf_name}_${mm}+${bMax}_CFD_integrated_results.tsv"
+fi
 echo -e "JOB END"
 
 if [ "$email" != "_" ]; then
