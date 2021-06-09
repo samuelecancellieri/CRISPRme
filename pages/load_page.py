@@ -154,6 +154,13 @@ def refreshSearch(n, dir_name):
                     images_status = html.P(
                         'Generating images...' + ' ' + 'Step [2/2]', style={'color': 'orange'})
 
+                if 'Integrating results\tEnd' in current_log:
+                    integrate_status = html.P('Done', style={'color': 'green'})
+                    all_done = all_done + 1
+                elif 'Integrating results\tStart' in current_log:
+                    integrate_status = html.P(
+                        'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
+
                 if 'Creating database\tEnd' in current_log:
                     database_status = html.P('Done', style={'color': 'green'})
                     all_done = all_done + 1
@@ -161,84 +168,6 @@ def refreshSearch(n, dir_name):
                     database_status = html.P(
                         'Inserting data...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
 
-                if 'Integrating results\tEnd' in current_log:
-                    integrate_status = html.P('Done', style={'color': 'green'})
-                    all_done = all_done + 1
-                elif 'Integrating results\tStart' in current_log:
-                    integrate_status = html.P(
-                        'Processing...' + ' ' + 'Step [1/1]', style={'color': 'orange'})
-                '''
-                if ('Search-index\tDone' in current_log and 'Search\tDone' in current_log):
-                    search_status = html.P('Done', style = {'color':'green'})
-                    all_done = all_done + 1
-                elif os.path.exists(current_job_dir + 'output.txt'):                #Extract % of search done 
-                    with open(current_job_dir + 'output.txt', 'r') as output_status:
-                        line = output_status.read().strip()
-                        if 'Indexing_Reference' in line:
-                            search_status = html.P('Indexing Reference Genome...' + ' ' + 'Step [1/2]', style = {'color':'orange'})
-                        if 'Indexing_Enriched' in line:
-                            search_status = html.P('Indexing Enriched Genome...' + ' ' + 'Step [2/2]', style = {'color':'orange'})
-                        if 'Search_output' in line:
-                            if 'both' in line:
-                                last_percent = line.rfind('%')
-                                if last_percent > 0:
-                                    last_percent = line[line[:last_percent].rfind(' '): last_percent]
-                                    search_status_message = last_percent + '%'
-                                else:
-                                    search_status_message = 'Searching...'
-
-                                steps = 'Step [1/2]'
-                                if 'Search_output_ref' in line:
-                                    steps = 'Step [2/2]'
-                                
-                            else:
-                                last_percent = line.rfind('%')
-                                if last_percent > 0:
-                                    last_percent = line[line[:last_percent].rfind(' '): last_percent]
-                                    search_status_message = last_percent + '%'
-                                else:
-                                    search_status_message = 'Searching...'
-                                steps = ''
-                            search_status = html.P(search_status_message + ' ' + steps, style = {'color':'orange'})
-
-                if ('Report\tDone' in current_log):
-                    report_status = html.P('Done', style = {'color':'green'})
-                    all_done = all_done + 1
-                elif os.path.exists(current_job_dir + 'output.txt'):                #Extract % of search done
-                    with open(current_job_dir + 'output.txt', 'r') as output_status:
-                        line = output_status.read().strip()
-                        if 'Generate_report' in line:
-                            if n_guides < 0:
-                                report_status = html.P('Generating Report...', style = {'color':'orange'}) 
-                            else:
-                                status_message = round((len(line.split('\n')) - 1) / n_guides, 2)
-                                report_status = html.P(str(status_message * 100) + '%', style = {'color':'orange'})
-                if ('PostProcess\tDone' in current_log):
-                    post_process_status = html.P('Done', style = {'color':'green'})
-                    all_done = all_done + 1
-                elif os.path.exists(current_job_dir + 'output.txt'):                #Extract % of search done
-                    with open(current_job_dir + 'output.txt', 'r') as output_status:
-                        line = output_status.read().strip()
-                        if 'PostProcess_output' in line:
-                            line = line.split('\n')
-                            if line[-1] == 'PostProcess_output':
-                                post_process_status = html.P('Processing data...', style = {'color':'orange'})    
-                            else:
-                                if 'Annotating...' in line:
-                                    last_percent = line[-1].rfind('%')
-                                    if last_percent > 0:
-                                        last_percent = line[line[:last_percent].rfind(' '): last_percent]
-                                        status_message = last_percent + '%'
-                                    else:
-                                        status_message = 'Annotating...'
-                                else:
-                                    status_message = line[-1]
-                                post_process_status = html.P(status_message, style = {'color':'orange'})
-                if all_done == 3 or 'Job\tDone' in current_log:
-                    return {'visibility':'visible'},  search_status, report_status, post_process_status ,'/result?job=' + dir_name.split('=')[-1], ''
-                else:
-                    return {'visibility':'hidden'},  search_status, report_status, post_process_status,'', ''
-                '''
                 if os.path.isfile(f"{current_job_dir}/log_error.txt") and os.path.getsize(f"{current_job_dir}/log_error.txt") > 0:
                     return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), '', dbc.Alert("The selected result encountered some errors, please remove it and try to submit again.", color="danger"), False
                 if all_done == 7 or 'Job\tDone' in current_log:
@@ -310,8 +239,8 @@ def load_page():
                                     html.Li('Merge targets'),
                                     html.Li(
                                         'Annotating and generating images'),
-                                    html.Li('Populating database'),
                                     html.Li('Integrating results'),
+                                    html.Li('Populating database'),
                                     #html.Li('Annotating result'),
                                     #html.Li('Generating report')
                                 ]
