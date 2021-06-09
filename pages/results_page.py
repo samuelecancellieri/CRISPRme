@@ -1216,7 +1216,7 @@ def samplePage(job_id, hash):
     )
 
     os.system(
-        f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal}")
+        f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal} &")
     # if not os.path.exists(sample_grep_result):
     # os.system(f"touch {sample_grep_result}")
 
@@ -1783,6 +1783,8 @@ def guidePagev3(job_id, hash):
         html.Div(job_id+'.' + str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.' +
                  guide, style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
+
+    os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
 
     # if not os.path.exists(guide_grep_result):
     # os.system(f'touch {guide_grep_result}')
