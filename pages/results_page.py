@@ -1781,7 +1781,7 @@ def guidePagev3(job_id, hash):
     targets_with_mm_bul_zip = targets_with_mm_bul.replace('tsv', 'zip')
     final_list.append(
         html.Div(job_id+'.' + str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.' +
-                 guide, style={'display': 'none'}, id='div-info-sumbyguide-targets')
+                 guide+'.targets', style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
 
     os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
