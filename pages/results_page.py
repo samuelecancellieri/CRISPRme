@@ -1053,6 +1053,14 @@ def global_get_sample_targets(job_id, sample, guide, page):
     conn.commit()
     conn.close()
 
+    integrated_sample_personal = current_working_directory + 'Results/' + \
+        job_id + '/' + job_id + '.' + sample + '.' + guide+'.personal_targets.tsv'
+    integrated_sample_personal_zip = integrated_sample_personal.replace(
+        'tsv', 'zip')
+
+    os.system(
+        f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal} &")
+
     # df = dt.fread(integrated_file_name)
 
     # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*' +
@@ -1208,15 +1216,13 @@ def samplePage(job_id, hash):
         job_id + '/' + job_id + '.' + sample + '.' + guide + '.txt'
     integrated_sample_personal = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.' + sample + '.' + guide+'.personal_targets.tsv'
-    integrated_sample_personal_zip = current_working_directory + 'Results/' + \
-        job_id + '/' + job_id + '.' + sample + '.' + guide+'.personal_targets.zip'
+    integrated_sample_personal_zip = integrated_sample_personal.replace(
+        'tsv', 'zip')
     final_list.append(
         html.Div(job_id + '.' + sample + '.' + guide+'.personal_targets',
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
 
-    os.system(
-        f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal} &")
     # if not os.path.exists(sample_grep_result):
     # os.system(f"touch {sample_grep_result}")
 
@@ -1776,15 +1782,11 @@ def guidePagev3(job_id, hash):
     guide_grep_result = job_directory + job_id + '.' + \
         bulge_t + '.' + bulge_s + '.' + mms + '.' + guide + '.txt'
     # put_header = 'head -1 ' + job_directory + job_id + file_to_grep + ' > ' + guide_grep_result + ' ; '
-    targets_with_mm_bul = current_working_directory + 'Results/' + job_id + '/'+job_id+'.' + \
-        str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv'
-    targets_with_mm_bul_zip = targets_with_mm_bul.replace('tsv', 'zip')
+
     final_list.append(
         html.Div(job_id+'.' + str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.' +
                  guide+'.targets', style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
-
-    os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
 
     # if not os.path.exists(guide_grep_result):
     # os.system(f'touch {guide_grep_result}')
@@ -1901,6 +1903,12 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
             f_out.write('\t'.join(row)+'\n')
     conn.commit()
     conn.close()
+
+    targets_with_mm_bul = current_working_directory + 'Results/' + job_id + '/'+job_id+'.' + \
+        str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv'
+    targets_with_mm_bul_zip = targets_with_mm_bul.replace('tsv', 'zip')
+
+    os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
     # integrated_file_name = glob.glob(
     #     current_working_directory + 'Results/' +
     #     value + '/'+value + '*integrated*.jay')[0]
