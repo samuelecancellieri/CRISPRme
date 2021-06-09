@@ -1206,12 +1206,15 @@ def samplePage(job_id, hash):
         job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
     sample_grep_result = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.' + sample + '.' + guide + '.txt'
-    integrated_sample_personal = job_id + '.' + sample + '.' + guide+'.personal_targets.tsv'
-    integrated_sample_personal_zip = job_id + '.' + sample + '.' + guide+'.personal_targets.zip'
+    integrated_sample_personal = current_working_directory + 'Results/' + \
+        job_id + '/' + job_id + '.' + sample + '.' + guide+'.personal_targets.tsv'
+    integrated_sample_personal_zip = current_working_directory + 'Results/' + \
+        job_id + '/' + job_id + '.' + sample + '.' + guide+'.personal_targets.zip'
     final_list.append(
         html.Div(job_id + '.' + sample + '.' + guide+'.personal_targets',
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
+
     os.system(
         f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal}")
     # if not os.path.exists(sample_grep_result):
