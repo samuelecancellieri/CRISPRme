@@ -163,7 +163,7 @@ header_integrated = [
     'Annotation_ENCODE'
 ]
 
-#check header for personal annotation
+# check header for personal annotation
 
 
 def resultPage(job_id):
@@ -1233,7 +1233,7 @@ def samplePage(job_id, hash):
     #     job_id + '/.' + job_id + '.bestMerge.txt'
     integrated_file_name = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+ '*integrated*')[0]
+        job_id + '/' + '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
     file_to_grep = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
@@ -1812,7 +1812,7 @@ def guidePagev3(job_id, hash):
     )
     integrated_file_name = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+ '*integrated*')[0]
+        job_id + '/' + '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
     file_to_grep = job_directory + job_id + '.bestMerge.txt.integrated_results.tsv'
     # file_to_grep_alt = job_directory + job_id + '.altMerge.txt'
@@ -1865,7 +1865,7 @@ def guidePagev3(job_id, hash):
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
     # with open(integrated_file_name, 'r') as f:
-        # header = f.readline().strip().split()  # [1:]
+    # header = f.readline().strip().split()  # [1:]
     header = header_integrated
 
     cols = [{"name": i, "id": i, 'hideable': True}
@@ -2534,7 +2534,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}],
                 id="table-position",
-                export_format="csv",
+                export_format="xlsx",
                 # columns=[{"name": COL_BOTH[count], "id": i, 'hideable':True}
                 #          for count, i in enumerate(df.columns)],
                 columns=[{"name": i, "id": i, 'hideable': True}
@@ -3176,7 +3176,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
         # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
         integrated_file_name = glob.glob(
-            job_directory+ '*integrated*')[0]
+            job_directory + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
         # integrated_to_grep = job_directory+job_id + \
         #     '.bestMerge.txt.integrated_results.tsv'
@@ -3757,7 +3757,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             job_id + '/' + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
         # with open(integrated_file_name, 'r') as f:
-            # header = f.readline().strip().split()  # [1:]
+        # header = f.readline().strip().split()  # [1:]
         header = header_integrated
         #dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
@@ -3961,7 +3961,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                         'textAlign': 'left',
                                         # 'maxWidth': '500px'
                                     },
-                                    export_format="csv",
+                                    export_format="xlsx",
                                     id='live_table',
                                     # columns=[{"name": dff_view_names[count], "id": i, 'hideable':True}
                                     #          for count, i in enumerate(dff.columns)],
