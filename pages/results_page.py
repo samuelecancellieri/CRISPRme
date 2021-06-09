@@ -7,7 +7,7 @@ from numpy.lib.function_base import _diff_dispatcher
 from app import URL, app
 # from app import app
 import pandas as pd
-from datatable import dt, f, sort
+# from datatable import dt, f, sort
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
@@ -959,6 +959,13 @@ def clusterPage(job_id, hash):
                 style_table={
                     'max-height': '600px'
                 },
+                style_cell_conditional=[
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CFD)'},
+                        'textAlign': 'left',
+                        'maxWidth':'300px'
+                    }
+                ],
                 # style_data_conditional=[
                 #     {
                 #         'if': {
@@ -1006,6 +1013,13 @@ def clusterPage(job_id, hash):
                     'max-height': '600px',
                     'overflowY': 'scroll',
                 },
+                style_cell_conditional=[
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CFD)'},
+                        'textAlign': 'left',
+                        'maxWidth':'300px'
+                    }
+                ],
                 # style_data_conditional=[
                 #     {
                 #         'if': {
@@ -1274,7 +1288,7 @@ def samplePage(job_id, hash):
                 id='table-sample-target',
                 columns=cols,
                 # data=result.to_dict('records'),
-                export_format='csv',
+                # export_format='csv',
                 # data = result.to_dict('records'),
                 # virtualization=True,
                 # fixed_rows={'headers': True, 'data': 0},
@@ -1292,6 +1306,13 @@ def samplePage(job_id, hash):
                     'max-height': '600px',
                     'overflowY': 'scroll',
                 },
+                style_cell_conditional=[
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CFD)'},
+                        'textAlign': 'left',
+                        'maxWidth':'300px'
+                    }
+                ],
                 # style_data_conditional=[
                 #     {
                 #         'if': {
@@ -1856,7 +1877,8 @@ def guidePagev3(job_id, hash):
                 style_cell_conditional=[
                     {
                         'if': {'column_id': 'Variant_samples_(highest_CFD)'},
-                        'textAlign': 'left'
+                        'textAlign': 'left',
+                        'maxWidth':'300px'
                     }
                 ],
                 css=[{'selector': '.row',
@@ -2483,10 +2505,13 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                 # columns=[{"name": i, "id": i} for i in df.columns],
                 data=result.to_dict('records'),
                 style_cell={'textAlign': 'left'},
-                style_cell_conditional=[{
-                    'if': {'column_id': 'Samples'},
-                    'textAlign': 'left'
-                }],
+                style_cell_conditional=[
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CFD)'},
+                        'textAlign': 'left',
+                        'maxWidth': '300px'
+                    }
+                ],
                 style_table={
                     'overflowX': 'scroll',
                 },
@@ -3270,9 +3295,13 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 id="results-table",
                 columns=[{"name": i, "id": i} for i in results_table.columns],
                 data=results_table.to_dict('records'),
-                # style_table={
-                #     'overflowX': 'scroll'
-                # }
+                style_cell_conditional=[
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CFD)'},
+                        'textAlign': 'left',
+                        'maxWidth': '300px'
+                    }
+                ],
             ),
             dash_table.DataTable(
                 css=[{'selector': '.row',
@@ -3283,10 +3312,13 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 columns=[{"name": i, "id": i, 'hideable': True}
                          for count, i in enumerate(ans.columns)],
                 data=ans.to_dict('records'),
-                # style_cell_conditional=[
-                #     {'if': {'column_id': 'Bulge_type'},
-                #      'width': '250px'},
-                # ],
+                style_cell_conditional=[
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CFD)'},
+                        'textAlign': 'left',
+                        'maxWidth': '300px'
+                    }
+                ],
                 style_table={
                     'overflowX': 'scroll'
                 }
@@ -3325,6 +3357,13 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                 css=[{'selector': '.row',
                       'rule': 'margin: 0'}],
                 id="results-table",
+                style_cell_conditional=[
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CFD)'},
+                        'textAlign': 'left',
+                        'maxWidth':'300px'
+                    }
+                ],
                 columns=[{"name": i, "id": i} for i in results_table.columns],
                 data=results_table.to_dict('records')
             ),
@@ -3870,6 +3909,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #          for count, i in enumerate(dff.columns)],
                                     columns=[{"name": i, "id": i, 'hideable': True}
                                              for count, i in enumerate(dff.columns)],
+                                    style_cell_conditional=[
+                                        {
+                                            'if': {'column_id': 'Variant_samples_(highest_CFD)'},
+                                            'textAlign': 'left',
+                                            'maxWidth': '300px'
+                                        }
+                                    ],
                                     # tooltip_data=[
                                     #     {
                                     #         column: {'value': str(value), 'type': 'markdown'}
