@@ -222,7 +222,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         # annotation_name = 'hg38_ref.annotations.bed'
         annotation_name = 'encode+gencode.hg38.bed'
         if "MA" in annotation_var:
-            annotation_name = 'gencode_encode.hg38+' + \
+            annotation_name = 'encode+gencode.hg38.bed+' + \
                 "".join(annotation_input.split('.')[:-1]) + '.bed'
             os.system(
                 f"cp {current_working_directory}/Annotations/encode+gencode.hg38.bed {current_working_directory}/Annotations/ann_tmp_{job_id}.bed")
@@ -235,7 +235,10 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             os.system(
                 f"mv {current_working_directory}/Annotations/ann_tmp_{job_id}.bed {current_working_directory}/Annotations/{annotation_name}")
     elif 'MA' in annotation_var:
-        annotation_name = annotation_input
+        # annotation_name = annotation_input
+        os.system(
+            f'awk \'$4 = $4\"_personal\"\' {current_working_directory}/Annotations/{annotation_input} > {current_working_directory}/Annotations/{annotation_input}.tmp')
+        annotation_name = annotation_input+'.tmp'
     if annotation_name == '.dummy.bed':
         os.system(f"rm -f {current_working_directory}/Annotations/.dummy.bed")
         os.system(f"touch {current_working_directory}/Annotations/.dummy.bed")
@@ -1148,7 +1151,7 @@ def get_more_annotations():
     annotation_list = []
 
     for elem in annotation_dir:
-        if 'gencode_encode' not in elem and 'None' not in elem and 'dummy' not in elem:
+        if 'encode' not in elem and 'None' not in elem and 'dummy' not in elem and 'tmp' not in elem:
             annotation_list.append({'label': elem.strip().split(
                 '/')[-1], 'value': elem.strip().split('/')[-1]})
 
