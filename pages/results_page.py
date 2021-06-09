@@ -160,9 +160,10 @@ header_integrated = [
     'Annotation_closest_gene_name',
     'Annotation_closest_gene_ID',
     'Annotation_closest_gene_distance_(kb)',
-    'Annotation_ENCODE',
-    'Annotation_personal'
+    'Annotation_ENCODE'
 ]
+
+#check header for personal annotation
 
 
 def resultPage(job_id):
