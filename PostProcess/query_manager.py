@@ -50,7 +50,7 @@ def shold(target,n_clicks,page_current,page_size,radio_order,orderdrop,sholddrop
     else:#min e max
         df=pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=? AND \"{}\" BETWEEN {} AND {} ORDER BY \"{}\" {} LIMIT ? OFFSET ?".format(guide_column,radio_order,sholddrop,maxdrop,radio_order,asc1),conn,params=param) #ok
 
-  #print("shold")
+  ##print("shold")
   # if target=="Target2":
   #   radio_order=str("MMBLG_"+radio_order+"_2")
   #   orderdrop="MMBLG_"+str(orderdrop)+"_2"
@@ -97,7 +97,7 @@ def shold(target,n_clicks,page_current,page_size,radio_order,orderdrop,sholddrop
   
   
 def noshold(target,n_clicks,page_current,page_size,radio_order,orderdrop,asc1,url_job,guide, current_working_directory):
-  print(asc1)
+  #print(asc1)
   if asc1 == None:
     asc1 = 'DESC'
   url=url_job[5:]
@@ -106,7 +106,7 @@ def noshold(target,n_clicks,page_current,page_size,radio_order,orderdrop,asc1,ur
   conn = sqlite3.connect(path)
   c = conn.cursor()
   param=[guide,page_size,page_current * page_size,]
-  print("noshold")
+  #print("noshold")
 
 
   if target=="Target2":
@@ -117,15 +117,15 @@ def noshold(target,n_clicks,page_current,page_size,radio_order,orderdrop,asc1,ur
     radio_order=str(radio_order)+"_(highest_CFD)"
     orderdrop=str(orderdrop)+"_(highest_CFD)"
 
-  print(radio_order, orderdrop)
+  #print(radio_order, orderdrop)
 
   if orderdrop!="None_(highest_CFD)":
     #query con multiordinamento
-    print('double ordering')
+    #print('double ordering')
     df=pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=? ORDER BY \"{}\" {}, \"{}\" {} LIMIT ? OFFSET ?".format(guide_column,radio_order,asc1,orderdrop,asc1),conn,params=param)
   else:
     #query con ordinamento singolo  
-    print('single ordering')
+    #print('single ordering')
     df=pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=? ORDER BY \"{}\" {} LIMIT ? OFFSET ?".format(guide_column,radio_order,asc1),conn,params=param)
 
   # if target=="Target2":
