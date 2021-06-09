@@ -178,7 +178,7 @@ def resultPage(job_id):
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     integrated_file_name = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*')[0]
+        job_id + '/' + '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
     integrated_file_name_zip = integrated_file_name.replace('tsv', 'zip')
     warning_message = []
@@ -1232,7 +1232,7 @@ def samplePage(job_id, hash):
     #     job_id + '/.' + job_id + '.bestMerge.txt'
     integrated_file_name = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*')[0]
+        job_id + '/'+ '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
     file_to_grep = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
@@ -1811,7 +1811,7 @@ def guidePagev3(job_id, hash):
     )
     integrated_file_name = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*')[0]
+        job_id + '/'+ '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
     file_to_grep = job_directory + job_id + '.bestMerge.txt.integrated_results.tsv'
     # file_to_grep_alt = job_directory + job_id + '.altMerge.txt'
@@ -2311,7 +2311,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     # zip integrated results
     integrated_file_name = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*integrated*')[0]
+        job_id + '/'+'*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
     # integrated_file = current_working_directory + 'Results/' + \
     #     job_id + '/' + job_id + '.bestMerge.txt.integrated_results.tsv'
@@ -3175,7 +3175,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
         # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
         integrated_file_name = glob.glob(
-            job_directory+job_id + '*integrated*')[0]
+            job_directory+ '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
         # integrated_to_grep = job_directory+job_id + \
         #     '.bestMerge.txt.integrated_results.tsv'
@@ -3753,7 +3753,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         c = conn.cursor()
         integrated_file_name = glob.glob(
             current_working_directory + 'Results/' +
-            job_id + '/'+job_id + '*integrated*')[0]
+            job_id + '/' + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
         # with open(integrated_file_name, 'r') as f:
             # header = f.readline().strip().split()  # [1:]
