@@ -1630,13 +1630,13 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
         #print('going to call no ref', genome_type, hide_reference)
         #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)) & (f['Variant_samples_(highest_CFD)'] != 'NA'), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
         result = global_store_subset_no_ref(
-            value, bulge_t, bulge_s, mms, guide, page_current)
+            value, bulge_t, bulge_s, mms, guide, page_current, job_id)
         # dff.drop(
         #     df[(df['Variant_samples_(highest_CFD)'] == 'NA')].index, inplace=True)
     else:
         #print('going to call ref', genome_type, hide_reference)
         result = global_store_subset(
-            value, bulge_t, bulge_s, mms, guide, page_current)
+            value, bulge_t, bulge_s, mms, guide, page_current, job_id)
         #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
     #print('filtered and sorted')
     data_to_send = result.to_dict('records')
@@ -1776,8 +1776,11 @@ def guidePagev3(job_id, hash):
     guide_grep_result = job_directory + job_id + '.' + \
         bulge_t + '.' + bulge_s + '.' + mms + '.' + guide + '.txt'
     # put_header = 'head -1 ' + job_directory + job_id + file_to_grep + ' > ' + guide_grep_result + ' ; '
+    targets_with_mm_bul = current_working_directory + 'Results/' + job_id + '/'+job_id+'.' + \
+        str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv'
+    targets_with_mm_bul_zip = targets_with_mm_bul.replace('tsv', 'zip')
     final_list.append(
-        html.Div(job_id + '.' + bulge_t + '.' + bulge_s + '.' + mms + '.' +
+        html.Div(job_id+'.' + str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.' +
                  guide, style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
 
@@ -1871,7 +1874,7 @@ def guidePagev3(job_id, hash):
 
 
 # @cache.memoize()
-def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page):
+def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id):
     '''
     Caching dei file targets per una miglior performance di visualizzazione
     '''
@@ -1886,6 +1889,14 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page):
     result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} AND \"{}\"<>\'NA\' LIMIT {} OFFSET {}".format(
         GUIDE_COLUMN, guide, BLG_T_COLUMN, bulge_t, BLG_COLUMN, bulge_s, MM_COLUMN, mms, SAMPLES_COLUMN, PAGE_SIZE, page * PAGE_SIZE), conn)
     result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+
+    target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Mismatches_(highest_CFD)\"=\'{mms}\' AND \"Bulges_(highest_CFD)\"=\'{bulge_s}\' AND \"Bulge_type_(highest_CFD)\"=\'{bulge_t}\'"
+    with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv', 'w') as f_out:
+        f_out.write('\t'.join(header_integrated)+'\n')
+        rows = c.execute(target_with_mm_b)
+        for row in rows:
+            row = [str(ele) for ele in row]
+            f_out.write('\t'.join(row)+'\n')
     conn.commit()
     conn.close()
     # integrated_file_name = glob.glob(
