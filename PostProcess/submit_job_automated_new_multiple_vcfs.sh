@@ -384,8 +384,8 @@ while read vcf_f; do
 		cd "$starting_dir"
 
 		echo -e 'Post-analysis INDELs\tStart\t'$(date) >>$log
-		if [ $(wc -l < "$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt") -gt 1 ]; then
-			
+		if [ $(wc -l <"$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt") -gt 1 ]; then
+
 			# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
 			./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
 
@@ -516,18 +516,7 @@ echo -e 'Creating images\tEnd\t'$(date) >>$log
 # if [ "$vcf_name" != "_" ]; then
 # 	cp $sampleID $output_folder/sampleID.txt
 # fi
-
-echo -e 'Building database'
-echo -e 'Creating database\tStart\t'$(date) >>$log
-# echo -e 'Creating database\tStart\t'$(date) >&2
-if [ -f "${output_folder}/$(basename ${output_folder}).db" ]; then
-	rm "${output_folder}/$(basename ${output_folder}).db"
-fi
 python $starting_dir/remove_n_and_dots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
-python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/$(basename ${output_folder})"
-echo -e 'Creating database\tEnd\t'$(date) >>$log
-# echo -e 'Creating database\tEnd\t'$(date) >&2
-
 echo $gene_proximity
 echo -e 'Integrating results\tStart\t'$(date) >>$log
 # echo -e 'Integrating results\tStart\t'$(date) >&2
@@ -562,9 +551,20 @@ if [ $6 != "_" ]; then
 	truncate -s -1 $6
 fi
 
+echo -e 'Building database'
+echo -e 'Creating database\tStart\t'$(date) >>$log
+# echo -e 'Creating database\tStart\t'$(date) >&2
+if [ -f "${output_folder}/$(basename ${output_folder}).db" ]; then
+	rm "${output_folder}/$(basename ${output_folder}).db"
+fi
+#python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/$(basename ${output_folder})"
+python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/$(basename ${output_folder})"
+echo -e 'Creating database\tEnd\t'$(date) >>$log
+# echo -e 'Creating database\tEnd\t'$(date) >&2
+
 python $starting_dir/change_headers_bestMerge.py "${output_folder}/$(basename ${output_folder}).altMerge.txt" "${output_folder}/$(basename ${output_folder}).altMerge.new.header.txt"
 mv "${output_folder}/$(basename ${output_folder}).altMerge.new.header.txt" "${output_folder}/$(basename ${output_folder}).altMerge.txt"
-mv "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/.$(basename ${output_folder}).bestMerge.txt" 
+mv "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/.$(basename ${output_folder}).bestMerge.txt"
 
 echo -e 'Integrating results\tEnd\t'$(date) >>$log
 # echo -e 'Integrating results\tEnd\t'$(date) >&2
