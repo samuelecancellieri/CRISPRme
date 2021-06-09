@@ -567,7 +567,7 @@ def complete_search():
             exit(1)
 
     if "--gene_annotation" not in input_args:
-        gene_annotation = '_'
+        gene_annotation = 'no'
     else:
         try:
             gene_annotation = os.path.abspath(
