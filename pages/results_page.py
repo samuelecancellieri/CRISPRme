@@ -1064,7 +1064,7 @@ def global_get_sample_targets(job_id, sample, guide, page):
     c = conn.cursor()
     result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\' LIMIT {} OFFSET {}".format(
         GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample, PAGE_SIZE, page * PAGE_SIZE), conn)
-    result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
 
     total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Variant_samples_(highest_CFD)\" LIKE \'%{sample}%\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(sample)+'.'+guide+'.personal_targets.tsv', 'w') as f_out:
@@ -1287,7 +1287,7 @@ def samplePage(job_id, hash):
     # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
     # result = pd.DataFrame(result.to_dict()).fillna('NA')
     with open(integrated_file_name, 'r') as f:
-        header = f.readline().strip().split()[1:]
+        header = f.readline().strip().split()#[1:]
 
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
@@ -1863,7 +1863,7 @@ def guidePagev3(job_id, hash):
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
     with open(integrated_file_name, 'r') as f:
-        header = f.readline().strip().split()[1:]
+        header = f.readline().strip().split()#[1:]
 
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
@@ -1934,7 +1934,7 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
     c = conn.cursor()
     result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} AND \"{}\"<>\'NA\' LIMIT {} OFFSET {}".format(
         GUIDE_COLUMN, guide, BLG_T_COLUMN, bulge_t, BLG_COLUMN, bulge_s, MM_COLUMN, mms, SAMPLES_COLUMN, PAGE_SIZE, page * PAGE_SIZE), conn)
-    result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
 
     target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Mismatches_(highest_CFD)\"=\'{mms}\' AND \"Bulges_(highest_CFD)\"=\'{bulge_s}\' AND \"Bulge_type_(highest_CFD)\"=\'{bulge_t}\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv', 'w') as f_out:
@@ -1985,7 +1985,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
     c = conn.cursor()
     result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\' AND \"{}\"={} AND \"{}\"={} LIMIT {} OFFSET {}".format(
         GUIDE_COLUMN, guide, BLG_T_COLUMN, bulge_t, BLG_COLUMN, bulge_s, MM_COLUMN, mms, PAGE_SIZE, page * PAGE_SIZE), conn)
-    result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
 
     target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Mismatches_(highest_CFD)\"=\'{mms}\' AND \"Bulges_(highest_CFD)\"=\'{bulge_s}\' AND \"Bulge_type_(highest_CFD)\"=\'{bulge_t}\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv', 'w') as f_out:
@@ -2491,7 +2491,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     c = conn.cursor()
     result = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\">={} AND \"{}\"<={} AND \"{}\"=\'{}\'".format(
         GUIDE_COLUMN, guide, POS_COLUMN, start, POS_COLUMN, end, CHR_COLUMN, chrom), conn)
-    result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
     conn.commit()
     conn.close()
     # try:
@@ -3754,7 +3754,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             job_id + '/'+job_id + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
         with open(integrated_file_name, 'r') as f:
-            header = f.readline().strip().split()[1:]
+            header = f.readline().strip().split()#[1:]
         #dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
         #                   'Position', 'Direction', 'Mismatches',
@@ -4497,7 +4497,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
             # data.loc[mask, 'Reference'] = data['DNA']
             # data.loc[mask, 'DNA'] = 'NA'
             # data.loc[mask, 'DNA'] = data['Reference']
-            data = data.drop(['Spacer+PAM'], axis=1)
+            # data = data.drop([GUIDE_COLUMN], axis=1)
             snps = pd.DataFrame(
                 data['Variant_info_genome_(highest_CFD)']).to_dict('records')
             data = data.to_dict('records')
