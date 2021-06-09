@@ -3115,9 +3115,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         #     '.bestMerge.txt.integrated_results.tsv'
         integrated_to_grep = integrated_file_name
         integrated_personal = job_directory + job_id + '.' + \
-            sample + '.' + guide + '.integrated.personal.txt'
+            sample + '.' + guide + '.personal_targets.txt'
         integrated_private = job_directory + job_id + '.' + \
-            sample + '.' + guide + '.integrated.private.txt'
+            sample + '.' + guide + '.private_targets.tsv'
 
         # os.system(f'head -1 {integrated_to_grep} > {job_directory}/header.txt')
         # # grep guide and then sample into personal card data
@@ -3177,13 +3177,17 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         result_personal.to_csv(integrated_personal, sep='\t', index=False)
         result_private.to_csv(integrated_private, sep='\t', index=False)
 
+        result_private_zip = result_private.replace('tsv', 'zip')
+
+        os.system(f"zip -j {result_private_zip} {result_private}")
+
         # plot for images in personal card
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
         os.system(
             f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
         os.system(
-            f"rm -f {integrated_private} {integrated_personal}")
+            f"rm -f {integrated_personal}")
 
         private = result_private.shape[0]
         #private = 0
@@ -3205,18 +3209,19 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         # os.system('zip '+'-j ' + integrated_private.replace('.txt',
         #                                                    '.zip') + ' ' + integrated_private)
 
-        with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "w") as file_out:
-            file_out.write(
-                '\t'.join(results_table.iloc[0, :].values.tolist()) + '\n')
+        # with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "w") as file_out:
+        #     file_out.write(
+        #         '\t'.join(results_table.iloc[0, :].values.tolist()) + '\n')
     else:
-        with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "r") as file_in:
-            infos = file_in.readline().strip().split('\t')
-            results_table = pd.DataFrame([[infos[0], infos[1], infos[2]]], columns=[
-                'Personal', 'PAM Creation', 'Private'])
-            if int(infos[2]) > 0:
-                targets = []
-                for line in file_in:
-                    targets.append(line.strip().split('\t'))
+        pass
+        # with open(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt', "r") as file_in:
+        #     infos = file_in.readline().strip().split('\t')
+        #     results_table = pd.DataFrame([[infos[0], infos[1], infos[2]]], columns=[
+        #         'Personal', 'PAM Creation', 'Private'])
+        #     if int(infos[2]) > 0:
+        #         targets = []
+        #         for line in file_in:
+        #             targets.append(line.strip().split('\t'))
 
     try:  # to read the private targets file, if not created, pass
         # ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
@@ -3235,7 +3240,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         sys.stderr.write('PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED')
 
     try:
-        file_to_load = job_id + '.' + sample + '.' + guide + '.private.zip'
+        # file_to_load = job_id + '.' + sample + '.' + guide + '.private.zip'
+        file_to_load = job_id + '.' + sample + '.' + guide + '.private_targets.zip'
         # #print(file_to_load)
         # ans = ans[COL_BOTH]
         out_1 = [
