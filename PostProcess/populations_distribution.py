@@ -197,7 +197,7 @@ legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
 plt.legend(handles_color, legend_labels, fontsize=fontsize, handlelength=5,
-           handler_map={tuple: HandlerTuple(ndivide=None)}, title="MM mismatches, B bulges")
+           handler_map={tuple: HandlerTuple(ndivide=None)}, title="MM mismatches, B bulges", title_fontsize=fontsize)
 # first param is for the colored rectangles of legens, second parameter for labels, handlelength is size of rectangles, handlermap is for grouping different colors in single label
 # [(first bar color, second bar color, ...), (first bar light color, second bar light color,...)]
 plt.title('Targets with up to ' +
