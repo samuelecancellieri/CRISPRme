@@ -154,6 +154,8 @@ for value in lower_barplot_values.values():
     previous_bar.append(value)
 # previous_bar.append(value for value in lower_barplot_values.values())
 print('previous bar', previous_bar)
+plt.bar(ind, previous_bar, width, color='black',
+        align='edge', edgecolor='white')
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
     # insert current total bars
     current_bar = [x[i] for x in barplot_values.values()]
