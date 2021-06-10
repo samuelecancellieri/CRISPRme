@@ -836,6 +836,7 @@ def checkInput(n, n_close, genome_selected, pam, guide_type, text_guides, mms, d
     text_guides = text_guides.upper()
     new_test_guides = list()
     for guide in text_guides.split('\n'):
+        guide = guide.replace('N', '')
         if len(guide) == len_guide_sequence:
             new_test_guides.append(guide)
     if not new_test_guides:

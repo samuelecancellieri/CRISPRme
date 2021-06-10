@@ -58,6 +58,12 @@ if web_server:
     file_extension = 'png'
 
 
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     # check if no targets are found for that combination source/totalcount and skip the execution
@@ -72,9 +78,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     for elem in guideDict:
         if float(guideDict['General']) != 0:
             percentage_list.append(
-                float(str(float(guideDict[elem])*100/float(guideDict['General']))[0:5]))
+                round(float(guideDict[elem])*100/float(guideDict['General']), 2))
         else:
-            percentage_list.append(float(0))
+            percentage_list.append(round(float(0), 0))
 
     guideDataFrame = pd.DataFrame.from_dict(guideDict, orient='index')
 
@@ -89,6 +95,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         #     'General', '', 'pELS', 'dELS', 'PLS', '', 'exon', 'gene', 'CDS', '', '']]
         dataframe_table.rename(
             index={'CTCF-only': 'CTCF', 'General': 'Total'}, inplace=True)
+        dataframe_table.sort_values(
+            by=['Percentage'], ascending=False, inplace=True)
     except:
         dataframe_table = guideDataFrame.loc[['General']]
         dataframe_table.rename(index={'General': 'Total'}, inplace=True)
@@ -100,6 +108,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         dataframe_radar_chart = dataframe_table.drop(['Total'])
     else:
         dataframe_radar_chart = dataframe_table
+
     dataframe_radar_chart = dataframe_radar_chart.T
 
     categories_radar_chart = list(dataframe_radar_chart)[0:]
@@ -139,11 +148,20 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # Draw ylabels
     # # # Draw ylabels
     ax.set_rlabel_position(0)
+    max_value_radar_chart = round(max(values_radar_chart))
+    # round to upper 10 multiple
+    while int(max_value_radar_chart % 10):
+        max_value_radar_chart = max_value_radar_chart + 1
+
+    radar_chart_yticks = [elem for elem in range(0, max_value_radar_chart, 10)]
+    radar_chart_yticks_labels = [
+        str(elem) for elem in range(0, max_value_radar_chart, 10)]
     # plt.yticks([0, 0.25, 0.50, 0.75], ["0", "0.25", "0.50", "0.75"], color="black", size=12)
-    plt.yticks([0, 25, 50, 75], ["0", "25", "50", "75"],
+    # plt.yticks([0, 25, 50, 75], ["0", "25", "50", "75"], color="black", size=fontsize-2)
+    plt.yticks(radar_chart_yticks, radar_chart_yticks_labels,
                color="black", size=fontsize-2)
     # plt.ylim(0, 1)
-    plt.ylim(0, 100)
+    plt.ylim(0, max_value_radar_chart)
 
     # Fill area
     ax.fill(angles_radar_chart, values_radar_chart, 'b', alpha=0.1)
@@ -214,9 +232,11 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
                ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=fontsize, loc='upper left', ncol=6)
+    plt.title(
+        'Mismatch and bulge distribution for targets with up to ' + str(total) + ' mismatches and/or bulges', color='black', size=titlesize-2)
 
-    plt.suptitle('Targets found in each ' + 'ENCODE+GENCODE'+' category - '+str(total)+' (Mismatches (MM) + Bulges(B))',
-                 horizontalalignment='center', color='black', size=titlesize)
+    plt.suptitle('Targets with up to ' + str(total) + ' mismatches and/or bulges by ENCODE/GENCODE annotations',
+                 horizontalalignment='center', color='black', size=titlesize-1)
 
     plt.tight_layout()
 
