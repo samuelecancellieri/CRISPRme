@@ -58,6 +58,12 @@ if web_server:
     file_extension = 'png'
 
 
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     # check if no targets are found for that combination source/totalcount and skip the execution
@@ -139,8 +145,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # Draw ylabels
     # # # Draw ylabels
     ax.set_rlabel_position(0)
+    print('values chart', values_radar_chart)
     max_value_radar_chart = round(max(values_radar_chart))
-    # print(max_value_radar_chart)
+    print('max value chart', max_value_radar_chart)
     radar_chart_yticks = [elem for elem in range(0, max_value_radar_chart, 10)]
     radar_chart_yticks_labels = [
         str(elem) for elem in range(0, max_value_radar_chart, 10)]
