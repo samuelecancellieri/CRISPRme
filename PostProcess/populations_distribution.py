@@ -113,7 +113,7 @@ for pop in barplot_values:
             sum_up_list[elem] += barplot_values[pop][count][elem]
     summs = 0
     for elem in sum_up_list:
-        summs += sum_up_list[elem]
+        summs += elem
     lower_barplot_values[pop] = summs
 
 barplot_values = barplot_values_tmp
