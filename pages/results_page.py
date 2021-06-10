@@ -4263,13 +4263,17 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
 
         fl.append(
-            html.Div(
-                ['The GENCODE and ENCODE annotations are defined in details ',
-                    html.A('here', target='_blank',
-                           href='https://www.gencodegenes.org/human/'), ' and ',
-                    html.A('here', target='_blank',
-                           href='https://screen.encodeproject.org/')
-                 ]
+            dbc.Row(
+                dbc.Col(
+                    html.Div(
+                        ['The GENCODE and ENCODE annotations are defined in details ',
+                         html.A('here', target='_blank',
+                                href='https://www.gencodegenes.org/human/'), ' and ',
+                         html.A('here', target='_blank',
+                                href='https://screen.encodeproject.org/')
+                         ]
+                    )
+                ), width={"size": 6, "offset": 6},
             )
         )
 
