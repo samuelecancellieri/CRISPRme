@@ -118,9 +118,9 @@ for pop in barplot_values:
 
 barplot_values = barplot_values_tmp
 
-print('total', totaldict)
-print('original barplot', barplot_values)
-print('all lower sum up', lower_barplot_values)
+#print('total', totaldict)
+#print('original barplot', barplot_values)
+#print('all lower sum up', lower_barplot_values)
 # number_bars = number_bars+1  # add bar with all the lower levels of data
 # [0 1 2 3 4 5] #NOTE 0 is REFERENCE
 ind = np.arange(0, len(barplot_values.keys()), 1)
@@ -153,7 +153,7 @@ all_bar = []
 for value in lower_barplot_values.values():
     previous_bar.append(value)
 # previous_bar.append(value for value in lower_barplot_values.values())
-print('previous bar', previous_bar)
+# #print('previous bar', previous_bar)
 lower_bar = []
 lower_bar.append(plt.bar(ind, previous_bar, width, color='yellow',
                          align='edge', edgecolor='black'))
@@ -169,7 +169,7 @@ for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
 
 # p2 = plt.bar(ind, barplot_values.values() , width, color=[adjust_lightness(x, 1.3) for x in population_color], align='edge', bottom = list(barplot_values.values()))
 
-# print('number bars', number_bars)
+# #print('number bars', number_bars)
 legend_labels = []
 handles_color = []
 legend_labels.append('MM+B < '+str(total))
