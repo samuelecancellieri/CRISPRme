@@ -304,6 +304,8 @@ def fillDict(guide, guideDict, motifDict):
         # find annotations and add data to the TOTAL dict
         if split[14] != 'n':
             annotationsList = split[14].strip().split(',')
+            # to avoid duplicate categories
+            annotationsList = set(annotationsList)
             for annotation in annotationsList:
                 if 'CTCF-bound' in annotation:
                     guideDict[total]['CTCF-only'] += 1
