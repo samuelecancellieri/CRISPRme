@@ -35,7 +35,7 @@ matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
 random.seed(a=None, version=2)
 
-plt.rc('font', family='Helvetica')
+matplotlib.rcParams['font.sans-serif'] = 'Helvetica'
 
 guide = sys.argv[1]  # guide file used during search
 try:
