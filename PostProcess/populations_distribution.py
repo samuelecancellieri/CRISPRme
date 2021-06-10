@@ -192,6 +192,7 @@ for x in range(number_bars):
                 legend_labels.append(str(total - x) + ' MM + ' + str(x) + ' B')
                 handles_color.append(all_bar[x][0])
 
+print('legend', legend_labels, 'handles', handles_color)
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
