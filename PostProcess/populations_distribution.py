@@ -152,12 +152,10 @@ all_bar = []
 lower_value_check = False
 # add data for lower count data
 for value in lower_barplot_values.values():
-    if value != 0:
-        previous_bar.append(value)
-        lower_value_check = True
+    previous_bar.append(value)
 
-if len(previous_bar) == 0:
-    previous_bar.append(0)
+if max(previous_bar) > 0:
+    lower_value_check = True
 
 lower_bar = []
 if lower_value_check:
