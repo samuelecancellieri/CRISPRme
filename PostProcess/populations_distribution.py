@@ -24,7 +24,7 @@ SAS     0,0     0,0     0,0     2,1     3,21    0,153   0,0     0,0     0,0     
 from matplotlib.legend_handler import HandlerTuple
 import matplotlib.colors as mc
 import colorsys
-from operator import itemgetter
+from operator import itemgetter, truediv
 from os.path import isfile, join
 from os import listdir
 import os
@@ -149,14 +149,18 @@ elif len(barplot_values.keys()) < len(population_color):
     population_color = population_color[:len(barplot_values.keys())]
 
 all_bar = []
-# sum
+lower_value_check = False
+# add data for lower count data
 for value in lower_barplot_values.values():
-    previous_bar.append(value)
-# previous_bar.append(value for value in lower_barplot_values.values())
-# #print('previous bar', previous_bar)
+    if value != 0:
+        previous_bar.append(value)
+        lower_value_check = True
+
 lower_bar = []
-lower_bar.append(plt.bar(ind, previous_bar, width, color='yellow',
-                         align='edge', edgecolor='black'))
+if lower_value_check:
+    lower_bar.append(plt.bar(ind, previous_bar, width, color='yellow',
+                             align='edge', edgecolor='black'))
+
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
     # insert current total bars
     current_bar = [x[i] for x in barplot_values.values()]
@@ -172,8 +176,9 @@ for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
 # #print('number bars', number_bars)
 legend_labels = []
 handles_color = []
-legend_labels.append('MM+B < '+str(total))
-handles_color.append(lower_bar[0][0])
+if lower_value_check:
+    legend_labels.append('MM+B < '+str(total))
+    handles_color.append(lower_bar[0][0])
 # for x in range(min(number_bars, total+1)):
 for x in range(number_bars):
     if x == 0:
