@@ -150,6 +150,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     print('max value chart', max_value_radar_chart)
     while (True):
         max_value_radar_chart += 1
+        print('while', max_value_radar_chart)
         if max_value_radar_chart/10 == 0:
             break
     print('round to upper 10 multiple', max_value_radar_chart)
