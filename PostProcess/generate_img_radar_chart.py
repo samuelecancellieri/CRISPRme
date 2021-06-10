@@ -191,7 +191,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
 
     plt.axis('off')
     table = plt.table(cellText=transpose_list, rowLabels=categories_table, colLabels=['Count', 'Percentage'],
-                      loc='best', colWidths=[0.25, 0.35], fontproperties=afont)
+                      loc='best', colWidths=[0.25, 0.35])
     table.auto_set_font_size(False)
     table.set_fontsize(fontsize)
     table.scale(1, 1.5)
