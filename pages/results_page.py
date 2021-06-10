@@ -4272,7 +4272,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                          html.A('here', target='_blank',
                                 href='https://screen.encodeproject.org/')
                          ]
-                    ), width={"size": 5, "offset": 7}
+                    ), width={"size": 6, "offset": 6}
                 )
             )
         )
