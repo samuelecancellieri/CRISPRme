@@ -30,6 +30,7 @@ warnings.filterwarnings("ignore")
 plt.style.use('seaborn-poster')
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
+
 random.seed(a=None, version=2)
 # final file containing all the results after post processing
 inGuideFile = open(sys.argv[1], 'r')  # guide file used during search
