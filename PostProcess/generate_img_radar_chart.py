@@ -87,6 +87,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     guideDataFrame['Percentage'] = percentage_list
     guideDataFrame.columns = ['Count', 'Percentage']
 
+    guideDataFrame.sort_values(by=['Percentage'], ascending=False)
+
     try:
         # dataframe for table creation
         dataframe_table = guideDataFrame.loc[['General', 'three_prime_UTR', 'five_prime_UTR',
