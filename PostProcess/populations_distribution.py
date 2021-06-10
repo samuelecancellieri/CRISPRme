@@ -105,8 +105,7 @@ with open(sys.argv[1]) as summary:
 totaldict = barplot_values
 barplot_values_tmp = dict()
 for pop in barplot_values:
-    for count in range(total+1):
-        barplot_values_tmp[pop] = barplot_values[pop][count]
+    barplot_values_tmp[pop] = barplot_values[pop][total]
 barplot_values = barplot_values_tmp
 # barplot_values = [elem for elem in barplot_values.keys()]
 print(totaldict)
