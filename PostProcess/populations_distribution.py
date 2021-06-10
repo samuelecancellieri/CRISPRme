@@ -144,8 +144,16 @@ if len(barplot_values.keys()) > len(population_color):
 # If i have less than 5 superpopulations + ref
 elif len(barplot_values.keys()) < len(population_color):
     population_color = population_color[:len(barplot_values.keys())]
+
 all_bar = []
+
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
+    # insert bar with all lower levels summed up
+    current_bar = [x[i] for x in lower_barplot_values.values()]
+    all_bar.append(plt.bar(ind, current_bar, width, color='black',
+                           align='edge', bottom=previous_bar, edgecolor='black'))
+    previous_bar = [x+previous_bar[k] for k, x in enumerate(current_bar)]
+    # insert current total bars
     current_bar = [x[i] for x in barplot_values.values()]
     # all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
     all_bar.append(plt.bar(ind, current_bar, width,
