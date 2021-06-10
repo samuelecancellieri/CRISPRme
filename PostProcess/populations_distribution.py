@@ -126,6 +126,7 @@ barplot_values = barplot_values_tmp
 ind = np.arange(0, len(barplot_values.keys()), 1)
 no_result = False
 try:
+    max_value += max(lower_barplot_values.values())
     y_range = np.arange(
         0, max_value + math.ceil(max_value/10), math.ceil(max_value/5))
 except:
