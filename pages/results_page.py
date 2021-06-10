@@ -4266,7 +4266,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Row(
                 dbc.Col(
                     html.Div(
-                        ['The GENCODE and ENCODE annotations are defined in details ',
+                        ['The GENCODE and ENCODE annotations are defined in detail ',
                          html.A('here', target='_blank',
                                 href='https://www.gencodegenes.org/human/'), ' and ',
                          html.A('here', target='_blank',
