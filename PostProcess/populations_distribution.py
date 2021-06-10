@@ -107,10 +107,10 @@ barplot_values_tmp = dict()
 for pop in barplot_values:
     for count in range(total+1):
         barplot_values_tmp[pop] = barplot_values[pop][count]
-
+barplot_values = barplot_values_tmp
 # barplot_values = [elem for elem in barplot_values.keys()]
 print(totaldict)
-print(barplot_values_tmp)
+print(barplot_values)
 # number_bars = number_bars+1  # add bar with all the lower levels of data
 # [0 1 2 3 4 5] #NOTE 0 is REFERENCE
 ind = np.arange(0, len(barplot_values.keys()), 1)
