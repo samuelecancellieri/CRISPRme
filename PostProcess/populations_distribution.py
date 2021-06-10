@@ -104,12 +104,20 @@ with open(sys.argv[1]) as summary:
 
 totaldict = barplot_values
 barplot_values_tmp = dict()
+lower_barplot_values = dict()
 for pop in barplot_values:
     barplot_values_tmp[pop] = barplot_values[pop][total]
+    sum_up_list = [0]*number_bars
+    for count in range(total):
+        for elem in range(number_bars):
+            sum_up_list[elem] += barplot_values[pop][count][elem]
+    lower_barplot_values[pop] = sum_up_list
+
 barplot_values = barplot_values_tmp
-# barplot_values = [elem for elem in barplot_values.keys()]
-print(totaldict)
-print(barplot_values)
+
+print('total', totaldict)
+print('original barplot', barplot_values)
+print('all lower sum up', lower_barplot_values)
 # number_bars = number_bars+1  # add bar with all the lower levels of data
 # [0 1 2 3 4 5] #NOTE 0 is REFERENCE
 ind = np.arange(0, len(barplot_values.keys()), 1)
