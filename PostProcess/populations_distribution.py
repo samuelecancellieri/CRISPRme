@@ -171,7 +171,7 @@ for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
 # print('number bars', number_bars)
 legend_labels = []
 handles_color = []
-legend_labels.append('MM+B< '+str(total))
+legend_labels.append('MM+B < '+str(total))
 handles_color.append('yellow')
 # for x in range(min(number_bars, total+1)):
 for x in range(number_bars):
@@ -192,7 +192,8 @@ for x in range(number_bars):
                 legend_labels.append(str(total - x) + ' MM + ' + str(x) + ' B')
                 handles_color.append(all_bar[x][0])
 
-print('legend', legend_labels, 'handles', handles_color)
+print('legend', legend_labels, 'handles',
+      handles_color, 'allbar', all_bar[0][0])
 legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
