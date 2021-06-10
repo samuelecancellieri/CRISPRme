@@ -87,13 +87,6 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     guideDataFrame['Percentage'] = percentage_list
     guideDataFrame.columns = ['Count', 'Percentage']
 
-    print('nosort', guideDataFrame)
-
-    guideDataFrame.sort_values(
-        by=['Percentage'], ascending=False, inplace=True)
-
-    print('sort', guideDataFrame)
-
     try:
         # dataframe for table creation
         dataframe_table = guideDataFrame.loc[['General', 'three_prime_UTR', 'five_prime_UTR',
@@ -102,6 +95,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         #     'General', '', 'pELS', 'dELS', 'PLS', '', 'exon', 'gene', 'CDS', '', '']]
         dataframe_table.rename(
             index={'CTCF-only': 'CTCF', 'General': 'Total'}, inplace=True)
+        dataframe_table.sort_values(
+            by=['Percentage'], ascending=False, inplace=True)
     except:
         dataframe_table = guideDataFrame.loc[['General']]
         dataframe_table.rename(index={'General': 'Total'}, inplace=True)
@@ -113,6 +108,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
         dataframe_radar_chart = dataframe_table.drop(['Total'])
     else:
         dataframe_radar_chart = dataframe_table
+
     dataframe_radar_chart = dataframe_radar_chart.T
 
     categories_radar_chart = list(dataframe_radar_chart)[0:]
