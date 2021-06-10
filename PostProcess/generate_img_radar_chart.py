@@ -139,8 +139,8 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # Draw ylabels
     # # # Draw ylabels
     ax.set_rlabel_position(0)
-    max_value_radar_chart = max(values_radar_chart)
-    print(max_value_radar_chart)
+    max_value_radar_chart = round(max(values_radar_chart))
+    # print(max_value_radar_chart)
     radar_chart_yticks = [elem for elem in range(0, max_value_radar_chart, 10)]
     radar_chart_yticks_labels = [
         str(elem) for elem in range(0, max_value_radar_chart, 10)]
