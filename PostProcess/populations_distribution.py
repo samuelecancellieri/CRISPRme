@@ -98,7 +98,7 @@ with open(sys.argv[1]) as summary:
                     barplot_values[line[0]][count] = [
                         int(x) for x in line[count+1].split(',')]
                     value = sum([int(x) for x in line[count+1].split(',')])
-                previous_bar.append(0)
+                # previous_bar.append(0)
                 if value > max_value:
                     max_value = value
 
@@ -111,7 +111,10 @@ for pop in barplot_values:
     for count in range(total):
         for elem in range(number_bars):
             sum_up_list[elem] += barplot_values[pop][count][elem]
-    lower_barplot_values[pop] = sum_up_list
+    summs = 0
+    for elem in sum_up_list:
+        summs += sum_up_list[elem]
+    lower_barplot_values[pop] = summs
 
 barplot_values = barplot_values_tmp
 
@@ -146,13 +149,9 @@ elif len(barplot_values.keys()) < len(population_color):
     population_color = population_color[:len(barplot_values.keys())]
 
 all_bar = []
-
+# sum
+# previous_bar.append()
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
-    # insert bar with all lower levels summed up
-    current_bar = [x[i] for x in lower_barplot_values.values()]
-    all_bar.append(plt.bar(ind, current_bar, width, color='black',
-                           align='edge', bottom=previous_bar, edgecolor='black'))
-    previous_bar = [x+previous_bar[k] for k, x in enumerate(current_bar)]
     # insert current total bars
     current_bar = [x[i] for x in barplot_values.values()]
     # all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
