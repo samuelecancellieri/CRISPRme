@@ -150,7 +150,9 @@ elif len(barplot_values.keys()) < len(population_color):
 
 all_bar = []
 # sum
-previous_bar.append(value for value in lower_barplot_values.values())
+for value in lower_barplot_values.values():
+    previous_bar.append(value)
+# previous_bar.append(value for value in lower_barplot_values.values())
 print('previous bar', previous_bar)
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
     # insert current total bars
