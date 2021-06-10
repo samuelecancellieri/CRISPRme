@@ -156,6 +156,9 @@ for value in lower_barplot_values.values():
         previous_bar.append(value)
         lower_value_check = True
 
+if len(previous_bar) == 0:
+    previous_bar.append(0)
+
 lower_bar = []
 if lower_value_check:
     lower_bar.append(plt.bar(ind, previous_bar, width, color='yellow',
