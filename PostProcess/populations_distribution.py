@@ -91,10 +91,10 @@ with open(sys.argv[1]) as summary:
                 line = line.split('\t')
                 number_bars = len(line[total + 1].split(','))
                 # line = EAS 0,7 1,2 5,3 10,11
-                for count in range(1, total+1):
-                    barplot_values[line[0]][count-1] = [
-                        int(x) for x in line[count].split(',')]
-                    value = sum([int(x) for x in line[count].split(',')])
+                for count in range(0, total+1):
+                    barplot_values[line[0]][count] = [
+                        int(x) for x in line[count+1].split(',')]
+                    value = sum([int(x) for x in line[count+1].split(',')])
                 previous_bar.append(0)
                 if value > max_value:
                     max_value = value
