@@ -98,6 +98,8 @@ with open(sys.argv[1]) as summary:
                 if value > max_value:
                     max_value = value
 
+
+print(barplot_values)
 # [0 1 2 3 4 5] #NOTE 0 is REFERENCE
 ind = np.arange(0, len(barplot_values.keys()), 1)
 no_result = False
