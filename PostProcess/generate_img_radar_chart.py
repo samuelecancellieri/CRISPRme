@@ -35,7 +35,7 @@ matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
 random.seed(a=None, version=2)
 
-afont = {'fontname': 'Helvetica'}
+# afont = {'fontname': 'Helvetica'}
 
 guide = sys.argv[1]  # guide file used during search
 try:
@@ -145,7 +145,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # Draw one axe per variable + add labels labels yet
     # plt.xticks(angles[:-1], categories, color='black', size=fontsize)
     plt.xticks(angles_radar_chart[:-1], categories_radar_chart,
-               color='black', size=fontsize, **afont)
+               color='black', size=fontsize)
 
     # Draw ylabels
     # # # Draw ylabels
@@ -161,7 +161,7 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     # plt.yticks([0, 0.25, 0.50, 0.75], ["0", "0.25", "0.50", "0.75"], color="black", size=12)
     # plt.yticks([0, 25, 50, 75], ["0", "25", "50", "75"], color="black", size=fontsize-2)
     plt.yticks(radar_chart_yticks, radar_chart_yticks_labels,
-               color="black", size=fontsize, **afont)
+               color="black", size=fontsize)
     # plt.ylim(0, 1)
     plt.ylim(0, max_value_radar_chart)
 
@@ -235,10 +235,10 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     plt.legend((p1[0], p2[0], p3[0], p4[0], p5[0], p6[0]),
                ('A', 'C', 'G', 'T', 'bRNA', 'bDNA'), fontsize=fontsize, loc='upper left', ncol=6)
     plt.title(
-        'Mismatch and bulge distribution for targets with up to ' + str(total) + ' mismatches and/or bulges', color='black', size=titlesize, **afont)
+        'Mismatch and bulge distribution for targets with up to ' + str(total) + ' mismatches and/or bulges', color='black', size=titlesize)
 
     plt.suptitle('Targets with up to ' + str(total) + ' mismatches and/or bulges by ENCODE/GENCODE annotations',
-                 horizontalalignment='center', color='black', size=titlesize, **afont)
+                 horizontalalignment='center', color='black', size=titlesize)
 
     plt.tight_layout()
 
