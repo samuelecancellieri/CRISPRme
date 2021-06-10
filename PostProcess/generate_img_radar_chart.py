@@ -148,11 +148,9 @@ def generatePlot(guide, guideDict, motifDict, mismatch, bulge, source):
     print('values chart', values_radar_chart)
     max_value_radar_chart = round(max(values_radar_chart))
     print('max value chart', max_value_radar_chart)
-    while (True):
-        max_value_radar_chart += 1
-        print('while', max_value_radar_chart)
-        if max_value_radar_chart/10 == 0:
-            break
+
+    print('test', max_value_radar_chart/10)
+
     print('round to upper 10 multiple', max_value_radar_chart)
     radar_chart_yticks = [elem for elem in range(0, max_value_radar_chart, 10)]
     radar_chart_yticks_labels = [
