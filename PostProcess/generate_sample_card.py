@@ -26,7 +26,7 @@ guide = str(sys.argv[2])
 sample = str(sys.argv[3])
 integrated_personal = current_working_directory + '/' + job_id + \
     '.' + sample + '.' + guide + '.personal_targets.txt'
-print('personal',integrated_personal)
+print('personal', integrated_personal)
 integrated_private = current_working_directory + '/' + job_id + '.' + \
     sample + '.' + guide + '.private_targets.tsv'
 print('private', integrated_private)
@@ -58,9 +58,9 @@ result_private.to_csv(integrated_private, sep='\t', index=False)
 print('fatto files')
 # generated plots
 os.system(
-    f"python {script_path}/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
+    f"python {script_path}/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
 os.system(
-    f"python {script_path}/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
+    f"python {script_path}/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
 os.system(
     f"rm -f {integrated_personal}")
 print('fatto plots')
