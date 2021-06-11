@@ -789,8 +789,8 @@ def personal_card():
         exit(1)
     else:
         try:
-            guide = os.path.abspath(
-                input_args[input_args.index("--guide_seq")+1])
+            guide = input_args[input_args.index(
+                "--guide_seq")+1]
         except IndexError:
             print("Please input some parameter for flag --guide_seq")
             exit(1)
@@ -799,12 +799,12 @@ def personal_card():
         exit(1)
     else:
         try:
-            sample_id = os.path.abspath(
-                input_args[input_args.index("--sample_id")+1])
+            sample_id = input_args[input_args.index(
+                "--sample_id")+1]
         except IndexError:
             print("Please input some parameter for flag --sample_id")
             exit(1)
-    print('chiamo generate card')
+    # print('chiamo generate card')
     os.system(script_path+"./generate_sample_card.py "+result_dir+" "+guide +
               " "+sample_id+" "+script_path)
 
