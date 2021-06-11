@@ -26,8 +26,11 @@ guide = str(sys.argv[2])
 sample = str(sys.argv[3])
 integrated_personal = current_working_directory + '/' + job_id + \
     '.' + sample + '.' + guide + '.personal_targets.txt'
+print('personal',integrated_personal)
 integrated_private = current_working_directory + '/' + job_id + '.' + \
     sample + '.' + guide + '.private_targets.tsv'
+print('private', integrated_private)
+
 script_path = sys.argv[4]
 
 
