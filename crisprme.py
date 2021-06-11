@@ -166,6 +166,7 @@ def getGuides(extracted_seq, pam, len_guide, pam_begin):
     return guides
     # return guides for when adding to app.py
 
+
 def directoryCheck():
     # function to check the main directory status, if some directory is missing, create it
     directoryList = ['Genomes', 'Results', 'Dictionaries',
@@ -803,6 +804,7 @@ def personal_card():
         except IndexError:
             print("Please input some parameter for flag --sample_id")
             exit(1)
+    print('chiamo generate card')
     os.system(script_path+"./generate_sample_card.py "+result_dir+" "+guide +
               " "+sample_id+" "+script_path)
 
