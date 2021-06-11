@@ -588,7 +588,7 @@ def target_integration():
         # print("\t--guide, used to specify the file that contains guides used for the search")
         print("\t--gencode, used to specify the file that contains gencode annotation to find nearest gene to any target")
         print(
-            "\t--empirical_data, used to specify the file that contains gencode annotation to find nearest gene to any target [OPTIONAL]")
+            "\t--empirical_data, used to specify the file that contains empirical data provided by the user to assess in-silico targets")
         print(
             "\t--vcf_dir, used to specify the directory containing vcf files used in the search phase, necessary to obtain haplotype frequence in multi-variant targets [OPTIONAL][BETA]")
         print("\t--output, used to specify the output folder for the results")
