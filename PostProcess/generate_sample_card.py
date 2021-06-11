@@ -26,12 +26,15 @@ integrated_private = current_working_directory + job_id + '.' + \
     sample + '.' + guide + '.private_targets.tsv'
 script_path = sys.argv[4]
 
+
+print('entrato')
 path_db = glob.glob(
-    current_working_directory + 'Results/' +
-    job_id + '/'+job_id + '*.db')[0]
+    current_working_directory + '*.db')[0]
+print('leggo il nome db')
 path_db = str(path_db)
 conn = sqlite3.connect(path_db)
 c = conn.cursor()
+print('connesso to db')
 # extract personal targets
 result_personal = pd.read_sql_query(
     "SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample), conn)
@@ -41,11 +44,11 @@ result_personal = result_personal.sort_values(
 result_private = result_personal[result_personal[SAMPLES_COLUMN] == sample]
 conn.commit()
 conn.close()
-
+print('fatto queries')
 # save to file
 result_personal.to_csv(integrated_personal, sep='\t', index=False)
 result_private.to_csv(integrated_private, sep='\t', index=False)
-
+print('fatto files')
 # generated plots
 os.system(
     f"python {script_path}/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
@@ -53,3 +56,4 @@ os.system(
     f"python {script_path}/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
 os.system(
     f"rm -f {integrated_personal}")
+print('fatto plots')
