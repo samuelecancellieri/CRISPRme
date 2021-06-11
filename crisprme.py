@@ -546,7 +546,7 @@ def personal_card():
     if "--help" in input_args:
         print("This is the personal card generator that creates a files with all the private targets for the input sample")
         print("These are the flags that must be used in order to run this function:")
-        print("--result_dir, directory containing the result from which extract the targets to generate the card")
+        print("\t--result_dir, directory containing the result from which extract the targets to generate the card")
         print(
             "\t--guide_seq, sequence of the guide to use in order to exctract the targets")
         print("\t--sample_id, ID of the sample to use in order to generate the card")
