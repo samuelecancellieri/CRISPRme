@@ -3370,8 +3370,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     }
                 ],
                 style_table={
-                    'overflowX': 'scroll'
-                }
+                    'overflowX': 'scroll', 'overflowY': 'scroll', 'max-height': '300px'},
             )
         ]
     except:
