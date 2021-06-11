@@ -19,7 +19,9 @@ SAMPLES_COLUMN = 'Variant_samples_(highest_CFD)'
 
 
 current_working_directory = sys.argv[1]
+print('current', current_working_directory)
 job_id = current_working_directory.split('/')[-1]
+print('jobid', job_id)
 guide = str(sys.argv[2])
 sample = str(sys.argv[3])
 integrated_personal = current_working_directory + job_id + \
