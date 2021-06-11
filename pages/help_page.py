@@ -174,19 +174,14 @@ def helpPage():
         )
     )
 
-    # final_list.append(
-    #     html.Div(
-    #         [
-    #             dbc.Alert(
-    #                 [
-    #                     'WARNING: If some inputs are missing, a warning popup will be displayed', html.P(),
-    #                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-    #                         open(app_main_directory+'/assets/helpPage/warning.png', 'rb').read()).decode()), width='100%'),
-    #                 ], color='warning', fade=False, style={'width': '70%'}
-    #             )
-    #         ]
-    #     )
-    # )
+    final_list.append(
+        html.Div(
+            [
+                html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                    open(app_main_directory+'/assets/helpPage/load_page.png', 'rb').read()).decode()), width='100%')
+            ]
+        )
+    )
 
     final_list.append(
         html.P(
