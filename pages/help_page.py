@@ -186,10 +186,10 @@ def helpPage():
     final_list.append(
         html.P(
             [
-                'After the submission, the status of the search will be displayed in a new page',
-                html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                    open(app_main_directory+'/assets/waitPage/loadPage.png', 'rb').read()).decode()), width='100%'),
-                'When the job is complete, the result link will appear at the end of the status report',
+                # 'After the submission, the status of the search will be displayed in a new page',
+                # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                #     open(app_main_directory+'/assets/waitPage/loadPage.png', 'rb').read()).decode()), width='100%'),
+                'Upon completion of the job, a link “View Results” will appear to view the results at the bottom of the status report page.',
                 html.P(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
                     open(app_main_directory+'/assets/waitPage/jobDone.png', 'rb').read()).decode()), width='20%'))
             ]
