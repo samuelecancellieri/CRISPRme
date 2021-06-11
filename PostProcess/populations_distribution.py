@@ -24,7 +24,7 @@ SAS     0,0     0,0     0,0     2,1     3,21    0,153   0,0     0,0     0,0     
 from matplotlib.legend_handler import HandlerTuple
 import matplotlib.colors as mc
 import colorsys
-from operator import itemgetter
+from operator import itemgetter, truediv
 from os.path import isfile, join
 from os import listdir
 import os
@@ -32,6 +32,8 @@ import warnings
 import glob
 from itertools import islice
 import sys
+
+from pandas.core.tools import numeric
 import numpy as np
 import scipy.spatial.distance as sp
 from math import pi
@@ -91,17 +93,40 @@ with open(sys.argv[1]) as summary:
                 line = line.split('\t')
                 number_bars = len(line[total + 1].split(','))
                 # line = EAS 0,7 1,2 5,3 10,11
-                barplot_values[line[0]] = [
-                    int(x) for x in line[total + 1].split(',')]
-                value = sum([int(x) for x in line[total + 1].split(',')])
-                previous_bar.append(0)
+                barplot_values[line[0]] = dict()
+                for count in range(0, total+1):
+                    barplot_values[line[0]][count] = [
+                        int(x) for x in line[count+1].split(',')]
+                    value = sum([int(x) for x in line[count+1].split(',')])
+                # previous_bar.append(0)
                 if value > max_value:
                     max_value = value
 
+totaldict = barplot_values
+barplot_values_tmp = dict()
+lower_barplot_values = dict()
+for pop in barplot_values:
+    barplot_values_tmp[pop] = barplot_values[pop][total]
+    sum_up_list = [0]*number_bars
+    for count in range(total):
+        for elem in range(number_bars):
+            sum_up_list[elem] += barplot_values[pop][count][elem]
+    summs = 0
+    for elem in sum_up_list:
+        summs += elem
+    lower_barplot_values[pop] = summs
+
+barplot_values = barplot_values_tmp
+
+#print('total', totaldict)
+#print('original barplot', barplot_values)
+#print('all lower sum up', lower_barplot_values)
+# number_bars = number_bars+1  # add bar with all the lower levels of data
 # [0 1 2 3 4 5] #NOTE 0 is REFERENCE
 ind = np.arange(0, len(barplot_values.keys()), 1)
 no_result = False
 try:
+    max_value += max(lower_barplot_values.values())
     y_range = np.arange(
         0, max_value + math.ceil(max_value/10), math.ceil(max_value/5))
 except:
@@ -123,8 +148,23 @@ if len(barplot_values.keys()) > len(population_color):
 # If i have less than 5 superpopulations + ref
 elif len(barplot_values.keys()) < len(population_color):
     population_color = population_color[:len(barplot_values.keys())]
+
 all_bar = []
+lower_value_check = False
+# add data for lower count data
+for value in lower_barplot_values.values():
+    previous_bar.append(value)
+
+if max(previous_bar) > 0:
+    lower_value_check = True
+
+lower_bar = []
+if lower_value_check:
+    lower_bar.append(plt.bar(ind, previous_bar, width, color='yellow',
+                             align='edge', edgecolor='black'))
+
 for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
+    # insert current total bars
     current_bar = [x[i] for x in barplot_values.values()]
     # all_bar.append(plt.bar(ind, current_bar, width, color=[adjust_lightness(x, 1 + i*0.3) if current_bar[pos] != 0 else 'white' for pos, x in enumerate(population_color)], align='edge', bottom=previous_bar, edgecolor='black'))
     all_bar.append(plt.bar(ind, current_bar, width,
@@ -135,9 +175,12 @@ for i in range(number_bars):  # For 0 bulge, 1 bulge, 2 bulge ...
 
 # p2 = plt.bar(ind, barplot_values.values() , width, color=[adjust_lightness(x, 1.3) for x in population_color], align='edge', bottom = list(barplot_values.values()))
 
-# print('number bars', number_bars)
+# #print('number bars', number_bars)
 legend_labels = []
 handles_color = []
+if lower_value_check:
+    legend_labels.append('MM+B < '+str(total))
+    handles_color.append(lower_bar[0][0])
 # for x in range(min(number_bars, total+1)):
 for x in range(number_bars):
     if x == 0:
@@ -161,7 +204,7 @@ legend_labels.reverse()
 # handles_color = [(x[:]) for x in all_bar]
 handles_color.reverse()
 plt.legend(handles_color, legend_labels, fontsize=fontsize, handlelength=5,
-           handler_map={tuple: HandlerTuple(ndivide=None)})
+           handler_map={tuple: HandlerTuple(ndivide=None)}, title="MM mismatches, B bulges", title_fontsize=fontsize)
 # first param is for the colored rectangles of legens, second parameter for labels, handlelength is size of rectangles, handlermap is for grouping different colors in single label
 # [(first bar color, second bar color, ...), (first bar light color, second bar light color,...)]
 plt.title('Targets with up to ' +

@@ -1315,9 +1315,7 @@ def samplePage(job_id, hash):
                 # filter_action='custom',
                 # filter_query='',
                 style_table={
-                    'max-height': '600px',
-                    'overflowY': 'scroll',
-                },
+                    'overflowX': 'scroll', 'overflowY': 'scroll', 'max-height': '300px'},
                 style_cell_conditional=[
                     {
                         'if': {'column_id': 'Variant_samples_(highest_CFD)'},
@@ -3372,8 +3370,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     }
                 ],
                 style_table={
-                    'overflowX': 'scroll'
-                }
+                    'overflowX': 'scroll', 'overflowY': 'scroll', 'max-height': '300px'},
             )
         ]
     except:
@@ -4266,7 +4263,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             dbc.Row(
                 dbc.Col(
                     html.Div(
-                        ['The GENCODE and ENCODE annotations are defined in details ',
+                        ['The GENCODE and ENCODE annotations are defined in detail ',
                          html.A('here', target='_blank',
                                 href='https://www.gencodegenes.org/human/'), ' and ',
                          html.A('here', target='_blank',

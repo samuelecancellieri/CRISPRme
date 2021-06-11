@@ -30,6 +30,7 @@ warnings.filterwarnings("ignore")
 plt.style.use('seaborn-poster')
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
+
 random.seed(a=None, version=2)
 # final file containing all the results after post processing
 inGuideFile = open(sys.argv[1], 'r')  # guide file used during search
@@ -300,56 +301,62 @@ def fillDict(guide, guideDict, motifDict):
         # add target to TOTAL dict
         # print(mismatch, bulge, guideDict[mismatch][bulge]['TOTAL']['General'])
         # guideDict[mismatch][bulge]['TOTAL']['General'] += 1
-        guideDict[total]['General'] += 1
-        # find annotations and add data to the TOTAL dict
-        if split[14] != 'n':
-            annotationsList = split[14].strip().split(',')
-            for annotation in annotationsList:
-                if 'CTCF-bound' in annotation:
-                    guideDict[total]['CTCF-only'] += 1
-                    guideDict[total][annotation.split(';')[0]] += 1
-                else:
-                    guideDict[total][annotation.replace('_gencode', '')] += 1
-                # guideDict[mismatch][bulge]['TOTAL'][annotation] += 1
-                # find motif in X and RNA/DNA targets
-        if 'DNA' not in split[0]:
-            for count, nucleotide in enumerate(alignedSequence):
-                if nucleotide.islower():
-                    motifDict[total][nucleotide.upper()][count] += 1
-                    # motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
-                    #                                     ][count] += 1
-                elif nucleotide == '-':
-                    motifDict[total][split[0]][count] += 1
-                    # motifDict[mismatch][bulge]['TOTAL'][][count] += 1
-                if guide[count] == 'N':
-                    motifDict[total][nucleotide.upper()][count] += 1
-                    # motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
-                    #                                     ][count] += 1
-        else:
-            alignedGuide = split[1]
-            for count, nucleotide in enumerate(alignedGuide[bulge:]):
-                if nucleotide == '-':
-                    motifDict[total][split[0]][count] += 1
-                    # motifDict[mismatch][bulge]['TOTAL'][split[0]][count] += 1
-            for count, nucleotide in enumerate(alignedSequence[bulge:]):
-                if nucleotide.islower():
-                    motifDict[total][nucleotide.upper()][count] += 1
-                    # motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
-                    #                                     ][count] += 1
-                if guide[0] != 'N':
-                    if guide[count] == 'N':
-                        motifDict[total][nucleotide.upper()][count] += 1
+        # guideDict[total]['General'] += 1
+        for over in range(total, 15):
+            # count the target in each level, from total to infinite, this way we autoinclude
+            # each target in the proper level and in all the following levels
+            guideDict[over]['General'] += 1
+            if split[14] != 'n':
+                annotationsList = split[14].strip().split(',')
+                # to avoid duplicate categories
+                annotationsList = set(annotationsList)
+                for annotation in annotationsList:
+                    if 'CTCF-bound' in annotation:
+                        guideDict[over]['CTCF-only'] += 1
+                        guideDict[over][annotation.split(';')[0]] += 1
+                    else:
+                        guideDict[over][annotation.replace(
+                            '_gencode', '')] += 1
+                    # guideDict[mismatch][bulge]['TOTAL'][annotation] += 1
+                    # find motif in X and RNA/DNA targets
+            if 'DNA' not in split[0]:
+                for count, nucleotide in enumerate(alignedSequence):
+                    if nucleotide.islower():
+                        motifDict[over][nucleotide.upper()][count] += 1
                         # motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
                         #                                     ][count] += 1
-            # to correct reading of guides N's when upstream PAM
-            for count, ennes in enumerate(guide):
-                if ennes == 'N':
-                    motifDict[total][alignedSequence[count].upper()
-                                     ][count] += 1
-                    # motifDict[mismatch][bulge]['TOTAL'][alignedSequence[count].upper(
-                    # )][count] += 1
-                else:
-                    break
+                    elif nucleotide == '-':
+                        motifDict[over][split[0]][count] += 1
+                        # motifDict[mismatch][bulge]['TOTAL'][][count] += 1
+                    if guide[count] == 'N':
+                        motifDict[over][nucleotide.upper()][count] += 1
+                        # motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
+                        #                                     ][count] += 1
+            else:
+                alignedGuide = split[1]
+                for count, nucleotide in enumerate(alignedGuide[bulge:]):
+                    if nucleotide == '-':
+                        motifDict[over][split[0]][count] += 1
+                        # motifDict[mismatch][bulge]['TOTAL'][split[0]][count] += 1
+                for count, nucleotide in enumerate(alignedSequence[bulge:]):
+                    if nucleotide.islower():
+                        motifDict[over][nucleotide.upper()][count] += 1
+                        # motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
+                        #                                     ][count] += 1
+                    if guide[0] != 'N':
+                        if guide[count] == 'N':
+                            motifDict[over][nucleotide.upper()][count] += 1
+                            # motifDict[mismatch][bulge]['TOTAL'][nucleotide.upper()
+                            #                                     ][count] += 1
+                # to correct reading of guides N's when upstream PAM
+                for count, ennes in enumerate(guide):
+                    if ennes == 'N':
+                        motifDict[over][alignedSequence[count].upper()
+                                        ][count] += 1
+                        # motifDict[mismatch][bulge]['TOTAL'][alignedSequence[count].upper(
+                        # )][count] += 1
+                    else:
+                        break
         # check if samples are available and take them if yes
         # samplePresent = False
         # if 'n' not in split[13] and 'NO_SAMPLES' not in split[13]:
