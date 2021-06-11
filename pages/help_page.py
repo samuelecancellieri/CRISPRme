@@ -22,7 +22,7 @@ def helpPage():
                     ['CRISPRme is available as an online web app at ',
                      html.A('http://crisprme.di.univr.it',
                             href='http://crisprme.di.univr.it', target='_blank'),
-                     'a standalone command line package. The required inputs to perform an online search are: gRNA spacer(s), Cas protein, PAM sequence, genome build with or without the inclusion of genetic variants (1000G, HGDP and/or personal variants), and thresholds of mismatches and RNA/DNA bulges.'
+                     ' a standalone command line package. The required inputs to perform an online search are: gRNA spacer(s), Cas protein, PAM sequence, genome build with or without the inclusion of genetic variants (1000G, HGDP and/or personal variants), and thresholds of mismatches and RNA/DNA bulges.'
                      ]
                 )
             ]
@@ -47,22 +47,21 @@ def helpPage():
                             'STEP 1: Spacer, Cas Protein and PAM selection',
                             html.Ul(
                                 [
-                                    html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                                        open(app_main_directory+'/assets/helpPage/guides.png', 'rb').read()).decode()), width='30%'),
+                                    # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                                    #     open(app_main_directory+'/assets/helpPage/guides.png', 'rb').read()).decode()), width='30%'),
                                     html.Li(
-                                        'Individual Protospacer(s): a list of crRNAs sequences, consisting in 1 or more sequences (max 1000 sequences) to search on the genome'),
-                                    html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                                        open(app_main_directory+'/assets/helpPage/sequence.png', 'rb').read()).decode()), width='40%'),
-                                    html.Li('Genomic sequence(s): one or more genetic sequences (max 1000 characters), each sequence MUST BE separated with the header \'>name\'. The sequence can be also submitted with a ' +
-                                            'chromosome range, also provided with an header. The region will be extracted from the Genome selected in STEP 1'),
-                                    html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                                        open(app_main_directory+'/assets/helpPage/nuclease.png', 'rb').read()).decode()), width='30%'),
+                                        'Spacer(s): The guide RNA (gRNA) spacer sequence matches the genomic target protospacer sequence (typically 20 nucleotides) and directs Cas protein binding to the protospacer in the presence of a protospacer adjacent motif (PAM). The spacer sequence is represented as DNA (rather than RNA) in CRISPRme to allow easy comparison to the aligned protospacer sequence. CRISPRme accepts a set of gRNA spacer(s), one per line, each with the same length (max 100 sequences). The input spacer sequence should not include PAM.'),
+                                    # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                                    #     open(app_main_directory+'/assets/helpPage/sequence.png', 'rb').read()).decode()), width='40%'),
+                                    html.Li('Genomic sequence(s): CRISPRme can alternatively take as input a set of genomic coordinates in BED format (chromosome# start end) or DNA sequences in FASTA format (max 1000 characters). The BED file coordinates will be treated as 0-based and CRISPRme (online version) will extract the first 100 possible spacer sequences within these coordinates starting with the positive strand. To use this type of input, the user must delimit each entry with a >header.'),
+                                    # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                                    #     open(app_main_directory+'/assets/helpPage/nuclease.png', 'rb').read()).decode()), width='30%'),
                                     html.Li(
-                                        'Nuclease: here you can select a specific Cas protein.'),
-                                    html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                                        open(app_main_directory+'/assets/helpPage/pam.png', 'rb').read()).decode()), width='30%'),
-                                    html.Li(
-                                        'PAM: here you can select a Protospacer Adjacent Motif for the specified Cas protein.'),
+                                        'PAM sequence: The PAM is a short (∼2-6 nucleotide) DNA sequence adjacent to the protospacer necessary for the Cas protein to bind to a specific DNA target. CRISPRme supports a set of PAMs and users must select one of them in order to perform the search. The software supports both 3’ (e.g. SpCas9) and 5’ (e.g. Cas12a) PAM sequences.'),
+                                    # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                                    #     open(app_main_directory+'/assets/helpPage/pam.png', 'rb').read()).decode()), width='30%'),
+                                    # html.Li(
+                                    #     'PAM: here you can select a Protospacer Adjacent Motif for the specified Cas protein.'),
                                 ], style={'padding': '15px'}
                             )
                         ]
@@ -89,18 +88,17 @@ def helpPage():
                             'STEP 2: Genome selection and threshold configuration',
                             html.Ul(
                                 [
-                                    html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                                        open(app_main_directory+'/assets/helpPage/genome.png', 'rb').read()).decode()), width='40%'),
+                                    # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                                    #     open(app_main_directory+'/assets/helpPage/genome.png', 'rb').read()).decode()), width='40%'),
                                     html.Li(
-                                        'Genome: here you can select a genome from the ones present and combine it with one or more VCF datasets (1000G, HGDP, personal variants)'),
-                                    html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                                        open(app_main_directory+'/assets/helpPage/thresholds.png', 'rb').read()).decode()), width='20%'),
-                                    html.Li(
-                                        'Allowed mismatches: number of tolerated mismatches in a target'),
-                                    html.Li(
-                                        'Bulge DNA size: size of bubbles tolerated on the DNA sequence (can be consecutive(AA--AA) or interleaved(AA-A-AA)).'),
-                                    html.Li(
-                                        'Bulge RNA size: size of bubbles tolerated on the RNA sequence (can be consecutive(AA--AA) or interleaved(AA-A-AA))'),
+                                        'Genome builds: The genome builds are based on FASTA files from UCSC. The hg38 and hg19 genomic builds are available with the option to incorporate variants from 1000G, HGDP, and/or personal variants in the search. The option to add personal variants is enabled only for the local offline and command line versions.'),
+                                    # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                                    #     open(app_main_directory+'/assets/helpPage/thresholds.png', 'rb').read()).decode()), width='20%'),
+                                    html.Li('Search thresholds: CRISPRme allows users to specify the number of mismatches, DNA and RNA bulges tolerated in enumerating potential off-targets. The web-tool allows up to 6 mismatches and up to 2 RNA/DNA bulges (which can be consecutive (NN--NN) or interleaved (NN-N-NN)). However, for the command line version, these thresholds can be set freely and depend only on the available computational resources.'),
+                                    # html.Li(
+                                    #     'Bulge DNA size: size of bubbles tolerated on the DNA sequence (can be consecutive(AA--AA) or interleaved(AA-A-AA)).'),
+                                    # html.Li(
+                                    #     'Bulge RNA size: size of bubbles tolerated on the RNA sequence (can be consecutive(AA--AA) or interleaved(AA-A-AA))'),
                                 ], style={'padding': '15px'}
                             )
                         ]
@@ -135,15 +133,16 @@ def helpPage():
                     # ),
                     html.Li(
                         [
-                            'STEP 3 Select Annotation(s) and notify by email',
+                            'STEP 3 Annotation(s), email notification, and job name',
                             html.Ul(
                                 [
-                                    html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                                        open(app_main_directory+'/assets/helpPage/advOpt.png', 'rb').read()).decode()), width='40%'),
+                                    # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+                                    #     open(app_main_directory+'/assets/helpPage/advOpt.png', 'rb').read()).decode()), width='40%'),
+                                    html.Li('Functional annotations: To assess the potential impact of off-target activity, CRISPRme provides a set of functional annotations for coding and non-coding regions. The annotations are based on files obtained from the Encyclopedia of DNA Elements (ENCODE) containing candidate cis regulatory elements21 and from GENCODE25 containing annotations for protein coding genes, transcribed but untranslated regions, and introns. In the offline versions of CRISPRme, users can add custom genome annotations, such as cell-type specific chromatin marks or off-target sites nominated by in vitro and/or cellular assays as simple BED files.'),
                                     html.Li(
-                                        'The user can choose the annotation to use, either only the provided set of annotations or combine it with a personal annotation file.'),
+                                        'Email notification: If an email address is provided, the user will receive a notification upon the job completion.'),
                                     html.Li(
-                                        'Notify me by email: if selected, let you insert an email to receive a notification when your job is terminated.'),
+                                        'Job name: If a string is provided, a prefix will be added to the unique job id to facilitate the identification of a particular search e.g. my_job_G05B8KHU0H.'),
                                 ], style={'padding': '15px'}
                             )
                         ]
