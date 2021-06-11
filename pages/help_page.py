@@ -15,17 +15,18 @@ from app import app_main_directory
 def helpPage():
     final_list = []
     final_list.append(
-        html.Div([
-            html.H3('About'),
-            html.P([
-                'CRISPRme  performs  predictive analysis and result assessment on population and individual specific CRISPR/Cas experiments.' +
-                ' CRISPRme enumerates on- and off-target accounting simultaneously for substitutions, DNA/RNA bulges and common genetic variants from the 1000 genomes project.'
-            ]),
-            html.P(['Open this ', html.A('example', href='http://crisprme.di.univr.it/load?job=36B28DI06M',
-                                         target='_blank'), ' to navigate the results we show in this page'])
-
-        ])
-
+        html.Div(
+            [
+                html.H3('About'),
+                html.P(
+                    ['CRISPRme is available as an online web app at ',
+                     html.A('http://crisprme.di.univr.it',
+                            href='http://crisprme.di.univr.it', target='_blank'),
+                     'a standalone command line package. The required inputs to perform an online search are: gRNA spacer(s), Cas protein, PAM sequence, genome build with or without the inclusion of genetic variants (1000G, HGDP and/or personal variants), and thresholds of mismatches and RNA/DNA bulges.'
+                     ]
+                )
+            ]
+        )
     )
 
     final_list.append(html.H3('Main Page'))
@@ -33,14 +34,17 @@ def helpPage():
     final_list.append(
         html.Div([
             html.P(
-                ['In the main page of CRISPRme, users can select a wide range of options to personalize their searches. The input phase is divided into three main steps:',
-                 html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory+'/assets/main_page.png', 'rb').read()).decode()), width="100%", height="auto")]
+                [
+                    'A search on CRISPRme can be performed in three simple steps thanks to the user-friendly user interface. Several options are available to personalize a search.',
+                 html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                      '/assets/main_page.png', 'rb').read()).decode()), width="100%", height="auto")
+                 ]
             ),
             html.Ul(
                 [
                     html.Li(
                         [
-                            'STEP 1: Guide, Nuclease and PAM selection',
+                            'STEP 1: Spacer, Cas Protein and PAM selection',
                             html.Ul(
                                 [
                                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
