@@ -1315,9 +1315,7 @@ def samplePage(job_id, hash):
                 # filter_action='custom',
                 # filter_query='',
                 style_table={
-                    'max-height': '600px',
-                    'overflowY': 'scroll',
-                },
+                    'overflowX': 'scroll', 'overflowY': 'scroll', 'max-height': '300px'},
                 style_cell_conditional=[
                     {
                         'if': {'column_id': 'Variant_samples_(highest_CFD)'},
