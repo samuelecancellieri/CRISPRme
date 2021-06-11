@@ -24,9 +24,9 @@ job_id = current_working_directory.split('/')[-1]
 print('jobid', job_id)
 guide = str(sys.argv[2])
 sample = str(sys.argv[3])
-integrated_personal = current_working_directory + job_id + \
+integrated_personal = current_working_directory + '/' + job_id + \
     '.' + sample + '.' + guide + '.personal_targets.txt'
-integrated_private = current_working_directory + job_id + '.' + \
+integrated_private = current_working_directory + '/' + job_id + '.' + \
     sample + '.' + guide + '.private_targets.tsv'
 script_path = sys.argv[4]
 
