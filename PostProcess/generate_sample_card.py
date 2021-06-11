@@ -19,29 +19,29 @@ SAMPLES_COLUMN = 'Variant_samples_(highest_CFD)'
 
 
 current_working_directory = sys.argv[1]
-print('current', current_working_directory)
+#print('current', current_working_directory)
 job_id = current_working_directory.split('/')[-1]
-print('jobid', job_id)
+#print('jobid', job_id)
 guide = str(sys.argv[2])
 sample = str(sys.argv[3])
 integrated_personal = current_working_directory + '/' + job_id + \
     '.' + sample + '.' + guide + '.personal_targets.txt'
-print('personal', integrated_personal)
+#print('personal', integrated_personal)
 integrated_private = current_working_directory + '/' + job_id + '.' + \
     sample + '.' + guide + '.private_targets.tsv'
-print('private', integrated_private)
+#print('private', integrated_private)
 
 script_path = sys.argv[4]
 
 
-print('entrato')
+# print('entrato')
 path_db = glob.glob(
     current_working_directory + '/' + '*.db')[0]
-print('leggo il nome db')
+#print('leggo il nome db')
 path_db = str(path_db)
 conn = sqlite3.connect(path_db)
 c = conn.cursor()
-print('connesso to db')
+#print('connesso to db')
 # extract personal targets
 result_personal = pd.read_sql_query(
     "SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample), conn)
@@ -51,11 +51,11 @@ result_personal = result_personal.sort_values(
 result_private = result_personal[result_personal[SAMPLES_COLUMN] == sample]
 conn.commit()
 conn.close()
-print('fatto queries')
+#print('fatto queries')
 # save to file
 result_personal.to_csv(integrated_personal, sep='\t', index=False)
 result_private.to_csv(integrated_private, sep='\t', index=False)
-print('fatto files')
+#print('fatto files')
 # generated plots
 os.system(
     f"python {script_path}/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
@@ -63,4 +63,4 @@ os.system(
     f"python {script_path}/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
 os.system(
     f"rm -f {integrated_personal}")
-print('fatto plots')
+#print('fatto plots')

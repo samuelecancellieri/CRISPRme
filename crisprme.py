@@ -804,7 +804,7 @@ def personal_card():
         except IndexError:
             print("Please input some parameter for flag --sample_id")
             exit(1)
-    # print('chiamo generate card')
+
     os.system(script_path+"./generate_sample_card.py "+result_dir+" "+guide +
               " "+sample_id+" "+script_path)
 
