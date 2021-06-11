@@ -170,23 +170,23 @@ def helpPage():
 
     final_list.append(
         html.P(
-            ['After selecting the desired inputs, click on the Submit button to start the search']
+            ['After selecting the desired inputs, clicking the Submit button starts the search . After the submission, a new page will show the status and progress.']
         )
     )
 
-    final_list.append(
-        html.Div(
-            [
-                dbc.Alert(
-                    [
-                        'WARNING: If some inputs are missing, a warning popup will be displayed', html.P(),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                            open(app_main_directory+'/assets/helpPage/warning.png', 'rb').read()).decode()), width='100%'),
-                    ], color='warning', fade=False, style={'width': '70%'}
-                )
-            ]
-        )
-    )
+    # final_list.append(
+    #     html.Div(
+    #         [
+    #             dbc.Alert(
+    #                 [
+    #                     'WARNING: If some inputs are missing, a warning popup will be displayed', html.P(),
+    #                     html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
+    #                         open(app_main_directory+'/assets/helpPage/warning.png', 'rb').read()).decode()), width='100%'),
+    #                 ], color='warning', fade=False, style={'width': '70%'}
+    #             )
+    #         ]
+    #     )
+    # )
 
     final_list.append(
         html.P(
