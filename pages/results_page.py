@@ -187,12 +187,12 @@ def resultPage(job_id):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
 
     count_guides = 0
-    with open(current_working_directory + 'Results/' + value + '/guides.txt') as g:
+    with open(current_working_directory + 'Results/' + value + '/.guides.txt') as g:
         for line in g:
             count_guides += 1
 
     # Load mismatches
-    with open(current_working_directory + 'Results/' + value + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + value + '/.Params.txt') as p:
         all_params = p.read()
         real_genome_name = (next(s for s in all_params.split('\n')
                                  if 'Genome_idx' in s)).split('\t')[-1]
@@ -630,7 +630,7 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
     chromosome = chr_pos.split('-')[0]
     position = chr_pos.split('-')[1]
 
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -698,7 +698,7 @@ def update_iupac_scomposition_table_cluster(page_current, page_size, sort_by, fi
     ].to_dict('records')
     # if genome_type != 'ref':
     #     dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-    #         job_directory + 'sampleID.txt')[:2]
+    #         job_directory + '.sampleID.txt')[:2]
     #     for row in data_to_send:
     #         summarized_sample_cell = dict()
     #         for s in row['Samples'].split(','):
@@ -735,7 +735,7 @@ def update_table_cluster(page_current, page_size, sort_by, filter, hide_referenc
     chromosome = chr_pos.split('-')[0]
     position = chr_pos.split('-')[1]
 
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -811,7 +811,7 @@ def update_table_cluster(page_current, page_size, sort_by, filter, hide_referenc
     ].to_dict('records')
     if genome_type != 'ref':
         dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-            job_directory + 'sampleID.txt')[:2]
+            job_directory + '.sampleID.txt')[:2]
         for row in data_to_send:
             summarized_sample_cell = dict()
             for s in row['Samples'].split(','):
@@ -838,7 +838,7 @@ def clusterPage(job_id, hash):
     position = chr_pos.split('-')[1]
     if (not isdir(current_working_directory + 'Results/' + job_id)):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -1109,7 +1109,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
     hash = hash.split('#')[1]
     guide = hash[:hash.find('-Sample-')]
     sample = str(hash[hash.rfind('-') + 1:])
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -1163,7 +1163,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
 
     # Calculate sample count
     # dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-    #     job_directory + 'sampleID.txt')[:2]
+    #     job_directory + '.sampleID.txt')[:2]
     data_to_send = dff.iloc[page_current *
                             page_size:(page_current + 1)*page_size].to_dict('records')
     # for row in data_to_send:
@@ -1192,7 +1192,7 @@ def samplePage(job_id, hash):
     if (not isdir(current_working_directory + 'Results/' + job_id)):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
 
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -1390,7 +1390,7 @@ def global_store_general(path_file_to_load):
 #         raise PreventUpdate
 #     job_id = search.split('=')[-1]
 #     job_directory = current_working_directory + 'Results/' + job_id + '/'
-#     with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+#     with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
 #         all_params = p.read()
 #         genome_type_f = (next(s for s in all_params.split(
 #             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -1487,7 +1487,7 @@ def global_store_general(path_file_to_load):
 #     ].to_dict('records')
 #     if genome_type != 'ref':
 #         dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-#             job_directory + 'sampleID.txt')[:2]
+#             job_directory + '.sampleID.txt')[:2]
 #         for row in data_to_send:
 #             summarized_sample_cell = dict()
 #             for s in row['Samples'].split(','):
@@ -1524,7 +1524,7 @@ def global_store_general(path_file_to_load):
 #         raise PreventUpdate
 #     fl = []
 #     job_id = search.split('=')[-1]
-#     with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+#     with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
 #         all_params = p.read()
 #         genome_type_f = (next(s for s in all_params.split(
 #             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -1622,7 +1622,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     '''
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -1736,7 +1736,7 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
                             page_size:(page_current + 1)*page_size].to_dict('records')
     # if genome_type != 'ref':
     #     dict_sample_to_pop, dict_pop_to_superpop = associateSample.loadSampleAssociation(
-    #         job_directory + 'sampleID.txt')[:2]
+    #         job_directory + '.sampleID.txt')[:2]
     #     for row in data_to_send:
     #         summarized_sample_cell = dict()
     #         for s in row['Samples'].split(','):
@@ -1772,7 +1772,7 @@ def guidePagev3(job_id, hash):
     value = job_id
     if (not isdir(current_working_directory + 'Results/' + job_id)):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
-    with open(current_working_directory + 'Results/' + value + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + value + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -2036,7 +2036,7 @@ def loadDistributionPopulations(sel_cel, all_guides, job_id):
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     job_id = job_id.split('=')[-1]
 
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         mms = int((next(s for s in all_params.split('\n')
                         if 'Mismatches' in s)).split('\t')[-1])
@@ -2121,7 +2121,7 @@ def toggleCollapseDistributionPopulations(n, is_open):
 def update_table_general_profile(page_current, page_size, sort_by, filter, search):
     job_id = search.split('=')[-1]
 
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -2150,7 +2150,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
                 list_error_guides.append(e_g.strip())
 
     # Get guide from guide.txt
-    with open(current_working_directory + 'Results/' + job_id + '/guides.txt') as g:
+    with open(current_working_directory + 'Results/' + job_id + '/.guides.txt') as g:
         guides = g.read().strip().split('\n')
         guides.sort()
 
@@ -2631,8 +2631,8 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     population_1000gp = associateSample.loadSampleAssociation(
-        job_directory + 'sampleID.txt')[2]
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+        job_directory + '.sampleID.txt')[2]
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         genome_type_f = (next(s for s in all_params.split(
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
@@ -2785,7 +2785,7 @@ def updateSampleDrop(pop, search):
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     dict_pop = associateSample.loadSampleAssociation(
-        job_directory + 'sampleID.txt')[3]
+        job_directory + '.sampleID.txt')[3]
     return [{'label': sam, 'value': sam} for sam in dict_pop[pop]], None
 
 # Callback to update the population tab based on superpopulation selected
@@ -2803,7 +2803,7 @@ def updatePopulationDrop(superpop, search):
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     population_1000gp = associateSample.loadSampleAssociation(
-        job_directory + 'sampleID.txt')[2]
+        job_directory + '.sampleID.txt')[2]
     return [{'label': i, 'value': i} for i in population_1000gp[superpop]], None
 
 
@@ -2928,7 +2928,7 @@ def generate_table(dataframe, id_table, genome_type, guide='', job_id='', max_ro
 
 
 def check_existance_sample(job_directory, job_id, sample):
-    df = pd.read_csv(job_directory + job_id + 'sampleID.txt',
+    df = pd.read_csv(job_directory + job_id + '.sampleID.txt',
                      sep='\t', na_filter=False)
     samples = df.iloc[:, 0]
     if sample in samples.values:
@@ -3447,7 +3447,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
 
-    with open(current_working_directory + 'Results/' + job_id + '/Params.txt') as p:
+    with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
         all_params = p.read()
         mms = (next(s for s in all_params.split('\n')
                     if 'Mismatches' in s)).split('\t')[-1]
@@ -3547,7 +3547,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         df[''] = more_info_col
 
         population_1000gp = associateSample.loadSampleAssociation(
-            job_directory + 'sampleID.txt')[2]
+            job_directory + '.sampleID.txt')[2]
         super_populations = [{'label': i, 'value': i}
                              for i in population_1000gp.keys()]
         populations = []
@@ -4130,7 +4130,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
         if genome_type != 'ref':
             population_1000gp = associateSample.loadSampleAssociation(
-                job_directory + 'sampleID.txt')[2]
+                job_directory + '.sampleID.txt')[2]
 
             super_populations = [{'label': i, 'value': i}
                                  for i in population_1000gp.keys()]

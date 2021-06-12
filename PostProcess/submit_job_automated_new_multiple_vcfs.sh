@@ -411,14 +411,14 @@ while read samples; do
 	if [ -z "$samples" ]; then
 		continue
 	fi
-	# tail -n +2 $samples >> "$output_folder/sampleID.txt"
-	grep -v '#' "${current_working_directory}/samplesIDs/$samples" >>"$output_folder/sampleID.txt"
+	# tail -n +2 $samples >> "$output_folder/.sampleID.txt"
+	grep -v '#' "${current_working_directory}/samplesIDs/$samples" >>"$output_folder/.sampleID.txt"
 done <$sampleID
 if [ "$vcf_name" != "_" ]; then
-	sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tSEX" "$output_folder/sampleID.txt"
+	sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tSEX" "$output_folder/.sampleID.txt"
 fi
 
-sampleID=$output_folder/sampleID.txt
+sampleID=$output_folder/.sampleID.txt
 
 # echo -e 'Merging targets' >  $output
 echo -e 'Merging Targets\tStart\t'$(date) >>$log
@@ -515,7 +515,7 @@ echo -e 'Creating images\tEnd\t'$(date) >>$log
 # echo -e 'Creating images\tEnd\t'$(date) >&2
 
 # if [ "$vcf_name" != "_" ]; then
-# 	cp $sampleID $output_folder/sampleID.txt
+# 	cp $sampleID $output_folder/.sampleID.txt
 # fi
 python $starting_dir/remove_n_and_dots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
 echo $gene_proximity
@@ -544,6 +544,7 @@ if [ $gene_proximity != "_" ]; then
 		python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &>"${output_folder}/warnings.txt"
 		rm -f "${output_folder}/warnings.txt"
 		rm "${output_folder}/tmp_linda_plot_file_${guide}.txt"
+		mv "${output_folder}/$(basename ${output_folder}).bestMerge.txt.empirical_not_found.tsv" "${output_folder}/.$(basename ${output_folder}).bestMerge.txt.empirical_not_found.tsv"
 	done <$guide_file
 fi
 echo -e 'Integrating results\tEnd\t'$(date) >>$log

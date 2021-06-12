@@ -65,7 +65,7 @@ def refreshSearch(n, dir_name):
                 current_log = log.read()
 
                 variant = False
-                with open(current_job_dir + 'Params.txt') as f:
+                with open(current_job_dir + '.Params.txt') as f:
                     if "Ref_comp\tTrue" in f.read():
                         variant = True
 
@@ -171,9 +171,9 @@ def refreshSearch(n, dir_name):
                 if os.path.isfile(f"{current_job_dir}/log_error.txt") and os.path.getsize(f"{current_job_dir}/log_error.txt") > 0:
                     return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), '', dbc.Alert("The selected result encountered some errors, please remove it and try to submit again.", color="danger"), False
                 if all_done == 7 or 'Job\tDone' in current_log:
-                    return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, URL+'/result?job=' + dir_name.split('=')[-1], '', True
+                    return {'visibility': 'visible'}, index_status, search_status, post_process_status, merge_status, images_status, integrate_status, database_status, URL+'/result?job=' + dir_name.split('=')[-1], '', True
                 else:
-                    return {'visibility': 'hidden'}, index_status, search_status, post_process_status, merge_status, images_status, database_status, integrate_status, '', '', True
+                    return {'visibility': 'hidden'}, index_status, search_status, post_process_status, merge_status, images_status, integrate_status, database_status, '', '', True
         elif 'queue.txt' in onlyfile:
             return {'visibility': 'hidden'}, html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('To do', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), '', dbc.Alert("Job submitted. Current status: in queue", color="info"), True
     return {'visibility': 'hidden'},  html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), html.P('Not available', style={'color': 'red'}), '', dbc.Alert("The selected result does not exist", color="danger"), True

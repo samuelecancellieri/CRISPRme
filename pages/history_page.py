@@ -79,13 +79,13 @@ def highlightRow(sel_cel, all_guides):
 
 def get_results():
     results_dirs = [f for f in listdir(current_working_directory + '/Results/') if isdir(join(
-        current_working_directory + '/Results/', f)) and isfile(current_working_directory + '/Results/' + f + '/Params.txt')]
+        current_working_directory + '/Results/', f)) and isfile(current_working_directory + '/Results/' + f + '/.Params.txt')]
     col = 'Job\tGenome_Selected\tVariant_Selected\tMismatches\tDNA_bulge\tRNA_bulge\tPAM\tNumber_Guides'
     resultParamDataframe = pd.DataFrame(columns=col.split('\t'))
     for job in results_dirs:
         try:
-            if os.path.exists(current_working_directory + '/Results/' + job + '/Params.txt'):
-                with open(current_working_directory + '/Results/' + job + '/Params.txt') as p:
+            if os.path.exists(current_working_directory + '/Results/' + job + '/.Params.txt'):
+                with open(current_working_directory + '/Results/' + job + '/.Params.txt') as p:
                     all_params = p.read()
                     mms = (next(s for s in all_params.split('\n')
                                 if 'Mismatches' in s)).split('\t')[-1]
