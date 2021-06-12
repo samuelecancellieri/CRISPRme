@@ -233,7 +233,7 @@ def resultPage(job_id):
     mms = int(mms[0])
 
     # load acfd for each guide
-    with open(current_working_directory + 'Results/' + value + '/'+value+'.acfd.txt') as a:
+    with open(current_working_directory + 'Results/' + value + '/.'+value+'.acfd.txt') as a:
         all_scores = a.read().strip().split('\n')
 
     list_error_guides = []
@@ -1059,7 +1059,7 @@ def global_get_sample_targets(job_id, sample, guide, page):
         return ''
     path_db = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*.db')[0]
+        job_id + '/.*.db')[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
@@ -1929,7 +1929,7 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
         return ''
     path_db = glob.glob(
         current_working_directory + 'Results/' +
-        value + '/'+value + '*.db')[0]
+        value + '/.*.db')[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
@@ -1980,7 +1980,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
         return ''
     path_db = glob.glob(
         current_working_directory + 'Results/' +
-        value + '/'+value + '*.db')[0]
+        value + '/.*.db')[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
@@ -2155,7 +2155,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         guides.sort()
 
     # load acfd for each guide
-    with open(current_working_directory + 'Results/' + job_id + '/'+job_id+'.'+'acfd.txt') as a:
+    with open(current_working_directory + 'Results/' + job_id + '/.'+job_id+'.'+'acfd.txt') as a:
         all_scores = a.read().strip().split('\n')
 
     # Load scores
@@ -2185,7 +2185,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         # append nuclease to table
         table_to_file.append('Nuclease: '+str(nuclease))
         data_general_count = pd.read_csv(current_working_directory + 'Results/' +
-                                         job_id + '/' + job_id + '.general_target_count.'+g+".txt", sep='\t', na_filter=False)
+                                         job_id + '/.' + job_id + '.general_target_count.'+g+".txt", sep='\t', na_filter=False)
 
         data_guides = dict()
         data_guides['Guide'] = g
@@ -2446,7 +2446,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     # integrated_file_name = str(integrated_file_name)
     path_db = glob.glob(
         current_working_directory + 'Results/' +
-        job_id + '/'+job_id + '*.db')[0]
+        job_id + '/.*.db')[0]
     path_db = str(path_db)
     file_to_grep = job_directory + job_id + '.bestMerge.txt.integrated_results.tsv'
     # file_to_grep_alt = job_directory + job_id +'.altMerge.txt'
@@ -3009,7 +3009,7 @@ def updateImagesTabs(mm, sel_cel, search, all_guides):
     # if not os.path.isfile(f"{job_directory}/{radar_img_encode}"):
     # try:
     # ###print('faccio radar chart')
-    os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
+    os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/.guide_dict_{guide}.json {job_directory}/.motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
     # except:
     # pass
 
@@ -3074,7 +3074,7 @@ def updateImagesTabs(mm, sel_cel, search, all_guides):
     #         if not os.path.isfile(current_img):
     #             try:
     #                 os.system(
-    #                     f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json {mm} {bulge} {c[0]} {job_directory}/imgs/")
+    #                     f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/.guide_dict_{guide}.json {job_directory}/.motif_dict_{guide}.json {mm} {bulge} {c[0]} {job_directory}/imgs/")
     #             except:
     #                 pass
     #         try:
@@ -3221,7 +3221,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 
         path_db = glob.glob(
             current_working_directory + 'Results/' +
-            job_id + '/'+job_id + '*.db')[0]
+            job_id + '/.*.db')[0]
         path_db = str(path_db)
         conn = sqlite3.connect(path_db)
         c = conn.cursor()
@@ -3746,8 +3746,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     elif value == 'tab-query-table':
         fl.append(html.P(
             'Summary page to query the final result file selecting one/two column to group by the table and extract requested targets'))
-        path = current_working_directory+"/Results/"+job_id+"/"+job_id+".db"
-        conn = sqlite3.connect(path)
+        #path = current_working_directory+"/Results/"+job_id+"/."+job_id+".db"
+        path_db = glob.glob(
+            current_working_directory + 'Results/' +
+            job_id + '/.*.db')[0]
+        path_db = str(path_db)
+        conn = sqlite3.connect(path_db)
         c = conn.cursor()
         integrated_file_name = glob.glob(
             current_working_directory + 'Results/' +
@@ -4096,7 +4100,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #     0) + '_total_0.0_TOTAL.png'  # TODO choose between 0 mm and max used mms
         # if not os.path.isfile(f"{job_directory}/{radar_img}"):
         #     try:
-        #         os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/guide_dict_{guide}.json {job_directory}/motif_dict_{guide}.json 0 0 TOTAL {job_directory}/imgs/")
+        #         os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/.guide_dict_{guide}.json {job_directory}/.motif_dict_{guide}.json 0 0 TOTAL {job_directory}/imgs/")
         #     except:
         #         pass
         # barplot_img = 'summary_histogram_' + \
