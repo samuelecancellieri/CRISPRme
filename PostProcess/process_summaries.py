@@ -141,7 +141,7 @@ for guide in guides:
 
     with open(f"{path_output}/{name_job}.summary_by_guide.{guide}.txt", "w") as summary_by_guide:
         summary_by_guide.write(
-            "Bulge_Type\tMismatches\tBulge_Size\tReference\tVariant\tCombined\tPAM_Creation\n")
+            "Bulge Type\tMismatches\tBulge Size\tReference\tVariant\tCombined\tPAM Creation\n")
         for key in dict_summary_by_guide.keys():
             entry = dict_summary_by_guide[key]
             summary_by_guide.write(
@@ -151,7 +151,7 @@ for guide in guides:
         with open(f"{path_output}/{name_job}.summary_by_samples.{guide}.txt", "w") as summary_by_samples:
             summary_by_samples.write(guide+"\n")
             summary_by_samples.write(
-                "Sample\tSex\tPopulation\tSuper_Population\tTargets_in_Variant\tTargets_in_Population\tTargets_in_Super_Population\tPAM_Creation\n")
+                "Sample\tSex\tPopulation\tSuper Population\tTargets in Variant\tTargets in Population\tTargets in Super Population\tPAM Creation\n")
             for key in dict_samples.keys():
                 entry = dict_samples[key]
                 summary_by_samples.write(
