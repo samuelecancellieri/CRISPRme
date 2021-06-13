@@ -29,7 +29,7 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
 
     url = url_job[5:]
 
-    path = current_working_directory+"/Results/"+url+"/"+url+".db"
+    path = current_working_directory+"/Results/"+url+"/."+url+".db"
 
     conn = sqlite3.connect(path)
     c = conn.cursor()
@@ -105,7 +105,7 @@ def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, a
     if asc1 == None:
         asc1 = 'DESC'
     url = url_job[5:]
-    path = current_working_directory+"/Results/"+url+"/"+url+".db"
+    path = current_working_directory+"/Results/"+url+"/."+url+".db"
 
     conn = sqlite3.connect(path)
     c = conn.cursor()

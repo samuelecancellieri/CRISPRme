@@ -29,7 +29,7 @@ email=${17}
 echo -e "MAIL: $email"
 echo -e "CPU used: $ncpus"
 
-log=$output_folder/log.txt
+log="$output_folder/log.txt"
 touch $log
 #echo -e 'Job\tStart\t'$(date) > $log
 start_time='Job\tStart\t'$(date)
@@ -411,14 +411,14 @@ while read samples; do
 	if [ -z "$samples" ]; then
 		continue
 	fi
-	# tail -n +2 $samples >> "$output_folder/sampleID.txt"
-	grep -v '#' "${current_working_directory}/samplesIDs/$samples" >>"$output_folder/sampleID.txt"
+	# tail -n +2 $samples >> "$output_folder/.sampleID.txt"
+	grep -v '#' "${current_working_directory}/samplesIDs/$samples" >>"$output_folder/.sampleID.txt"
 done <$sampleID
 if [ "$vcf_name" != "_" ]; then
-	sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tSEX" "$output_folder/sampleID.txt"
+	sed -i 1i"#SAMPLE_ID\tPOPULATION_ID\tSUPERPOPULATION_ID\tSEX" "$output_folder/.sampleID.txt"
 fi
 
-sampleID=$output_folder/sampleID.txt
+sampleID=$output_folder/.sampleID.txt
 
 # echo -e 'Merging targets' >  $output
 echo -e 'Merging Targets\tStart\t'$(date) >>$log
@@ -482,9 +482,9 @@ rm $final_res_alt
 
 cd $starting_dir
 if [ "$vcf_name" != "_" ]; then
-	./process_summaries.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $guide_file $sampleID $mm $bMax "${output_folder}/$(basename ${output_folder})" "var"
+	./process_summaries.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $guide_file $sampleID $mm $bMax "${output_folder}" "var"
 else
-	./process_summaries.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $guide_file $sampleID $mm $bMax "${output_folder}/$(basename ${output_folder})" "ref"
+	./process_summaries.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $guide_file $sampleID $mm $bMax "${output_folder}" "ref"
 fi
 
 if ! [ -d "$output_folder/imgs" ]; then
@@ -495,7 +495,7 @@ if [ "$vcf_name" != "_" ]; then
 	cd "$output_folder/imgs"
 	while IFS= read -r line || [ -n "$line" ]; do
 		for total in $(seq 0 $(expr $mm + $bMax)); do
-			python $starting_dir/populations_distribution.py "${output_folder}/$(basename ${output_folder}).PopulationDistribution.txt" $total $line
+			python $starting_dir/populations_distribution.py "${output_folder}/.$(basename ${output_folder}).PopulationDistribution.txt" $total $line
 		done
 
 	done <$guide_file
@@ -504,18 +504,18 @@ fi
 cd $starting_dir
 if [ "$vcf_name" != "_" ]; then
 	#./radar_chart.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $sampleID $annotation_file "$output_folder/imgs" $ncpus
-	./radar_chart_dict_generator.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $sampleID $annotation_file "$output_folder" $ncpus
+	./radar_chart_dict_generator.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $sampleID $annotation_file "$output_folder" $ncpus $mm $bMax
 else
 	echo -e "dummy_file" >dummy.txt
 	#./radar_chart.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" dummy.txt $annotation_file "$output_folder/imgs" $ncpus
-	./radar_chart_dict_generator.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" dummy.txt $annotation_file "$output_folder" $ncpus
+	./radar_chart_dict_generator.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" dummy.txt $annotation_file "$output_folder" $ncpus $mm $bMax
 	rm dummy.txt
 fi
 echo -e 'Creating images\tEnd\t'$(date) >>$log
 # echo -e 'Creating images\tEnd\t'$(date) >&2
 
 # if [ "$vcf_name" != "_" ]; then
-# 	cp $sampleID $output_folder/sampleID.txt
+# 	cp $sampleID $output_folder/.sampleID.txt
 # fi
 python $starting_dir/remove_n_and_dots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
 echo $gene_proximity
@@ -544,8 +544,10 @@ if [ $gene_proximity != "_" ]; then
 		python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &>"${output_folder}/warnings.txt"
 		rm -f "${output_folder}/warnings.txt"
 		rm "${output_folder}/tmp_linda_plot_file_${guide}.txt"
+		mv "${output_folder}/$(basename ${output_folder}).bestMerge.txt.empirical_not_found.tsv" "${output_folder}/.$(basename ${output_folder}).bestMerge.txt.empirical_not_found.tsv"
 	done <$guide_file
 fi
+echo -e 'Integrating results\tEnd\t'$(date) >>$log
 truncate -s -1 $guide_file
 truncate -s -1 $vcf_list
 if [ $6 != "_" ]; then
@@ -556,10 +558,10 @@ echo -e 'Building database'
 echo -e 'Creating database\tStart\t'$(date) >>$log
 # echo -e 'Creating database\tStart\t'$(date) >&2
 if [ -f "${output_folder}/$(basename ${output_folder}).db" ]; then
-	rm "${output_folder}/$(basename ${output_folder}).db"
+	rm -f "${output_folder}/$(basename ${output_folder}).db"
 fi
 #python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/$(basename ${output_folder})"
-python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/$(basename ${output_folder})"
+python $starting_dir/db_creation.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/.$(basename ${output_folder})"
 echo -e 'Creating database\tEnd\t'$(date) >>$log
 # echo -e 'Creating database\tEnd\t'$(date) >&2
 
@@ -567,7 +569,7 @@ python $starting_dir/change_headers_bestMerge.py "${output_folder}/$(basename ${
 mv "${output_folder}/$(basename ${output_folder}).altMerge.new.header.txt" "${output_folder}/$(basename ${output_folder}).altMerge.txt"
 mv "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${output_folder}/.$(basename ${output_folder}).bestMerge.txt"
 
-echo -e 'Integrating results\tEnd\t'$(date) >>$log
+
 # echo -e 'Integrating results\tEnd\t'$(date) >&2
 echo -e 'Job\tDone\t'$(date) >>$log
 # echo -e 'Job\tDone\t'$(date) >&2

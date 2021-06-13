@@ -151,7 +151,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         `Genomes/JobID/pam.txt` file, following the Crispritz standard
         + Indexing: if the selected Genome-PAM has no index in `genome_library`, set a flag to calculate the index when submitting the job. The PAM
         used for indexing is `Genomes/JobID/pam_indexing.txt`
-        + Params file: the informations about the job are saved into the `Params.txt` file
+        + Params file: the informations about the job are saved into the `.Params.txt` file
         + Annotation: based on the selected genome reference part, the annotation is chosen from the `annotations` directory
         + Sample: based on the enriched genome selected, the sampleID file is chosen from the `samplesID` directory
         + Dictionary: based on the enriched genome selected, the Dictionary for sample extraction is selected from the `dictionaries` directory
@@ -281,7 +281,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
 
     # print('valore del vcf', ref_var)
     sample_list = []
-    with open(result_dir+"/list_vcfs.txt", 'w') as vcf_file:
+    with open(result_dir+"/.list_vcfs.txt", 'w') as vcf_file:
         if len(ref_var) == 0:
             vcf_folder = "_"
             vcf_file.write(vcf_folder+"\n")
@@ -316,7 +316,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
             # dictionary_directory = current_working_directory + \
             #     'dictionaries/'+genome_ref+'+'+vcf_input
 
-    with open(result_dir+"/samplesID.txt", 'w') as sampleID_file:
+    with open(result_dir+"/.samplesID.txt", 'w') as sampleID_file:
         for ele in sample_list:
             sampleID_file.write(ele+"\n")
     # for ele in sample_list:
@@ -434,14 +434,14 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         pam_to_file = ('N' * len_guides) + pam_char + ' ' + index_pam_value
         pam_to_indexing = ('N' * 25) + pam_char + ' ' + index_pam_value
 
-    save_pam_file = open(result_dir + '/pam.txt', 'w')
+    save_pam_file = open(result_dir + '/.pam.txt', 'w')
     save_pam_file.write(pam_to_file)
     save_pam_file.close()
-    pam = result_dir + '/pam.txt'
+    pam = result_dir + '/.pam.txt'
 
-    guides_file = result_dir + '/guides.txt'
+    guides_file = result_dir + '/.guides.txt'
     if text_guides is not None and text_guides != '':
-        save_guides_file = open(result_dir + '/guides.txt', 'w')
+        save_guides_file = open(result_dir + '/.guides.txt', 'w')
         if (pam_begin):
             text_guides = 'N' * pam_len + \
                 text_guides.replace('\n', '\n' + 'N' * pam_len)
@@ -511,8 +511,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     # genome_idx = pam_char + '_' + '2' + '_' + genome_selected
     # genome_idx_ref = genome_idx.split('+')[0]
 
-    # Create Params.txt file
-    with open(result_dir + '/Params.txt', 'w') as p:
+    # Create .Params.txt file
+    with open(result_dir + '/.Params.txt', 'w') as p:
         p.write('Genome_selected\t' + genome_selected + '\n')
         p.write('Genome_ref\t' + genome_ref + '\n')
         if search_index:
@@ -536,15 +536,15 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     all_result_dirs.remove(job_id)
     # all_result_dirs.remove('test')
     for check_param_dir in all_result_dirs:
-        if os.path.exists(current_working_directory + 'Results/' + check_param_dir + '/Params.txt'):
+        if os.path.exists(current_working_directory + 'Results/' + check_param_dir + '/.Params.txt'):
             # if os.path.exists(current_working_directory + 'Results/' + check_param_dir + '/log.txt'):
             # with open(current_working_directory + 'Results/' + check_param_dir + '/log.txt') as log:
             # if ('Job\tDone' in log.read()):
-            if (filecmp.cmp(current_working_directory + 'Results/' + check_param_dir + '/Params.txt', result_dir + '/Params.txt')):
+            if (filecmp.cmp(current_working_directory + 'Results/' + check_param_dir + '/.Params.txt', result_dir + '/.Params.txt')):
                 guides1 = open(current_working_directory + 'Results/' +
-                               check_param_dir + '/guides.txt').read().split('\n')
+                               check_param_dir + '/.guides.txt').read().split('\n')
                 guides2 = open(current_working_directory + 'Results/' +
-                               job_id + '/guides.txt').read().split('\n')
+                               job_id + '/.guides.txt').read().split('\n')
                 if (collections.Counter(guides1) == collections.Counter(guides2)):
                     if os.path.exists(current_working_directory + 'Results/' + check_param_dir + '/log.txt'):
                         adj_date = False
@@ -625,7 +625,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
     merge_default = 3
     print(
         f"Submitted JOB {job_id}. The stdout is redirected in log_verbose.txt and stderr is redirected in log_error.txt")
-    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new_multiple_vcfs.sh {current_working_directory}/Genomes/{genome_ref} {result_dir}/list_vcfs.txt {guides_file} {pam} {current_working_directory}/Annotations/{annotation_name} {result_dir}/samplesID.txt {max([int(dna), int(rna)])} {mms} {dna} {rna} {merge_default} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/Annotations/{gencode_name} {dest_email} 1> {result_dir}/log_verbose.txt 2>{result_dir}/log_error.txt"
+    command = f"{app_main_directory}/PostProcess/./submit_job_automated_new_multiple_vcfs.sh {current_working_directory}/Genomes/{genome_ref} {result_dir}/.list_vcfs.txt {guides_file} {pam} {current_working_directory}/Annotations/{annotation_name} {result_dir}/.samplesID.txt {max([int(dna), int(rna)])} {mms} {dna} {rna} {merge_default} {result_dir} {app_main_directory}/PostProcess {8} {current_working_directory} {current_working_directory}/Annotations/{gencode_name} {dest_email} 1> {result_dir}/log_verbose.txt 2>{result_dir}/log_error.txt"
     # with open(f"{result_dir}/log_verbose.txt", 'w') as log_verbose:
     # log_verbose = open(f"{result_dir}/log_verbose.txt", 'w')
     # , stdout=log_verbose)
