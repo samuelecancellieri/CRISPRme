@@ -256,6 +256,15 @@ Output:
 - Set of plots generated with personal and private targets containing the variant CFD score and the reference CFD score
 - Filtered file with private targets of the sample directly extracted from integrated file
 
+Example call:
+- Conda
+```
+crisprme.py generate-personal-card --result_dir Results/sg1617.6.2.2/ --guide_seq CTAACAGTTGCTTTTATCACNNN --sample_id NA21129
+``` 
+- Docker
+```
+    docker run -v ${PWD}:/DATA -w /DATA -i i scancellieri/crisprme crisprme.py generate-personal-card --result_dir Results/sg1617.6.2.2/ --guide_seq CTAACAGTTGCTTTTATCACNNN --sample_id NA21129
+```
 
 **<a name="Web-Interface">3.3</a> CRISPRme Web-Interface function**  
 This function starts the server to use the web-interface
