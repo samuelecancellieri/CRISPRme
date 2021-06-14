@@ -1069,8 +1069,10 @@ def global_get_sample_targets(job_id, sample, guide, page):
 
     total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Variant_samples_(highest_CFD)\" LIKE \'%{sample}%\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(sample)+'.'+guide+'.personal_targets.tsv', 'w') as f_out:
-        f_out.write('\t'.join(header_integrated)+'\n')
+        # f_out.write('\t'.join(header_integrated)+'\n')
         rows = c.execute(total_private_sample)
+        db_header = [description[0] for description in rows.description]
+        f_out.write('\t'.join(db_header)+'\n')
         for row in rows:
             row = [str(ele) for ele in row]
             f_out.write('\t'.join(row)+'\n')
@@ -1941,8 +1943,10 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
 
     target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Mismatches_(highest_CFD)\"=\'{mms}\' AND \"Bulges_(highest_CFD)\"=\'{bulge_s}\' AND \"Bulge_type_(highest_CFD)\"=\'{bulge_t}\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv', 'w') as f_out:
-        f_out.write('\t'.join(header_integrated)+'\n')
+        # f_out.write('\t'.join(header_integrated)+'\n')
         rows = c.execute(target_with_mm_b)
+        db_header = [description[0] for description in rows.description]
+        f_out.write('\t'.join(db_header)+'\n')
         for row in rows:
             row = [str(ele) for ele in row]
             f_out.write('\t'.join(row)+'\n')
@@ -1992,8 +1996,10 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
 
     target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Mismatches_(highest_CFD)\"=\'{mms}\' AND \"Bulges_(highest_CFD)\"=\'{bulge_s}\' AND \"Bulge_type_(highest_CFD)\"=\'{bulge_t}\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv', 'w') as f_out:
-        f_out.write('\t'.join(header_integrated)+'\n')
+        # f_out.write('\t'.join(header_integrated)+'\n')
         rows = c.execute(target_with_mm_b)
+        db_header = [description[0] for description in rows.description]
+        f_out.write('\t'.join(db_header)+'\n')
         for row in rows:
             row = [str(ele) for ele in row]
             f_out.write('\t'.join(row)+'\n')
