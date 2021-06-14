@@ -1069,8 +1069,10 @@ def global_get_sample_targets(job_id, sample, guide, page):
 
     total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Variant_samples_(highest_CFD)\" LIKE \'%{sample}%\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(sample)+'.'+guide+'.personal_targets.tsv', 'w') as f_out:
-        f_out.write('\t'.join(header_integrated)+'\n')
+        # f_out.write('\t'.join(header_integrated)+'\n')
         rows = c.execute(total_private_sample)
+        db_header = [description[0] for description in rows.description]
+        f_out.write('\t'.join(db_header)+'\n')
         for row in rows:
             row = [str(ele) for ele in row]
             f_out.write('\t'.join(row)+'\n')
@@ -1287,9 +1289,11 @@ def samplePage(job_id, hash):
     # df = dt.fread(integrated_file_name)
     # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
     # result = pd.DataFrame(result.to_dict()).fillna('NA')
-    # with open(integrated_file_name, 'r') as f:
-    #     header = f.readline().strip().split()  # [1:]
-    header = header_integrated
+    with open(integrated_file_name, 'r') as integrated:
+        header = integrated.readline().strip().split()
+    # with open(integrated_file_name, 'r') as integrated:
+    #     print(integrated.readline().strip().split())
+    # header = header_integrated
 
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
@@ -1778,6 +1782,8 @@ def guidePagev3(job_id, hash):
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
         ref_comp = (next(s for s in all_params.split(
             '\n') if 'Ref_comp' in s)).split('\t')[-1]
+        pam = (next(s for s in all_params.split(
+            '\n') if 'Pam' in s)).split('\t')[-1]
 
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     genome_type = 'ref'
@@ -1789,8 +1795,21 @@ def guidePagev3(job_id, hash):
         genome_type = 'both'
         style_hide_reference = {}
         value_hide_reference = ['hide-ref']
+
+    pam_at_start = False
+    if str(guide)[0] == 'N':
+        pam_at_start = True
+
     final_list = []
-    final_list.append(html.H3('Selected Guide: ' + guide + add_header))
+    if pam_at_start:
+        final_list.append(html.H3('Selected Guide: ' +
+                                  str(pam)+str(guide).replace('N', '')+add_header))
+        # fl.append(html.H5('Focus on: ' + str(pam)+str(guide).replace('N', '')))
+    else:
+        final_list.append(html.H3('Selected Guide: ' +
+                                  str(guide).replace('N', '')+str(pam)+add_header))
+        # fl.append(html.H5('Focus on: ' + str(guide).replace('N', '')+str(pam)))
+    # final_list.append(html.H3('Selected Guide: ' + guide + add_header))
     final_list.append(
         html.P(
             [
@@ -1862,9 +1881,9 @@ def guidePagev3(job_id, hash):
     #print('table', cols)
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
-    # with open(integrated_file_name, 'r') as f:
-    # header = f.readline().strip().split()  # [1:]
-    header = header_integrated
+    with open(integrated_file_name, 'r') as integrated:
+        header = integrated.readline().strip().split()
+    # header = header_integrated
 
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
@@ -1939,8 +1958,10 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
 
     target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Mismatches_(highest_CFD)\"=\'{mms}\' AND \"Bulges_(highest_CFD)\"=\'{bulge_s}\' AND \"Bulge_type_(highest_CFD)\"=\'{bulge_t}\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv', 'w') as f_out:
-        f_out.write('\t'.join(header_integrated)+'\n')
+        # f_out.write('\t'.join(header_integrated)+'\n')
         rows = c.execute(target_with_mm_b)
+        db_header = [description[0] for description in rows.description]
+        f_out.write('\t'.join(db_header)+'\n')
         for row in rows:
             row = [str(ele) for ele in row]
             f_out.write('\t'.join(row)+'\n')
@@ -1990,8 +2011,10 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
 
     target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"=\'{guide}\' AND \"Mismatches_(highest_CFD)\"=\'{mms}\' AND \"Bulges_(highest_CFD)\"=\'{bulge_s}\' AND \"Bulge_type_(highest_CFD)\"=\'{bulge_t}\'"
     with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(bulge_t)+'.'+str(mms)+'.'+str(bulge_s)+'.'+guide+'.targets.tsv', 'w') as f_out:
-        f_out.write('\t'.join(header_integrated)+'\n')
+        # f_out.write('\t'.join(header_integrated)+'\n')
         rows = c.execute(target_with_mm_b)
+        db_header = [description[0] for description in rows.description]
+        f_out.write('\t'.join(db_header)+'\n')
         for row in rows:
             row = [str(ele) for ele in row]
             f_out.write('\t'.join(row)+'\n')
@@ -3757,9 +3780,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             current_working_directory + 'Results/' +
             job_id + '/' + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
-        # with open(integrated_file_name, 'r') as f:
-        # header = f.readline().strip().split()  # [1:]
-        header = header_integrated
+        with open(integrated_file_name, 'r') as integrated:
+            header = integrated.readline().strip().split()
+        # header = header_integrated
         #dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
         #                   'Position', 'Direction', 'Mismatches',
