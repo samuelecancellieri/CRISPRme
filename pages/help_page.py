@@ -347,18 +347,21 @@ def helpPage():
                         # )
                         html.Li([html.Span('Graphical Reports: ', style={
                                 'color': 'red'}), 'This page creates several graphical reports for each selected sgRNA.']),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
-                                                                                             '/assets/resultPage/summaryByGraphic_population.png', 'rb').read()).decode()), width='100%'),
+                        # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                        #                                                                      '/assets/resultPage/summaryByGraphic_population.png', 'rb').read()).decode()), width='100%'),
                         html.Li(
                             'A stem plot shows how genetic variants affect predicted off-target potential. The arrow connecting the red (reference allele off-target) and blue (alternative allele off-target) dots shows the increase in predicted cleavage potential due to the variant.'),
-                        # html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
-                        #                                                                      '/assets/resultPage/summaryByGraphic_sample.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/lolli_plot.png', 'rb').read()).decode()), width='100%'),
                         html.Li(
                             'Bar plots depict  how candidate off-targets are distributed across super-populations based on the number of mismatches and bulges '),
                         html.Li(
                             'A radar chart with the relative specificity of the analyzed guide for each functional region based on annotations from GENCODE and ENCODE. A larger area in the chart represents a gRNA with more potential off-targets falling in annotated regions, possibly representing an undesirable outcome. A summary table provides the count and percentage of off-targets with a given annotation.'),
                         html.Li(
                             'A motif logo summarizing the frequency of mismatches and bulges (b) for each base of the protospacer + PAM.'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
+                                                                                             '/assets/resultPage/barplot_radar_motif.png', 'rb').read()).decode()), width='100%'),
+
 
                         html.Li([html.Span('Personal Risk Cards: ', style={
                                 'color': 'red'}), 'CRISPRme provides a dedicated page to generate reports called Personal Risk Cards that  summarize potential off-target editing by a particular gRNA in a given individual due to genetic variants. This feature is particularly useful for retrieving and investigating private off-targets. \
