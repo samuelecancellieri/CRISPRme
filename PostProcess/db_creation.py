@@ -46,16 +46,21 @@ c = conn.cursor()
 #     header = f.readline().split()
 #     for line in f:
 #         tot_lines += 1
-
-df = pd.read_csv(fileIn, sep='\t', index_col=False, na_filter=False, nrows=1000)
-types = [dict_pd_dtypes_to_sql_types(pd_dtype) for pd_dtype in df.dtypes]
-
-
 db_schema = []
-for i, col in enumerate(df.columns):
-    db_schema.append(f"\"{col}\" {types[i]}")
+try:
+    df = pd.read_csv(fileIn, sep='\t', index_col=False, na_filter=False, nrows=1000)
+    types = [dict_pd_dtypes_to_sql_types(pd_dtype) for pd_dtype in df.dtypes]
 
-db_schema = ', '.join(db_schema)
+    for i, col in enumerate(df.columns):
+        db_schema.append(f"\"{col}\" {types[i]}")
+
+    db_schema = ', '.join(db_schema)
+except:
+    with open(fileIn) as f_in:
+        cols = f_in.readline().strip().split('\t')
+        for col in cols:
+            db_schema.append(f"\"{col}\" TEXT")
+        db_schema = ', '.join(db_schema)
 #print(db_schema)
 
 q = f"CREATE TABLE IF NOT EXISTS final_table ({db_schema})"
