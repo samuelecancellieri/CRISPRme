@@ -329,7 +329,7 @@ def complete_search():
         genome_idx = pam_char + '_' + str(bMax) + '_' + genome_ref
         ref_comparison = False
     # os.chdir(script_path)
-    with open(outputfolder + '/Params.txt', 'w') as p:
+    with open(outputfolder + '/.Params.txt', 'w') as p:
         p.write('Genome_selected\t' + genome_ref.replace(' ', '_') + '\n')
         p.write('Genome_ref\t' + genome_ref + '\n')
         if search_index:
@@ -346,18 +346,18 @@ def complete_search():
         # p.write('Gecko\t' + str(gecko_comp) + '\n')
         p.write('Ref_comp\t' + str(ref_comparison) + '\n')
         p.close()
-    os.system(f'cp {guidefile} {outputfolder}/guides.txt')
+    os.system(f'cp {guidefile} {outputfolder}/.guides.txt')
     print(
         f"Launching job {outputfolder}. The stdout is redirected in log_verbose.txt and stderr is redirected in log_error.txt")
     if variant:
         with open(f"{outputfolder}/log_verbose.txt", 'w') as log_verbose:
             with open(f"{outputfolder}/log_error.txt", 'w') as log_error:
-                subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), str(vcfdir), str(outputfolder)+"/guides.txt", str(pamfile), str(annotationfile), str(
+                subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), str(vcfdir), str(outputfolder)+"/.guides.txt", str(pamfile), str(annotationfile), str(
                     samplefile), str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(current_working_directory), str(gene_annotation)], stdout=log_verbose, stderr=log_error)
     else:
         with open(f"{outputfolder}/log_verbose.txt", 'w') as log_verbose:
             with open(f"{outputfolder}/log_error.txt", 'w') as log_error:
-                subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), '_', str(outputfolder)+"/guides.txt", str(pamfile), str(annotationfile), str(script_path+'vuoto.txt'),
+                subprocess.run([script_path+'./submit_job_automated_new_multiple_vcfs.sh', str(genomedir), '_', str(outputfolder)+"/.guides.txt", str(pamfile), str(annotationfile), str(script_path+'vuoto.txt'),
                                 str(bMax), str(mm), str(bDNA), str(bRNA), str(merge_t), str(outputfolder), str(script_path), str(thread), str(current_working_directory), str(gene_annotation)], stdout=log_verbose, stderr=log_error)
 
 
