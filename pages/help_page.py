@@ -192,7 +192,7 @@ def helpPage():
                 #     open(app_main_directory+'/assets/waitPage/loadPage.png', 'rb').read()).decode()), width='100%'),
                 'Upon completion of the job, a link “View Results” will appear to view the results at the bottom of the status report page.',
                 html.P(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(
-                    open(app_main_directory+'/assets/helpPage/jobDone.png', 'rb').read()).decode()), width='20%'))
+                    open(app_main_directory+'/assets/helpPage/jobDone.png', 'rb').read()).decode())))
             ]
         )
     )
