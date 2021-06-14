@@ -1782,6 +1782,8 @@ def guidePagev3(job_id, hash):
             '\n') if 'Genome_selected' in s)).split('\t')[-1]
         ref_comp = (next(s for s in all_params.split(
             '\n') if 'Ref_comp' in s)).split('\t')[-1]
+        pam = (next(s for s in all_params.split(
+            '\n') if 'Pam' in s)).split('\t')[-1]
 
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     genome_type = 'ref'
@@ -1793,8 +1795,21 @@ def guidePagev3(job_id, hash):
         genome_type = 'both'
         style_hide_reference = {}
         value_hide_reference = ['hide-ref']
+
+    pam_at_start = False
+    if str(guide)[0] == 'N':
+        pam_at_start = True
+
     final_list = []
-    final_list.append(html.H3('Selected Guide: ' + guide + add_header))
+    if pam_at_start:
+        final_list.append(html.H3('Selected Guide: ' +
+                                  str(pam)+str(guide).replace('N', '')+add_header))
+        # fl.append(html.H5('Focus on: ' + str(pam)+str(guide).replace('N', '')))
+    else:
+        final_list.append(html.H3('Selected Guide: ' +
+                                  str(guide).replace('N', '')+str(pam)+add_header))
+        # fl.append(html.H5('Focus on: ' + str(guide).replace('N', '')+str(pam)))
+    # final_list.append(html.H3('Selected Guide: ' + guide + add_header))
     final_list.append(
         html.P(
             [
