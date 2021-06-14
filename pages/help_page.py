@@ -260,7 +260,7 @@ def helpPage():
                                 html.Li(
                                     'Show Targets: open a new page to display all the targets of the row of interest as in the following image:'),
                                 html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
-                                                                                             '/assets/resultPage/summaryByGuide_show_targets.png', 'rb').read()).decode()), width='100%'),
+                                                                                                     '/assets/resultPage/summaryByGuide_show_targets.png', 'rb').read()).decode()), width='100%'),
                             ]
                         ),
 
@@ -290,7 +290,7 @@ def helpPage():
                                 html.Li(
                                     'Show Targets: open a new page to display all the targets of the row of interest as in the following image:'),
                                 html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
-                                                                                             '/assets/resultPage/summaryBySamples_show_targets.png', 'rb').read()).decode()), width='100%'),
+                                                                                                     '/assets/resultPage/summaryBySamples_show_targets.png', 'rb').read()).decode()), width='100%'),
                             ]
                         ),
 
@@ -367,8 +367,10 @@ def helpPage():
                                 'color': 'red'}), 'CRISPRme provides a dedicated page to generate reports called Personal Risk Cards that  summarize potential off-target editing by a particular gRNA in a given individual due to genetic variants. This feature is particularly useful for retrieving and investigating private off-targets. \
                                     The report contains two dynamically generated plots depicting all the candidate variant off-targets for the sample including those non-unique to the individual and those that are unique to the individual. These plots highlight how the introduction of genetic variants can change the predicted off-target cleavage potential, \
                                     thereby demonstrating the importance of variant-aware off-target assessment as in CRISPRme. The report also contains two tables, consisting of a summary (Table 1, top) and information on each extracted candidate off-target (Table 2, bottom) with the following columns:']),
-                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory +
-                                                                                             '/assets/resultPage/personalCard.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory + \
+                                                                                             '/assets/resultPage/personalCard_top.png', 'rb').read()).decode()), width='100%'),
+                        html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(app_main_directory + \
+                                                                                             '/assets/resultPage/personalCard_bottom.png', 'rb').read()).decode()), width='100%'),
                         # html.Ul(
                         #     [
                         #         html.Li(
