@@ -1289,7 +1289,7 @@ def samplePage(job_id, hash):
     # df = dt.fread(integrated_file_name)
     # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
     # result = pd.DataFrame(result.to_dict()).fillna('NA')
-    with open(integrated_file_name, 'r', encoding="ISO-8859-1") as integrated:
+    with open(integrated_file_name, 'r', encoding="ASCII") as integrated:
         header = integrated.readline().strip().split('\t')
     # with open(integrated_file_name, 'r') as integrated:
     #     print(integrated.readline().strip().split())
@@ -1881,7 +1881,7 @@ def guidePagev3(job_id, hash):
     #print('table', cols)
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
-    with open(integrated_file_name, 'r', encoding="ISO-8859-1") as integrated:
+    with open(integrated_file_name, 'r', encoding="ASCII") as integrated:
         header = integrated.readline().strip().split('\t')
     # header = header_integrated
 
@@ -3780,7 +3780,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             current_working_directory + 'Results/' +
             job_id + '/' + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
-        with open(integrated_file_name, 'r', encoding="ISO-8859-1") as integrated:
+        with open(integrated_file_name, 'r', encoding="ASCII") as integrated:
             header = integrated.readline().strip().split('\t')
         # header = header_integrated
         #dff_view_names = COL_BOTH
