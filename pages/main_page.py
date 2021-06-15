@@ -413,8 +413,8 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         for c in g:
             if c not in VALID_CHARS:
                 text_guides = text_guides.replace(c, '')
-    if len(text_guides.split('\n')) > 1000000000:
-        text_guides = '\n'.join(text_guides.split('\n')[:1000000000]).strip()
+    if len(text_guides.split('\n')) > 100:
+        text_guides = '\n'.join(text_guides.split('\n')[:100]).strip()
     # len_guides = len(text_guides.split('\n')[0])
     len_guides = len_guide_sequence
 
@@ -1125,7 +1125,7 @@ def changeVariantsChecklistState(genome_value):
         checklist_variants_options.append({'label': ' plus HGDP variants',
                                            'value': 'HGDP', 'disabled': False})
         checklist_variants_options.append({'label': ' plus personal variants',
-                                           'value': 'PV', 'disabled': False})
+                                           'value': 'PV', 'disabled': True})
     personal_vcf = get_more_VCF(genome_value)
     return [checklist_variants_options, personal_vcf]
 
@@ -1346,7 +1346,7 @@ def indexPage():
                     {'label': ' ENCODE cCREs + GENCODE gene',
                      'value': 'EN'},
                     {'label': ' Personal annotations',
-                     'value': 'MA', 'disabled': False},
+                     'value': 'MA', 'disabled': True},
                 ],
                     id='checklist-annotations', value=['EN'])
             ),
