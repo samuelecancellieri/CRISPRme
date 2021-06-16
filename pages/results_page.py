@@ -3810,10 +3810,10 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         path_db = str(path_db)
         conn = sqlite3.connect(path_db)
         c = conn.cursor()
-        integrated_file_name = glob.glob(
-            current_working_directory + 'Results/' +
-            job_id + '/' + '*integrated*')[0]
-        integrated_file_name = str(integrated_file_name)
+        # integrated_file_name = glob.glob(
+        #     current_working_directory + 'Results/' +
+        #     job_id + '/' + '*integrated*')[0]
+        # integrated_file_name = str(integrated_file_name)
         total_private_sample = f"SELECT * FROM final_table LIMIT 1"
         rows = c.execute(total_private_sample)
         header = [description[0] for description in rows.description]
