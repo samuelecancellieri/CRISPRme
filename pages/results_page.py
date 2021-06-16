@@ -3181,16 +3181,16 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
     if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                         guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None, na_filter=False)
+                         guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None, na_filter=False, dtype=object)
         # df = df.astype(str)
-        try:
-            int_sample = int(sample)
-        except:
-            int_sample = sample
-        # personal = df.loc[sample, 4]
-        # pam_creation = df.loc[sample, 7]
-        personal = df.loc[int_sample, 4]
-        pam_creation = df.loc[int_sample, 7]
+        # try:
+        #     int_sample = int(sample)
+        # except:
+        #     int_sample = sample
+        personal = df.loc[sample, 4]
+        pam_creation = df.loc[sample, 7]
+        # personal = df.loc[int_sample, 4]
+        # pam_creation = df.loc[int_sample, 7]
 
         # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
         integrated_file_name = glob.glob(
