@@ -1289,9 +1289,12 @@ def samplePage(job_id, hash):
     # df = dt.fread(integrated_file_name)
     # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
     # result = pd.DataFrame(result.to_dict()).fillna('NA')
-    with open(integrated_file_name, 'r') as integrated:
-        header = integrated.readline().strip().split('\t')
-
+    # with open(integrated_file_name, 'r') as integrated:
+    #     header = integrated.readline().strip().split('\t')
+    integrated_file = open(integrated_file_name, 'r')
+    header = integrated_file.readline().strip().split('\t')
+    integrated_file.close()
+    
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
 
@@ -1655,10 +1658,10 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     #     current_working_directory + 'Results/' +
     #     job_id + '/'+job_id + '*integrated*.jay')[0]
     # integrated_file_name = str(integrated_file_name)
-    #df = dt.fread(integrated_file_name)
-    #print('read file')
-    #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort('CFD_score_(highest_CFD)', 'Mismatches+bulges_(highest_CFD)', reversed=[True, False])
-    #dff = df
+    # df = dt.fread(integrated_file_name)
+    # print('read file')
+    # result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort('CFD_score_(highest_CFD)', 'Mismatches+bulges_(highest_CFD)', reversed=[True, False])
+    # dff = df
 
     # ###print(dff, 'line 1392')
     # if genome_type == 'ref':
@@ -1670,27 +1673,27 @@ def update_table_subset(page_current, page_size, sort_by, filter, hide_reference
     # ##print(dff, 'line 1397')
 
     if 'hide-ref' in hide_reference or genome_type == 'var':
-        #print('going to call no ref', genome_type, hide_reference)
-        #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)) & (f['Variant_samples_(highest_CFD)'] != 'NA'), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
+        # print('going to call no ref', genome_type, hide_reference)
+        # result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)) & (f['Variant_samples_(highest_CFD)'] != 'NA'), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
         result = global_store_subset_no_ref(
             value, bulge_t, bulge_s, mms, guide, page_current, job_id)
         # dff.drop(
         #     df[(df['Variant_samples_(highest_CFD)'] == 'NA')].index, inplace=True)
     else:
-        #print('going to call ref', genome_type, hide_reference)
+        # print('going to call ref', genome_type, hide_reference)
         result = global_store_subset(
             value, bulge_t, bulge_s, mms, guide, page_current, job_id)
-        #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
-    #print('filtered and sorted')
+        # result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :].sort(-f['CFD_score_(highest_CFD)'], f['Mismatches+bulges_(highest_CFD)'])
+    # print('filtered and sorted')
     data_to_send = result.to_dict('records')
-    #print('data converted')
+    # print('data converted')
     return data_to_send
     # try:  # For VAR and BOTH
     #     del dff['Variant Unique']
     # except:  # For REF
     #     pass
 
-    #print('tabella target prima', dff)
+    # print('tabella target prima', dff)
     '''
     for filter_part in filtering_expressions:
         col_name, operator, filter_value = split_filter_part(filter_part)
@@ -1865,8 +1868,8 @@ def guidePagev3(job_id, hash):
     #     result = pd.concat([result, partial])
 
     # result.to_csv(guide_grep_result, sep='\t', index=False)
-    #result = dt.fread(integrated_file_name)
-    #result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :]
+    # result = dt.fread(integrated_file_name)
+    # result = df[(f['Spacer+PAM'] == guide) & (f['Bulge_type_(highest_CFD)'] == str(bulge_t)) & (f['Bulges_(highest_CFD)'] == str(bulge_s)) & (f['Mismatches_(highest_CFD)'] == str(mms)), :]
 
     # result.to_csv(guide_grep_result)
 
@@ -1875,11 +1878,14 @@ def guidePagev3(job_id, hash):
 
     # global_store_subset(job_id, bulge_t, bulge_s, mms, guide)
 
-    #print('table', cols)
+    # print('table', cols)
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
-    with open(integrated_file_name, 'r') as integrated:
-        header = integrated.readline().strip().split('\t')
+    # with open(integrated_file_name, 'r') as integrated:
+    #     header = integrated.readline().strip().split('\t')
+    integrated_file = open(integrated_file_name, 'r')
+    header = integrated_file.readline().strip().split('\t')
+    integrated_file.close()
     # header = header_integrated
 
     cols = [{"name": i, "id": i, 'hideable': True}
@@ -2581,7 +2587,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
         ]
     else:
         out_1 = [html.P('No results found with this genomic coordinates')]
-    #os.system(f"rm {pos_grep_result}")
+    # os.system(f"rm {pos_grep_result}")
     return out_1, '1/' + str(1)
 
 # Callback to update the hidden div filter position
@@ -2975,7 +2981,7 @@ def updateImagesTabs(mm, sel_cel, search, all_guides):
     bulge = 0
     # if sel_cel is None:
     #     raise PreventUpdate
-    #print('entro update tab')
+    # print('entro update tab')
     # sample = str(sample)
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
@@ -3024,7 +3030,7 @@ def updateImagesTabs(mm, sel_cel, search, all_guides):
     #     guide + '_' + str(mm) + \
     #     '.' + str(bulge) + '_TOTAL.GENCODE.png'
 
-    #print('faccio i radar')
+    # print('faccio i radar')
 
     # if not os.path.isfile(f"{job_directory}/{radar_img_encode}"):
     # try:
@@ -3247,17 +3253,17 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         path_db = str(path_db)
         conn = sqlite3.connect(path_db)
         c = conn.cursor()
-        #print('start queries sample card')
+        # print('start queries sample card')
         result_personal = pd.read_sql_query(
             "SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample), conn)
         result_personal = result_personal.sort_values(
             [CFD_COLUMN, TOTAL_COLUMN], ascending=[False, True])
-        #print('done personal')
+        # print('done personal')
         # pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\"=\'{}\'".format(GUIDE_COLUMN,guide,SAMPLES_COLUMN, sample),conn)
         result_private = result_personal[result_personal[SAMPLES_COLUMN] == sample]
-        #print('done private')
-        #result_personal.drop([GUIDE_COLUMN], axis=1, inplace=True)
-        #result_private.drop([GUIDE_COLUMN], axis=1, inplace=True)
+        # print('done private')
+        # result_personal.drop([GUIDE_COLUMN], axis=1, inplace=True)
+        # result_private.drop([GUIDE_COLUMN], axis=1, inplace=True)
         conn.commit()
         conn.close()
 
@@ -3277,7 +3283,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
             f"rm -f {integrated_personal}")
 
         private = result_private.shape[0]
-        #private = 0
+        # private = 0
         # for line in open(sample_grep_result):
         #    private += 1
         # ##print(personal, pam_creation, private)
@@ -3768,7 +3774,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     elif value == 'tab-query-table':
         fl.append(html.P(
             'Summary page to query the final result file selecting one/two column to group by the table and extract requested targets'))
-        #path = current_working_directory+"/Results/"+job_id+"/."+job_id+".db"
+        # path = current_working_directory+"/Results/"+job_id+"/."+job_id+".db"
         path_db = glob.glob(
             current_working_directory + 'Results/' +
             job_id + '/.*.db')[0]
@@ -3779,10 +3785,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             current_working_directory + 'Results/' +
             job_id + '/' + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
-        with open(integrated_file_name, 'r') as integrated:
-            header = integrated.readline().strip().split('\t')
+        # with open(integrated_file_name, 'r') as integrated:
+        #     header = integrated.readline().strip().split('\t')
+        integrated_file = open(integrated_file_name, 'r')
+        header = integrated_file.readline().strip().split('\t')
+        integrated_file.close()
         # header = header_integrated
-        #dff_view_names = COL_BOTH
+        # dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
         #                   'Position', 'Direction', 'Mismatches',
         #                   'Bulge Size', 'PAM gen', 'Samples', 'SNP',
@@ -4267,7 +4276,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         radar_chart_sample_content = dbc.Row(id='row-radar-chart-sample')
         sample_image_content = html.Div(id='div-sample-image')
 
-        #print('radar chart')
+        # print('radar chart')
 
         if genome_type != 'ref':
             graph_summary_both = [populations_barplots,
