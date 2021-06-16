@@ -3172,7 +3172,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         raise PreventUpdate
 
     # convert sample to str to avoid concatenation errrors
-    sample = str(sample)
+    # sample = str(sample)
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
