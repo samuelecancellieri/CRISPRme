@@ -359,9 +359,12 @@ def fillDict(guide, guideDict, motifDict):
                     if 'CTCF-bound' in annotation:
                         guideDict[over]['CTCF-only'] += 1
                         guideDict[over][annotation.split(';')[0]] += 1
-                    else:
+                    elif '_gencode' in annotation:
                         guideDict[over][annotation.replace(
                             '_gencode', '')] += 1
+                    elif '_personal' in annotation:
+                        guideDict[over][annotation.replace(
+                            '_personal', '')] += 1
                     # guideDict[mismatch][bulge]['TOTAL'][annotation] += 1
                     # find motif in X and RNA/DNA targets
             if 'DNA' not in split[0]:
@@ -539,8 +542,10 @@ populationDict = dict()
 # read all the annotations
 for line in inAnnotationsFile:
     annotation = line.strip().split('\t')[3]
-    if '_personal' not in annotation:
+    if '_gencode' in annotation:
         annotationsSet.add(annotation.replace('_gencode', ''))
+    if '_personal' in annotation:
+        annotationsSet.add(annotation.replace('_personal', ''))
 
 annotationsSet.add('CTCF-only')
 annotationsSet = sorted(annotationsSet)
@@ -558,7 +563,8 @@ for guide in inGuideFile:
     motifDict = motifDictCreation(guide)
     fillDict(guide, guideDict, motifDict)
     for total in range(max_mm+max_bulges):
-            generatePlot(guide, guideDict[total], motifDict[total], total, 0, 'TOTAL')
+        generatePlot(guide, guideDict[total],
+                     motifDict[total], total, 0, 'TOTAL')
     json.dump(guideDict, open(outDir+f"/.guide_dict_{guide}.json", 'w'))
     json.dump(motifDict, open(outDir+f"/.motif_dict_{guide}.json", 'w'))
     # print('Starting image creation for guide: ', guide)
