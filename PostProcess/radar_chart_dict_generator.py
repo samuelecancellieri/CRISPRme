@@ -549,7 +549,7 @@ for line in inAnnotationsFile:
 
 annotationsSet.add('CTCF-only')
 annotationsSet = sorted(annotationsSet)
-# print('annotations', annotationsSet)
+print('annotations', annotationsSet)
 
 # read all the population, superpop and samples
 for line in inSamplesIDFile:
