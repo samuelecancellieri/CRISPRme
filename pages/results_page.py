@@ -3178,7 +3178,8 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
     sample_grep_result = current_working_directory + 'Results/' + \
-        job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
+        job_id + '/' + job_id + '.' + \
+        str(sample) + '.' + guide + '.private.txt'
     if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
                          guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None, na_filter=False, dtype=object)
