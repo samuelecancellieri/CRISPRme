@@ -1291,10 +1291,27 @@ def samplePage(job_id, hash):
     # result = pd.DataFrame(result.to_dict()).fillna('NA')
     # with open(integrated_file_name, 'r') as integrated:
     #     header = integrated.readline().strip().split('\t')
-    integrated_file = open(integrated_file_name, 'r')
-    header = integrated_file.readline().strip().split('\t')
-    integrated_file.close()
-    
+    path_db = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/.*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+    rows = c.execute(total_private_sample)
+    header = [description[0] for description in rows.description]
+    conn.commit()
+    conn.close()
+    # header = '\t'.join(db_header)
+    # with open(current_working_directory+'/Results/'+job_id+'/'+job_id+'.'+str(sample)+'.'+guide+'.personal_targets.tsv', 'w') as f_out:
+    #     # f_out.write('\t'.join(header_integrated)+'\n')
+    #     rows = c.execute(total_private_sample)
+    #     db_header = [description[0] for description in rows.description]
+    #     f_out.write('\t'.join(db_header)+'\n')
+    # integrated_file = open(integrated_file_name, 'r')
+    # header = integrated_file.readline().strip().split('\t')
+    # integrated_file.close()
+
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
 
@@ -1883,10 +1900,22 @@ def guidePagev3(job_id, hash):
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
     # with open(integrated_file_name, 'r') as integrated:
     #     header = integrated.readline().strip().split('\t')
-    integrated_file = open(integrated_file_name, 'r')
-    header = integrated_file.readline().strip().split('\t')
-    integrated_file.close()
+    # integrated_file = open(integrated_file_name, 'r')
+    # header = integrated_file.readline().strip().split('\t')
+    # integrated_file.close()
     # header = header_integrated
+    path_db = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/.*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+    rows = c.execute(total_private_sample)
+    header = [description[0] for description in rows.description]
+    conn.commit()
+    conn.close()
+    # header = '\t'.join(db_header)
 
     cols = [{"name": i, "id": i, 'hideable': True}
             for i in header]
@@ -3785,11 +3814,16 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             current_working_directory + 'Results/' +
             job_id + '/' + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
+        total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+        rows = c.execute(total_private_sample)
+        header = [description[0] for description in rows.description]
+        conn.commit()
+        conn.close()
         # with open(integrated_file_name, 'r') as integrated:
         #     header = integrated.readline().strip().split('\t')
-        integrated_file = open(integrated_file_name, 'r')
-        header = integrated_file.readline().strip().split('\t')
-        integrated_file.close()
+        # integrated_file = open(integrated_file_name, 'r')
+        # header = integrated_file.readline().strip().split('\t')
+        # integrated_file.close()
         # header = header_integrated
         # dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
