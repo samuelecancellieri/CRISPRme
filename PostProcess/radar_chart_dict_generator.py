@@ -363,8 +363,7 @@ def fillDict(guide, guideDict, motifDict):
                         guideDict[over][annotation.replace(
                             '_gencode', '')] += 1
                     elif '_personal' in annotation:
-                        guideDict[over][annotation.replace(
-                            '_personal', '')] += 1
+                        continue
                     # guideDict[mismatch][bulge]['TOTAL'][annotation] += 1
                     # find motif in X and RNA/DNA targets
             if 'DNA' not in split[0]:
@@ -541,13 +540,10 @@ populationDict = dict()
 
 # read all the annotations
 for line in inAnnotationsFile:
-    annotation = line.strip().split('\t')[3]
-    if '_gencode' in annotation:
-        annotationsSet.add(annotation.replace('_gencode', ''))
-    if '_personal' in annotation:
-        annotationsSet.add(annotation.replace('_personal', ''))
-    else:
-        annotationsSet.add(annotation)
+    annotations_list = line.strip().split('\t')[3].split(',')
+    for annotation in annotations_list:
+        if '_personal' not in annotation:
+            annotationsSet.add(annotation.replace('_gencode', ''))
 
 annotationsSet.add('CTCF-only')
 annotationsSet = sorted(annotationsSet)
