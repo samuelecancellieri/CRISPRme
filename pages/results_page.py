@@ -3194,6 +3194,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         # pam_creation = df.loc[int_sample, 7]
 
         # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
+        sample = str(sample)
         integrated_file_name = glob.glob(
             job_directory + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
@@ -3308,7 +3309,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         #         targets = []
         #         for line in file_in:
         #             targets.append(line.strip().split('\t'))
-
+    sample = str(sample)
     try:  # to read the private targets file, if not created, pass
         # ans = pd.read_csv(sample_grep_result, sep='\t', usecols=range(
         #     0, 38), skiprows=0, na_filter=False, nrows=5)
