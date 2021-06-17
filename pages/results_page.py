@@ -2371,8 +2371,8 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     # integrated_to_zip = current_working_directory + 'Results/' + \
     #     job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip'
     integrated_to_zip = integrated_file_name.replace('tsv', 'zip')
-    # if not os.path.exists(integrated_to_zip):
-    os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
+    if not os.path.exists(integrated_to_zip):
+        os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
 
     if 'NO SCORES' not in all_scores:
         try:
