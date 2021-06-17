@@ -460,7 +460,7 @@ echo -e "Cleaning directory"
 # fi
 # ./assemble_cfd_graphs.py $output_folder
 # mv $output_folder/snps.CFDGraph.txt $output_folder/cfd_graphs
-rm -f "$output_folder/*.CFDGraph.txt"
+rm -f $output_folder/*.CFDGraph.txt
 #mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
 rm -f $output_folder/indels.CFDGraph.txt
 
