@@ -1289,8 +1289,23 @@ def samplePage(job_id, hash):
     # df = dt.fread(integrated_file_name)
     # result = df[(f['Spacer+PAM'] == guide) & (f['Variant_samples_(highest_CFD)'].re_match('.*'+str(sample)+'.*')), 1:]
     # result = pd.DataFrame(result.to_dict()).fillna('NA')
-    with open(integrated_file_name, 'r') as integrated:
-        header = integrated.readline().strip().split('\t')
+    # with open(integrated_file_name, 'r') as integrated:
+    #     header = integrated.readline().strip().split('\t')
+    path_db = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/.*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    # integrated_file_name = glob.glob(
+    #     current_working_directory + 'Results/' +
+    #     job_id + '/' + '*integrated*')[0]
+    # integrated_file_name = str(integrated_file_name)
+    total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+    rows = c.execute(total_private_sample)
+    header = [description[0] for description in rows.description]
+    conn.commit()
+    conn.close()
     # with open(integrated_file_name, 'r') as integrated:
     #     print(integrated.readline().strip().split())
     # header = header_integrated
@@ -1881,8 +1896,23 @@ def guidePagev3(job_id, hash):
     #print('table', cols)
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
-    with open(integrated_file_name, 'r') as integrated:
-        header = integrated.readline().strip().split('\t')
+    path_db = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/.*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    # integrated_file_name = glob.glob(
+    #     current_working_directory + 'Results/' +
+    #     job_id + '/' + '*integrated*')[0]
+    # integrated_file_name = str(integrated_file_name)
+    total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+    rows = c.execute(total_private_sample)
+    header = [description[0] for description in rows.description]
+    conn.commit()
+    conn.close()
+    # with open(integrated_file_name, 'r') as integrated:
+    #     header = integrated.readline().strip().split('\t')
     # header = header_integrated
 
     cols = [{"name": i, "id": i, 'hideable': True}
@@ -3770,18 +3800,33 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         fl.append(html.P(
             'Summary page to query the final result file selecting one/two column to group by the table and extract requested targets'))
         #path = current_working_directory+"/Results/"+job_id+"/."+job_id+".db"
+        # path_db = glob.glob(
+        #     current_working_directory + 'Results/' +
+        #     job_id + '/.*.db')[0]
+        # path_db = str(path_db)
+        # conn = sqlite3.connect(path_db)
+        # c = conn.cursor()
+        # integrated_file_name = glob.glob(
+        #     current_working_directory + 'Results/' +
+        #     job_id + '/' + '*integrated*')[0]
+        # integrated_file_name = str(integrated_file_name)
         path_db = glob.glob(
             current_working_directory + 'Results/' +
             job_id + '/.*.db')[0]
         path_db = str(path_db)
         conn = sqlite3.connect(path_db)
         c = conn.cursor()
-        integrated_file_name = glob.glob(
-            current_working_directory + 'Results/' +
-            job_id + '/' + '*integrated*')[0]
-        integrated_file_name = str(integrated_file_name)
-        with open(integrated_file_name, 'r') as integrated:
-            header = integrated.readline().strip().split('\t')
+        # integrated_file_name = glob.glob(
+        #     current_working_directory + 'Results/' +
+        #     job_id + '/' + '*integrated*')[0]
+        # integrated_file_name = str(integrated_file_name)
+        total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+        rows = c.execute(total_private_sample)
+        header = [description[0] for description in rows.description]
+        conn.commit()
+        conn.close()
+        # with open(integrated_file_name, 'r') as integrated:
+        #     header = integrated.readline().strip().split('\t')
         # header = header_integrated
         #dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
