@@ -241,7 +241,7 @@ def changeUrl(n, href, nuclease, genome_selected, ref_var, annotation_var, vcf_i
         os.system(
             f'awk \'$4 = $4\"_personal\"\' {current_working_directory}/Annotations/{annotation_input} | sed "s/ /\t/g" | sed "s/,/_personal,/g" > {current_working_directory}/Annotations/.{annotation_input}.personal.tmp')
         annotation_name = '.'+annotation_input+'.personal.tmp'
-    if annotation_name == '.dummy.bed':
+    if 'EN' not in annotation_var:
         os.system(f"rm -f {current_working_directory}/Annotations/.dummy.bed")
         os.system(f"touch {current_working_directory}/Annotations/.dummy.bed")
         gencode_name = '.dummy.bed'
