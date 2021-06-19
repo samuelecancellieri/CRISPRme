@@ -314,8 +314,9 @@ def complete_search():
             exit(1)
 
     if "--annotation" not in input_args:
-        print("--annotation must be contained in the input")
-        exit(1)
+        print("--annotation not used")
+        annotationfile = script_path+'vuoto.txt'
+        # exit(1)
     else:
         try:
             annotationfile = os.path.abspath(
@@ -341,6 +342,22 @@ def complete_search():
                 f'cat {personal_annotation_file}.tmp {annotationfile} > {annotationfile}+personal.bed')
             os.system(f'rm -f {personal_annotation_file}.tmp')
             annotationfile = annotationfile+'+personal.bed'
+
+    if '--personal_annotation' in input_args and '--annotation' not in input_args:
+        try:
+            personal_annotation_file = os.path.abspath(
+                input_args[input_args.index("--personal_annotation")+1])
+        except:
+            pass
+        if not os.path.isfile(personal_annotation_file):
+            print("The file specified for --personal_annotation does not exist")
+            exit(1)
+        os.system(
+            f'awk \'$4 = $4\"_personal\"\' {personal_annotation_file} | sed "s/ /\t/g" | sed "s/,/_personal,/g" > {personal_annotation_file}.tmp')
+        os.system(
+            f'cat {personal_annotation_file}.tmp {annotationfile} > {annotationfile}+personal.bed')
+        os.system(f'rm -f {personal_annotation_file}.tmp')
+        annotationfile = annotationfile+'+personal.bed'
 
     if variant and "--samplesID" not in input_args:
         print("--samplesID must be contained in the input")
