@@ -225,7 +225,7 @@ def complete_search():
             print("Please input some parameter for flag --guide")
             exit(1)
         if not os.path.isfile(guidefile):
-            print("The folder specified for --guide does not exist")
+            print("The file specified for --guide does not exist")
             exit(1)
     # sequence check
     sequence_use = False
@@ -310,7 +310,7 @@ def complete_search():
             print("Please input some parameter for flag --pam")
             exit(1)
         if not os.path.isfile(pamfile):
-            print("The folder specified for --pam does not exist")
+            print("The file specified for --pam does not exist")
             exit(1)
 
     if "--annotation" not in input_args:
@@ -373,9 +373,9 @@ def complete_search():
         except:
             print("Please input a number for flag bMax")
             exit(1)
-        if bMax < 0 or bMax > 2:
-            print("The range for bMax is from 0 to 2")
-            exit(1)
+        # if bMax < 0 or bMax > 2:
+        #     print("The range for bMax is from 0 to 2")
+        #     exit(1)
 
     if "--mm" not in input_args:
         print("--mm must be contained in the input")
@@ -410,7 +410,7 @@ def complete_search():
         if bDNA > bMax:
             print("The number of bDNA must be equal or less than bMax")
             exit(1)
-        elif bDNA < 0 or bDNA > 2:
+        elif bDNA < 0 or bDNA > bMax:
             print("The range for bDNA is from 0 to", bMax)
             exit(1)
 
@@ -432,9 +432,9 @@ def complete_search():
         if bRNA > bMax:
             print("The number of bRNA must be equal or less than bMax")
             exit(1)
-        elif bRNA < 0 or bRNA > 2:
-            print("The range for bRNA is from 0 to", bMax)
-            exit(1)
+        # elif bRNA < 0 or bRNA > 2:
+        #     print("The range for bRNA is from 0 to", bMax)
+        #     exit(1)
 
     if "--merge" not in input_args:
         merge_t = 3  # default merge
@@ -569,8 +569,8 @@ def complete_search():
                 temp_guides.append(addN+guide)
             else:
                 temp_guides.append(guide+addN)
-        if len(temp_guides) > 1000:
-            temp_guides = temp_guides[:1000]
+        if len(temp_guides) > 1000000000:
+            temp_guides = temp_guides[:1000000000]
         guides = temp_guides
         extracted_guides_file = open(outputfolder+'/guides.txt', 'w')
         for guide in guides:
