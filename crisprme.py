@@ -189,7 +189,8 @@ def complete_search():
         print(
             "\t--sequence, used to specify the file containing DNA sequences or bed coordinates to extract guides [IF NOT --guide]")
         print("\t--pam, used to specify the file that contains the pam")
-        print("\t--annotation, used to specify the file that contains some annotations of the reference genome")
+        print("\t--annotation, used to specify the file that contains annotations of the reference genome")
+        print("\t--personal_annotation, used to specify the file that contains personal annotations of the reference genome")
         print(
             "\t--samplesID, used to specify the file with a list of files (one per line) containing the information about samples present in VCF files [OPTIONAL!]")
         print(
