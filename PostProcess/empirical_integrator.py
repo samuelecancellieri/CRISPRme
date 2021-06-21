@@ -128,7 +128,7 @@ outFile.write(save)
 
 print('INTEGRATING RESULTS')
 
-if '#' in inCrispritzResults.readline():
+if 'Chromosome' in inCrispritzResults.readline():
     print('SKIP HEADER')
 else:
     inCrispritzResults.seek(0)
