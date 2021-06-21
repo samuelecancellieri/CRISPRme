@@ -40,10 +40,8 @@ outFile = open(outputDir + originFileName +
 
 
 empiricalTree = IntervalTree()
-empiricalList = []
-genomeDict = {}
-empiricalDict = {}
-valueDict = {}
+empiricalList = list()
+empiricalDict = dict()
 
 saveDict = {
     'Spacer+PAM': 'NA',
@@ -108,17 +106,19 @@ print('CREATING INTERVAL TREES')
 for count, line in enumerate(inEmpiricalResults):
     empList = line.strip().split('\t')
     empList = [elem.strip() for elem in empList]
+    # example row for empirical list
+    # mand  mand        mand       mand mand       mand  optional
+    # chr10	33753323	33753346	4	CIRCLEseq	OT1 aTtACAGcTGCaTTTATCACAGG
     empList.append(count)
     # adding empirical data to the tree
     empiricalTree[int(empList[1]):int(empList[2])] = empList
-    # generate temp empirical dict to save empirical information per row
-    empiricalDict[str(empList[4])] = 50
-    # value of empirical row, keeping info about mm+bul for each empirical origin (seq data, in-silico, vitro, ecc)
-    valueDict[str(empList[5])] = 'NA'
-    # update save dict with user-defined names from empirical data
-    saveDict[str(empList[5])] = 'NA'
-    # newkey = str(empList[5])+'_mm+bul'
-    # saveDict[newkey] = 'NA'
+    # to save header
+    saveDict[str(empList[4])] = 'NA'
+    newkey = str(empList[4])+'_mm+bul'
+    saveDict[newkey] = 'NA'
+    # to save data of empirical
+    empiricalDict[str(empList[4])] = 'NA'
+    empiricalDict[newkey] = 'NA'
 
 # writing header in file
 save = ''
@@ -136,16 +136,16 @@ else:
 for nline, line in enumerate(inCrispritzResults):
     target = line.strip().split('\t')
 
-    for key in saveDict:
-        saveDict[key] = 'NA'
+    # for key in saveDict:
+    #     saveDict[key] = 'NA'
 
     for key in empiricalDict:
-        empiricalDict[key] = 50
-        valueDict[key] = 'NA'
+        empiricalDict[key] = 'NA'
+    #     valueDict[key] = 'NA'
     # lowestEmpirical = 100
 
     # read chr from target line
-    saveDict['Chromosome'] = target[1]
+    # saveDict['Chromosome'] = target[1]
 
     # search empirical target using in-silico target position with a window
     foundEmpirical = sorted(empiricalTree[int(target[2])-4:int(target[2])+4])
@@ -153,26 +153,29 @@ for nline, line in enumerate(inCrispritzResults):
     # search in the list of found empirical to extract data with same chr and save them
     for found in range(0, len(foundEmpirical)):
         empirical = foundEmpirical[found].data
-        if str(saveDict['Chromosome']) == str(empirical[0]):
+        if str(target[1]) == str(empirical[0]):
             empiricalList.append(empirical[-1])
-            valueDict[str(empirical[4])] = empirical[5]
-            empiricalDict[str(empirical[4])] = int(empirical[3])
+            empiricalDict[str(empirical[4])] = str(empirical[5])
+            empiricalDict[str(empirical[4])+'_mm+bul'] = str(empirical[3])
+            # valueDict[str(empirical[4])] = empirical[5]
+            # empiricalDict[str(empirical[4])] = int(empirical[3])
 
     # update the empirical dict with found targets
-    for key in empiricalDict:
-        if int(empiricalDict[key]) < 50:
-            saveDict[key] = str(valueDict[key])
-            newkey = str(key)+'_mm+bul'
-            saveDict[newkey] = empiricalDict[key]
+    # for key in empiricalDict:
+    #     if int(empiricalDict[key]) < 50:
+    #         saveDict[key] = str(valueDict[key])
+    #         newkey = str(key)+'_mm+bul'
+    #         saveDict[newkey] = empiricalDict[key]
             # if int(empiricalDict[key]) < lowestEmpirical:
             # saveDict['lowest_empirical'] = str(empiricalDict[key])
 
-    save = str()
-    for key in saveDict:
-        save += str(saveDict[key])+'\t'
-    save += '\n'
+    # save = str()
+    # for key in saveDict:
+    #     save += str(saveDict[key])+'\t'
+    # save += '\n'
 
-    outFile.write(save)
+    # save row of target with empirical data
+    outFile.write('\t'.join(target)+'\t'.join(empiricalDict.values())+'\n')
 
 print('CHECKING MISSING RESULTS')
 
