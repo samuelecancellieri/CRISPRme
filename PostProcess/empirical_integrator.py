@@ -32,8 +32,8 @@ inEmpiricalResults = open(empiricalResults, 'r').readlines()
 # guide file
 # realguide = open(guideFile, 'r').readlines()
 # open outputDir to write results
-originFileName = crispritzResultFile.split('/')
-originFileName = originFileName[len(originFileName)-1]
+originFileName = crispritzResultFile.split('/')[-1]
+# originFileName = originFileName[len(originFileName)-1]
 outFile = open(outputDir + originFileName +
                '.empirical_data.tsv', 'w')
 # outFile_name = outputDir+originFileName+'.integrated_results.tsv'
