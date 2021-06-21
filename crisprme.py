@@ -19,11 +19,11 @@ conda_path = "opt/crisprme/PostProcess/"
 # path corrected to use with conda
 corrected_origin_path = script_path[:-3]+conda_path
 corrected_web_path = origin_path[:-3]+"opt/crisprme/"
-#corrected_web_path = os.getcwd()
+# corrected_web_path = os.getcwd()
 
 script_path = corrected_origin_path
 current_working_directory = os.getcwd() + '/'
-#script_path = corrected_web_path+"/PostProcess/"
+# script_path = corrected_web_path+"/PostProcess/"
 
 input_args = sys.argv
 
@@ -144,7 +144,7 @@ def getGuides(extracted_seq, pam, len_guide, pam_begin):
                     if i < len_guide:
                         continue
                     # guides.append(extracted_seq[i-len_guide:i+len_pam])           # i is position where first char of pam is found, eg the N char in NNNNNN NGG
-                    #print('1 for:' , extracted_seq[i-len_guide:i])
+                    # print('1 for:' , extracted_seq[i-len_guide:i])
                     guides.append(extracted_seq[i-len_guide:i])
     for pam in iupac_pam_reverse:  # Negative strand
         pos = ([m.start()
@@ -160,7 +160,7 @@ def getGuides(extracted_seq, pam, len_guide, pam_begin):
                     if i > (len_sequence - len_guide - len_pam):
                         continue
                     # guides.append(str(Seq(extracted_seq[i:i+len_pam+len_guide]).reverse_complement()))         # i is position where first char of pam is found, eg the first C char in CCN NNNNNN
-                    #print('2 for:', str(Seq(extracted_seq[i + len_pam : i + len_guide + len_pam]).reverse_complement()))
+                    # print('2 for:', str(Seq(extracted_seq[i + len_pam : i + len_guide + len_pam]).reverse_complement()))
                     guides.append(str(
                         Seq(extracted_seq[i + len_pam: i + len_guide + len_pam]).reverse_complement()))
     return guides
@@ -411,7 +411,7 @@ def complete_search():
             exit(1)
 
     if "--bDNA" not in input_args:
-        #print("--bDNA must be contained in the input")
+        # print("--bDNA must be contained in the input")
         # exit(1)
         bDNA = 0
     else:
@@ -433,7 +433,7 @@ def complete_search():
             exit(1)
 
     if "--bRNA" not in input_args:
-        #print("--bRNA must be contained in the input")
+        # print("--bRNA must be contained in the input")
         # exit(1)
         bRNA = 0
     else:
@@ -620,13 +620,7 @@ def target_integration():
         print("This is the automated integration process that process the final result file to generate a usable target panel.")
         print("These are the flags that must be used in order to run this function:")
         print("\t--targets, used to specify the final result file to use in the panel creation process")
-        print("\t--genome_version, used to specify the genome version used in the search phase (e.g. hg38)")
-        # print("\t--guide, used to specify the file that contains guides used for the search")
-        print("\t--gencode, used to specify the file that contains gencode annotation to find nearest gene to any target")
-        print(
-            "\t--empirical_data, used to specify the file that contains empirical data provided by the user to assess in-silico targets")
-        print(
-            "\t--vcf_dir, used to specify the directory containing vcf files used in the search phase, necessary to obtain haplotype frequence in multi-variant targets [OPTIONAL][BETA]")
+        print("\t--empirical_data, used to specify the file that contains empirical data provided by the user to assess in-silico targets"),
         print("\t--output, used to specify the output folder for the results")
         exit(0)
 
@@ -644,46 +638,46 @@ def target_integration():
             print("The file specified for --target_file does not exist")
             exit(1)
 
-    if "--vcf_dir" not in input_args:
-        print("--vcf_dir non in input, multi-variant haplotype will not be calculated")
-        vcf_dir = script_path+'vuota/'
-        # exit(1)
-    else:
-        try:
-            vcf_dir = os.path.abspath(
-                input_args[input_args.index("--vcf_dir")+1])
-        except IndexError:
-            print("Please input some parameter for flag --vcf_dir")
-            exit(1)
-        if not os.path.isdir(vcf_dir):
-            print("The folder specified for --vcf_dir does not exist")
-            exit(1)
+    # if "--vcf_dir" not in input_args:
+    #     print("--vcf_dir non in input, multi-variant haplotype will not be calculated")
+    #     vcf_dir = script_path+'vuota/'
+    #     # exit(1)
+    # else:
+    #     try:
+    #         vcf_dir = os.path.abspath(
+    #             input_args[input_args.index("--vcf_dir")+1])
+    #     except IndexError:
+    #         print("Please input some parameter for flag --vcf_dir")
+    #         exit(1)
+    #     if not os.path.isdir(vcf_dir):
+    #         print("The folder specified for --vcf_dir does not exist")
+    #         exit(1)
 
-    if "--genome_version" not in input_args:
-        print("--genome_version must be contained in the input")
-        exit(1)
-    else:
-        try:
-            genome_version = input_args[input_args.index(
-                "--genome_version")+1]
-        except IndexError:
-            print("Please input some parameter for flag --genome")
-            exit(1)
+    # if "--genome_version" not in input_args:
+    #     print("--genome_version must be contained in the input")
+    #     exit(1)
+    # else:
+    #     try:
+    #         genome_version = input_args[input_args.index(
+    #             "--genome_version")+1]
+    #     except IndexError:
+    #         print("Please input some parameter for flag --genome")
+    #         exit(1)
 
-    if "--guide" not in input_args:
-        guidefile = script_path+'vuoto.txt'
-        # print("--guide must be contained in the input")
-        # exit(1)
-    else:
-        try:
-            guidefile = os.path.abspath(
-                input_args[input_args.index("--guide")+1])
-        except IndexError:
-            print("Please input some parameter for flag --guide")
-            exit(1)
-        if not os.path.isfile(guidefile):
-            print("The file specified for --guide does not exist")
-            exit(1)
+    # if "--guide" not in input_args:
+    #     guidefile = script_path+'vuoto.txt'
+    #     # print("--guide must be contained in the input")
+    #     # exit(1)
+    # else:
+    #     try:
+    #         guidefile = os.path.abspath(
+    #             input_args[input_args.index("--guide")+1])
+    #     except IndexError:
+    #         print("Please input some parameter for flag --guide")
+    #         exit(1)
+    #     if not os.path.isfile(guidefile):
+    #         print("The file specified for --guide does not exist")
+    #         exit(1)
 
     if "--empirical_data" not in input_args:
         print("--empirical_data not in input, proceeding without empirical data")
@@ -700,19 +694,19 @@ def target_integration():
             print("The file specified for --empirical_data does not exist")
             exit(1)
 
-    if "--gencode" not in input_args:
-        print("--gencode must be contained in the input")
-        exit(1)
-    else:
-        try:
-            gencode_file = os.path.abspath(
-                input_args[input_args.index("--gencode")+1])
-        except IndexError:
-            print("Please input some parameter for flag --gencode")
-            exit(1)
-        if not os.path.isfile(gencode_file):
-            print("The file specified for --gencode does not exist")
-            exit(1)
+    # if "--gencode" not in input_args:
+    #     print("--gencode must be contained in the input")
+    #     exit(1)
+    # else:
+    #     try:
+    #         gencode_file = os.path.abspath(
+    #             input_args[input_args.index("--gencode")+1])
+    #     except IndexError:
+    #         print("Please input some parameter for flag --gencode")
+    #         exit(1)
+    #     if not os.path.isfile(gencode_file):
+    #         print("The file specified for --gencode does not exist")
+    #         exit(1)
 
     if "--output" not in input_args:
         print("--output must be contained in the input")
@@ -728,9 +722,8 @@ def target_integration():
             print("The folder specified for --output does not exist")
             exit(1)
 
-    # os.chdir(script_path)
-    os.system(script_path+"./post_process.sh "+target_file+" "+gencode_file +
-              " "+empiricalfile+" "+guidefile+" "+str(genome_version)+" "+outputfolder+" "+vcf_dir+" "+script_path)
+    os.system(
+        f'{script_path}./empirical_integrator.py {target_file} {empiricalfile} {outputfolder}')
 
 
 def gnomAD_converter():
