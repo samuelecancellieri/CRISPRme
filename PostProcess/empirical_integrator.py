@@ -180,7 +180,7 @@ for nline, line in enumerate(inCrispritzResults):
 
 print('CHECKING MISSING RESULTS')
 
-notFoundFile = open(outputDir + originFileName +
+notFoundFile = open(outputDir + '/' + originFileName +
                     '.empirical_not_found.tsv', 'w')
 
 for count, line in enumerate(inEmpiricalResults):
