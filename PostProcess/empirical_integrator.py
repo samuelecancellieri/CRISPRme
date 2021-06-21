@@ -154,7 +154,7 @@ for nline, line in enumerate(inCrispritzResults):
     for found in range(0, len(foundEmpirical)):
         empirical = foundEmpirical[found].data
         if str(saveDict['Chromosome']) == str(empirical[0]):
-            empiricalList.append(empirical[7])
+            empiricalList.append(empirical[-1])
             valueDict[str(empirical[4])] = empirical[5]
             empiricalDict[str(empirical[4])] = int(empirical[3])
 
