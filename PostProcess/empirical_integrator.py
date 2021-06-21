@@ -34,7 +34,7 @@ inEmpiricalResults = open(empiricalResults, 'r').readlines()
 # open outputDir to write results
 originFileName = crispritzResultFile.split('/')[-1]
 # originFileName = originFileName[len(originFileName)-1]
-outFile = open(outputDir + originFileName +
+outFile = open(outputDir + '/' + originFileName +
                '.empirical_data.tsv', 'w')
 # outFile_name = outputDir+originFileName+'.integrated_results.tsv'
 
@@ -175,7 +175,8 @@ for nline, line in enumerate(inCrispritzResults):
     # save += '\n'
 
     # save row of target with empirical data
-    outFile.write('\t'.join(target)+'\t'.join(empiricalDict.values())+'\n')
+    outFile.write('\t'.join(target) + '\t' +
+                  '\t'.join(empiricalDict.values())+'\n')
 
 print('CHECKING MISSING RESULTS')
 
