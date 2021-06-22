@@ -14,9 +14,9 @@ from app import app, URL, current_working_directory, cache
 from pages import main_page
 from pages import navbar_creation
 # from pages import GUImessage
-from pages import creazione_dizionari
-from pages import ChooseFiles
-from pages import annotations
+# from pages import creazione_dizionari
+# from pages import ChooseFiles
+# from pages import annotations
 # from pages import send_mail
 from pages import results_page
 from pages import load_page
