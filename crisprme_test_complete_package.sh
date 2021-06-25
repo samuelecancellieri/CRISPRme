@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "download the complete crisprme package and then unzip it"
 axel -a -n 4 https://www.dropbox.com/s/pzfeb1k9v9ekyhr/complete_test_package_no_VCFs.tar.gz?dl=1
 axel -a -n 4 https://www.dropbox.com/s/v1fxyhopjek6ib1/VCFs.tar.gz?dl=1
