@@ -23,8 +23,8 @@ if [ "$md5_VCF_package" != "$test_md5" ]; then
 fi
 
 mkdir crisprme_complete_test
-tar -xvzf complete_test_package_no_VCFs.tar.gz --directory crisprme_complete_test/
-tar -xvzf VCFs.tar.gz --directory crisprme_complete_test/
+tar -xzf complete_test_package_no_VCFs.tar.gz --directory crisprme_complete_test/
+tar -xzf VCFs.tar.gz --directory crisprme_complete_test/
 cd crisprme_complete_test/
 
 echo "generate input test data"
