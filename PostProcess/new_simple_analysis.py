@@ -165,6 +165,7 @@ def get_mm_pam_scores():
 
 
 def retrieveFromDict(chr_pos):
+    chr_pos = 0
     try:
         entry = mydict[current_chr+','+str(chr_pos+1)]
     except:
