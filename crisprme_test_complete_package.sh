@@ -5,8 +5,10 @@ md5_complete_package=b9111f5e1fc9de77ae6f098e12a6ab4e
 md5_VCF_package=7feb40213b329c506d6a5e16b7dc10cf
 
 echo "download the complete crisprme package and then unzip it"
-axel -a -q -n 1 https://www.dropbox.com/s/pzfeb1k9v9ekyhr/complete_test_package_no_VCFs.tar.gz?dl=1
-axel -a -q -n 1 https://www.dropbox.com/s/v1fxyhopjek6ib1/VCFs.tar.gz?dl=1
+wget -c -q -O complete_test_package_no_VCFs.tar.gz https://www.dropbox.com/s/pzfeb1k9v9ekyhr/complete_test_package_no_VCFs.tar.gz?dl=1
+wget -c -q -O VCFs.tar.gz https://www.dropbox.com/s/v1fxyhopjek6ib1/VCFs.tar.gz?dl=1
+# axel -a -q -n 1 https://www.dropbox.com/s/pzfeb1k9v9ekyhr/complete_test_package_no_VCFs.tar.gz?dl=1
+# axel -a -q -n 1 https://www.dropbox.com/s/v1fxyhopjek6ib1/VCFs.tar.gz?dl=1
 
 #check value for complete package
 test_md5=$(md5sum complete_test_package_no_VCFs.tar.gz | awk '{print $1}')
