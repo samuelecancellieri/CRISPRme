@@ -84,6 +84,22 @@ def split_filter_part(filter_part):
     return [None] * 3
 
 
+# load example data
+@app.callback(
+    [Output('text-guides', 'value'),
+     Output('available-cas', 'value'),
+     Output('available-pam', 'value'),
+     Output('available-genome', 'value'),
+     Output('checklist-variants', 'value'),
+     Output('mms', 'value'),
+     Output('dna', 'value'),
+     Output('rna', 'value')],
+    [Input('load-example-button', 'n_clicks')]
+)
+def load_example_data(load_button_click):
+    return ["CTAACAGTTGCTTTTATCAC", 'SpCas9', '20bp-NNN-SpCas9', 'hg38', ['1000G'], '6', '2', '2']
+
+
 # Submit Job, change url
 @app.callback(
     [Output('url', 'pathname'),
@@ -1387,6 +1403,13 @@ def indexPage():
         ]
     )
 
+    example_content = html.Div(
+        [
+            html.Button('Load Example', id='load-example-button',
+                        style={'background-color': '#E6E6E6'}),
+        ]
+    )
+
     terms_and_conditions_content = html.Div(
         [
             html.Div('By clicking submit you are agreeing to the'),
@@ -1448,6 +1471,8 @@ def indexPage():
                                         job_name_content,
                                         html.Div(submit_content, style={
                                                  'margin-left': '30%'}),
+                                        html.Div(example_content, style={
+                                                 'margin-left': '20%'}),
                                         terms_and_conditions_content
                                     ],
                                     id='column-three-step-3',
