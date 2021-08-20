@@ -4228,14 +4228,22 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             super_populations = []
             populations = []
         # fl.append(html.P('Select Mismatch Value'))
-
+        # CRISPRme_top_1000_log_for_main_text_{guide}_MMvBUL.png
         try:
-            top1000_image = html.Div(
-                html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                                id='top-1000-score', width="80%", height="auto"),
-                       target="_blank")
-            )
+            if nuclease == 'SpCas9':
+                top1000_image = html.Div(
+                    html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                    current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                                    id='top-1000-score', width="80%", height="auto"),
+                           target="_blank")
+                )
+            else:
+                top1000_image = html.Div(
+                    html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                    current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}_MMvBUL.png', 'rb').read()).decode()),
+                                    id='top-1000-score', width="80%", height="auto"),
+                           target="_blank")
+                )
         except:
             top1000_image = html.Div('')
 
