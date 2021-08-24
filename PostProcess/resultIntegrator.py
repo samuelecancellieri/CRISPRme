@@ -430,7 +430,7 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = 'NA'
 
     change_alt_ref_highest_cfd = False
-    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
         # if 'DNA' in saveDict['Bulge_type_(highest_CFD)']:
         #     mm = 0
         #     bulge = 0
@@ -452,7 +452,7 @@ for nline, line in enumerate(inCrispritzResults):
         change_alt_ref_highest_cfd = True
 
     change_alt_ref_fewest_mm_b = False
-    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'alt' and saveDict['CFD_score_REF_(fewest_mm+b)'] == saveDict['CFD_score_ALT_(fewest_mm+b)']:
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'alt' and saveDict['CFD_score_REF_(fewest_mm+b)'] != '-1.0' and saveDict['CFD_score_REF_(fewest_mm+b)'] == saveDict['CFD_score_ALT_(fewest_mm+b)']:
         # if 'DNA' in saveDict['Bulge_type_(fewest_mm+b)']:
         #     mm = 0
         #     bulge = 0
