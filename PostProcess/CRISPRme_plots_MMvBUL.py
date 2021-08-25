@@ -35,12 +35,7 @@ matplotlib.use('Agg')
 # df = df.reset_index()
 # df["index"] += 1
 
-
-def calculateTotalForRef(dff):
-    dff['Mismatches+bulges_(highest_CFD)_REF'] = 1000
-
-
-    # Read file
+# Read file
 df = pd.read_csv(sys.argv[1], sep="\t",
                  index_col=False, na_values=['n'], nrows=1000)
 out_folder = sys.argv[2]
