@@ -97,7 +97,7 @@ def reverse_complement_table(seq):
 
 class reversor:
     '''
-    Nel caso debba ordinare più campi però con reverse diversi, eg uno True e l'altro False, posso usare questa classe nella chiave per
+    Nel caso debba ordinare più campi però con reverse diversi, eg uno True e l'altro False, posso usare questa classe nella chiave per 
     simulare il contrario del reverse applicato
     '''
 
@@ -279,8 +279,7 @@ for line in inTarget:
             float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
 
         cluster_to_save_mmbl = cluster_to_save.copy()
-        # cluster_to_save_mmbl.sort(key=lambda x: (int(x[8]), int(x[7])))
-        cluster_to_save_mmbl.sort(key=lambda x: (int(x[9])))
+        cluster_to_save_mmbl.sort(key=lambda x: (int(x[8]), int(x[7])))
 
         keys_seen = []
         saved = False
@@ -559,8 +558,7 @@ cluster_to_save.sort(key=lambda x: (
     float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
 
 cluster_to_save_mmbl = cluster_to_save.copy()
-# cluster_to_save_mmbl.sort(key=lambda x: (int(x[8]), int(x[7])))
-cluster_to_save_mmbl.sort(key=lambda x: (int(x[9])))
+cluster_to_save_mmbl.sort(key=lambda x: (int(x[8]), int(x[7])))
 
 keys_seen = []
 saved = False
