@@ -50,7 +50,7 @@ def seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
             continue
         if elem == "-":
             count_non_seed_alt += 1
-    return count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
+    return [count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt]
 
 
 def createBedforMultiAlternative(variantList, samples):
