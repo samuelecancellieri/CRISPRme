@@ -545,11 +545,6 @@ for nline, line in enumerate(inCrispritzResults):
     # process seed count for non-scorable targets
     if saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0':
         seed_count = True
-        special_scoring = {
-            "Seed_mismatches+bulges_REF_(highest_CFD)": 0, "Seed_mismatches+bulges_ALT_(highest_CFD)": 0,
-            "Seed_mismatches+bulges_REF_(fewest_mm+b)": 0, "Seed_mismatches+bulges_ALT_(fewest_mm+b)": 0,
-            "Non_seed_mismatches+bulges_REF_(highest_CFD)": 0, "Non-seed_mismatches+bulges_ALT_(highest_CFD)": 0,
-            "Non_seed_mismatches+bulges_REF_(fewest_mm+b)": 0, "Non_seed_mismatches+bulges_ALT_(fewest_mm+b)": 0}
 
         if pam_at_start:
             real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][count_N_in_guide:]
@@ -668,12 +663,17 @@ for nline, line in enumerate(inCrispritzResults):
     save = ''
     for key in saveDict:
         save += str(saveDict[key])+'\t'
-    if seed_count:
-        for key in special_scoring:
-            save += str(special_scoring[key]+'\t')
+    for key in special_scoring:
+        save += str(special_scoring[key]+'\t')
     save += '\n'
 
     outFile.write(save)
+
+if seed_count:
+    pass
+else:
+    os.system(f'cut -f53-60 --complement {outFile_name} > {outFile_name}.tmp')
+    os.system(f'mv {outFile_name}.tmp {outFile_name}')
 
 if check_personal_existence:
     pass
