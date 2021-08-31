@@ -113,7 +113,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
                 fileOut.write("\t".join(final_list[0]))
                 bestTarget = final_list.pop(0)
         else:
-            final_list.sort(key=lambda x: (int(x[total-1], int(x[total-2]))))
+            final_list.sort(key=lambda x: (int(x[total-1]), int(x[total-2])))
             final_list[0][cfd-1] = str(n_ele-1)
             final_list[0][2*cfd+1] = str(n_ele-1)
             fileOut.write("\t".join(final_list[0]))
