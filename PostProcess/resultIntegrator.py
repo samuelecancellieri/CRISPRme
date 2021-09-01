@@ -670,7 +670,7 @@ for nline, line in enumerate(inCrispritzResults):
     for key in saveDict:
         save += str(saveDict[key])+'\t'
     for key in special_scoring:
-        save += str(special_scoring[key]+'\t')
+        save += str(special_scoring[key])+'\t'
     save += '\n'
 
     outFile.write(save)
