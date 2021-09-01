@@ -189,7 +189,7 @@ saveDict = {
     "Seed_mismatches+bulges_REF_(highest_CFD)": 'NA',
     "Seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
     "Non_seed_mismatches+bulges_REF_(highest_CFD)": 'NA',
-    "Non-seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
+    "Non_seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
     'Bulge_type_(highest_CFD)': 'NA',
     'REF/ALT_origin_(highest_CFD)': 'NA',
     'PAM_creation_(highest_CFD)': 'NA',
