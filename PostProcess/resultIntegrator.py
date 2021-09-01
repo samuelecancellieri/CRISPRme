@@ -186,6 +186,10 @@ saveDict = {
     'Mismatches_(highest_CFD)': 'NA',
     'Bulges_(highest_CFD)': 'NA',
     'Mismatches+bulges_(highest_CFD)': 'NA',
+    "Seed_mismatches+bulges_REF_(highest_CFD)": 'NA',
+    "Seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
+    "Non_seed_mismatches+bulges_REF_(highest_CFD)": 'NA',
+    "Non-seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
     'Bulge_type_(highest_CFD)': 'NA',
     'REF/ALT_origin_(highest_CFD)': 'NA',
     'PAM_creation_(highest_CFD)': 'NA',
@@ -209,6 +213,10 @@ saveDict = {
     'Mismatches_(fewest_mm+b)': 'NA',
     'Bulges_(fewest_mm+b)': 'NA',
     'Mismatches+bulges_(fewest_mm+b)': 'NA',
+    "Seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA',
+    "Seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
+    "Non_seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA',
+    "Non_seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
     'Bulge_type_(fewest_mm+b)': 'NA',
     'REF/ALT_origin_(fewest_mm+b)': 'NA',
     'PAM_creation_(fewest_mm+b)': 'NA',
@@ -228,13 +236,6 @@ saveDict = {
     'Annotation_ENCODE': 'NA',
     'Annotation_personal': 'NA'
 }
-
-special_scoring = {
-    "Seed_mismatches+bulges_REF_(highest_CFD)": 'NA', "Seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
-    "Non_seed_mismatches+bulges_REF_(highest_CFD)": 'NA', "Non-seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
-    "Seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA', "Seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
-    "Non_seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA', "Non_seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA'}
-
 
 start_time = time.time()
 
@@ -257,8 +258,7 @@ for count, line in enumerate(inEmpiricalResults):
 
 # writing header in file
 save = ''
-save += '\t'.join(list(saveDict.keys()))+'\t' + \
-    '\t'.join(list(special_scoring.keys()))
+save += '\t'.join(list(saveDict.keys()))
 save += '\n'
 outFile.write(save)
 
@@ -546,9 +546,6 @@ for nline, line in enumerate(inCrispritzResults):
     if saveDict['CFD_score_REF_(highest_CFD)'] == '-1.0':
         seed_count = True
 
-        for key in special_scoring:
-            special_scoring[key] = 'NA'
-
         if pam_at_start:
             real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][count_N_in_guide:]
             real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][count_N_in_guide:]
@@ -573,13 +570,13 @@ for nline, line in enumerate(inCrispritzResults):
         seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
                                     0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
 
-        special_scoring['Seed_mismatches+bulges_REF_(highest_CFD)'] = str(
+        saveDict['Seed_mismatches+bulges_REF_(highest_CFD)'] = str(
             seed_list[0])
-        special_scoring['Seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
+        saveDict['Seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
             seed_list[1])
-        special_scoring['Non_seed_mismatches+bulges_REF_(highest_CFD)'] = str(
+        saveDict['Non_seed_mismatches+bulges_REF_(highest_CFD)'] = str(
             seed_list[2])
-        special_scoring['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
+        saveDict['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
             seed_list[3])
 
         if pam_at_start:
@@ -606,13 +603,13 @@ for nline, line in enumerate(inCrispritzResults):
         seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
                                     0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
 
-        special_scoring['Seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
+        saveDict['Seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
             seed_list[0])
-        special_scoring['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
+        saveDict['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
             seed_list[1])
-        special_scoring['Non_seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
+        saveDict['Non_seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
             seed_list[2])
-        special_scoring['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
+        saveDict['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
             seed_list[3])
 
     if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
@@ -678,27 +675,22 @@ for nline, line in enumerate(inCrispritzResults):
             # saveDict['lowest_empirical'] = str(empiricalDict[key])
 
     save = ''
-    save += '\t'.join(list(saveDict.values()))+'\t' + \
-        '\t'.join(list(special_scoring.values()))
-    # for key in saveDict:
-    #     save += str(saveDict[key])+'\t'
-    # for key in special_scoring:
-    #     save += str(special_scoring[key])+'\t'
+    save += '\t'.join(list(saveDict.values()))
     save += '\n'
 
     outFile.write(save)
 
-if seed_count:
-    pass
-else:
-    os.system(f'cut -f53-60 --complement {outFile_name} > {outFile_name}.tmp')
-    os.system(f'mv {outFile_name}.tmp {outFile_name}')
+# if seed_count:
+#     pass
+# else:
+#     os.system(f'cut -f53-60 --complement {outFile_name} > {outFile_name}.tmp')
+#     os.system(f'mv {outFile_name}.tmp {outFile_name}')
 
-if check_personal_existence:
-    pass
-else:
-    os.system(f'cut -f52 --complement {outFile_name} > {outFile_name}.tmp')
-    os.system(f'mv {outFile_name}.tmp {outFile_name}')
+# if check_personal_existence:
+#     pass
+# else:
+#     os.system(f'cut -f52 --complement {outFile_name} > {outFile_name}.tmp')
+#     os.system(f'mv {outFile_name}.tmp {outFile_name}')
 
 print('CHECKING MISSING RESULTS')
 
