@@ -543,7 +543,7 @@ for nline, line in enumerate(inCrispritzResults):
 
     seed_count = False
     # process seed count for non-scorable targets
-    if saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0':
+    if saveDict['CFD_score_REF_(highest_CFD)'] == '-1.0':
         seed_count = True
 
         if pam_at_start:
