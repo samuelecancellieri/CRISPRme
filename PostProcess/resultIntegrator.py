@@ -549,16 +549,19 @@ for nline, line in enumerate(inCrispritzResults):
         if pam_at_start:
             real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][count_N_in_guide:]
             real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][count_N_in_guide:]
+            seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+            seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+            non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+            non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
         else:
             real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][:len(
                 saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'])-count_N_in_guide]
             real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][: len(
                 saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'])-count_N_in_guide]
-
-        seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
-        seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
-        non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
-        non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+            seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+            seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+            non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+            non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
 
         seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
                                     0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
@@ -575,11 +578,19 @@ for nline, line in enumerate(inCrispritzResults):
         if pam_at_start:
             real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][count_N_in_guide:]
             real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][count_N_in_guide:]
+            seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+            seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+            non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+            non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
         else:
             real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][:len(
                 saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'])-count_N_in_guide]
             real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][: len(
                 saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'])-count_N_in_guide]
+            seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+            seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+            non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+            non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
 
         seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
         seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
