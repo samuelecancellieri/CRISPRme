@@ -573,13 +573,13 @@ for nline, line in enumerate(inCrispritzResults):
         seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
                                     0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
 
-        special_scoring['Seed_mismatches+bulges_REF_(highest_CFD)'] = int(
+        special_scoring['Seed_mismatches+bulges_REF_(highest_CFD)'] = str(
             seed_list[0])
-        special_scoring['Seed_mismatches+bulges_ALT_(highest_CFD)'] = int(
+        special_scoring['Seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
             seed_list[1])
-        special_scoring['Non_seed_mismatches+bulges_REF_(highest_CFD)'] = int(
+        special_scoring['Non_seed_mismatches+bulges_REF_(highest_CFD)'] = str(
             seed_list[2])
-        special_scoring['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = int(
+        special_scoring['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
             seed_list[3])
 
         if pam_at_start:
@@ -606,13 +606,13 @@ for nline, line in enumerate(inCrispritzResults):
         seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
                                     0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
 
-        special_scoring['Seed_mismatches+bulges_REF_(fewest_mm+b)'] = int(
+        special_scoring['Seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
             seed_list[0])
-        special_scoring['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = int(
+        special_scoring['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
             seed_list[1])
-        special_scoring['Non_seed_mismatches+bulges_REF_(fewest_mm+b)'] = int(
+        special_scoring['Non_seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
             seed_list[2])
-        special_scoring['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = int(
+        special_scoring['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
             seed_list[3])
 
     if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
