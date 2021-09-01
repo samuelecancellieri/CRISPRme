@@ -231,8 +231,8 @@ saveDict = {
 
 special_scoring = {
     "Seed_mismatches+bulges_REF_(highest_CFD)": 'NA', "Seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
-    "Seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA', "Seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
     "Non_seed_mismatches+bulges_REF_(highest_CFD)": 'NA', "Non-seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
+    "Seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA', "Seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
     "Non_seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA', "Non_seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA'}
 
 
@@ -546,6 +546,9 @@ for nline, line in enumerate(inCrispritzResults):
     if saveDict['CFD_score_REF_(highest_CFD)'] == '-1.0':
         seed_count = True
 
+        for key in special_scoring:
+            special_scoring[key] = 'NA'
+
         if pam_at_start:
             real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][count_N_in_guide:]
             real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][count_N_in_guide:]
@@ -562,6 +565,10 @@ for nline, line in enumerate(inCrispritzResults):
             seed_alt = real_target_alt[int(len(real_target_alt)/2):]
             non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
             non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+
+        if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
+            seed_alt == 'NA'
+            non_seed_alt == 'NA'
 
         seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
                                     0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
@@ -591,6 +598,10 @@ for nline, line in enumerate(inCrispritzResults):
             seed_alt = real_target_alt[int(len(real_target_alt)/2):]
             non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
             non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+
+        if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
+            seed_alt == 'NA'
+            non_seed_alt == 'NA'
 
         seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
                                     0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
@@ -667,10 +678,12 @@ for nline, line in enumerate(inCrispritzResults):
             # saveDict['lowest_empirical'] = str(empiricalDict[key])
 
     save = ''
-    for key in saveDict:
-        save += str(saveDict[key])+'\t'
-    for key in special_scoring:
-        save += str(special_scoring[key])+'\t'
+    save += '\t'.join(list(saveDict.values()))+'\t' + \
+        '\t'.join(list(special_scoring.values()))
+    # for key in saveDict:
+    #     save += str(saveDict[key])+'\t'
+    # for key in special_scoring:
+    #     save += str(special_scoring[key])+'\t'
     save += '\n'
 
     outFile.write(save)
