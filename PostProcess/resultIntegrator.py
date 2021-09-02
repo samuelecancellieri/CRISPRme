@@ -689,7 +689,7 @@ for nline, line in enumerate(inCrispritzResults):
 if check_personal_existence:
     pass
 else:
-    os.system(f'cut -f59 --complement {outFile_name} > {outFile_name}.tmp')
+    os.system(f'cut -f60 --complement {outFile_name} > {outFile_name}.tmp')
     os.system(f'mv {outFile_name}.tmp {outFile_name}')
 
 print('CHECKING MISSING RESULTS')
