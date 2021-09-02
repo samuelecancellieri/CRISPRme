@@ -4124,8 +4124,6 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     #                          'maxWidth': 200,
                                     #                        },
                                     #                        ],
-                                    sort_action="native",
-                                    sort_mode="multi",
                                     page_current=0,
                                     page_size=1000,
                                     page_action='custom',
