@@ -541,76 +541,76 @@ for nline, line in enumerate(inCrispritzResults):
             if count == 0:  # if N is at start of the guide, pam_at_start = true
                 pam_at_start = True
 
-    seed_count = False
-    # process seed count for non-scorable targets
-    if saveDict['CFD_score_REF_(highest_CFD)'] == '-1.0':
-        seed_count = True
+    # seed_count = False
+    # # process seed count for non-scorable targets
+    # if saveDict['CFD_score_REF_(highest_CFD)'] == '-1.0':
+    #     seed_count = True
 
-        if pam_at_start:
-            real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][count_N_in_guide:]
-            real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][count_N_in_guide:]
-            seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
-            seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
-            non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
-            non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
-        else:
-            real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][:len(
-                saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'])-count_N_in_guide]
-            real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][: len(
-                saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'])-count_N_in_guide]
-            seed_ref = real_target_ref[int(len(real_target_ref)/2):]
-            seed_alt = real_target_alt[int(len(real_target_alt)/2):]
-            non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
-            non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+    if pam_at_start:
+        real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][count_N_in_guide:]
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][count_N_in_guide:]
+        seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+        seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+        non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+        non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+    else:
+        real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][:len(
+            saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'])-count_N_in_guide]
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][: len(
+            saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'])-count_N_in_guide]
+        seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+        seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+        non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+        non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
 
-        if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
-            seed_alt == 'NA'
-            non_seed_alt == 'NA'
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
+        seed_alt == 'NA'
+        non_seed_alt == 'NA'
 
-        seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
-                                    0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
+    seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
+                                0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
 
-        saveDict['Seed_mismatches+bulges_REF_(highest_CFD)'] = str(
-            seed_list[0])
-        saveDict['Seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
-            seed_list[1])
-        saveDict['Non_seed_mismatches+bulges_REF_(highest_CFD)'] = str(
-            seed_list[2])
-        saveDict['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
-            seed_list[3])
+    saveDict['Seed_mismatches+bulges_REF_(highest_CFD)'] = str(
+        seed_list[0])
+    saveDict['Seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
+        seed_list[1])
+    saveDict['Non_seed_mismatches+bulges_REF_(highest_CFD)'] = str(
+        seed_list[2])
+    saveDict['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
+        seed_list[3])
 
-        if pam_at_start:
-            real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][count_N_in_guide:]
-            real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][count_N_in_guide:]
-            seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
-            seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
-            non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
-            non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
-        else:
-            real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][:len(
-                saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'])-count_N_in_guide]
-            real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][: len(
-                saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'])-count_N_in_guide]
-            seed_ref = real_target_ref[int(len(real_target_ref)/2):]
-            seed_alt = real_target_alt[int(len(real_target_alt)/2):]
-            non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
-            non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+    if pam_at_start:
+        real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][count_N_in_guide:]
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][count_N_in_guide:]
+        seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+        seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+        non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+        non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+    else:
+        real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][:len(
+            saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'])-count_N_in_guide]
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][: len(
+            saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'])-count_N_in_guide]
+        seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+        seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+        non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+        non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
 
-        if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
-            seed_alt == 'NA'
-            non_seed_alt == 'NA'
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
+        seed_alt == 'NA'
+        non_seed_alt == 'NA'
 
-        seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
-                                    0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
+    seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
+                                0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
 
-        saveDict['Seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
-            seed_list[0])
-        saveDict['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
-            seed_list[1])
-        saveDict['Non_seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
-            seed_list[2])
-        saveDict['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
-            seed_list[3])
+    saveDict['Seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
+        seed_list[0])
+    saveDict['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
+        seed_list[1])
+    saveDict['Non_seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
+        seed_list[2])
+    saveDict['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
+        seed_list[3])
 
     if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
         if pam_at_start:  # save pam sequence extracting directly from the ref sequence
