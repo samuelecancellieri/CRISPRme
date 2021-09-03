@@ -549,6 +549,15 @@ for nline, line in enumerate(inCrispritzResults):
     if pam_at_start:
         real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][count_N_in_guide:]
         real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][count_N_in_guide:]
+        dna_bulge_count_seed = 0
+        dna_bulge_count_non_seed = 0
+        if 'DNA' in saveDict['Bulge_type_(highest_CFD)']:
+            dna_seq = saveDict['Aligned_spacer+PAM_(highest_CFD)'][count_N_in_guide:]
+            for pos, nt in enumerate(dna_seq):
+                if nt == '-' and pos < int(len(real_target_ref)/2):
+                    dna_bulge_count_seed += 1
+                elif nt == '-' and pos >= int(len(real_target_ref)/2):
+                    dna_bulge_count_non_seed += 1
         seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
         seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
         non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
@@ -556,8 +565,18 @@ for nline, line in enumerate(inCrispritzResults):
     else:
         real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][:len(
             saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'])-count_N_in_guide]
-        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][: len(
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][:len(
             saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'])-count_N_in_guide]
+        dna_bulge_count_seed = 0
+        dna_bulge_count_non_seed = 0
+        if 'DNA' in saveDict['Bulge_type_(highest_CFD)']:
+            dna_seq = saveDict['Aligned_spacer+PAM_(highest_CFD)'][:len(
+                saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'])-count_N_in_guide]
+            for pos, nt in enumerate(dna_seq):
+                if nt == '-' and pos >= int(len(real_target_ref)/2):
+                    dna_bulge_count_seed += 1
+                elif nt == '-' and pos < int(len(real_target_ref)/2):
+                    dna_bulge_count_non_seed += 1
         seed_ref = real_target_ref[int(len(real_target_ref)/2):]
         seed_alt = real_target_alt[int(len(real_target_alt)/2):]
         non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
@@ -571,17 +590,26 @@ for nline, line in enumerate(inCrispritzResults):
                                 0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
 
     saveDict['Seed_mismatches+bulges_REF_(highest_CFD)'] = str(
-        seed_list[0])
+        int(seed_list[0])+dna_bulge_count_seed)
     saveDict['Seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
-        seed_list[1])
+        int(seed_list[1])+dna_bulge_count_seed)
     saveDict['Non_seed_mismatches+bulges_REF_(highest_CFD)'] = str(
-        seed_list[2])
+        int(seed_list[2])+dna_bulge_count_non_seed)
     saveDict['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
-        seed_list[3])
+        int(seed_list[3])+dna_bulge_count_non_seed)
 
     if pam_at_start:
         real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][count_N_in_guide:]
         real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][count_N_in_guide:]
+        dna_bulge_count_seed = 0
+        dna_bulge_count_non_seed = 0
+        if 'DNA' in saveDict['Bulge_type_(fewest_mm+b)']:
+            dna_seq = saveDict['Aligned_spacer+PAM_(fewest_mm+b)'][count_N_in_guide:]
+            for pos, nt in enumerate(dna_seq):
+                if nt == '-' and pos < int(len(real_target_ref)/2):
+                    dna_bulge_count_seed += 1
+                elif nt == '-' and pos >= int(len(real_target_ref)/2):
+                    dna_bulge_count_non_seed += 1
         seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
         seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
         non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
@@ -591,6 +619,16 @@ for nline, line in enumerate(inCrispritzResults):
             saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'])-count_N_in_guide]
         real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][: len(
             saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'])-count_N_in_guide]
+        dna_bulge_count_seed = 0
+        dna_bulge_count_non_seed = 0
+        if 'DNA' in saveDict['Bulge_type_(fewest_mm+b)']:
+            dna_seq = saveDict['Aligned_spacer+PAM_(fewest_mm+b)'][:len(
+                saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'])-count_N_in_guide]
+            for pos, nt in enumerate(dna_seq):
+                if nt == '-' and pos >= int(len(real_target_ref)/2):
+                    dna_bulge_count_seed += 1
+                elif nt == '-' and pos < int(len(real_target_ref)/2):
+                    dna_bulge_count_non_seed += 1
         seed_ref = real_target_ref[int(len(real_target_ref)/2):]
         seed_alt = real_target_alt[int(len(real_target_alt)/2):]
         non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
