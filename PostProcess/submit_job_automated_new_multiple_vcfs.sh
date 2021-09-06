@@ -275,7 +275,7 @@ while read vcf_f; do
 		echo -e 'Search Reference\tStart\t'$(date) >>$log
 		# echo -e 'Search Reference\tStart\t'$(date) >&2
 		# echo -e 'Search Reference' >  $output
-		if [ "$bDNA" -ne 0 ] || ["$bRNA" -ne 0 ]; then
+		if [ "$bDNA" -ne 0 ] || [ "$bRNA" -ne 0 ]; then
 			crispritz.py search $idx_ref "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) &
 			pid_search_ref=$!
 		else
