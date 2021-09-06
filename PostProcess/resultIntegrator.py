@@ -650,6 +650,15 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
         seed_list[3])
 
+    # reset count seed and non-seed for ALT if target is REF
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
+        saveDict['Seed_mismatches+bulges_ALT_(highest_CFD)'] = '0'
+        saveDict['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = '0'
+
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
+        saveDict['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = '0'
+        saveDict['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = '0'
+
     if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
         if pam_at_start:  # save pam sequence extracting directly from the ref sequence
             saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][: count_N_in_guide]
