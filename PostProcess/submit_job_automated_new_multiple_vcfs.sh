@@ -275,12 +275,12 @@ while read vcf_f; do
 		echo -e 'Search Reference\tStart\t'$(date) >>$log
 		# echo -e 'Search Reference\tStart\t'$(date) >&2
 		# echo -e 'Search Reference' >  $output
-		if [ "$bDNA" -ne 0 ] && ["$bRNA" -ne 0]; then
+		if [ "$bDNA" -ne 0 ] || ["$bRNA" -ne 0]; then
 			crispritz.py search $idx_ref "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) &
 			pid_search_ref=$!
 		else
 			echo 'faccio brute search'
-			crispritz.py search "$current_working_directory/Genomes/${ref_name}/" "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -t -th $(expr $ncpus / 4) &
+			crispritz.py search "$current_working_directory/Genomes/${ref_name}/" "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -r -th $(expr $ncpus / 4) &
 			pid_search_ref=$!
 		fi
 	else
@@ -292,12 +292,12 @@ while read vcf_f; do
 			echo -e 'Search Variant\tStart\t'$(date) >>$log
 			# echo -e 'Search Variant\tStart\t'$(date) >&2
 			# echo -e 'Search Variant' >  $output
-			if [ "$bDNA" -ne 0 ] && ["$bRNA" -ne 0]; then
+			if [ "$bDNA" -ne 0 ] || ["$bRNA" -ne 0]; then
 				crispritz.py search "$idx_var" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) -var
 				mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 				echo -e 'Search Variant\tEnd\t'$(date) >>$log
 			else
-				crispritz.py search "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -t -th $(expr $ncpus / 4) &
+				crispritz.py search "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -r -th $(expr $ncpus / 4) &
 			fi
 		else
 			echo -e "Search for variant already done"
