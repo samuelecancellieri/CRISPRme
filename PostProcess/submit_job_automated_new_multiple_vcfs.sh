@@ -279,6 +279,7 @@ while read vcf_f; do
 			crispritz.py search $idx_ref "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) &
 			pid_search_ref=$!
 		else
+			echo 'faccio brute search'
 			crispritz.py search "$current_working_directory/Genomes/${ref_name}/" "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -t -th $(expr $ncpus / 4) &
 			pid_search_ref=$!
 		fi
