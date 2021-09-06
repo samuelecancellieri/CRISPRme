@@ -297,6 +297,7 @@ while read vcf_f; do
 				echo -e 'Search Variant\tEnd\t'$(date) >>$log
 			else
 				crispritz.py search "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -r -th $(expr $ncpus / 4) &
+				echo -e 'Search Variant\tEnd\t'$(date) >>$log
 				# mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 			fi
 		else
@@ -328,7 +329,7 @@ while read vcf_f; do
 	# if [ -f "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
 	# 	mv "$output_folder/${ref_name}_${pam_name}_${
 	# move all targets into targets directory
-	mv "*.targets.txt" "$output_folder/crispritz_targets"
+	mv $output_folder/*.targets.txt $output_folder/crispritz_targets
 
 	if ! [ -d "$output_folder/crispritz_prof" ]; then
 		mkdir $output_folder/crispritz_prof
