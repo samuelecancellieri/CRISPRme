@@ -603,3 +603,6 @@ echo -e "JOB END"
 if [ "$email" != "_" ]; then
 	python $starting_dir/../pages/send_mail.py $output_folder
 fi
+
+#keep log_error but no block visualization
+mv $output_folder/log_error.txt $output_folder/log_error_old.txt
