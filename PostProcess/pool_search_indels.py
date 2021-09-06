@@ -53,7 +53,7 @@ else:
 
 os.chdir(output_folder)
 # with Pool(processes=t) as pool:
-with Pool(processes=1) as pool:
+with Pool(processes=t) as pool:
     pool.map(search_indels, chrs)
 
 
