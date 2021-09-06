@@ -293,11 +293,11 @@ while read vcf_f; do
 			# echo -e 'Search Variant' >  $output
 			if [[ "$bDNA" -ne 0 ]] || [["$bRNA" -ne 0]]; then
 				crispritz.py search "$idx_var" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) -var
-				mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+				# mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 				echo -e 'Search Variant\tEnd\t'$(date) >>$log
 			else
 				crispritz.py search "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -r -th $(expr $ncpus / 4) &
-				mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+				# mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 			fi
 		else
 			echo -e "Search for variant already done"
@@ -309,7 +309,7 @@ while read vcf_f; do
 			# echo -e 'Search INDELs\tStart\t'$(date) >&2
 			cd $starting_dir
 			./pool_search_indels.py "$ref_folder" "$vcf_folder" "$vcf_name" "$guide_file" "$pam_file" $bMax $mm $bDNA $bRNA "$output_folder" $true_pam "$current_working_directory/"
-			mv "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+			# mv "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
 			echo -e "Search INDELs End"
 			echo -e 'Search INDELs\tEnd\t'$(date) >>$log
 			# echo -e 'Search INDELs\tEnd\t'$(date) >&2
@@ -325,9 +325,10 @@ while read vcf_f; do
 	echo -e 'Search Reference\tEnd\t'$(date) >>$log
 	# echo -e 'Search Reference\tEnd\t'$(date) >&2
 
-	if [ -f "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
-		mv "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
-	fi
+	# if [ -f "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
+	# 	mv "$output_folder/${ref_name}_${pam_name}_${
+	# move all targets into targets directory
+	mv "*.targets.txt" "$output_folder/crispritz_targets"
 
 	if ! [ -d "$output_folder/crispritz_prof" ]; then
 		mkdir $output_folder/crispritz_prof
