@@ -29,7 +29,7 @@ def search_indels(f):
         if "chr" in elem:
             chrom = elem
     print("Searching for INDELs in", chrom)
-    if bDNA > 0 and bRNA > 0:
+    if bDNA != '0' or bRNA != '0':
         os.system(f"crispritz.py search {current_working_directory}/genome_library/{true_pam}_2_{ref_name}+{vcf_name}_INDELS/{true_pam}_2_fake{chrom}/ {pam_file} {guide_file} fake{chrom}_{pam_name}_{guide_name}_{mm}_{bDNA}_{bRNA} -index -mm {mm} -bDNA {bDNA} -bRNA {bRNA} -t  -th 1 >/dev/null")
     else:
         os.system(f"crispritz.py search {current_working_directory}/Genomes/{ref_name}+{vcf_name}_INDELS/fake_{vcf_name}_{chrom}/ {pam_file} {guide_file} fake{chrom}_{pam_name}_{guide_name}_{mm}_{bDNA}_{bRNA} -mm {mm} -t -th 1 >/dev/null")
