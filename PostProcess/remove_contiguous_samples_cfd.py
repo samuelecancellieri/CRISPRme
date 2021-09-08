@@ -115,7 +115,9 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         else:
             # final_list.sort(key=lambda x: (int(x[total-1]), int(x[total-2])))
             # sort for mm and bul in half target sorted for mm and bul originally mm[30],bul[31]
-            final_list.sort(key=lambda x: (int(x[31]), int(x[30])))
+            # final_list.sort(key=lambda x: (int(x[31]), int(x[30])))
+            # sort for total (mm+bul) in second half target
+            final_list.sort(key=lambda x: int(x[32]))
             final_list[0][cfd-1] = str(n_ele-1)
             final_list[0][2*cfd+1] = str(n_ele-1)
             fileOut.write("\t".join(final_list[0]))
