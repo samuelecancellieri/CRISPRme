@@ -11,7 +11,7 @@
 # $mismatch indica il numero di mismatches usati per la ricerca, default 6,
 # $bulgesDNA e $bulgesRNA indicano il num di bulges usati nella ricerca, default 2
 # cartella del genoma reference, indicata con $referencegenome                  -> INPUT $6
-# Assicurarsi che il file con gli ID dei sample (samplesID.txt) sia nella cartella 
+# Assicurarsi che il file con gli ID dei sample (samplesID.txt) sia nella cartella
 # dello script
 
 #ESEMPIO CHIAMATA
@@ -30,35 +30,35 @@ mismatch=$7
 bulgesDNA=$8
 bulgesRNA=$9
 
-guide_file=${10} 
-pam_file=${11} 
-# sampleID=${12} 
+guide_file=${10}
+pam_file=${11}
+# sampleID=${12}
 
 output_folder=${12}
 
 echo $jobid
 # 1) Rimozione duplicati, estrazione semicommon e unique e creazione file total
 #echo 'Creazione file .total.txt'
-./extraction.sh $REFtargets $ENRtargets $jobid  # OUTPUT    $jobid.common_targets.txt -> Non usato
-                                                #           $jobid.semi_common_targets.txt 
-                                                #           $jobid.unique_targets.txt
-rm $jobid.common_targets.txt
+./extraction.sh $REFtargets $ENRtargets $jobid # OUTPUT    $jobid.common_targets.txt -> Non usato
+#           $jobid.semi_common_targets.txt
+#           $jobid.unique_targets.txt
+#rm $jobid.common_targets.txt
 
 # 2) Creazione colonne PAM creation etc
-awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' $jobid.semi_common_targets.txt > $jobid.semi_common_targets.minmaxdisr.txt 
-rm $jobid.semi_common_targets.txt
+awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' $jobid.semi_common_targets.txt >$jobid.semi_common_targets.minmaxdisr.txt
+#rm $jobid.semi_common_targets.txt
 
-awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' $jobid.unique_targets.txt > $jobid.unique_targets.pamcreation.txt #Add pam creation, variant unique, real guide column
-rm $jobid.unique_targets.txt
+awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' $jobid.unique_targets.txt >$jobid.unique_targets.pamcreation.txt #Add pam creation, variant unique, real guide column
+#rm $jobid.unique_targets.txt
 
-cat $jobid.unique_targets.pamcreation.txt $jobid.semi_common_targets.minmaxdisr.txt > $jobid.total.txt
-rm $jobid.unique_targets.pamcreation.txt
-rm $jobid.semi_common_targets.minmaxdisr.txt
+cat $jobid.unique_targets.pamcreation.txt $jobid.semi_common_targets.minmaxdisr.txt >$jobid.total.txt
+#rm $jobid.unique_targets.pamcreation.txt
+#rm $jobid.semi_common_targets.minmaxdisr.txt
 
 #echo 'Creazione cluster del file .total.txt'
-# 3) Clustering 
-./cluster.dict.py $jobid.total.txt 'no' 'True' 'True' "$guide_file" 'total' 'orderChr'  # OUTPUT     $jobid.total.cluster.txt
-rm $jobid.total.txt
+# 3) Clustering
+./cluster.dict.py $jobid.total.txt 'no' 'True' 'True' "$guide_file" 'total' 'orderChr' # OUTPUT     $jobid.total.cluster.txt
+#rm $jobid.total.txt
 
 #sed -i ':a;N;$!ba;s/\n/\tn\tn\tn\n/g' $jobid.total.cluster.txt
 #sed -i '$s/$/\tn\tn\tn/g' $jobid.total.cluster.txt
@@ -85,7 +85,7 @@ rm $jobid.total.txt
 
 #echo 'Estrazione sample dal file .total.cluster.txt'
 
-# ./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA 
+# ./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA
 ./new_simple_analysis.py "$referencegenome" "$dictionaries" "$jobid.total.cluster.txt" "${pam_file}" "$jobid" "$mismatch"
 
 # OUTPUT    $jobid.bestCFD.txt
@@ -93,27 +93,26 @@ rm $jobid.total.txt
 # NOTA AnnotatorAllTargets.py salva su disco SOLO il target con CFD più alto nel cluster e tra le scomposizioni esistenti
 # Quindi i files jobid.samples.annotation (contentente le scomposizioni del TOP1 esistenti) e jobid.cluster.tmp.txt (contenente il miglior TOP1
 # scomposto e i target dei cluster con quell'aplotipo) NON sono creati
-rm "$jobid.total.cluster.txt"
+#rm "$jobid.total.cluster.txt"
 
 echo 'Sorting and adjusting results'
 #(head -n 1 $jobid.bestCFD.txt && tail -n +2 $jobid.bestCFD.txt | sort -k4,4 -k6,6 -T ./) > tmp  && mv tmp $jobid.bestCFD.txt
 #python compact_ref_var.py $jobid.bestCFD.txt
-./adjust_cols.py $jobid.bestCFD.txt 
-# ./adjust_cols.py $jobid.altCFD.txt 
+./adjust_cols.py $jobid.bestCFD.txt
+# ./adjust_cols.py $jobid.altCFD.txt
 
-./adjust_cols.py $jobid.bestmmblg.txt 
-# ./adjust_cols.py $jobid.altmmblg.txt 
+./adjust_cols.py $jobid.bestmmblg.txt
+# ./adjust_cols.py $jobid.altmmblg.txt
 
 sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.bestmmblg.txt
 # sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.altmmblg.txt
 
+pr -m -t -J $jobid.bestCFD.txt $jobid.bestmmblg.txt >$jobid.bestMerge.txt
+# pr -m -t -J $jobid.altCFD.txt $jobid.altmmblg.txt > $jobid.altMerge.txt
 
-pr -m -t -J $jobid.bestCFD.txt $jobid.bestmmblg.txt > $jobid.bestMerge.txt 
-# pr -m -t -J $jobid.altCFD.txt $jobid.altmmblg.txt > $jobid.altMerge.txt 
-
-rm $jobid.bestCFD.txt
+#rm $jobid.bestCFD.txt
 # rm $jobid.altCFD.txt
-rm $jobid.bestmmblg.txt
+#rm $jobid.bestmmblg.txt
 # rm $jobid.altmmblg.txt
 
 # mv $jobid.bestMerge.txt $output_folder
