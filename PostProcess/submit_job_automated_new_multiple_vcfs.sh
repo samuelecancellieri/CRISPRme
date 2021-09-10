@@ -37,7 +37,7 @@ start_time='Job\tStart\t'$(date)
 # output=$output_folder/output.txt
 # touch $output
 
-#rm -f $output_folder/queue.txt
+rm -f $output_folder/queue.txt
 #for vcf_f in "${vcf_list[@]}";
 if [ $2 == "_" ]; then
 	echo -e "_" >>$output_folder/tmp_list_vcf.txt
@@ -473,9 +473,9 @@ echo -e "Cleaning directory"
 # fi
 # ./assemble_cfd_graphs.py $output_folder
 # mv $output_folder/snps.CFDGraph.txt $output_folder/cfd_graphs
-#rm -f $output_folder/*.CFDGraph.txt
+rm -f $output_folder/*.CFDGraph.txt
 #mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
-#rm -f $output_folder/indels.CFDGraph.txt
+rm -f $output_folder/indels.CFDGraph.txt
 
 # echo -e 'Creating images' >  $output
 echo -e 'Creating images\tStart\t'$(date) >>$log
@@ -489,10 +489,10 @@ echo -e "Risk score added"
 
 cd $output_folder
 # rm -r "cfd_graphs"
-#rm -r "crispritz_prof"
+rm -r "crispritz_prof"
 # rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
-#rm $final_res
-#rm $final_res_alt
+rm $final_res
+rm $final_res_alt
 
 cd $starting_dir
 if [ "$vcf_name" != "_" ]; then

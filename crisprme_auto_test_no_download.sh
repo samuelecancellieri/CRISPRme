@@ -1,8 +1,8 @@
 echo "unzip gencode+encode annotations"
 #unzip annotations
 cd Annotations/
-tar -xzf gencode_encode.hg38.tar.gz &>error.txt
-#rm -f gencode_encode.hg38.tar.gz error.txt
+tar -xzf gencode_encode.hg38.tar.gz &> error.txt
+rm -f gencode_encode.hg38.tar.gz error.txt
 cd ../
 
 #unzip gencode
