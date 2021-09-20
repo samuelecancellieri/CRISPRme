@@ -4639,7 +4639,10 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
                 if filter_target_value == 'CFD' and 'fewest' in elem:
                     drop_col.append(elem)
             data.drop(drop_col, inplace=True, axis=1)
-            
+            # extract cols for datatable
+            columns = [{"name": i, "id": i, 'hideable': True}
+                       for count, i in enumerate(data.columns)]
+
             # selct SNPs col to filter
             if filter_target_value == 'fewest':
                 snps = pd.DataFrame(
@@ -4647,17 +4650,13 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
             if filter_target_value == 'CFD':
                 snps = pd.DataFrame(
                     data['Variant_info_genome_(highest_CFD)']).to_dict('records')
-                
+
             # extract data and tabulate
             data = data.to_dict('records')
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
                             for column, value in row.items()
                             } for row in snps]
-            
-            # extract cols for datatable
-            columns = [{"name": i, "id": i, 'hideable': True}
-                       for count, i in enumerate(data.columns)]
     else:
         raise PreventUpdate
     # ##print('query table', data)
