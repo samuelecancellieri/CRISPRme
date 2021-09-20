@@ -3826,21 +3826,21 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #     current_working_directory + 'Results/' +
         #     job_id + '/' + '*integrated*')[0]
         # integrated_file_name = str(integrated_file_name)
-        path_db = glob.glob(
-            current_working_directory + 'Results/' +
-            job_id + '/.*.db')[0]
-        path_db = str(path_db)
-        conn = sqlite3.connect(path_db)
-        c = conn.cursor()
+        # path_db = glob.glob(
+        #     current_working_directory + 'Results/' +
+        #     job_id + '/.*.db')[0]
+        # path_db = str(path_db)
+        # conn = sqlite3.connect(path_db)
+        # c = conn.cursor()
         # integrated_file_name = glob.glob(
         #     current_working_directory + 'Results/' +
         #     job_id + '/' + '*integrated*')[0]
         # integrated_file_name = str(integrated_file_name)
-        total_private_sample = f"SELECT * FROM final_table LIMIT 1"
-        rows = c.execute(total_private_sample)
-        header = [description[0] for description in rows.description]
-        conn.commit()
-        conn.close()
+        # total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+        # rows = c.execute(total_private_sample)
+        # header = [description[0] for description in rows.description]
+        # conn.commit()
+        # conn.close()
         # with open(integrated_file_name, 'r') as integrated:
         #     header = integrated.readline().strip().split('\t')
         # header = header_integrated
@@ -3855,7 +3855,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #                             'Total', 'Bulge_type', 'PAM_gen', 'CFD',
         #                             'CFD_ref', 'Highest_CFD_Risk_Score',
         #                             'Var_uniq', 'SNP', 'AF', 'rsID', 'Samples', 'Seq_in_cluster', 'Annotation_Type'])
-        dff = pd.DataFrame(columns=header)
+        # dff = pd.DataFrame(columns=header)
         # to define column names in the first empty table
         # ##print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
         # ##print('check col in query table', dff)
@@ -4651,7 +4651,7 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
                 snps = pd.DataFrame(
                     data['Variant_info_genome_(highest_CFD)']).to_dict('records')
 
-            # extract data and tabulate
+            # extract data and list datas
             data = data.to_dict('records')
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
