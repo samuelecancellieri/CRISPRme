@@ -3904,10 +3904,10 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 html.H4('Select filter criteria for targets'),
                                 dcc.Dropdown(options=[
                                     {'label': 'Fewest Mismatches and Bulges',
-                                     'value': 'MM_BUL'},
+                                     'value': 'Fewest'},
                                     {'label': 'CFD score', 'value': 'CFD'},
-                                    {'label': 'User Score Francisco',
-                                     'value': 'user_score'}
+                                    {'label': 'User Score',
+                                     'value': 'User'}
                                 ],
                                     id='target_filter_dropdown'
                                 )
