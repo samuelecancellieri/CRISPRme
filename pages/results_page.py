@@ -3904,11 +3904,11 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 html.H4('Select filter criteria for targets'),
                                 dcc.Dropdown(options=[
                                     {'label': 'Fewest Mismatches and Bulges',
-                                     'value': 'Fewest'},
+                                     'value': 'fewest'},
                                     {'label': 'CFD score', 'value': 'CFD'},
                                     {'label': 'User Score',
                                      'value': 'User'}
-                                ], value='Fewest',
+                                ], value='fewest',
                                     id='target_filter_dropdown'
                                 )
                             ]))),
@@ -4064,8 +4064,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     id='live_table',
                                     # columns=[{"name": dff_view_names[count], "id": i, 'hideable':True}
                                     #          for count, i in enumerate(dff.columns)],
-                                    columns=[{"name": i, "id": i, 'hideable': True}
-                                             for count, i in enumerate(dff.columns)],
+                                    # columns=[{"name": i, "id": i, 'hideable': True}
+                                    #          for count, i in enumerate(dff.columns)],
                                     style_cell_conditional=[
                                         {
                                             'if': {'column_id': 'Variant_samples_(highest_CFD)'},
@@ -4629,7 +4629,12 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
             # data.loc[mask, 'DNA'] = 'NA'
             # data.loc[mask, 'DNA'] = data['Reference']
             # data = data.drop([GUIDE_COLUMN], axis=1)
-            print(data)
+            # print(data)
+            drop_col = list()
+            for elem in list(data.columns):
+                if filter_target_value not in elem:
+                    drop_col.append(elem)
+            data.drop(drop_col, inplace=True, axis=1)
             snps = pd.DataFrame(
                 data['Variant_info_genome_(highest_CFD)']).to_dict('records')
             data = data.to_dict('records')
