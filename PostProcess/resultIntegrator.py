@@ -272,7 +272,6 @@ else:
 
 for nline, line in enumerate(inCrispritzResults):
     target = line.strip().split('\t')
-    print('analizzo riga', nline)
     try:
         annotationLine = inAnnotationFile.readline().strip().split('\t')
     except:
@@ -731,7 +730,6 @@ for nline, line in enumerate(inCrispritzResults):
     save = ''
     save += '\t'.join(list(saveDict.values()))
     save += '\n'
-    print('salvo la riga', save)
     outFile.write(save)
 
 # if seed_count:
