@@ -4631,7 +4631,7 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
             # data.loc[mask, 'DNA'] = data['Reference']
             # data = data.drop([GUIDE_COLUMN], axis=1)
             # print(data)
-
+            # find col to drop using the user filter
             drop_col = list()
             for elem in list(data.columns):
                 if filter_target_value == 'fewest' and 'highest_CFD' in elem:
@@ -4639,13 +4639,23 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
                 if filter_target_value == 'CFD' and 'fewest' in elem:
                     drop_col.append(elem)
             data.drop(drop_col, inplace=True, axis=1)
-            snps = pd.DataFrame(
-                data['Variant_info_genome_(highest_CFD)']).to_dict('records')
+            
+            # selct SNPs col to filter
+            if filter_target_value == 'fewest':
+                snps = pd.DataFrame(
+                    data['Variant_info_genome_(fewest_mm+b)']).to_dict('records')
+            if filter_target_value == 'CFD':
+                snps = pd.DataFrame(
+                    data['Variant_info_genome_(highest_CFD)']).to_dict('records')
+                
+            # extract data and tabulate
             data = data.to_dict('records')
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
                             for column, value in row.items()
                             } for row in snps]
+            
+            # extract cols for datatable
             columns = [{"name": i, "id": i, 'hideable': True}
                        for count, i in enumerate(data.columns)]
     else:
