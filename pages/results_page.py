@@ -4680,6 +4680,7 @@ def reset_pagenumber(n):
     Output('order', 'options'),
     [Input('target', 'value')])
 def set_columns_options(selected_target):
+    print(selected_target)
     all_value = {'Target1 :with highest CFD': ['Mismatches', 'Bulges', 'Mismatches+bulges', 'CFD_score', 'CFD_risk_score'],  # , 'Highest_CFD_Absolute_Risk_Score'
                  'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulges', 'Mismatches+bulges', 'CFD_score', 'CFD_risk_score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
