@@ -4629,6 +4629,7 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
             # data.loc[mask, 'DNA'] = 'NA'
             # data.loc[mask, 'DNA'] = data['Reference']
             # data = data.drop([GUIDE_COLUMN], axis=1)
+            print(data)
             snps = pd.DataFrame(
                 data['Variant_info_genome_(highest_CFD)']).to_dict('records')
             data = data.to_dict('records')
