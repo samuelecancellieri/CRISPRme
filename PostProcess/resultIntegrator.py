@@ -272,6 +272,7 @@ else:
 
 for nline, line in enumerate(inCrispritzResults):
     target = line.strip().split('\t')
+    print('analizzo riga', nline)
     try:
         annotationLine = inAnnotationFile.readline().strip().split('\t')
     except:
