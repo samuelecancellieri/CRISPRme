@@ -3897,7 +3897,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #     )
         query_tab_content = html.Div(
             [
-                # img_panel,
+                dbc.Row(
+                    html.Div(
+                        [
+                            html.H4('Select filter criteria for targets'),
+                            dcc.Dropdown(options=[
+                                {'label': 'Fewest Mismatches and Bulges',
+                                    'value': 'MM_BUL'},
+                                {'label': 'CFD score', 'value': 'CFD'},
+                                {'label': 'User Score Francisco',
+                                    'value': 'user_score'}
+                            ],
+                                id='target_filter_dropdown'
+                            )
+                        ])),
                 dbc.Row(  # row with main group by, secondo group by and thresholds
                     [
                         dbc.Col(  # col0 phantom target select
