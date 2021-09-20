@@ -3908,7 +3908,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     {'label': 'CFD score', 'value': 'CFD'},
                                     {'label': 'User Score',
                                      'value': 'User'}
-                                ],
+                                ], value='Fewest',
                                     id='target_filter_dropdown'
                                 )
                             ]))),
@@ -4565,7 +4565,8 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
      Output('live_table', 'tooltip_data'),
      Output("message-alert", "is_open"), ],
     [Input('submit-val', 'n_clicks'),
-     Input('live_table', "page_current")],
+     Input('live_table', "page_current"),
+     Input('target_filter_dropdown', 'value')],
     [State('live_table', "page_size"),
      State('general-profile-table', 'selected_cells'),
      State('target', 'value'),
@@ -4579,9 +4580,10 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
      State("message-alert", "is_open"),
      ]
 )
-def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_order, all_guides, orderdrop, sholddrop, asc1, maxdrop, url, alert):
+def update_output(n_clicks, page_current, filter_target_value, page_size, sel_cel, target, radio_order, all_guides, orderdrop, sholddrop, asc1, maxdrop, url, alert):
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
+    print(filter_target_value)
     target = target[0:7]
     """
     # #print(target)
