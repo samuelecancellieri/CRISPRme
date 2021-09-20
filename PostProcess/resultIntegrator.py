@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from operator import truediv
+from operator import not_, truediv
+import operator
 from posixpath import expanduser
 from intervaltree import IntervalTree
 import sys
@@ -532,14 +533,19 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA'
         saveDict['Variant_samples_(fewest_mm+b)'] = 'NA'
 
-    count_N_in_guide = 0  # check how long is the pam counting Ns in the guide
-    pam_at_start = False  # check if pam is at start of the sequence
+    # check how long is the pam counting Ns in the guide
+    count_N_in_guide = str(target[15]).count('N')
+    # check if pam is at start of the sequence
+    if str(target[15])[0] == 'N':
+        pam_at_start = True
+    else:
+        pam_at_start = False
     # count number of Ns in the guide
-    for count, elem in enumerate(str(target[15])):
-        if elem == 'N':
-            count_N_in_guide += 1
-            if count == 0:  # if N is at start of the guide, pam_at_start = true
-                pam_at_start = True
+    # for count, elem in enumerate(str(target[15])):
+    #     if elem == 'N':
+    #         count_N_in_guide += 1
+    #         if count == 0:  # if N is at start of the guide, pam_at_start = true
+    #             pam_at_start = True
 
     # seed_count = False
     # # process seed count for non-scorable targets
