@@ -88,11 +88,19 @@ for guide in guides:
 
             if splitted[13] == "n":
                 var = False
+                # count for mm and bul in CFD target
+                # general_table[guide]['ref'][int(
+                #     splitted[9]), int(splitted[8])] += 1
+                # count for mm and bul in MM_BUL target
                 general_table[guide]['ref'][int(
-                    splitted[9]), int(splitted[8])] += 1
+                    splitted[33]), int(splitted[32])] += 1
             else:
+                # count for mm and bul in CFD target
+                # general_table[guide]['var'][int(
+                #     splitted[9]), int(splitted[8])] += 1
+                # count for mm and bul in MM_BUL target
                 general_table[guide]['var'][int(
-                    splitted[9]), int(splitted[8])] += 1
+                    splitted[33]), int(splitted[32])] += 1
 
             bulge_type = f"{splitted[0]}\t{splitted[8]}\t{splitted[9]}"
             if bulge_type in dict_summary_by_guide.keys():
