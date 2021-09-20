@@ -4561,7 +4561,8 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
 # Return the table with the result of the query
 @ app.callback(
     # [Output('live_table', 'data'),
-    [Output('live_table', 'data'),
+    [Output('live_table', 'columns'),
+     Output('live_table', 'data'),
      Output('live_table', 'tooltip_data'),
      Output("message-alert", "is_open"), ],
     [Input('submit-val', 'n_clicks'),
@@ -4630,9 +4631,12 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
             # data.loc[mask, 'DNA'] = data['Reference']
             # data = data.drop([GUIDE_COLUMN], axis=1)
             # print(data)
+
             drop_col = list()
             for elem in list(data.columns):
-                if filter_target_value not in elem:
+                if filter_target_value == 'fewest' and 'highest_CFD' in elem:
+                    drop_col.append(elem)
+                if filter_target_value == 'CFD' and 'fewest' in elem:
                     drop_col.append(elem)
             data.drop(drop_col, inplace=True, axis=1)
             snps = pd.DataFrame(
@@ -4642,10 +4646,12 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
                             column: {'value': str(value), 'type': 'markdown'}
                             for column, value in row.items()
                             } for row in snps]
+            columns = [{"name": i, "id": i, 'hideable': True}
+                       for count, i in enumerate(data.columns)]
     else:
         raise PreventUpdate
     # ##print('query table', data)
-    return data, tooltip_data, alert
+    return columns, data, tooltip_data, alert
 
 
 # to get correct number of page
