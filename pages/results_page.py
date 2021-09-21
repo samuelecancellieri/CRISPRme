@@ -4585,15 +4585,19 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
     print(filter_target_value)
+    # print(target)
+    # target = target[0:7]
+    # print(target)
+
+    target = filter_target_value
+
+    # if filter_target_value == 'fewest':
+    #     target = 'fewest'
+    # if filter_target_value == 'CFD':
+    #     target = 'Target1'
+
     print(target)
-    target = target[0:7]
-    print(target)
-    """
-    # #print(target)
-    # temporal guide for test file
-    # #print(n_clicks)
-    # #print(type(n_clicks))
-    """
+
     if n_clicks > 0:
         if radio_order == None:
             data = []
