@@ -24,6 +24,7 @@ guide_column = "Spacer+PAM"
 
 def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sholddrop, maxdrop, asc1, url_job, guide, current_working_directory):
     # query with threshold
+    print('entro shold')
     if asc1 == None:
         asc1 = 'DESC'
 
@@ -102,6 +103,7 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
 
 def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, asc1, url_job, guide, current_working_directory):
     # print(asc1)
+    print('entro noshold')
     if asc1 == None:
         asc1 = 'DESC'
     url = url_job[5:]
