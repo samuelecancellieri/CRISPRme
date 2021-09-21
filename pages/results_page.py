@@ -4585,6 +4585,7 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
     print(filter_target_value)
+    print(target)
     target = target[0:7]
     print(target)
     """
