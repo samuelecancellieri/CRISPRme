@@ -43,6 +43,8 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
         radio_order = str(radio_order)+"_(fewest_mm+b)"
         orderdrop = str(orderdrop)+"_(fewest_mm+b)"
 
+    print(radio_order, orderdrop)
+
     if orderdrop != "None_(highest_CFD)":  # ordinamento doppio
         if maxdrop == None:  # min
             df = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=? AND {}>={} ORDER BY \"{}\" {},\"{}\" {} LIMIT ? OFFSET ?".format(
@@ -116,13 +118,15 @@ def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, a
     c = conn.cursor()
     param = [guide, page_size, page_current * page_size, ]
     # print("noshold")
-    
+
     if target == 'CFD':
         radio_order = str(radio_order)+"_(highest_CFD)"
         orderdrop = str(orderdrop)+"_(highest_CFD)"
     elif target == 'fewest':
         radio_order = str(radio_order)+"_(fewest_mm+b)"
         orderdrop = str(orderdrop)+"_(fewest_mm+b)"
+
+    print(radio_order, orderdrop)
 
     # if target == "Target2":
     #     radio_order = str("MMBLG_"+radio_order+"_2")
