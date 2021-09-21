@@ -4584,19 +4584,13 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
 def update_output(n_clicks, page_current, filter_target_value, page_size, sel_cel, target, radio_order, all_guides, orderdrop, sholddrop, asc1, maxdrop, url, alert):
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
-    print(filter_target_value)
+    # print(filter_target_value)
     # print(target)
     # target = target[0:7]
     # print(target)
 
+    # target is the filter value to query on the db
     target = filter_target_value
-
-    # if filter_target_value == 'fewest':
-    #     target = 'fewest'
-    # if filter_target_value == 'CFD':
-    #     target = 'Target1'
-
-    print(target)
 
     if n_clicks > 0:
         if radio_order == None:

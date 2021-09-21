@@ -24,7 +24,7 @@ guide_column = "Spacer+PAM"
 
 def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sholddrop, maxdrop, asc1, url_job, guide, current_working_directory):
     # query with threshold
-    print('entro shold')
+    # print('entro shold')
     if asc1 == None:
         asc1 = 'DESC'
 
@@ -43,7 +43,7 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
         radio_order = str(radio_order)+"_(fewest_mm+b)"
         orderdrop = str(orderdrop)+"_(fewest_mm+b)"
 
-    print(radio_order, orderdrop)
+    # print(radio_order, orderdrop)
 
     if orderdrop != "None_(highest_CFD)":  # ordinamento doppio
         if maxdrop == None:  # min
@@ -108,7 +108,7 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
 
 def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, asc1, url_job, guide, current_working_directory):
     # print(asc1)
-    print('entro noshold')
+    # print('entro noshold')
     if asc1 == None:
         asc1 = 'DESC'
     url = url_job[5:]
@@ -126,7 +126,7 @@ def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, a
         radio_order = str(radio_order)+"_(fewest_mm+b)"
         orderdrop = str(orderdrop)+"_(fewest_mm+b)"
 
-    print(radio_order, orderdrop)
+    # print(radio_order, orderdrop)
 
     # if target == "Target2":
     #     radio_order = str("MMBLG_"+radio_order+"_2")
