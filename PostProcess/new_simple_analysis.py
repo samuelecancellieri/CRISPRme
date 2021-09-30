@@ -7,6 +7,8 @@ import pickle
 import numpy as np
 import pandas as pd
 import time
+from CRISTA_score import CRISTA_predict
+
 
 inFasta = open(sys.argv[1], 'r')  # lettura fasta del chr
 current_chr = inFasta.readline().strip().replace('>', '')  # lettura fasta del chr
@@ -235,11 +237,17 @@ bulge_pos = 8
 header = '#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tReference'
 outputFile = sys.argv[5]
 
+# file with best CFD targets
 cfd_best = open(outputFile + '.bestCFD.txt', 'w+')
 cfd_best.write(header + '\tCFD\n')  # Write header
 
+# file with best mm+bul targets
 mmblg_best = open(outputFile + '.bestmmblg.txt', 'w+')
 mmblg_best.write(header + '\tCFD\n')  # Write header
+
+# file with best CRISTA targets
+crista_best = open(outputFile + '.bestCRISTA.txt', 'w+')
+crista_best.write(header + '\tCFD\n')  # Write header
 
 mm_scores, pam_scores = get_mm_pam_scores()
 
@@ -262,8 +270,7 @@ for line in inTarget:
         current_guide_chr_pos_direction = guide_no_bulge + \
             split[3] + split[5] + split[6]  # update next cluster key
 
-        for t in cluster_to_save:
-
+        for t in cluster_to_save:  # calculate bestCFD target
             if t[0] == 'DNA':
                 cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(
                     t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
@@ -274,14 +281,25 @@ for line in inTarget:
                                      :-3], t[2].upper()[-2:], mm_scores, pam_scores, do_scores)
                 # t.append(str(cfd_score))
                 t.append("{:.3f}".format(cfd_score))
+            print('target in cluster to save', t)
 
+        # sort for CFD score the target in cluster
         cluster_to_save.sort(key=lambda x: (
             float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
 
+        # copy cluster of bestCFD to calculate best mm+bul target
         cluster_to_save_mmbl = cluster_to_save.copy()
-        # cluster_to_save_mmbl.sort(key=lambda x: (int(x[8]), int(x[7])))
-        #sort for total (mm+bul)
+        # sort for total (mm+bul)
         cluster_to_save_mmbl.sort(key=lambda x: int(x[9]))
+
+        cluster_to_save_crista = cluster_to_save.copy()
+        for target in cluster_to_save_crista:
+            # calculate CRISTA score
+            crista_score = CRISTA_predict(
+                list(guide_no_bulge.replace('N', '')), list(genomeStr[int(split[5])-3:int(split[5])+len(guide_no_bulge.replace('N', ''))+6]))
+            target.pop()  # remove CFD in target and replace with CRISTA score
+            target.append("{:.3f}".format(crista_score[0]))
+            print('target in cluster to save CRISTA', target)
 
         keys_seen = []
         saved = False
@@ -560,8 +578,7 @@ cluster_to_save.sort(key=lambda x: (
     float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
 
 cluster_to_save_mmbl = cluster_to_save.copy()
-# cluster_to_save_mmbl.sort(key=lambda x: (int(x[8]), int(x[7])))
-#sort for total (mm+bul)
+# sort for total (mm+bul)
 cluster_to_save_mmbl.sort(key=lambda x: int(x[9]))
 
 keys_seen = []
@@ -626,6 +643,7 @@ cluster_to_save = []
 
 cfd_best.close()
 mmblg_best.close()
+crista_best.close()
 
 os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCFD.txt')
 
