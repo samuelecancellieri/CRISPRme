@@ -187,7 +187,7 @@ def iupac_decomposition(split, guide_no_bulge,
     realTarget = split[2]
     replaceTarget = split[2].replace('-', '')
     refSeq = genomeStr[int(split[4]): int(split[4])+len(replaceTarget)].upper()
-    replaceTargetsDict = dict()
+    # replaceTargetsDict = dict()
 
     revert = False
     if split[6] == '-':
@@ -265,7 +265,8 @@ def iupac_decomposition(split, guide_no_bulge,
                                 totalDict[count][size+1][combinedKey] = [
                                     replaceTarget2, resultSet, listInfo2]
                                 # remove the new generated sample set from all lower levels
-                                # remember to change this when new release
+                                # remember to uncomment this when new release
+                                # if haplotype_check:
                                 totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
                                     totalDict[count][size +
                                                      1][combinedKey][1]
@@ -323,6 +324,7 @@ def iupac_decomposition(split, guide_no_bulge,
                                     target_to_list[pos_beg +
                                                    position_t] = char_t.lower()
 
+                        # pam respect input PAM after IUPAC resolution
                         pam_ok = True
                         for pam_chr_pos, pam_chr in enumerate(target_to_list[pam_begin: pam_end]):
                             if pam_chr.upper() not in iupac_code_set[pam[pam_chr_pos]]:
@@ -334,7 +336,7 @@ def iupac_decomposition(split, guide_no_bulge,
                             # ref char not in set of general pam char
                             if not iupac_code_set[pam[pos_pam]] & iupac_code_set[pam_char]:
                                 found_creation = True
-
+                        # value of mm and bulges is over allowed threshold, discard target
                         if mm_new_t - int(split[8]) > allowed_mms:
                             continue
                         elif pam_ok:
@@ -357,9 +359,11 @@ def iupac_decomposition(split, guide_no_bulge,
                                 final_line[15] = str(tmp_matrix[0][0])
                                 final_line[16] = str(tmp_matrix[0][1])
                                 final_line[17] = str(tmp_matrix[0][2])
-
+                            # report ref DNA seq of target
                             final_line.append(refSeq_with_bulges)
+                            # number to activate ref score calculation (active if target is alternative)
                             final_line.append(33)
+                            # position of tmp_mms (removed later after processing)
                             final_line.append(tmp_pos_mms)
                             cluster_to_save.append(final_line)
     return cluster_to_save
@@ -481,7 +485,7 @@ try:
             break
         elif '/' in mydict[entry]:
             break
-    print('Haplotype verified', haplotype_check)
+    print('Haplotype processing', haplotype_check)
 except:
     print("No dict found for", current_chr)
 
@@ -528,14 +532,17 @@ if len_pam != 3 or guide_len != 20 or pam_at_beginning:
 # keep track of current analyzed cluster (necessary to check if the cluster is terminated)
 # current_guide_chr_pos_direction = ''
 # count_cluster_dimension = 0
+
 # skip header
 inTarget.readline()
 for line in inTarget:
-    # list with clusterized targets in list format
+    # list with clusterized targets in list format (contains ref seq and all other alternative targets)
     cluster_to_save = list()
-    # print('target in before process', line)
+    # split target into list
     split = line.strip().split('\t')
+    # sgRNA sequence (with bulges and PAM)
     guide = split[1]
+    # found target on DNA (with bulges,mismatches and PAM)
     target = split[2]
     guide_no_bulge = split[1].replace('-', '')
     guide_no_pam = guide[pos_beg:pos_end]
@@ -545,8 +552,12 @@ for line in inTarget:
         process_iupac = True
     else:
         process_iupac = False
+        # append to respect file format for post analysis
+        # null ref sequence
         split.append('n')
+        # specific value to represent a ref target to avoid recount score
         split.append(55)
+        # count of mm_bul for ref sequence in case of alternative target
         split.append(0)
         cluster_to_save.append(split)
 
@@ -562,13 +573,18 @@ for line in inTarget:
     for count, cluster in enumerate(clusters_with_scores):
         for target in cluster:
             if count == 0:  # CFD target
+                # remove count of tmp_mms
                 target.pop(-2)
+                # save CFD targets
                 cfd_best.write(
                     '\t'.join(target)+'\t'+str(0)+'\n')
+                # save mm-bul targets
                 mmblg_best.write(
                     '\t'.join(target)+'\t'+str(0)+'\n')
             if count == 1:  # CRISTA target
+                # remove count of tmp_mms
                 target.pop(-2)
+                # save CRISTA targets
                 crista_best.write('\t'.join(target)+'\t' +
                                   str(0)+'\n')
 
@@ -788,8 +804,8 @@ mmblg_best.close()
 crista_best.close()
 
 os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCFD.txt')
-
 os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestmmblg.txt')
+os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCRISTA.txt')
 
 
 cfd_dataframe = pd.DataFrame.from_dict(cfd_for_graph)
