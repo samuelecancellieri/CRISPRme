@@ -275,8 +275,13 @@ while read vcf_f; do
 		echo -e 'Search Reference\tStart\t'$(date) >>$log
 		# echo -e 'Search Reference\tStart\t'$(date) >&2
 		# echo -e 'Search Reference' >  $output
-		crispritz.py search $idx_ref "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) &
-		pid_search_ref=$!
+		if [ "$bDNA" -ne 0 ] || [ "$bRNA" -ne 0 ]; then
+			crispritz.py search $idx_ref "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) &
+			pid_search_ref=$!
+		else
+			crispritz.py search "$current_working_directory/Genomes/${ref_name}/" "$pam_file" "$guide_file" "${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -r -th $(expr $ncpus / 4) &
+			pid_search_ref=$!
+		fi
 	else
 		echo -e "Search for reference already done"
 	fi
@@ -286,10 +291,15 @@ while read vcf_f; do
 			echo -e 'Search Variant\tStart\t'$(date) >>$log
 			# echo -e 'Search Variant\tStart\t'$(date) >&2
 			# echo -e 'Search Variant' >  $output
-			crispritz.py search "$idx_var" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) -var
-			mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
-			echo -e 'Search Variant\tEnd\t'$(date) >>$log
-			# echo -e 'Search Variant\tEnd\t'$(date) >&2
+			if [ "$bDNA" -ne 0 ] || [ "$bRNA" -ne 0 ]; then
+				crispritz.py search "$idx_var" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th $(expr $ncpus / 4) -var
+				# mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+				echo -e 'Search Variant\tEnd\t'$(date) >>$log
+			else
+				crispritz.py search "$current_working_directory/Genomes/${ref_name}+${vcf_name}/" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -mm $mm -r -th $(expr $ncpus / 4) &
+				echo -e 'Search Variant\tEnd\t'$(date) >>$log
+				# mv "${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+			fi
 		else
 			echo -e "Search for variant already done"
 		fi
@@ -299,8 +309,11 @@ while read vcf_f; do
 			echo -e 'Search INDELs\tStart\t'$(date) >>$log
 			# echo -e 'Search INDELs\tStart\t'$(date) >&2
 			cd $starting_dir
+			#commented to avoid indels search
 			./pool_search_indels.py "$ref_folder" "$vcf_folder" "$vcf_name" "$guide_file" "$pam_file" $bMax $mm $bDNA $bRNA "$output_folder" $true_pam "$current_working_directory/"
-			mv "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+			# mv "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
+			awk '($3 !~ "n") {print $0}' "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" >"$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.tmp"
+			mv "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.tmp" "$output_folder/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt"
 			echo -e "Search INDELs End"
 			echo -e 'Search INDELs\tEnd\t'$(date) >>$log
 			# echo -e 'Search INDELs\tEnd\t'$(date) >&2
@@ -316,9 +329,10 @@ while read vcf_f; do
 	echo -e 'Search Reference\tEnd\t'$(date) >>$log
 	# echo -e 'Search Reference\tEnd\t'$(date) >&2
 
-	if [ -f "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
-		mv "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "$output_folder/crispritz_targets"
-	fi
+	# if [ -f "$output_folder/${ref_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
+	# 	mv "$output_folder/${ref_name}_${pam_name}_${
+	# move all targets into targets directory
+	mv $output_folder/*.targets.txt $output_folder/crispritz_targets
 
 	if ! [ -d "$output_folder/crispritz_prof" ]; then
 		mkdir $output_folder/crispritz_prof
@@ -388,6 +402,7 @@ while read vcf_f; do
 		if [ $(wc -l <"$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt") -gt 1 ]; then
 
 			# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
+			#commented to avoid indel analysis
 			./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
 
 			# echo -e 'Post-analysis INDELs\tEnd\t'$(date) >&2
@@ -477,7 +492,7 @@ echo -e "Risk score added"
 cd $output_folder
 # rm -r "cfd_graphs"
 rm -r "crispritz_prof"
-# rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
+rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
 rm $final_res
 rm $final_res_alt
 
@@ -543,6 +558,8 @@ if [ $gene_proximity != "_" ]; then
 		head -1 "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >>"${output_folder}/tmp_linda_plot_file_${guide}.txt"
 		fgrep "$guide" "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >>"${output_folder}/tmp_linda_plot_file_${guide}.txt"
 		python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &>"${output_folder}/warnings.txt"
+		#QUI METTERE QUELLO CON MMvBUL DA USARE QUANDO CFD SCORE NON CALCOLATO
+		python $starting_dir/CRISPRme_plots_MMvBUL.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &>"${output_folder}/warnings.txt"
 		rm -f "${output_folder}/warnings.txt"
 		rm "${output_folder}/tmp_linda_plot_file_${guide}.txt"
 	done <$guide_file
@@ -590,3 +607,6 @@ echo -e "JOB END"
 if [ "$email" != "_" ]; then
 	python $starting_dir/../pages/send_mail.py $output_folder
 fi
+
+#keep log_error but no block visualization
+mv $output_folder/log_error.txt $output_folder/log_error_no_check.txt

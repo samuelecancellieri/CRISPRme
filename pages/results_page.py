@@ -1301,6 +1301,23 @@ def samplePage(job_id, hash):
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
+    # integrated_file_name = glob.glob(
+    #     current_working_directory + 'Results/' +
+    #     job_id + '/' + '*integrated*')[0]
+    # integrated_file_name = str(integrated_file_name)
+    total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+    rows = c.execute(total_private_sample)
+    header = [description[0] for description in rows.description]
+    conn.commit()
+    conn.close()
+    # with open(integrated_file_name, 'r') as integrated:
+    #     header = integrated.readline().strip().split('\t')
+    path_db = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/.*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
     total_private_sample = f"SELECT * FROM final_table LIMIT 1"
     rows = c.execute(total_private_sample)
     header = [description[0] for description in rows.description]
@@ -1904,11 +1921,23 @@ def guidePagev3(job_id, hash):
     # print('table', cols)
     # cols = [{"name": i, "id": i, 'type': t, 'hideable': True}
     #         for i, t in zip(COL_BOTH, COL_BOTH_TYPE)]
+    path_db = glob.glob(
+        current_working_directory + 'Results/' +
+        job_id + '/.*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
+    # integrated_file_name = glob.glob(
+    #     current_working_directory + 'Results/' +
+    #     job_id + '/' + '*integrated*')[0]
+    # integrated_file_name = str(integrated_file_name)
+    total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+    rows = c.execute(total_private_sample)
+    header = [description[0] for description in rows.description]
+    conn.commit()
+    conn.close()
     # with open(integrated_file_name, 'r') as integrated:
     #     header = integrated.readline().strip().split('\t')
-    # integrated_file = open(integrated_file_name, 'r')
-    # header = integrated_file.readline().strip().split('\t')
-    # integrated_file.close()
     # header = header_integrated
     path_db = glob.glob(
         current_working_directory + 'Results/' +
@@ -2381,8 +2410,8 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     # integrated_to_zip = current_working_directory + 'Results/' + \
     #     job_id + '/' + job_id + '.bestMerge.txt.integrated_results.zip'
     integrated_to_zip = integrated_file_name.replace('tsv', 'zip')
-    # if not os.path.exists(integrated_to_zip):
-    os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
+    if not os.path.exists(integrated_to_zip):
+        os.system(f"zip -j {integrated_to_zip} {integrated_file} &")
 
     if 'NO SCORES' not in all_scores:
         try:
@@ -3819,27 +3848,34 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     elif value == 'tab-query-table':
         fl.append(html.P(
             'Summary page to query the final result file selecting one/two column to group by the table and extract requested targets'))
-        # path = current_working_directory+"/Results/"+job_id+"/."+job_id+".db"
-        path_db = glob.glob(
-            current_working_directory + 'Results/' +
-            job_id + '/.*.db')[0]
-        path_db = str(path_db)
-        conn = sqlite3.connect(path_db)
-        c = conn.cursor()
+        #path = current_working_directory+"/Results/"+job_id+"/."+job_id+".db"
+        # path_db = glob.glob(
+        #     current_working_directory + 'Results/' +
+        #     job_id + '/.*.db')[0]
+        # path_db = str(path_db)
+        # conn = sqlite3.connect(path_db)
+        # c = conn.cursor()
         # integrated_file_name = glob.glob(
         #     current_working_directory + 'Results/' +
         #     job_id + '/' + '*integrated*')[0]
         # integrated_file_name = str(integrated_file_name)
-        total_private_sample = f"SELECT * FROM final_table LIMIT 1"
-        rows = c.execute(total_private_sample)
-        header = [description[0] for description in rows.description]
-        conn.commit()
-        conn.close()
+        # path_db = glob.glob(
+        #     current_working_directory + 'Results/' +
+        #     job_id + '/.*.db')[0]
+        # path_db = str(path_db)
+        # conn = sqlite3.connect(path_db)
+        # c = conn.cursor()
+        # integrated_file_name = glob.glob(
+        #     current_working_directory + 'Results/' +
+        #     job_id + '/' + '*integrated*')[0]
+        # integrated_file_name = str(integrated_file_name)
+        # total_private_sample = f"SELECT * FROM final_table LIMIT 1"
+        # rows = c.execute(total_private_sample)
+        # header = [description[0] for description in rows.description]
+        # conn.commit()
+        # conn.close()
         # with open(integrated_file_name, 'r') as integrated:
         #     header = integrated.readline().strip().split('\t')
-        # integrated_file = open(integrated_file_name, 'r')
-        # header = integrated_file.readline().strip().split('\t')
-        # integrated_file.close()
         # header = header_integrated
         # dff_view_names = COL_BOTH
         # dff_view_names = ['Bulge type', 'crRNA', 'Off target motif', 'Reference sequence', 'Chromosome',
@@ -3852,7 +3888,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #                             'Total', 'Bulge_type', 'PAM_gen', 'CFD',
         #                             'CFD_ref', 'Highest_CFD_Risk_Score',
         #                             'Var_uniq', 'SNP', 'AF', 'rsID', 'Samples', 'Seq_in_cluster', 'Annotation_Type'])
-        dff = pd.DataFrame(columns=header)
+        # dff = pd.DataFrame(columns=header)
         # to define column names in the first empty table
         # ##print(pd.read_sql_query("SELECT * FROM final_table LIMIT 0", conn))
         # ##print('check col in query table', dff)
@@ -3894,7 +3930,21 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         #     )
         query_tab_content = html.Div(
             [
-                # img_panel,
+                dbc.Row(
+                    dbc.Col(
+                        html.Div(
+                            [
+                                html.H4('Select filter criteria for targets'),
+                                dcc.Dropdown(options=[
+                                    {'label': 'Fewest Mismatches and Bulges',
+                                     'value': 'fewest'},
+                                    {'label': 'CFD score', 'value': 'CFD'},
+                                    {'label': 'User Score',
+                                     'value': 'User'}
+                                ], value='fewest',
+                                    id='target_filter_dropdown'
+                                )
+                            ]))),
                 dbc.Row(  # row with main group by, secondo group by and thresholds
                     [
                         dbc.Col(  # col0 phantom target select
@@ -4047,8 +4097,8 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                     id='live_table',
                                     # columns=[{"name": dff_view_names[count], "id": i, 'hideable':True}
                                     #          for count, i in enumerate(dff.columns)],
-                                    columns=[{"name": i, "id": i, 'hideable': True}
-                                             for count, i in enumerate(dff.columns)],
+                                    # columns=[{"name": i, "id": i, 'hideable': True}
+                                    #          for count, i in enumerate(dff.columns)],
                                     style_cell_conditional=[
                                         {
                                             'if': {'column_id': 'Variant_samples_(highest_CFD)'},
@@ -4225,14 +4275,22 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             super_populations = []
             populations = []
         # fl.append(html.P('Select Mismatch Value'))
-
+        # CRISPRme_top_1000_log_for_main_text_{guide}_MMvBUL.png
         try:
-            top1000_image = html.Div(
-                html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                                id='top-1000-score', width="80%", height="auto"),
-                       target="_blank")
-            )
+            if nuclease == 'SpCas9':
+                top1000_image = html.Div(
+                    html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                    current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                                    id='top-1000-score', width="80%", height="auto"),
+                           target="_blank")
+                )
+            else:
+                top1000_image = html.Div(
+                    html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                    current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}_MMvBUL.png', 'rb').read()).decode()),
+                                    id='top-1000-score', width="80%", height="auto"),
+                           target="_blank")
+                )
         except:
             top1000_image = html.Div('')
 
@@ -4536,11 +4594,13 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
 # Return the table with the result of the query
 @ app.callback(
     # [Output('live_table', 'data'),
-    [Output('live_table', 'data'),
+    [Output('live_table', 'columns'),
+     Output('live_table', 'data'),
      Output('live_table', 'tooltip_data'),
      Output("message-alert", "is_open"), ],
     [Input('submit-val', 'n_clicks'),
-     Input('live_table', "page_current")],
+     Input('live_table', "page_current"),
+     Input('target_filter_dropdown', 'value')],
     [State('live_table', "page_size"),
      State('general-profile-table', 'selected_cells'),
      State('target', 'value'),
@@ -4554,16 +4614,17 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
      State("message-alert", "is_open"),
      ]
 )
-def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_order, all_guides, orderdrop, sholddrop, asc1, maxdrop, url, alert):
+def update_output(n_clicks, page_current, filter_target_value, page_size, sel_cel, target, radio_order, all_guides, orderdrop, sholddrop, asc1, maxdrop, url, alert):
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
-    target = target[0:7]
-    """
-    # #print(target)
-    # temporal guide for test file
-    # #print(n_clicks)
-    # #print(type(n_clicks))
-    """
+    # print(filter_target_value)
+    # print(target)
+    # target = target[0:7]
+    # print(target)
+
+    # target is the filter value to query on the db
+    target = filter_target_value
+
     if n_clicks > 0:
         if radio_order == None:
             data = []
@@ -4602,8 +4663,28 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
             # data.loc[mask, 'DNA'] = 'NA'
             # data.loc[mask, 'DNA'] = data['Reference']
             # data = data.drop([GUIDE_COLUMN], axis=1)
-            snps = pd.DataFrame(
-                data['Variant_info_genome_(highest_CFD)']).to_dict('records')
+            # print(data)
+            # find col to drop using the user filter
+            drop_col = list()
+            for elem in list(data.columns):
+                if filter_target_value == 'fewest' and 'highest_CFD' in elem:
+                    drop_col.append(elem)
+                if filter_target_value == 'CFD' and 'fewest' in elem:
+                    drop_col.append(elem)
+            data.drop(drop_col, inplace=True, axis=1)
+            # extract cols for datatable
+            columns = [{"name": i, "id": i, 'hideable': True}
+                       for count, i in enumerate(data.columns)]
+
+            # selct SNPs col to filter
+            if filter_target_value == 'fewest':
+                snps = pd.DataFrame(
+                    data['Variant_info_genome_(fewest_mm+b)']).to_dict('records')
+            if filter_target_value == 'CFD':
+                snps = pd.DataFrame(
+                    data['Variant_info_genome_(highest_CFD)']).to_dict('records')
+
+            # extract data and list datas
             data = data.to_dict('records')
             tooltip_data = [{
                             column: {'value': str(value), 'type': 'markdown'}
@@ -4612,7 +4693,7 @@ def update_output(n_clicks, page_current, page_size, sel_cel, target, radio_orde
     else:
         raise PreventUpdate
     # ##print('query table', data)
-    return data, tooltip_data, alert
+    return columns, data, tooltip_data, alert
 
 
 # to get correct number of page

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from operator import truediv
+from operator import not_, truediv
+import operator
 from posixpath import expanduser
 from intervaltree import IntervalTree
 import sys
@@ -19,6 +20,38 @@ def rev_comp(a):
     if a == 'C' or a == 'c':
         return 'G'
     return 'C'
+
+# process seed analisys
+
+
+def seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
+                    count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt):
+    # count mm and bulges for seed and non-seed target
+    for elem in seed_ref:
+        if elem.islower():
+            count_seed_ref += 1
+            continue
+        if elem == "-":
+            count_seed_ref += 1
+    for elem in non_seed_ref:
+        if elem.islower():
+            count_non_seed_ref += 1
+            continue
+        if elem == "-":
+            count_non_seed_ref += 1
+    for elem in seed_alt:
+        if elem.islower():
+            count_seed_alt += 1
+            continue
+        if elem == "-":
+            count_seed_alt += 1
+    for elem in non_seed_alt:
+        if elem.islower():
+            count_non_seed_alt += 1
+            continue
+        if elem == "-":
+            count_non_seed_alt += 1
+    return [count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt]
 
 
 def createBedforMultiAlternative(variantList, samples):
@@ -154,6 +187,10 @@ saveDict = {
     'Mismatches_(highest_CFD)': 'NA',
     'Bulges_(highest_CFD)': 'NA',
     'Mismatches+bulges_(highest_CFD)': 'NA',
+    "Seed_mismatches+bulges_REF_(highest_CFD)": 'NA',
+    "Seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
+    "Non_seed_mismatches+bulges_REF_(highest_CFD)": 'NA',
+    "Non_seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
     'Bulge_type_(highest_CFD)': 'NA',
     'REF/ALT_origin_(highest_CFD)': 'NA',
     'PAM_creation_(highest_CFD)': 'NA',
@@ -177,6 +214,10 @@ saveDict = {
     'Mismatches_(fewest_mm+b)': 'NA',
     'Bulges_(fewest_mm+b)': 'NA',
     'Mismatches+bulges_(fewest_mm+b)': 'NA',
+    "Seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA',
+    "Seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
+    "Non_seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA',
+    "Non_seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
     'Bulge_type_(fewest_mm+b)': 'NA',
     'REF/ALT_origin_(fewest_mm+b)': 'NA',
     'PAM_creation_(fewest_mm+b)': 'NA',
@@ -196,7 +237,6 @@ saveDict = {
     'Annotation_ENCODE': 'NA',
     'Annotation_personal': 'NA'
 }
-
 
 start_time = time.time()
 
@@ -430,47 +470,11 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = 'NA'
 
     change_alt_ref_highest_cfd = False
-    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
-        # if 'DNA' in saveDict['Bulge_type_(highest_CFD)']:
-        #     mm = 0
-        #     bulge = 0
-        #     for nt in saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)']:
-        #         if nt.islower():
-        #             mm += 1
-        #     for nt in saveDict['Aligned_spacer+PAM_(highest_CFD)']:
-        #         if nt == '-':
-        #             bulge += 1
-        # else:
-        #     mm = 0
-        #     bulge = 0
-        #     for nt in saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)']:
-        #         if nt.islower():
-        #             mm += 1
-        #         if nt == '-':
-        #             bulge += 1
-        # if mm <= int(saveDict['Mismatches_(highest_CFD)']) and bulge <= int(saveDict['Bulges_(highest_CFD)']):
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
         change_alt_ref_highest_cfd = True
 
     change_alt_ref_fewest_mm_b = False
-    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'alt' and saveDict['CFD_score_REF_(fewest_mm+b)'] == saveDict['CFD_score_ALT_(fewest_mm+b)']:
-        # if 'DNA' in saveDict['Bulge_type_(fewest_mm+b)']:
-        #     mm = 0
-        #     bulge = 0
-        #     for nt in saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)']:
-        #         if nt.islower():
-        #             mm += 1
-        #     for nt in saveDict['Aligned_spacer+PAM_(fewest_mm+b)']:
-        #         if nt == '-':
-        #             bulge += 1
-        # else:
-        #     mm = 0
-        #     bulge = 0
-        #     for nt in saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)']:
-        #         if nt.islower():
-        #             mm += 1
-        #         if nt == '-':
-        #             bulge += 1
-        # if mm <= int(saveDict['Mismatches_(fewest_mm+b)']) and bulge <= int(saveDict['Bulges_(fewest_mm+b)']):
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'alt' and saveDict['CFD_score_REF_(fewest_mm+b)'] != '-1.0' and saveDict['CFD_score_REF_(fewest_mm+b)'] == saveDict['CFD_score_ALT_(fewest_mm+b)']:
         change_alt_ref_fewest_mm_b = True
 
     if change_alt_ref_highest_cfd:
@@ -482,6 +486,7 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Variant_MAF_(highest_CFD)'] = 'NA'
         saveDict['Variant_rsID_(highest_CFD)'] = 'NA'
         saveDict['Variant_samples_(highest_CFD)'] = 'NA'
+        saveDict['PAM_creation_(highest_CFD)'] = 'NA'
 
     if change_alt_ref_fewest_mm_b:
         saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)']
@@ -492,35 +497,159 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Variant_MAF_(fewest_mm+b)'] = 'NA'
         saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA'
         saveDict['Variant_samples_(fewest_mm+b)'] = 'NA'
+        saveDict['PAM_creation_(fewest_mm+b)'] = 'NA'
 
-    count_N_in_guide = 0  # check how long is the pam counting Ns in the guide
-    pam_at_start = False  # check if pam is at start of the sequence
+    # check how long is the pam counting Ns in the guide
+    count_N_in_guide = str(target[15]).count('N')
+    # check if pam is at start of the sequence
+    if str(target[15])[0] == 'N':
+        pam_at_start = True
+    else:
+        pam_at_start = False
     # count number of Ns in the guide
-    for count, elem in enumerate(str(target[15])):
-        if elem == 'N':
-            count_N_in_guide += 1
-            if count == 0:  # if N is at start of the guide, pam_at_start = true
-                pam_at_start = True
+    # for count, elem in enumerate(str(target[15])):
+    #     if elem == 'N':
+    #         count_N_in_guide += 1
+    #         if count == 0:  # if N is at start of the guide, pam_at_start = true
+    #             pam_at_start = True
+
+    # seed_count = False
+    # # process seed count for non-scorable targets
+    # if saveDict['CFD_score_REF_(highest_CFD)'] == '-1.0':
+    #     seed_count = True
+
+    if pam_at_start:
+        real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][count_N_in_guide:]
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][count_N_in_guide:]
+        dna_bulge_count_seed = 0
+        dna_bulge_count_non_seed = 0
+        if 'DNA' in saveDict['Bulge_type_(highest_CFD)']:
+            dna_seq = saveDict['Aligned_spacer+PAM_(highest_CFD)'][count_N_in_guide:]
+            for pos, nt in enumerate(dna_seq):
+                if nt == '-' and pos < int(len(real_target_ref)/2):
+                    dna_bulge_count_seed += 1
+                elif nt == '-' and pos >= int(len(real_target_ref)/2):
+                    dna_bulge_count_non_seed += 1
+        seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+        seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+        non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+        non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+    else:
+        real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][:len(
+            saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'])-count_N_in_guide]
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][:len(
+            saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'])-count_N_in_guide]
+        dna_bulge_count_seed = 0
+        dna_bulge_count_non_seed = 0
+        if 'DNA' in saveDict['Bulge_type_(highest_CFD)']:
+            dna_seq = saveDict['Aligned_spacer+PAM_(highest_CFD)'][:len(
+                saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'])-count_N_in_guide]
+            for pos, nt in enumerate(dna_seq):
+                if nt == '-' and pos >= int(len(real_target_ref)/2):
+                    dna_bulge_count_seed += 1
+                elif nt == '-' and pos < int(len(real_target_ref)/2):
+                    dna_bulge_count_non_seed += 1
+        seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+        seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+        non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+        non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
+        seed_alt == 'NA'
+        non_seed_alt == 'NA'
+
+    seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
+                                0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
+
+    saveDict['Seed_mismatches+bulges_REF_(highest_CFD)'] = str(
+        int(seed_list[0])+dna_bulge_count_seed)
+    saveDict['Seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
+        int(seed_list[1])+dna_bulge_count_seed)
+    saveDict['Non_seed_mismatches+bulges_REF_(highest_CFD)'] = str(
+        int(seed_list[2])+dna_bulge_count_non_seed)
+    saveDict['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = str(
+        int(seed_list[3])+dna_bulge_count_non_seed)
+
+    if pam_at_start:
+        real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][count_N_in_guide:]
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][count_N_in_guide:]
+        dna_bulge_count_seed = 0
+        dna_bulge_count_non_seed = 0
+        if 'DNA' in saveDict['Bulge_type_(fewest_mm+b)']:
+            dna_seq = saveDict['Aligned_spacer+PAM_(fewest_mm+b)'][count_N_in_guide:]
+            for pos, nt in enumerate(dna_seq):
+                if nt == '-' and pos < int(len(real_target_ref)/2):
+                    dna_bulge_count_seed += 1
+                elif nt == '-' and pos >= int(len(real_target_ref)/2):
+                    dna_bulge_count_non_seed += 1
+        seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+        seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+        non_seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+        non_seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+    else:
+        real_target_ref = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][:len(
+            saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'])-count_N_in_guide]
+        real_target_alt = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][: len(
+            saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'])-count_N_in_guide]
+        dna_bulge_count_seed = 0
+        dna_bulge_count_non_seed = 0
+        if 'DNA' in saveDict['Bulge_type_(fewest_mm+b)']:
+            dna_seq = saveDict['Aligned_spacer+PAM_(fewest_mm+b)'][:len(
+                saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'])-count_N_in_guide]
+            for pos, nt in enumerate(dna_seq):
+                if nt == '-' and pos >= int(len(real_target_ref)/2):
+                    dna_bulge_count_seed += 1
+                elif nt == '-' and pos < int(len(real_target_ref)/2):
+                    dna_bulge_count_non_seed += 1
+        seed_ref = real_target_ref[int(len(real_target_ref)/2):]
+        seed_alt = real_target_alt[int(len(real_target_alt)/2):]
+        non_seed_ref = real_target_ref[:int(len(real_target_ref)/2)]
+        non_seed_alt = real_target_alt[:int(len(real_target_alt)/2)]
+
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
+        seed_alt == 'NA'
+        non_seed_alt == 'NA'
+
+    seed_list = seed_processing(seed_ref, seed_alt, non_seed_ref, non_seed_alt,
+                                0, 0, 0, 0)  # count_seed_ref, count_seed_alt, count_non_seed_ref, count_non_seed_alt
+
+    saveDict['Seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
+        seed_list[0])
+    saveDict['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
+        seed_list[1])
+    saveDict['Non_seed_mismatches+bulges_REF_(fewest_mm+b)'] = str(
+        seed_list[2])
+    saveDict['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = str(
+        seed_list[3])
+
+    # reset count seed and non-seed for ALT if target is REF
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
+        saveDict['Seed_mismatches+bulges_ALT_(highest_CFD)'] = '0'
+        saveDict['Non_seed_mismatches+bulges_ALT_(highest_CFD)'] = '0'
+
+    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
+        saveDict['Seed_mismatches+bulges_ALT_(fewest_mm+b)'] = '0'
+        saveDict['Non_seed_mismatches+bulges_ALT_(fewest_mm+b)'] = '0'
 
     if saveDict['REF/ALT_origin_(highest_CFD)'] == 'ref':
         if pam_at_start:  # save pam sequence extracting directly from the ref sequence
-            saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][:count_N_in_guide]
+            saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][: count_N_in_guide]
         else:
             saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'][-count_N_in_guide:]
     else:
         if pam_at_start:  # save pam sequence extracting directly from the var sequence
-            saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][:count_N_in_guide]
+            saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][: count_N_in_guide]
         else:
             saveDict['PAM_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'][-count_N_in_guide:]
 
     if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'ref':
         if pam_at_start:  # save pam sequence extracting directly from the ref sequence
-            saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][:count_N_in_guide]
+            saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][: count_N_in_guide]
         else:
             saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'][-count_N_in_guide:]
     else:
         if pam_at_start:  # save pam sequence extracting directly from the var sequence
-            saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][:count_N_in_guide]
+            saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][: count_N_in_guide]
         else:
             saveDict['PAM_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'][-count_N_in_guide:]
 
@@ -547,7 +676,7 @@ for nline, line in enumerate(inCrispritzResults):
     if len(gencode_annotations) > 0:
         saveDict['Annotation_GENCODE'] = ','.join(gencode_annotations)
 
-    foundEmpirical = sorted(empiricalTree[int(target[6])-4:int(target[6])+4])
+    foundEmpirical = sorted(empiricalTree[int(target[6])-4: int(target[6])+4])
 
     for found in range(0, len(foundEmpirical)):
         empirical = foundEmpirical[found].data
@@ -565,16 +694,20 @@ for nline, line in enumerate(inCrispritzResults):
             # saveDict['lowest_empirical'] = str(empiricalDict[key])
 
     save = ''
-    for key in saveDict:
-        save += str(saveDict[key])+'\t'
+    save += '\t'.join(list(saveDict.values()))
     save += '\n'
-
     outFile.write(save)
+
+# if seed_count:
+#     pass
+# else:
+#     os.system(f'cut -f53-60 --complement {outFile_name} > {outFile_name}.tmp')
+#     os.system(f'mv {outFile_name}.tmp {outFile_name}')
 
 if check_personal_existence:
     pass
 else:
-    os.system(f'cut -f52 --complement {outFile_name} > {outFile_name}.tmp')
+    os.system(f'cut -f60 --complement {outFile_name} > {outFile_name}.tmp')
     os.system(f'mv {outFile_name}.tmp {outFile_name}')
 
 print('CHECKING MISSING RESULTS')

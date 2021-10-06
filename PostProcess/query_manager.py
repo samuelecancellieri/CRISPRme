@@ -24,6 +24,7 @@ guide_column = "Spacer+PAM"
 
 def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sholddrop, maxdrop, asc1, url_job, guide, current_working_directory):
     # query with threshold
+    # print('entro shold')
     if asc1 == None:
         asc1 = 'DESC'
 
@@ -35,9 +36,14 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
     c = conn.cursor()
     param = [guide, page_size, page_current * page_size, ]
 
-    if target == "Target1":
+    if target == 'CFD':
         radio_order = str(radio_order)+"_(highest_CFD)"
         orderdrop = str(orderdrop)+"_(highest_CFD)"
+    elif target == 'fewest':
+        radio_order = str(radio_order)+"_(fewest_mm+b)"
+        orderdrop = str(orderdrop)+"_(fewest_mm+b)"
+
+    # print(radio_order, orderdrop)
 
     if orderdrop != "None_(highest_CFD)":  # ordinamento doppio
         if maxdrop == None:  # min
@@ -102,6 +108,7 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
 
 def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, asc1, url_job, guide, current_working_directory):
     # print(asc1)
+    # print('entro noshold')
     if asc1 == None:
         asc1 = 'DESC'
     url = url_job[5:]
@@ -112,13 +119,22 @@ def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, a
     param = [guide, page_size, page_current * page_size, ]
     # print("noshold")
 
-    if target == "Target2":
-        radio_order = str("MMBLG_"+radio_order+"_2")
-        orderdrop = "MMBLG_"+str(orderdrop)+"_2"
-
-    if target == "Target1":
+    if target == 'CFD':
         radio_order = str(radio_order)+"_(highest_CFD)"
         orderdrop = str(orderdrop)+"_(highest_CFD)"
+    elif target == 'fewest':
+        radio_order = str(radio_order)+"_(fewest_mm+b)"
+        orderdrop = str(orderdrop)+"_(fewest_mm+b)"
+
+    # print(radio_order, orderdrop)
+
+    # if target == "Target2":
+    #     radio_order = str("MMBLG_"+radio_order+"_2")
+    #     orderdrop = "MMBLG_"+str(orderdrop)+"_2"
+
+    # if target == "Target1":
+    #     radio_order = str(radio_order)+"_(highest_CFD)"
+    #     orderdrop = str(orderdrop)+"_(highest_CFD)"
 
     #print(radio_order, orderdrop)
 

@@ -17,9 +17,8 @@ starting_dir=$8
 echo 'Preparing files for post processing'
 sed -i '/#/d' $1
 # LC_ALL=C sort -T $dir -k21,21rg $1 -o $1
-#sort using CFD score as primary and Total as secondary value
-LC_ALL=C sort -T $dir -k21,21rg -k11,11n $1 -o $1
-# awk '{print $5"\t"$7"\t"$7+length($3)"\t"$21}' $1 > $1.bed
+#sort using CFD score as primary and Total_MMBUL as secondary value
+LC_ALL=C sort -T $dir -k21,21rg -k35,35n $1 -o $1
 awk '{print $5"\t"$7"\t"$7+length($3)"\t"NR}' $1 >$1.bed
 sort-bed $1.bed >$1.bed.sort
 mv $1.bed.sort $1.bed

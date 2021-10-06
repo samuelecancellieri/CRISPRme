@@ -35,7 +35,7 @@ to_remove = ['Cluster_Position', 'Highest_CFD_Absolute_Risk_Score', 'MMBLG_Real_
              ]
 # print(len(to_remove))
 
-new_names = ['Spacer+PAM', 'Chromosome', 'Start_coordinate_(highest_CFD)', 'Strand_(highest_CFD)', 'Aligned_spacer+PAM_(highest_CFD)', 'Aligned_protospacer+PAM_REF_(highest_CFD)', 'Aligned_protospacer+PAM_ALT_(highest_CFD)',
+new_names = ['Spacer+PAM','Chromosome', 'Start_coordinate_(highest_CFD)', 'Strand_(highest_CFD)', 'Aligned_spacer+PAM_(highest_CFD)', 'Aligned_protospacer+PAM_REF_(highest_CFD)', 'Aligned_protospacer+PAM_ALT_(highest_CFD)',
              'Mismatches_(highest_CFD)', 'Bulges_(highest_CFD)', 'Mismatches+bulges_(highest_CFD)', 'Bulge_type_(highest_CFD)', 'PAM_creation_(highest_CFD)', 'CFD_score_(highest_CFD)', 'CFD_score_REF_(highest_CFD)',
              'CFD_risk_score_(highest_CFD)', 'Variant_info_genome_(highest_CFD)', 'Variant_MAF_(highest_CFD)', 'Variant_rsID_(highest_CFD)', 'Variant_samples_(highest_CFD)', 'Not_found_in_REF', 'Other_motifs',
              'Start_coordinate_(fewest_mm+b)', 'Strand_(fewest_mm+b)', 'Aligned_spacer+PAM_(fewest_mm+b)', 'Aligned_protospacer+PAM_REF_(fewest_mm+b)', 'Aligned_protospacer+PAM_ALT_(fewest_mm+b)',
