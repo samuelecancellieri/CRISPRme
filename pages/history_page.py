@@ -133,8 +133,7 @@ def get_results():
         pass
     # resultParamDataframe = resultParamDataframe.sort_values(
     #     ['Mismatches', 'DNA_bulge', 'RNA_bulge'], ascending=[True, True, True])
-    resultParamDataframe = resultParamDataframe[resultParamDataframe.Job != "LL_1450_QI907BG3VD"]
-    
+
     return resultParamDataframe
 
 

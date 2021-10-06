@@ -492,7 +492,7 @@ echo -e "Risk score added"
 cd $output_folder
 # rm -r "cfd_graphs"
 rm -r "crispritz_prof"
-rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
+# rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
 rm $final_res
 rm $final_res_alt
 
