@@ -405,15 +405,37 @@ def preprocess_CRISTA_score(target):
     # preprocess target then calculate CRISTA score
     guide_no_bulge_no_pam = str(target[1]).replace('-', '').replace('N', '')
     sgRNA_list = list()
-    # sgRNA with no bulges and no Ns
-    sgRNA_list.append(guide_no_bulge_no_pam)
+    # sgRNA taken directly from the target alignment
+    sgRNA_list.append(target[1])
+    # DNA seq extracted from the ref genome
     DNAseq_list = list()
-    DNAseq_list.append(genomeStr[int(
-        split[5])-3:int(split[5])+len(guide_no_bulge_no_pam)+6].upper())
+    # first 3 nucleotide to add to protospacer
+    pre_protospacer_DNA = genomeStr[int(split[4])-3:int(split[4])].upper()
+    if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
+        pass  # do nothing, then i will implement the check for the valid alt allele
+    # protospacer taken directly from the aligned target
+    protospacerDNA = str(target[2])
+    # last 3 nucleotides to add to protospacer
+    post_protospacer_DNA = genomeStr[int(
+        split[4])+len(target[1]):int(split[4])+len(target[1])+3].upper()
+    if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
+        pass  # do nothing, then i will implement the check for the valid alt allele
+
+    complete_DNA_seq = pre_protospacer_DNA + \
+        protospacerDNA+post_protospacer_DNA
+
+    # trim the 3' end to avoid sequences longer than 29
+    complete_DNA_seq = complete_DNA_seq[:29]
+
+    # append sequence to DNA list
+    DNAseq_list.append(complete_DNA_seq)
+
+    # calculate score
     if do_scores:
         crista_score = CRISTA_predict(sgRNA_list, DNAseq_list)[0]
     else:
         crista_score = -1
+
     target.append("{:.3f}".format(crista_score))
     target[-3] = "{:.3f}".format(crista_score)
     # print(target)
