@@ -64,6 +64,8 @@ import re
 import numpy as np
 import PA_limitedIndel as PA_script
 import pandas as pd
+import warnings
+warnings.filterwarnings("ignore")
 
 ### globals
 RF_PICKLE_PATH = "CRISTA_predictors.pkl"

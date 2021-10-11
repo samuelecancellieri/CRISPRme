@@ -404,35 +404,44 @@ def preprocess_CFD_score(target):
 def preprocess_CRISTA_score(target):
     # preprocess target then calculate CRISTA score
     guide_no_bulge_no_pam = str(target[1]).replace('-', '').replace('N', '')
-    sgRNA_list = list()
-    # sgRNA taken directly from the target alignment
-    sgRNA_list.append(target[1])
+
+    # non-aligned sgRNA
+    sgRNA_non_aligned_list = guide_no_bulge_no_pam+'NGG'
+    # aligned DNA
+    DNA_aligned = (str(target[2]))
     # DNA seq extracted from the ref genome
-    DNAseq_list = list()
-    # first 3 nucleotide to add to protospacer
-    pre_protospacer_DNA = genomeStr[int(split[4])-3:int(split[4])].upper()
+    DNAseq_from_genome_list = str()
+    # first 5 nucleotide to add to protospacer
+    pre_protospacer_DNA = genomeStr[int(split[4])-5:int(split[4])].upper()
     if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
         pass  # do nothing, then i will implement the check for the valid alt allele
     # protospacer taken directly from the aligned target
-    protospacerDNA = str(target[2])
-    # last 3 nucleotides to add to protospacer
+    protospacerDNA = str(target[2]).replace('-', '')
+    # last 5 nucleotides to add to protospacer
     post_protospacer_DNA = genomeStr[int(
-        split[4])+len(target[1]):int(split[4])+len(target[1])+3].upper()
+        split[4])+len(target[1]):int(split[4])+len(target[1])+5].upper()
     if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
         pass  # do nothing, then i will implement the check for the valid alt allele
 
-    complete_DNA_seq = pre_protospacer_DNA + \
-        protospacerDNA+post_protospacer_DNA
+    # DNA seq extracted from genome and append to aligned DNA seq from CRISPRme
+    complete_DNA_seq = str(pre_protospacer_DNA) + \
+        protospacerDNA+str(post_protospacer_DNA)
 
-    # trim the 3' end to avoid sequences longer than 29
-    complete_DNA_seq = complete_DNA_seq[:29]
+    # trim the 3' and 5' end to avoid sequences longer than 29
+    len_DNA_seq = len(complete_DNA_seq)
+    first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
+    second_half = complete_DNA_seq[int(
+        len_DNA_seq/2):int(len_DNA_seq/2)+15]
+    complete_DNA_seq = first_half+second_half
 
     # append sequence to DNA list
-    DNAseq_list.append(complete_DNA_seq)
+    DNAseq_from_genome_list = complete_DNA_seq
 
+    do_scores = False  # REMOVE TO EXECUTE SCORING
     # calculate score
     if do_scores:
-        crista_score = CRISTA_predict(sgRNA_list, DNAseq_list)[0]
+        crista_score = CRISTA_predict(
+            sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
     else:
         crista_score = -1
 
