@@ -473,9 +473,9 @@ for nline, line in enumerate(inCrispritzResults):
     if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
         change_alt_ref_highest_cfd = True
 
-    change_alt_ref_fewest_mm_b = False
-    if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'alt' and saveDict['CFD_score_REF_(fewest_mm+b)'] != '-1.0' and saveDict['CFD_score_REF_(fewest_mm+b)'] == saveDict['CFD_score_ALT_(fewest_mm+b)']:
-        change_alt_ref_fewest_mm_b = True
+    # change_alt_ref_fewest_mm_b = False
+    # if saveDict['REF/ALT_origin_(fewest_mm+b)'] == 'alt' and saveDict['CFD_score_REF_(fewest_mm+b)'] != '-1.0' and saveDict['CFD_score_REF_(fewest_mm+b)'] == saveDict['CFD_score_ALT_(fewest_mm+b)']:
+    #     change_alt_ref_fewest_mm_b = True
 
     if change_alt_ref_highest_cfd:
         saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)']
@@ -488,16 +488,16 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Variant_samples_(highest_CFD)'] = 'NA'
         saveDict['PAM_creation_(highest_CFD)'] = 'NA'
 
-    if change_alt_ref_fewest_mm_b:
-        saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)']
-        saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = 'NA'
-        saveDict['REF/ALT_origin_(fewest_mm+b)'] = 'ref'
-        saveDict['Variant_info_spacer+PAM_(fewest_mm+b)'] = 'NA'
-        saveDict['Variant_info_genome_(fewest_mm+b)'] = 'NA'
-        saveDict['Variant_MAF_(fewest_mm+b)'] = 'NA'
-        saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA'
-        saveDict['Variant_samples_(fewest_mm+b)'] = 'NA'
-        saveDict['PAM_creation_(fewest_mm+b)'] = 'NA'
+    # if change_alt_ref_fewest_mm_b:
+    #     saveDict['Aligned_protospacer+PAM_REF_(fewest_mm+b)'] = saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)']
+    #     saveDict['Aligned_protospacer+PAM_ALT_(fewest_mm+b)'] = 'NA'
+    #     saveDict['REF/ALT_origin_(fewest_mm+b)'] = 'ref'
+    #     saveDict['Variant_info_spacer+PAM_(fewest_mm+b)'] = 'NA'
+    #     saveDict['Variant_info_genome_(fewest_mm+b)'] = 'NA'
+    #     saveDict['Variant_MAF_(fewest_mm+b)'] = 'NA'
+    #     saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA'
+    #     saveDict['Variant_samples_(fewest_mm+b)'] = 'NA'
+    #     saveDict['PAM_creation_(fewest_mm+b)'] = 'NA'
 
     # check how long is the pam counting Ns in the guide
     count_N_in_guide = str(target[15]).count('N')
