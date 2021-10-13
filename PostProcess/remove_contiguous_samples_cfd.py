@@ -103,13 +103,15 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         if str(final_list[0][cfd]) != '-1.0':
             final_list.sort(key=lambda x: float(x[cfd]), reverse=True)
             if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] == 'n':
-                final_list[1][cfd-1] = str(n_ele-1)
-                final_list[1][2*cfd+1] = str(n_ele-1)
+                final_list[1][cfd-1] = str(n_ele-1) #CFD
+                final_list[1][2*cfd+1] = str(n_ele-1)#MM_BUL
+                final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
                 fileOut.write("\t".join(final_list[1]))
                 bestTarget = final_list.pop(1)
             else:
-                final_list[0][cfd-1] = str(n_ele-1)
-                final_list[0][2*cfd+1] = str(n_ele-1)
+                final_list[0][cfd-1] = str(n_ele-1)#CFD
+                final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
+                final_list[0][3*cfd+1] = str(n_ele-1)#CRISTA
                 fileOut.write("\t".join(final_list[0]))
                 bestTarget = final_list.pop(0)
         else:
@@ -118,26 +120,28 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             # final_list.sort(key=lambda x: (int(x[31]), int(x[30])))
             # sort for total (mm+bul) in second half target
             final_list.sort(key=lambda x: int(x[32]))
-            final_list[0][cfd-1] = str(n_ele-1)
-            final_list[0][2*cfd+1] = str(n_ele-1)
+            final_list[0][cfd-1] = str(n_ele-1)#CFD
+            final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
+            final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
             fileOut.write("\t".join(final_list[0]))
             bestTarget = final_list.pop(0)
         for ele in final_list:
-            ele[cfd-1] = str(n_ele-1)
-            ele[2*cfd+1] = str(n_ele-1)
+            final_list[0][cfd-1] = str(n_ele-1)#CFD
+            final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
+            final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
             # fileOut_disc.write(("\t".join(ele)).strip()+"\t"+bestTarget[chrom]+"_"+bestTarget[pos]+"\n")
             fileOut_disc.write(("\t".join(ele)))
     elif n_ele == 1:
         fileOut.write("\t".join(final_list[0]))
 
 
-tau = int(sys.argv[3])
-chrom = int(sys.argv[4])-1
-pos = int(sys.argv[5])-1
-total = int(sys.argv[6])-1
-true_guide = int(sys.argv[7])-1
-snp_info = int(sys.argv[8])-1
-cfd = int(sys.argv[9])-1
+tau = int(sys.argv[3]) #range in bp to merge targets
+chrom = int(sys.argv[4])-1 #chromoso
+pos = int(sys.argv[5])-1 #position of target
+total = int(sys.argv[6])-1 #mm+bul value
+true_guide = int(sys.argv[7])-1 #real guide used in the search
+snp_info = int(sys.argv[8])-1 #snp_info (ref_alt_allele)
+cfd = int(sys.argv[9])-1 #CFD score 
 # -1 is to get the correct "python enumeration" from the bash script
 
 start = time.time()

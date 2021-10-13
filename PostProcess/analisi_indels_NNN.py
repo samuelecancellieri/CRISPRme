@@ -745,7 +745,8 @@ for line in inResult:
 
         cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse = True)
         cluster_to_save_mmbl = cluster_to_save.copy()
-        cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
+        # cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
+        cluster_to_save_mmbl.sort(key = lambda x : (int(x[9])))
         
         keys_seen = []
         saved = False
@@ -1002,7 +1003,8 @@ for t in cluster_to_save:
 
 cluster_to_save.sort(key = lambda x : (float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse = True)
 cluster_to_save_mmbl = cluster_to_save.copy()
-cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
+# cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
+cluster_to_save_mmbl.sort(key = lambda x : (int(x[9])))
 
 keys_seen = []
 saved = False

@@ -403,10 +403,10 @@ def preprocess_CFD_score(target):
 
 def preprocess_CRISTA_score(target):
     # preprocess target then calculate CRISTA score
-    guide_no_bulge_no_pam = str(target[1]).replace('-', '').replace('N', '')
+    # guide_no_bulge_no_pam = str(target[1]).replace('-', '').replace('N', '')
 
     # non-aligned sgRNA
-    sgRNA_non_aligned_list = guide_no_bulge_no_pam+'NGG'
+    sgRNA_non_aligned_list = str(target[1])[:len(str(target[1]))-3]+'NGG'
     # aligned DNA
     DNA_aligned = (str(target[2]))
     # DNA seq extracted from the ref genome
@@ -436,8 +436,8 @@ def preprocess_CRISTA_score(target):
 
     # append sequence to DNA list
     DNAseq_from_genome_list = complete_DNA_seq
-
-    do_scores = False  # REMOVE TO EXECUTE SCORING
+    
+    # do_scores = False  # REMOVE TO EXECUTE SCORING
     # calculate score
     if do_scores:
         crista_score = CRISTA_predict(
@@ -446,7 +446,20 @@ def preprocess_CRISTA_score(target):
         crista_score = -1
 
     target.append("{:.3f}".format(crista_score))
-    target[-3] = "{:.3f}".format(crista_score)
+    # target[-3] = "{:.3f}".format(crista_score)
+    if target[-3] == 55:
+        target[-3] = "{:.3f}".format(crista_score)
+    if target[-3] == 33:
+        if do_scores:
+            DNA_aligned = (str(target[-4]))
+            protospacerDNA = str(target[-4]).replace('-', '')
+            complete_DNA_seq = str(pre_protospacer_DNA) + protospacerDNA+ str(post_protospacer_DNA)
+            DNAseq_from_genome_list = complete_DNA_seq
+            crista_score = CRISTA_predict(
+            sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
+        else:
+            crista_score = -1
+        target[-3] = "{:.3f}".format(crista_score)
     # print(target)
     # print('crista', crista_score)
     return target

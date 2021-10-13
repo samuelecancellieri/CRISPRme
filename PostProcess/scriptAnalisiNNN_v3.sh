@@ -11,7 +11,7 @@
 # $mismatch indica il numero di mismatches usati per la ricerca, default 6,
 # $bulgesDNA e $bulgesRNA indicano il num di bulges usati nella ricerca, default 2
 # cartella del genoma reference, indicata con $referencegenome                  -> INPUT $6
-# Assicurarsi che il file con gli ID dei sample (samplesID.txt) sia nella cartella 
+# Assicurarsi che il file con gli ID dei sample (samplesID.txt) sia nella cartella
 # dello script
 
 #ESEMPIO CHIAMATA
@@ -30,34 +30,34 @@ mismatch=$7
 bulgesDNA=$8
 bulgesRNA=$9
 
-guide_file=${10} 
-pam_file=${11} 
-# sampleID=${12} 
+guide_file=${10}
+pam_file=${11}
+# sampleID=${12}
 
 output_folder=${12}
 
 echo $jobid
 # 1) Rimozione duplicati, estrazione semicommon e unique e creazione file total
 #echo 'Creazione file .total.txt'
-./extraction.sh $REFtargets $ENRtargets $jobid  # OUTPUT    $jobid.common_targets.txt -> Non usato
-                                                #           $jobid.semi_common_targets.txt 
-                                                #           $jobid.unique_targets.txt
+./extraction.sh $REFtargets $ENRtargets $jobid # OUTPUT    $jobid.common_targets.txt -> Non usato
+#           $jobid.semi_common_targets.txt
+#           $jobid.unique_targets.txt
 rm $jobid.common_targets.txt
 
 # 2) Creazione colonne PAM creation etc
-awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' $jobid.semi_common_targets.txt > $jobid.semi_common_targets.minmaxdisr.txt 
+awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' $jobid.semi_common_targets.txt >$jobid.semi_common_targets.minmaxdisr.txt
 rm $jobid.semi_common_targets.txt
 
-awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' $jobid.unique_targets.txt > $jobid.unique_targets.pamcreation.txt #Add pam creation, variant unique, real guide column
+awk '{real_guide=$2; gsub("-","",real_guide); print $0"\tn\tn\tn\tn\t"real_guide"\tn\tn\tn"}' $jobid.unique_targets.txt >$jobid.unique_targets.pamcreation.txt #Add pam creation, variant unique, real guide column
 rm $jobid.unique_targets.txt
 
-cat $jobid.unique_targets.pamcreation.txt $jobid.semi_common_targets.minmaxdisr.txt > $jobid.total.txt
+cat $jobid.unique_targets.pamcreation.txt $jobid.semi_common_targets.minmaxdisr.txt >$jobid.total.txt
 rm $jobid.unique_targets.pamcreation.txt
 rm $jobid.semi_common_targets.minmaxdisr.txt
 
 #echo 'Creazione cluster del file .total.txt'
-# 3) Clustering 
-./cluster.dict.py $jobid.total.txt 'no' 'True' 'True' "$guide_file" 'total' 'orderChr'  # OUTPUT     $jobid.total.cluster.txt
+# 3) Clustering
+./cluster.dict.py $jobid.total.txt 'no' 'True' 'True' "$guide_file" 'total' 'orderChr' # OUTPUT     $jobid.total.cluster.txt
 rm $jobid.total.txt
 
 #sed -i ':a;N;$!ba;s/\n/\tn\tn\tn\n/g' $jobid.total.cluster.txt
@@ -85,7 +85,7 @@ rm $jobid.total.txt
 
 #echo 'Estrazione sample dal file .total.cluster.txt'
 
-# ./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA 
+# ./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA
 ./new_simple_analysis.py "$referencegenome" "$dictionaries" "$jobid.total.cluster.txt" "${pam_file}" "$jobid" "$mismatch"
 
 # OUTPUT    $jobid.bestCFD.txt
@@ -96,24 +96,35 @@ rm $jobid.total.txt
 rm "$jobid.total.cluster.txt"
 
 echo 'Sorting and adjusting results'
-#(head -n 1 $jobid.bestCFD.txt && tail -n +2 $jobid.bestCFD.txt | sort -k4,4 -k6,6 -T ./) > tmp  && mv tmp $jobid.bestCFD.txt
+head -1 $jobid.bestCFD.txt >tmp
+(tail -n +2 $jobid.bestCFD.txt | sort -k4,4 -k6,6 -k21,21rg -T ./) >>tmp && mv tmp $jobid.bestCFD.txt
+
+head -1 $jobid.bestmmblg.txt >tmp
+(tail -n +2 $jobid.bestmmblg.txt | sort -k4,4 -k6,6 -k10,10n -T ./) >>tmp && mv tmp $jobid.bestmmblg.txt
+
+head -1 $jobid.bestCRISTA.txt >tmp
+(tail -n +2 $jobid.bestCRISTA.txt | sort -k4,4 -k6,6 -k21,21rg -T ./) >>tmp && mv tmp $jobid.bestCRISTA.txt #sort CRISTA file per chr,cluster_position and score
+
 #python compact_ref_var.py $jobid.bestCFD.txt
-./adjust_cols.py $jobid.bestCFD.txt 
-# ./adjust_cols.py $jobid.altCFD.txt 
+./adjust_cols.py $jobid.bestCFD.txt
+./adjust_cols.py $jobid.bestmmblg.txt
+./adjust_cols.py $jobid.bestCRISTA.txt
+# ./adjust_cols.py $jobid.altmmblg.txt
 
-./adjust_cols.py $jobid.bestmmblg.txt 
-# ./adjust_cols.py $jobid.altmmblg.txt 
+# sed -i 1i"#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\t_#Bulge_type\t_crRNA\t_DNA\t_Reference\t_Chromosome\t_Position\t_Cluster_Position\t_Direction\t_Mismatches\t_Bulge_Size\t_Total\t_PAM_gen\t_Var_uniq\t_Samples\t_Annotation_Type\t_Real_Guide\t_rsID\t_AF\t_SNP\t_#Seq_in_cluster\t_CFD\t_CFD_ref\tCRISTA_#Bulge_type\tCRISTA_crRNA\tCRISTA_DNA\tCRISTA_Reference\tCRISTA_Chromosome\tCRISTA_Position\tCRISTA_Cluster_Position\tCRISTA_Direction\tCRISTA_Mismatches\tCRISTA_Bulge_Size\tCRISTA_Total\tCRISTA_PAM_gen\tCRISTA_Var_uniq\tCRISTA_Samples\tCRISTA_Annotation_Type\tCRISTA_Real_Guide\tCRISTA_rsID\tCRISTA_AF\tCRISTA_SNP\tCRISTA_#Seq_in_cluster\tCRISTA_CFD\tCRISTA_CFD_ref" "$final_res"
+# sed -i 1i"_#Bulge_type\t_crRNA\t_DNA\t_Reference\t_Chromosome\t_Position\t_Cluster_Position\t_Direction\t_Mismatches\t_Bulge_Size\t_Total\t_PAM_gen\t_Var_uniq\t_Samples\t_Annotation_Type\t_Real_Guide\t_rsID\t_AF\t_SNP\t_#Seq_in_cluster\t_CFD\t_CFD_ref/" $jobid.bestCFD.txt
+# sed -i 1i"_#Bulge_type\t_crRNA\t_DNA\t_Reference\t_Chromosome\t_Position\t_Cluster_Position\t_Direction\t_Mismatches\t_Bulge_Size\t_Total\t_PAM_gen\t_Var_uniq\t_Samples\t_Annotation_Type\t_Real_Guide\t_rsID\t_AF\t_SNP\t_#Seq_in_cluster\t_CFD\t_CFD_ref/" $jobid.bestmmblg.txt
+# sed -i 1i"_#Bulge_type\t_crRNA\t_DNA\t_Reference\t_Chromosome\t_Position\t_Cluster_Position\t_Direction\t_Mismatches\t_Bulge_Size\t_Total\t_PAM_gen\t_Var_uniq\t_Samples\t_Annotation_Type\t_Real_Guide\t_rsID\t_AF\t_SNP\t_#Seq_in_cluster\t_CFD\t_CFD_ref/" $jobid.bestCRISTA.txt
 
-sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.bestmmblg.txt
-# sed -i '1s/.*/MMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' $jobid.altmmblg.txt
+# sed -i '1s/.*/_#Bulge_type\t_crRNA\t_DNA\t_Reference\t_Chromosome\t_Position\t_Cluster_Position\t_Direction\t_Mismatches\t_Bulge_Size\t_Total\t_PAM_gen\t_Var_uniq\t_Samples\t_Annotation_Type\t_Real_Guide\t_rsID\t_AF\t_SNP\t_#Seq_in_cluster\t_CFD\t_CFD_ref/' $jobid.bestmmblg.txt
+# sed -i '1s/.*/_#Bulge_type\t_crRNA\t_DNA\t_Reference\t_Chromosome\t_Position\t_Cluster_Position\t_Direction\t_Mismatches\t_Bulge_Size\t_Total\t_PAM_gen\t_Var_uniq\t_Samples\t_Annotation_Type\t_Real_Guide\t_rsID\t_AF\t_SNP\t_#Seq_in_cluster\t_CFD\t_CFD_ref/' $jobid.altmmblg.txt
 
+# pr -m -t -J $jobid.bestCFD.txt $jobid.bestmmblg.txt >$jobid.bestMerge.txt
+# pr -m -t -J $jobid.altCFD.txt $jobid.altmmblg.txt > $jobid.altMerge.txt
 
-pr -m -t -J $jobid.bestCFD.txt $jobid.bestmmblg.txt > $jobid.bestMerge.txt 
-# pr -m -t -J $jobid.altCFD.txt $jobid.altmmblg.txt > $jobid.altMerge.txt 
-
-rm $jobid.bestCFD.txt
+# rm $jobid.bestCFD.txt
 # rm $jobid.altCFD.txt
-rm $jobid.bestmmblg.txt
+# rm $jobid.bestmmblg.txt
 # rm $jobid.altmmblg.txt
 
 # mv $jobid.bestMerge.txt $output_folder
