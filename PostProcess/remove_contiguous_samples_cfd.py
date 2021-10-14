@@ -103,15 +103,15 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         if str(final_list[0][cfd]) != '-1.0':
             final_list.sort(key=lambda x: float(x[cfd]), reverse=True)
             if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] == 'n':
-                final_list[1][cfd-1] = str(n_ele-1) #CFD
-                final_list[1][2*cfd+1] = str(n_ele-1)#MM_BUL
-                final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
+                final_list[1][cfd-1] = str(n_ele-1) #bestSCORE
+                # final_list[1][2*cfd+1] = str(n_ele-1)#MM_BUL
+                # final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
                 fileOut.write("\t".join(final_list[1]))
                 bestTarget = final_list.pop(1)
             else:
                 final_list[0][cfd-1] = str(n_ele-1)#CFD
-                final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
-                final_list[0][3*cfd+1] = str(n_ele-1)#CRISTA
+                # final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
+                # final_list[0][3*cfd+1] = str(n_ele-1)#CRISTA
                 fileOut.write("\t".join(final_list[0]))
                 bestTarget = final_list.pop(0)
         else:
@@ -119,16 +119,16 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             # sort for mm and bul in half target sorted for mm and bul originally mm[30],bul[31]
             # final_list.sort(key=lambda x: (int(x[31]), int(x[30])))
             # sort for total (mm+bul) in second half target
-            final_list.sort(key=lambda x: int(x[32]))
-            final_list[0][cfd-1] = str(n_ele-1)#CFD
-            final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
-            final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
+            final_list.sort(key=lambda x: int(x[total]))
+            final_list[0][cfd-1] = str(n_ele-1)#bestMM_BUL when not scored
+            # final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
+            # final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
             fileOut.write("\t".join(final_list[0]))
             bestTarget = final_list.pop(0)
         for ele in final_list:
             final_list[0][cfd-1] = str(n_ele-1)#CFD
-            final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
-            final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
+            # final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
+            # final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
             # fileOut_disc.write(("\t".join(ele)).strip()+"\t"+bestTarget[chrom]+"_"+bestTarget[pos]+"\n")
             fileOut_disc.write(("\t".join(ele)))
     elif n_ele == 1:

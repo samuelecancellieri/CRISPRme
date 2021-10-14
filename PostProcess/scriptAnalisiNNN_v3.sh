@@ -96,16 +96,22 @@ rm $jobid.total.txt
 rm "$jobid.total.cluster.txt"
 
 echo 'Sorting and adjusting results'
-head -1 $jobid.bestCFD.txt >tmp
-(tail -n +2 $jobid.bestCFD.txt | sort -k4,4 -k6,6 -k21,21rg -T ./) >>tmp && mv tmp $jobid.bestCFD.txt
+#copy header in tmp file
+head -1 $jobid.bestCFD.txt >$jobid.tmp
+#tail file w/o header and sort for realguide,chr,cluster_pos,score
+(tail -n +2 $jobid.bestCFD.txt | sort -k16,16 -k5,5 -k7,7n -k21,21rg -T ./) >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD.txt
 
-head -1 $jobid.bestmmblg.txt >tmp
-(tail -n +2 $jobid.bestmmblg.txt | sort -k4,4 -k6,6 -k10,10n -T ./) >>tmp && mv tmp $jobid.bestmmblg.txt
+#copy header in tmp file
+head -1 $jobid.bestmmblg.txt >$jobid.tmp
+#tail file w/o header and sort for realguide,chr,cluster_pos,total(mm+bul)
+(tail -n +2 $jobid.bestmmblg.txt | sort -k16,16 -k5,5 -k7,7n -k10,10n -T ./) >>$jobid.tmp && mv $jobid.tmp $jobid.bestmmblg.txt
 
-head -1 $jobid.bestCRISTA.txt >tmp
-(tail -n +2 $jobid.bestCRISTA.txt | sort -k4,4 -k6,6 -k21,21rg -T ./) >>tmp && mv tmp $jobid.bestCRISTA.txt #sort CRISTA file per chr,cluster_position and score
+#copy header in tmp file
+head -1 $jobid.bestCRISTA.txt >$jobid.tmp
+#tail file w/o header and sort for realguide,chr,cluster_pos,score
+(tail -n +2 $jobid.bestCRISTA.txt | sort -k16,16 -k5,5 -k7,7n -k21,21rg -T ./) >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA.txt
 
-#python compact_ref_var.py $jobid.bestCFD.txt
+#adjustin columns to have the correct order and remove uncessary ones
 ./adjust_cols.py $jobid.bestCFD.txt
 ./adjust_cols.py $jobid.bestmmblg.txt
 ./adjust_cols.py $jobid.bestCRISTA.txt
@@ -130,3 +136,21 @@ head -1 $jobid.bestCRISTA.txt >tmp
 # mv $jobid.bestMerge.txt $output_folder
 # mv $jobid.altMerge.txt $output_folder
 # mv $jobid.CFDGraph.txt $output_folder
+
+# echo -e 'Merging Targets\tStart\t'$(date) >>$log
+#echo -e 'Merging Close Targets\tStart\t'$(date) >> $log
+
+#merge targets in same chr when they are at distance 3 from each other (inclusive)
+./merge_close_targets_cfd.sh $jobid.bestCFD.txt $jobid.bestCFD.txt.trimmed 3
+mv $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt
+mv $jobid.bestCFD.txt.trimmed.discarded_samples $jobid.bestCFD.txt.alt
+
+#merge targets in same chr when they are at distance 3 from each other (inclusive)
+./merge_close_targets_cfd.sh $jobid.bestmmblg.txt $jobid.bestmmblg.txt.trimmed 3
+mv $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt
+mv $jobid.bestmmblg.txt.trimmed.discarded_samples $jobid.bestmmblg.txt.alt
+
+#merge targets in same chr when they are at distance 3 from each other (inclusive)
+./merge_close_targets_cfd.sh $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.trimmed 3
+mv $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt
+mv $jobid.bestCRISTA.txt.trimmed.discarded_samples $jobid.bestCRISTA.txt.alt
