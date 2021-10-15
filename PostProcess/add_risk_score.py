@@ -14,7 +14,6 @@ else:
 with open(file_in, 'r') as fin:
     with open(file_out, 'w') as fout:
         header = fin.readline().strip().split('\t')
-        print('header in add risk score', header)
         # header.insert(22, 'Highest_CFD_Risk_Score')
         # header.insert(23, 'Highest_CFD_Absolute_Risk_Score')
         # header.append('MMBLG_CFD_Risk_Score')

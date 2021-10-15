@@ -401,7 +401,7 @@ while read vcf_f; do
 		cd "$starting_dir"
 
 		echo -e 'Post-analysis INDELs\tStart\t'$(date) >>$log
-		#STOP INDELS ANALYSIS
+		#SKIP INDELS ANALYSIS
 		# if [ $(wc -l <"$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt") -gt 1 ]; then
 
 		# 	# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
