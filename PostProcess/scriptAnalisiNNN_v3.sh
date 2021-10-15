@@ -87,6 +87,9 @@ rm $jobid.total.txt
 
 # ./simpleAnalysis_v3.py "$annotationfile" "$jobid.total.cluster.txt" "$jobid" "$dictionaries" "$pam_file" $mismatch "$referencegenome" "$guide_file" $bulgesDNA $bulgesRNA
 ./new_simple_analysis.py "$referencegenome" "$dictionaries" "$jobid.total.cluster.txt" "${pam_file}" "$jobid" "$mismatch"
+# cp $jobid.bestCFD.txt $jobid.bestCFD.txt.check_analysis
+# cp $jobid.bestmmblg.txt $jobid.bestmmblg.txt.check_analysis
+# cp $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.check_analysis
 
 # OUTPUT    $jobid.bestCFD.txt
 #           $jobid.CFDGraph.txt     (per fare l'area graph dei CFD REF vs ENR)
@@ -98,18 +101,21 @@ rm "$jobid.total.cluster.txt"
 echo 'Sorting and adjusting results'
 #copy header in tmp file
 head -1 $jobid.bestCFD.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,score
-(tail -n +2 $jobid.bestCFD.txt | sort -k16,16 -k5,5 -k7,7n -k21,21rg -T ./) >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD.txt
+#tail file w/o header and sort for realguide,chr,cluster_pos,score,sample
+tail -n +2 $jobid.bestCFD.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD.txt
+# cp $jobid.bestCFD.txt $jobid.bestCFD.txt.after_sort
 
 #copy header in tmp file
 head -1 $jobid.bestmmblg.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,total(mm+bul)
-(tail -n +2 $jobid.bestmmblg.txt | sort -k16,16 -k5,5 -k7,7n -k10,10n -T ./) >>$jobid.tmp && mv $jobid.tmp $jobid.bestmmblg.txt
+#tail file w/o header and sort for realguide,chr,cluster_pos,total(mm+bul),sample
+tail -n +2 $jobid.bestmmblg.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestmmblg.txt
+# cp $jobid.bestmmblg.txt $jobid.bestmmblg.txt.after_sort
 
 #copy header in tmp file
 head -1 $jobid.bestCRISTA.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,score
-(tail -n +2 $jobid.bestCRISTA.txt | sort -k16,16 -k5,5 -k7,7n -k21,21rg -T ./) >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA.txt
+#tail file w/o header and sort for realguide,chr,cluster_pos,score,sample
+tail -n +2 $jobid.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA.txt
+# cp $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.after_sort
 
 #adjustin columns to have the correct order and remove uncessary ones
 ./adjust_cols.py $jobid.bestCFD.txt
@@ -141,16 +147,71 @@ head -1 $jobid.bestCRISTA.txt >$jobid.tmp
 #echo -e 'Merging Close Targets\tStart\t'$(date) >> $log
 
 #merge targets in same chr when they are at distance 3 from each other (inclusive)
-./merge_close_targets_cfd.sh $jobid.bestCFD.txt $jobid.bestCFD.txt.trimmed 3
+./merge_close_targets_cfd.sh $jobid.bestCFD.txt $jobid.bestCFD.txt.trimmed 3 'score'
+# cp $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt.check_merge
 mv $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt
 mv $jobid.bestCFD.txt.trimmed.discarded_samples $jobid.bestCFD.txt.alt
 
 #merge targets in same chr when they are at distance 3 from each other (inclusive)
-./merge_close_targets_cfd.sh $jobid.bestmmblg.txt $jobid.bestmmblg.txt.trimmed 3
+./merge_close_targets_cfd.sh $jobid.bestmmblg.txt $jobid.bestmmblg.txt.trimmed 3 'total'
+# cp $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt.check_merge
 mv $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt
 mv $jobid.bestmmblg.txt.trimmed.discarded_samples $jobid.bestmmblg.txt.alt
 
 #merge targets in same chr when they are at distance 3 from each other (inclusive)
-./merge_close_targets_cfd.sh $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.trimmed 3
+./merge_close_targets_cfd.sh $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.trimmed 3 'score'
+# cp $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt.check_merge
 mv $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt
 mv $jobid.bestCRISTA.txt.trimmed.discarded_samples $jobid.bestCRISTA.txt.alt
+
+# echo -e 'Annotating results\tStart\t'$(date) >>$log
+#annotate bestCFD
+./annotate_final_results.py $jobid.bestCFD.txt $annotationfile $jobid.bestCFD.txt.annotated
+./annotate_final_results.py $jobid.bestCFD.txt.alt $annotationfile $jobid.bestCFD.txt.alt.annotated
+mv $jobid.bestCFD.txt.annotated $jobid.bestCFD.txt
+mv $jobid.bestCFD.txt.alt.annotated $jobid.bestCFD.txt.alt
+#annotate bestmmblg
+./annotate_final_results.py $jobid.bestmmblg.txt $annotationfile $jobid.bestmmblg.txt.annotated
+./annotate_final_results.py $jobid.bestmmblg.txt.alt $annotationfile $jobid.bestmmblg.txt.alt.annotated
+mv $jobid.bestmmblg.txt.annotated $jobid.bestmmblg.txt
+mv $jobid.bestmmblg.txt.alt.annotated $jobid.bestmmblg.txt.alt
+#annotate bestCRISTA
+./annotate_final_results.py $jobid.bestCRISTA.txt $annotationfile $jobid.bestCRISTA.txt.annotated
+./annotate_final_results.py $jobid.bestCRISTA.txt.alt $annotationfile $jobid.bestCRISTA.txt.alt.annotated
+mv $jobid.bestCRISTA.txt.annotated $jobid.bestCRISTA.txt
+mv $jobid.bestCRISTA.txt.alt.annotated $jobid.bestCRISTA.txt.alt
+#correct files names
+#bestCFD
+
+#bestmmblg
+
+#bestCRISTA
+
+# echo -e 'Annotating results\tEnd\t'$(date) >>$log
+
+# echo -e "Adding risk score"
+#scoring bestCFD
+./add_risk_score.py $jobid.bestCFD.txt $jobid.bestCFD.txt.risk "False"
+./add_risk_score.py $jobid.bestCFD.txt.alt $jobid.bestCFD.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
+mv $jobid.bestCFD.txt.risk $jobid.bestCFD.txt
+mv $jobid.bestCFD.txt.alt.risk $jobid.bestCFD.txt.alt
+#scoring bestmmblg
+./add_risk_score.py $jobid.bestmmblg.txt $jobid.bestmmblg.txt.risk "False"
+./add_risk_score.py $jobid.bestmmblg.txt.alt $jobid.bestmmblg.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
+mv $jobid.bestmmblg.txt.risk $jobid.bestmmblg.txt
+mv $jobid.bestmmblg.txt.alt.risk $jobid.bestmmblg.txt.alt
+#scoring bestCRISTA
+./add_risk_score.py $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.risk "False"
+./add_risk_score.py $jobid.bestCRISTA.txt.alt $jobid.bestCRISTA.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
+mv $jobid.bestCRISTA.txt.risk $jobid.bestCRISTA.txt
+mv $jobid.bestCRISTA.txt.alt.risk $jobid.bestCRISTA.txt.alt
+# echo -e "Risk score added"
+
+#remove N's and dots from rsID from best
+./remove_n_and_dots.py $jobid.bestCFD.txt
+./remove_n_and_dots.py $jobid.bestmmblg.txt
+./remove_n_and_dots.py $jobid.bestCRISTA.txt
+#remove N's and dots from rsID from alt
+./remove_n_and_dots.py $jobid.bestCFD.txt.alt
+./remove_n_and_dots.py $jobid.bestmmblg.txt.alt
+./remove_n_and_dots.py $jobid.bestCRISTA.txt.alt

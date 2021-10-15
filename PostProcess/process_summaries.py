@@ -122,7 +122,7 @@ for guide in guides:
                 seen_superpop = set()
                 seen_pop = set()
                 for sample in samples:
-                    if sample != "NO_SAMPLES" and sample != '':
+                    if sample != "NO_SAMPLES" and sample != '' and sample != 'NA':
                         dict_samples[sample][3] += 1
                         seen_pop.add(dict_samples[sample][1])
                         seen_superpop.add(dict_samples[sample][2])

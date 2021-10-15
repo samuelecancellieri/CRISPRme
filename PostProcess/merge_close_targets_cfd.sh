@@ -3,6 +3,7 @@
 fileIn=$1
 fileOut=$2
 thresh=$3 #threshold to use in order to merge near targets
+sort_criteria=$4
 
 ##########ADJUST THESE PARAMETERS BASED ON INPUT FILE##########
 #columns start from 1
@@ -23,5 +24,5 @@ echo "Sorting done in $(($ENDTIME - $STARTTIME)) seconds"
 # rm $fileIn.sorted.tmp
 echo "Merging targets"
 # python remove_contiguous_samples_cfd.py $fileIn.sorted $fileOut $thresh $chrom $position $total $true_guide $snp_info $cfd
-python remove_contiguous_samples_cfd.py $fileIn $fileOut $thresh $chrom $position $total $true_guide $snp_info $cfd
+python remove_contiguous_samples_cfd.py $fileIn $fileOut $thresh $chrom $position $total $true_guide $snp_info $cfd $sort_criteria
 # rm $fileIn.sorted

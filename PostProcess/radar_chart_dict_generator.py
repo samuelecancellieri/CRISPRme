@@ -351,7 +351,7 @@ def fillDict(guide, guideDict, motifDict):
             # count the target in each level, from total to infinite, this way we autoinclude
             # each target in the proper level and in all the following levels
             guideDict[over]['General'] += 1
-            if split[14] != 'n':
+            if split[14] != 'NA':
                 annotationsList = split[14].strip().split(',')
                 # to avoid duplicate categories
                 annotationsList = set(annotationsList)
@@ -558,7 +558,8 @@ for guide in inGuideFile:
     motifDict = motifDictCreation(guide)
     fillDict(guide, guideDict, motifDict)
     for total in range(max_mm+max_bulges):
-            generatePlot(guide, guideDict[total], motifDict[total], total, 0, 'TOTAL')
+        generatePlot(guide, guideDict[total],
+                     motifDict[total], total, 0, 'TOTAL')
     json.dump(guideDict, open(outDir+f"/.guide_dict_{guide}.json", 'w'))
     json.dump(motifDict, open(outDir+f"/.motif_dict_{guide}.json", 'w'))
     # print('Starting image creation for guide: ', guide)
