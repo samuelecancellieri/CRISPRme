@@ -42,6 +42,9 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
     elif target == 'fewest':
         radio_order = str(radio_order)+"_(fewest_mm+b)"
         orderdrop = str(orderdrop)+"_(fewest_mm+b)"
+    elif target == 'CRISTA':
+        radio_order = str(radio_order)+"_(highest_CRISTA)"
+        orderdrop = str(orderdrop)+"_(highest_CRISTA)"
 
     # print(radio_order, orderdrop)
 
@@ -125,6 +128,9 @@ def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, a
     elif target == 'fewest':
         radio_order = str(radio_order)+"_(fewest_mm+b)"
         orderdrop = str(orderdrop)+"_(fewest_mm+b)"
+    elif target == 'CRISTA':
+        radio_order = str(radio_order)+"_(highest_CRISTA)"
+        orderdrop = str(orderdrop)+"_(highest_CRISTA)"
 
     # print(radio_order, orderdrop)
 
