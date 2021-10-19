@@ -413,15 +413,15 @@ def preprocess_CRISTA_score(target):
     DNAseq_from_genome_list = str()
     # first 5 nucleotide to add to protospacer
     pre_protospacer_DNA = genomeStr[int(split[4])-5:int(split[4])].upper()
-    if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
-        pass  # do nothing, then i will implement the check for the valid alt allele
+    # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
+    #     pass  # do nothing, then i will implement the check for the valid alt allele
     # protospacer taken directly from the aligned target
     protospacerDNA = str(target[2]).replace('-', '')
     # last 5 nucleotides to add to protospacer
     post_protospacer_DNA = genomeStr[int(
         split[4])+len(target[1]):int(split[4])+len(target[1])+5].upper()
-    if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
-        pass  # do nothing, then i will implement the check for the valid alt allele
+    # if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
+    #     pass  # do nothing, then i will implement the check for the valid alt allele
 
     # DNA seq extracted from genome and append to aligned DNA seq from CRISPRme
     complete_DNA_seq = str(pre_protospacer_DNA) + \
@@ -454,6 +454,12 @@ def preprocess_CRISTA_score(target):
             DNA_aligned = (str(target[-4]))
             protospacerDNA = str(target[-4]).replace('-', '')
             complete_DNA_seq = str(pre_protospacer_DNA) + protospacerDNA+ str(post_protospacer_DNA)
+            # trim the 3' and 5' end to avoid sequences longer than 29
+            len_DNA_seq = len(complete_DNA_seq)
+            first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
+            second_half = complete_DNA_seq[int(
+                len_DNA_seq/2):int(len_DNA_seq/2)+15]
+            complete_DNA_seq = first_half+second_half
             DNAseq_from_genome_list = complete_DNA_seq
             crista_score = CRISTA_predict(
             sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
