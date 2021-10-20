@@ -436,7 +436,7 @@ def preprocess_CRISTA_score(target):
 
     # append sequence to DNA list
     DNAseq_from_genome_list = complete_DNA_seq
-    
+
     # do_scores = False  # REMOVE TO EXECUTE SCORING
     # calculate score
     if do_scores:
@@ -450,19 +450,21 @@ def preprocess_CRISTA_score(target):
     if target[-3] == 55:
         target[-3] = "{:.3f}".format(crista_score)
     if target[-3] == 33:
-        if do_scores:
+        if False:  # skip ref scoring due to error
             DNA_aligned = (str(target[-4]))
             protospacerDNA = str(target[-4]).replace('-', '')
-            complete_DNA_seq = str(pre_protospacer_DNA) + protospacerDNA+ str(post_protospacer_DNA)
+            complete_DNA_seq = str(pre_protospacer_DNA) + \
+                protospacerDNA + str(post_protospacer_DNA)
             # trim the 3' and 5' end to avoid sequences longer than 29
             len_DNA_seq = len(complete_DNA_seq)
-            first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
+            first_half = complete_DNA_seq[int(
+                len_DNA_seq/2)-14:int(len_DNA_seq/2)]
             second_half = complete_DNA_seq[int(
                 len_DNA_seq/2):int(len_DNA_seq/2)+15]
             complete_DNA_seq = first_half+second_half
             DNAseq_from_genome_list = complete_DNA_seq
             crista_score = CRISTA_predict(
-            sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
+                sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
         else:
             crista_score = -1
         target[-3] = "{:.3f}".format(crista_score)
