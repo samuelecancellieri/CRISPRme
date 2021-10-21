@@ -69,19 +69,6 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             else:
                 dict_var[(ele[pos], ele[snp_info])] = [ele]
 
-    for key in dict_var.keys():
-        # remove duplicates in samples info
-        dict_var[key][0][true_guide -
-                         2] = str(set(dict_var[key][0][true_guide - 2]))
-        # remove duplicates in rsID info
-        dict_var[key][0][snp_info -
-                         2] = str(set(dict_var[key][0][snp_info - 2]))
-        # remove duplicates in MAF info
-        dict_var[key][0][snp_info -
-                         1] = str(set(dict_var[key][0][snp_info - 1]))
-        # remove duplicates in snp info
-        dict_var[key][0][snp_info] = str(set(dict_var[key][0][snp_info]))
-
     list_ref.sort(key=lambda x: int(x[total]))
     var_only = False
     if len(list_ref) > 1:
@@ -112,6 +99,22 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             final_list.append(best_var)
 
     n_ele = len(final_list)
+
+    temp_final_list = list()
+    for target in final_list:
+        # remove duplicates into snp info col
+        target[snp_info] = ','.join(set(target[snp_info].split(',')))
+        # remove duplicate into rsID col
+        target[snp_info-2] = ','.join(set(target[snp_info-2].split(',')))
+        # remove duplicate into AF col
+        target[snp_info-1] = ','.join(set(target[snp_info-1].split(',')))
+        # remove duplicate into samples col
+        target[true_guide-2] = ','.join(set(target[true_guide-2].split(',')))
+        # append to temp list
+        temp_final_list.append(target)
+
+    # final list with polished targets (no duplicates in snp data)
+    final_list = temp_final_list
     if n_ele > 1:
         if str(final_list[0][cfd]) != '-1.0' and sort_order == 'score':
             # final_list.sort(key=lambda x: float(x[cfd]), reverse=True)
