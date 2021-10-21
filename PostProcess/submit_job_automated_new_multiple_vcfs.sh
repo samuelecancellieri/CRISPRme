@@ -564,12 +564,12 @@ rm -f *.CFDGraph.txt
 rm -f indels.CFDGraph.txt
 rm -r "crispritz_prof"
 rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
-rm $final_res.bestCFD.txt
-rm $final_res.bestmmblg.txt
-rm $final_res.bestCRISTA.txt
-rm $final_res_alt.bestCFD.txt
-rm $final_res_alt.bestmmblg.txt
-rm $final_res_alt.bestCRISTA.txt
+# rm $final_res.bestCFD.txt
+# rm $final_res.bestmmblg.txt
+# rm $final_res.bestCRISTA.txt
+# rm $final_res_alt.bestCFD.txt
+# rm $final_res_alt.bestmmblg.txt
+# rm $final_res_alt.bestCRISTA.txt
 mv $final_res "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
 mv $final_res_alt "${output_folder}/$(basename ${output_folder}).altMerge.txt"
 
@@ -605,7 +605,6 @@ else
 	rm dummy.txt
 fi
 echo -e 'Creating images\tEnd\t'$(date) >>$log
-
 
 echo $gene_proximity
 echo -e 'Integrating results\tStart\t'$(date) >>$log

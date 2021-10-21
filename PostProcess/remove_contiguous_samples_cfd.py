@@ -55,6 +55,11 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
     list_ref = []
     dict_var = dict()
     for ele in cluster:
+        # remove possible duplicates in alternative identifier columns
+        ele[snp_info] = set(ele[snp_info])  # set of snp info data
+        ele[true_guide-2] = set(ele[true_guide-2])  # set of samples columns
+        ele[snp_info-2] = set(ele[snp_info-2])  # set of rsID columns
+        ele[snp_info-1] = set(ele[snp_info-1])  # set of AF columns
         if ele[snp_info] == 'n':
             list_ref.append(ele)
         else:
@@ -101,35 +106,27 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
     n_ele = len(final_list)
     if n_ele > 1:
         if str(final_list[0][cfd]) != '-1.0' and sort_order == 'score':
-            final_list.sort(key=lambda x: float(x[cfd]), reverse=True)
+            # final_list.sort(key=lambda x: float(x[cfd]), reverse=True)
+            # sort descending CFD and then ascending total count
+            sorted_final_list = sorted(
+                sorted(final_list, key=lambda x: float(x[cfd]), reverse=True), key=lambda x: int(x[total]))
+            final_list = sorted_final_list
             if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] == 'n':
                 final_list[1][cfd-1] = str(n_ele-1)  # bestSCORE
-                # final_list[1][2*cfd+1] = str(n_ele-1)#MM_BUL
-                # final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
                 fileOut.write("\t".join(final_list[1]))
                 bestTarget = final_list.pop(1)
             else:
-                final_list[0][cfd-1] = str(n_ele-1)  # CFD
-                # final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
-                # final_list[0][3*cfd+1] = str(n_ele-1)#CRISTA
+                final_list[0][cfd-1] = str(n_ele-1)  # best SCORE
                 fileOut.write("\t".join(final_list[0]))
                 bestTarget = final_list.pop(0)
         else:
-            # final_list.sort(key=lambda x: (int(x[total-1]), int(x[total-2])))
-            # sort for mm and bul in half target sorted for mm and bul originally mm[30],bul[31]
-            # final_list.sort(key=lambda x: (int(x[31]), int(x[30])))
-            # sort for total (mm+bul) in second half target
+            # sort for total (mm+bul) in target
             final_list.sort(key=lambda x: int(x[total]))
             final_list[0][cfd-1] = str(n_ele-1)  # bestMM_BUL when not scored
-            # final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
-            # final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
             fileOut.write("\t".join(final_list[0]))
             bestTarget = final_list.pop(0)
         for ele in final_list:
-            final_list[0][cfd-1] = str(n_ele-1)  # CFD
-            # final_list[0][2*cfd+1] = str(n_ele-1)#MM_BUL
-            # final_list[1][3*cfd+1] = str(n_ele-1)#CRISTA
-            # fileOut_disc.write(("\t".join(ele)).strip()+"\t"+bestTarget[chrom]+"_"+bestTarget[pos]+"\n")
+            final_list[0][cfd-1] = str(n_ele-1)  # discarded targets in cluster
             fileOut_disc.write(("\t".join(ele)))
     elif n_ele == 1:
         fileOut.write("\t".join(final_list[0]))
