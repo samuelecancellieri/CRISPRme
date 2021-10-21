@@ -148,19 +148,22 @@ tail -n +2 $jobid.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg 
 
 #merge targets in same chr when they are at distance 3 from each other (inclusive)
 ./merge_close_targets_cfd.sh $jobid.bestCFD.txt $jobid.bestCFD.txt.trimmed 3 'score'
-# cp $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt.check_merge
+cp $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt.check_merge
+cp $jobid.bestCFD.txt.trimmed.discarded_samples $jobid.bestCFD.txt.trimmed.discarded_samples.check_merge
 mv $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt
 mv $jobid.bestCFD.txt.trimmed.discarded_samples $jobid.bestCFD.txt.alt
 
 #merge targets in same chr when they are at distance 3 from each other (inclusive)
 ./merge_close_targets_cfd.sh $jobid.bestmmblg.txt $jobid.bestmmblg.txt.trimmed 3 'total'
-# cp $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt.check_merge
+cp $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt.check_merge
+cp $jobid.bestmmblg.txt.trimmed.discarded_samples $jobid.bestmmblg.txt.trimmed.discarded_samples.check_merge
 mv $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt
 mv $jobid.bestmmblg.txt.trimmed.discarded_samples $jobid.bestmmblg.txt.alt
 
 #merge targets in same chr when they are at distance 3 from each other (inclusive)
 ./merge_close_targets_cfd.sh $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.trimmed 3 'score'
-# cp $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt.check_merge
+cp $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt.check_merge
+cp $jobid.bestCRISTA.txt.trimmed.discarded_samples $jobid.bestCRISTA.txt.trimmed.discarded_samples.check_merge
 mv $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt
 mv $jobid.bestCRISTA.txt.trimmed.discarded_samples $jobid.bestCRISTA.txt.alt
 
