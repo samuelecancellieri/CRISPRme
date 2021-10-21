@@ -603,10 +603,7 @@ def preprocess_CRISTA_score(target, do_scores):
     # append sequence to DNA list
     DNAseq_from_genome_list = complete_DNA_seq.upper()
 
-    # print('VAR set of CRISTA INPUT')
-    # print(sgRNA_non_aligned_list)
-    # print(DNA_aligned)
-    # print(DNAseq_from_genome_list)
+    do_scores = False  # SKIP SCORE CALCULATION
 
     # calculate score
     if do_scores:
@@ -618,9 +615,6 @@ def preprocess_CRISTA_score(target, do_scores):
     # append score to target
     target.append("{:.3f}".format(crista_score))
 
-    do_scores = False  # skip ref analysis
-
-    # target[-3] = "{:.3f}".format(crista_score)
     if target[-3] == 55:
         target[-3] = "{:.3f}".format(crista_score)
     if target[-3] == 33:
@@ -641,19 +635,13 @@ def preprocess_CRISTA_score(target, do_scores):
             # set dna seq to use in CRISTA
             DNAseq_from_genome_list = complete_DNA_seq.upper()
 
-            # print('REF set of CRISTA INPUT')
-            # print(sgRNA_non_aligned_list)
-            # print(DNA_aligned)
-            # print(DNAseq_from_genome_list)
-
             # calculate score
             crista_score = CRISTA_predict(
                 sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
         else:
             crista_score = -1
         target[-3] = "{:.3f}".format(crista_score)
-    # print(target)
-    # print('crista', crista_score)
+
     return target
 
 
