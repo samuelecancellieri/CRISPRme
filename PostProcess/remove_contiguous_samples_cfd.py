@@ -56,10 +56,14 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
     dict_var = dict()
     for ele in cluster:
         # remove possible duplicates in alternative identifier columns
-        ele[snp_info] = set(ele[snp_info])  # set of snp info data
-        ele[true_guide-2] = set(ele[true_guide-2])  # set of samples columns
-        ele[snp_info-2] = set(ele[snp_info-2])  # set of rsID columns
-        ele[snp_info-1] = set(ele[snp_info-1])  # set of AF columns
+        # set of snp info data
+        ele[snp_info] = list(set(ele[snp_info]))
+        # set of samples columns
+        ele[true_guide-2] = list(set(ele[true_guide-2]))
+        # set of rsID columns
+        ele[snp_info-2] = list(set(ele[snp_info-2]))
+        # set of AF columns
+        ele[snp_info-1] = list(set(ele[snp_info-1]))
         if ele[snp_info] == 'n':
             list_ref.append(ele)
         else:
