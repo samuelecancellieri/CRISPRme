@@ -794,7 +794,8 @@ for line in inResult:
     try:
         indel_data = sorted(INDELS_tree[int(line[4])])[0].data
     except:
-        print(line)
+        # target found has no INDEL, so it's REF and must be skipped
+        continue
     # assign extracted data to final target
     final_result[3] = current_chr  # current analyzed chr
     final_result[12] = indel_data[1]  # samples
