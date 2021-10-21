@@ -228,10 +228,10 @@ saveDict = {
     'Bulge_type_(highest_CRISTA)': 'NA',
     'REF/ALT_origin_(highest_CRISTA)': 'NA',
     'PAM_creation_(highest_CRISTA)': 'NA',
-    'CFD_score_(highest_CRISTA)': 'NA',
-    'CFD_score_REF_(highest_CRISTA)': 'NA',
-    'CFD_score_ALT_(highest_CRISTA)': 'NA',
-    'CFD_risk_score_(highest_CRISTA)': 'NA',
+    'CRISTA_score_(highest_CRISTA)': 'NA',
+    'CRISTA_score_REF_(highest_CRISTA)': 'NA',
+    'CRISTA_score_ALT_(highest_CRISTA)': 'NA',
+    'CRISTA_risk_score_(highest_CRISTA)': 'NA',
     'Variant_info_spacer+PAM_(highest_CRISTA)': 'NA',
     'Variant_info_genome_(highest_CRISTA)': 'NA',
     'Variant_MAF_(highest_CRISTA)': 'NA',
@@ -483,11 +483,11 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['REF/ALT_origin_(highest_CRISTA)'] = 'ref' if str(
         target[61]) == 'NA' else 'alt'
     saveDict['PAM_creation_(highest_CRISTA)'] = str(target[59])
-    saveDict['CFD_score_(highest_CRISTA)'] = str(target[68]
-                                                 ) if float(target[68]) > float(target[69]) else str(target[69])
-    saveDict['CFD_score_REF_(highest_CRISTA)'] = str(target[69])
-    saveDict['CFD_score_ALT_(highest_CRISTA)'] = str(target[68])
-    saveDict['CFD_risk_score_(highest_CRISTA)'] = str(target[70])
+    saveDict['CRISTA_score_(highest_CRISTA)'] = str(target[68]
+                                                    ) if float(target[68]) > float(target[69]) else str(target[69])
+    saveDict['CRISTA_score_REF_(highest_CRISTA)'] = str(target[69])
+    saveDict['CRISTA_score_ALT_(highest_CRISTA)'] = str(target[68])
+    saveDict['CRISTA_risk_score_(highest_CRISTA)'] = str(target[70])
     saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = ','.join(
         variantList_fewest_mm_b)
     saveDict['Variant_info_genome_(highest_CRISTA)'] = str(target[66])
@@ -512,7 +512,7 @@ for nline, line in enumerate(inCrispritzResults):
         change_alt_ref_highest_cfd = True
 
     change_alt_ref_highest_crista = False
-    if saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CFD_score_REF_(highest_CRISTA)'] != '-1.0' and saveDict['CFD_score_REF_(highest_CRISTA)'] == saveDict['CFD_score_ALT_(highest_CRISTA)']:
+    if saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] == saveDict['CRISTA_score_ALT_(highest_CRISTA)']:
         change_alt_ref_fewest_mm_b = True
 
     if change_alt_ref_highest_cfd:
