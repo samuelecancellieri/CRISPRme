@@ -60,16 +60,27 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         else:
             # merge samples of identical targets (coming from different VCF datasets)
             if (ele[pos], ele[snp_info]) in dict_var.keys():
-                # if new samples shares the same snp_info data, merge the samples and the info (true_guide - 2 points to samples column)
-                if ele[true_guide - 2] != dict_var[(ele[pos], ele[snp_info])][0][true_guide - 2]:
-                    dict_var[(ele[pos], ele[snp_info])][0][true_guide - 2] = dict_var[(ele[pos], ele[snp_info])
-                                                                                      ][0][true_guide - 2] + "," + ele[true_guide - 2]  # true_guide - 2 points to samples column
-                    dict_var[(ele[pos], ele[snp_info])][0][snp_info - 2] = dict_var[(ele[pos], ele[snp_info])
-                                                                                    ][0][snp_info - 2] + "," + ele[snp_info - 2]  # snp_info - 2 points to rsID column
-                    dict_var[(ele[pos], ele[snp_info])][0][snp_info - 1] = dict_var[(ele[pos], ele[snp_info])
-                                                                                    ][0][snp_info - 1] + "," + ele[snp_info - 1]  # ttuesnp_info_guide - 2 points to AF column
+                dict_var[(ele[pos], ele[snp_info])][0][true_guide - 2] = dict_var[(ele[pos], ele[snp_info])
+                                                                                  ][0][true_guide - 2] + "," + ele[true_guide - 2]  # true_guide - 2 points to samples column
+                dict_var[(ele[pos], ele[snp_info])][0][snp_info - 2] = dict_var[(ele[pos], ele[snp_info])
+                                                                                ][0][snp_info - 2] + "," + ele[snp_info - 2]  # snp_info - 2 points to rsID column
+                dict_var[(ele[pos], ele[snp_info])][0][snp_info - 1] = dict_var[(ele[pos], ele[snp_info])
+                                                                                ][0][snp_info - 1] + "," + ele[snp_info - 1]  # ttuesnp_info_guide - 2 points to AF column
             else:
                 dict_var[(ele[pos], ele[snp_info])] = [ele]
+
+    for key in dict_var.keys():
+        # remove duplicates in samples info
+        dict_var[key][0][true_guide -
+                         2] = str(set(dict_var[key][0][true_guide - 2]))
+        # remove duplicates in rsID info
+        dict_var[key][0][snp_info -
+                         2] = str(set(dict_var[key][0][snp_info - 2]))
+        # remove duplicates in MAF info
+        dict_var[key][0][snp_info -
+                         1] = str(set(dict_var[key][0][snp_info - 1]))
+        # remove duplicates in snp info
+        dict_var[key][0][snp_info] = str(set(dict_var[key][0][snp_info]))
 
     list_ref.sort(key=lambda x: int(x[total]))
     var_only = False
