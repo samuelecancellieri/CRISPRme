@@ -101,8 +101,8 @@ rm "$jobid.total.cluster.txt"
 echo 'Sorting and adjusting results'
 #copy header in tmp file
 head -1 $jobid.bestCFD.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,score
-tail -n +2 $jobid.bestCFD.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD.txt
+#tail file w/o header and sort for realguide,chr,cluster_pos,score,total(mm+bul)
+tail -n +2 $jobid.bestCFD.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD.txt
 # cp $jobid.bestCFD.txt $jobid.bestCFD.txt.after_sort
 
 #copy header in tmp file
@@ -113,8 +113,8 @@ tail -n +2 $jobid.bestmmblg.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T
 
 #copy header in tmp file
 head -1 $jobid.bestCRISTA.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,score
-tail -n +2 $jobid.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA.txt
+#tail file w/o header and sort for realguide,chr,cluster_pos,score,total(mm+bul)
+tail -n +2 $jobid.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA.txt
 # cp $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.after_sort
 
 #adjustin columns to have the correct order and remove uncessary ones
