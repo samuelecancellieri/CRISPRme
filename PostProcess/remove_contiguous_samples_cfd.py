@@ -115,13 +115,16 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
 
     # final list with polished targets (no duplicates in snp data)
     final_list = temp_final_list
+    # sort by total in ascending order
+    final_list.sort(key=lambda x: int(x[total]))
     if n_ele > 1:
         if str(final_list[0][cfd]) != '-1.0' and sort_order == 'score':
-            # final_list.sort(key=lambda x: float(x[cfd]), reverse=True)
-            # sort descending CFD and then ascending total count
-            sorted_final_list = sorted(
-                sorted(final_list, key=lambda x: float(x[cfd]), reverse=True), key=lambda x: int(x[total]))
-            final_list = sorted_final_list
+            # sort by score in descending order
+            final_list.sort(key=lambda x: float(x[cfd]), reverse=True)
+            # sort ascending total and then descending score
+            # sorted_final_list = sorted(
+            #     sorted(final_list, key=lambda x: int(x[total]), reverse=False), key=lambda x: float(x[cfd]), reverse=True)
+            # final_list = sorted_final_list
             if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] == 'n':
                 final_list[1][cfd-1] = str(n_ele-1)  # bestSCORE
                 fileOut.write("\t".join(final_list[1]))
