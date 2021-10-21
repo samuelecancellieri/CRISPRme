@@ -763,7 +763,7 @@ last_annotation = ''  # in un cluster, l'annotazione è la stessa, quindi la cal
 last_samples = []  # se due target hanno la stessa scomposizione, hanno gli stessi samples, quindi non li ricalcolo
 next(inResult)  # Skip header
 # contains all targets for each cluster, it's then sorted by CFD. Only the target with highest CFD is saved
-cluster_to_save = []
+# cluster_to_save = []
 # sum number times a cfd value appears, TODO aggiungere anche il conteggio per ogni sample
 cfd_for_graph = {'ref': [0]*101, 'var': [0]*101}
 
@@ -785,6 +785,7 @@ global_start = time.time()
 
 for line in inResult:
     # print(line)
+    cluster_to_save = list()
     line = line.strip().split('\t')
     # print(line)
     guide_no_bulge = line[1].replace('-', '')
