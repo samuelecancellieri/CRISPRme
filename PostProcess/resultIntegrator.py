@@ -513,7 +513,7 @@ for nline, line in enumerate(inCrispritzResults):
 
     change_alt_ref_highest_crista = False
     if saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] == saveDict['CRISTA_score_ALT_(highest_CRISTA)']:
-        change_alt_ref_fewest_mm_b = True
+        change_alt_ref_highest_crista = True
 
     if change_alt_ref_highest_cfd:
         saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)']
