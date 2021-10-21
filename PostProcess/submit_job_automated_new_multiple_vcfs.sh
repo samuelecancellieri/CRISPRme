@@ -514,11 +514,47 @@ for key in "${array_fake_chroms[@]}"; do
 	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt.alt"
 done
 
-#STOP MERGE ALT CHR
-# ./merge_alt_chr.sh $final_res $final_res.chr_merged
-# mv $final_res.chr_merged $final_res
+# echo -e 'Annotating results\tStart\t'$(date) >>$log
+#ANNOTATE BEST TARGETS
+./annotate_final_results.py $final_res.bestCFD.txt $annotationfile $final_res.bestCFD.txt.annotated
+./annotate_final_results.py $final_res.bestmmblg.txt $annotationfile $final_res.bestmmblg.txt.annotated
+./annotate_final_results.py $final_res.bestCRISTA.txt $annotationfile $final_res.bestCRISTA.txt.annotated
+mv $final_res.bestCFD.txt.annotated $final_res.bestCFD.txt
+mv $final_res.bestmmblg.txt.annotated $final_res.bestmmblg.txt
+mv $final_res.bestCRISTA.txt.annotated $final_res.bestCRISTA.txt
+#ANNOTATE ALT TARGETS
+./annotate_final_results.py $final_res_alt.bestCFD.txt $annotationfile $final_res_alt.bestCFD.txt.annotated
+./annotate_final_results.py $final_res_alt.bestmmblg.txt $annotationfile $final_res_alt.bestmmblg.txt.annotated
+./annotate_final_results.py $final_res_alt.bestCRISTA.txt $annotationfile $final_res_alt.bestCRISTA.txt.annotated
+mv $final_res_alt.bestCFD.txt.annotated $final_res_alt.bestCFD.txt
+mv $final_res_alt.bestmmblg.txt.annotated $final_res_alt.bestmmblg.txt
+mv $final_res_alt.bestCRISTA.txt.annotated $final_res_alt.bestCRISTA.txt
 
-#join targets by columns for best and alt files
+#SCORING BEST RESULTS
+./add_risk_score.py $final_res.bestCFD.txt $final_res.bestCFD.txt.risk "False"
+./add_risk_score.py $final_res.bestmmblg.txt $final_res.bestmmblg.txt.risk "False"
+./add_risk_score.py $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.risk "False"
+mv $final_res.bestCFD.txt.risk $final_res.bestCFD.txt
+mv $final_res.bestmmblg.txt.risk $final_res.bestmmblg.txt
+mv $final_res.bestCRISTA.txt.risk $final_res.bestCRISTA.txt
+#SCORING ALT RESULTS
+./add_risk_score.py $final_res_alt.bestCFD.txt $final_res_alt.bestCFD.txt.risk "False"
+./add_risk_score.py $final_res_alt.bestmmblg.txt $final_res_alt.bestmmblg.txt.risk "False"
+./add_risk_score.py $final_res_alt.bestCRISTA.txt $final_res_alt.bestCRISTA.txt.risk "False"
+mv $final_res_alt.bestCFD.txt.risk $final_res_alt.bestCFD.txt
+mv $final_res_alt.bestmmblg.txt.risk $final_res_alt.bestmmblg.txt
+mv $final_res_alt.bestCRISTA.txt.risk $final_res_alt.bestCRISTA.txt
+
+#remove N's and dots from rsID from BEST FILES
+./remove_n_and_dots.py $final_res.bestCFD.txt
+./remove_n_and_dots.py $final_res.bestmmblg.txt
+./remove_n_and_dots.py $final_res.bestCRISTA.txt
+#remove N's and dots from rsID from ALT FILES
+./remove_n_and_dots.py $final_res_alt.bestCFD.txt
+./remove_n_and_dots.py $final_res_alt.bestmmblg.txt
+./remove_n_and_dots.py $final_res_alt.bestCRISTA.txt
+
+#join targets by columns for BEST and ALT files
 pr -m -t -J $final_res.bestCFD.txt $final_res.bestmmblg.txt $final_res.bestCRISTA.txt >$final_res
 pr -m -t -J $final_res_alt.bestCFD.txt $final_res_alt.bestmmblg.txt $final_res_alt.bestCRISTA.txt >$final_res_alt
 

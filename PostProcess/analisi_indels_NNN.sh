@@ -136,41 +136,38 @@ tail -n +2 $jobid.bestCRISTA_INDEL.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21
 ./remove_bad_indel_targets.py "$jobid.bestCRISTA_INDEL.txt"
 ./remove_bad_indel_targets.py "$jobid.bestmmblg_INDEL.txt"
 
-#merge targets in same chr when they are at distance 3 from each other (inclusive)
+#merge targets in same chr when they are at distance 3 from each other (inclusive) preserving the highest scoring one
 ./merge_close_targets_cfd.sh $jobid.bestCFD_INDEL.txt $jobid.bestCFD_INDEL.txt.trimmed 3 'score'
-# cp $jobid.bestCFD_INDEL.txt.trimmed $jobid.bestCFD_INDEL.txt.check_merge
 mv $jobid.bestCFD_INDEL.txt.trimmed $jobid.bestCFD_INDEL.txt
 mv $jobid.bestCFD_INDEL.txt.trimmed.discarded_samples $jobid.bestCFD_INDEL.txt.alt
 
-#merge targets in same chr when they are at distance 3 from each other (inclusive)
+#merge targets in same chr when they are at distance 3 from each other (inclusive) preserving the lowest total(mm+bul) one
 ./merge_close_targets_cfd.sh $jobid.bestmmblg_INDEL.txt $jobid.bestmmblg_INDEL.txt.trimmed 3 'total'
-# cp $jobid.bestmmblg_INDEL.txt.trimmed $jobid.bestmmblg_INDEL.txt.check_merge
 mv $jobid.bestmmblg_INDEL.txt.trimmed $jobid.bestmmblg_INDEL.txt
 mv $jobid.bestmmblg_INDEL.txt.trimmed.discarded_samples $jobid.bestmmblg_INDEL.txt.alt
 
-#merge targets in same chr when they are at distance 3 from each other (inclusive)
+#merge targets in same chr when they are at distance 3 from each other (inclusive) preserving the highest scoring one
 ./merge_close_targets_cfd.sh $jobid.bestCRISTA_INDEL.txt $jobid.bestCRISTA_INDEL.txt.trimmed 3 'score'
-# cp $jobid.bestCRISTA_INDEL.txt.trimmed $jobid.bestCRISTA_INDEL.txt.check_merge
 mv $jobid.bestCRISTA_INDEL.txt.trimmed $jobid.bestCRISTA_INDEL.txt
 mv $jobid.bestCRISTA_INDEL.txt.trimmed.discarded_samples $jobid.bestCRISTA_INDEL.txt.alt
 
 # echo -e 'Annotating results\tStart\t'$(date) >>$log
 #annotate bestCFD_INDEL
-./annotate_final_results.py $jobid.bestCFD_INDEL.txt $annotationfile $jobid.bestCFD_INDEL.txt.annotated
-./annotate_final_results.py $jobid.bestCFD_INDEL.txt.alt $annotationfile $jobid.bestCFD_INDEL.txt.alt.annotated
-mv $jobid.bestCFD_INDEL.txt.annotated $jobid.bestCFD_INDEL.txt
-mv $jobid.bestCFD_INDEL.txt.alt.annotated $jobid.bestCFD_INDEL.txt.alt
-#annotate bestmmblg_INDEL
-./annotate_final_results.py $jobid.bestmmblg_INDEL.txt $annotationfile $jobid.bestmmblg_INDEL.txt.annotated
-./annotate_final_results.py $jobid.bestmmblg_INDEL.txt.alt $annotationfile $jobid.bestmmblg_INDEL.txt.alt.annotated
-mv $jobid.bestmmblg_INDEL.txt.annotated $jobid.bestmmblg_INDEL.txt
-mv $jobid.bestmmblg_INDEL.txt.alt.annotated $jobid.bestmmblg_INDEL.txt.alt
-#annotate bestCRISTA_INDEL
-./annotate_final_results.py $jobid.bestCRISTA_INDEL.txt $annotationfile $jobid.bestCRISTA_INDEL.txt.annotated
-./annotate_final_results.py $jobid.bestCRISTA_INDEL.txt.alt $annotationfile $jobid.bestCRISTA_INDEL.txt.alt.annotated
-mv $jobid.bestCRISTA_INDEL.txt.annotated $jobid.bestCRISTA_INDEL.txt
-mv $jobid.bestCRISTA_INDEL.txt.alt.annotated $jobid.bestCRISTA_INDEL.txt.alt
-#correct files names
+# ./annotate_final_results.py $jobid.bestCFD_INDEL.txt $annotationfile $jobid.bestCFD_INDEL.txt.annotated
+# ./annotate_final_results.py $jobid.bestCFD_INDEL.txt.alt $annotationfile $jobid.bestCFD_INDEL.txt.alt.annotated
+# mv $jobid.bestCFD_INDEL.txt.annotated $jobid.bestCFD_INDEL.txt
+# mv $jobid.bestCFD_INDEL.txt.alt.annotated $jobid.bestCFD_INDEL.txt.alt
+# #annotate bestmmblg_INDEL
+# ./annotate_final_results.py $jobid.bestmmblg_INDEL.txt $annotationfile $jobid.bestmmblg_INDEL.txt.annotated
+# ./annotate_final_results.py $jobid.bestmmblg_INDEL.txt.alt $annotationfile $jobid.bestmmblg_INDEL.txt.alt.annotated
+# mv $jobid.bestmmblg_INDEL.txt.annotated $jobid.bestmmblg_INDEL.txt
+# mv $jobid.bestmmblg_INDEL.txt.alt.annotated $jobid.bestmmblg_INDEL.txt.alt
+# #annotate bestCRISTA_INDEL
+# ./annotate_final_results.py $jobid.bestCRISTA_INDEL.txt $annotationfile $jobid.bestCRISTA_INDEL.txt.annotated
+# ./annotate_final_results.py $jobid.bestCRISTA_INDEL.txt.alt $annotationfile $jobid.bestCRISTA_INDEL.txt.alt.annotated
+# mv $jobid.bestCRISTA_INDEL.txt.annotated $jobid.bestCRISTA_INDEL.txt
+# mv $jobid.bestCRISTA_INDEL.txt.alt.annotated $jobid.bestCRISTA_INDEL.txt.alt
+# #correct files names
 #bestCFD_INDEL
 
 #bestmmblg_INDEL
@@ -181,27 +178,27 @@ mv $jobid.bestCRISTA_INDEL.txt.alt.annotated $jobid.bestCRISTA_INDEL.txt.alt
 
 # echo -e "Adding risk score"
 #scoring bestCFD_INDEL
-./add_risk_score.py $jobid.bestCFD_INDEL.txt $jobid.bestCFD_INDEL.txt.risk "False"
-./add_risk_score.py $jobid.bestCFD_INDEL.txt.alt $jobid.bestCFD_INDEL.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
-mv $jobid.bestCFD_INDEL.txt.risk $jobid.bestCFD_INDEL.txt
-mv $jobid.bestCFD_INDEL.txt.alt.risk $jobid.bestCFD_INDEL.txt.alt
-#scoring bestmmblg_INDEL
-./add_risk_score.py $jobid.bestmmblg_INDEL.txt $jobid.bestmmblg_INDEL.txt.risk "False"
-./add_risk_score.py $jobid.bestmmblg_INDEL.txt.alt $jobid.bestmmblg_INDEL.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
-mv $jobid.bestmmblg_INDEL.txt.risk $jobid.bestmmblg_INDEL.txt
-mv $jobid.bestmmblg_INDEL.txt.alt.risk $jobid.bestmmblg_INDEL.txt.alt
-#scoring bestCRISTA_INDEL
-./add_risk_score.py $jobid.bestCRISTA_INDEL.txt $jobid.bestCRISTA_INDEL.txt.risk "False"
-./add_risk_score.py $jobid.bestCRISTA_INDEL.txt.alt $jobid.bestCRISTA_INDEL.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
-mv $jobid.bestCRISTA_INDEL.txt.risk $jobid.bestCRISTA_INDEL.txt
-mv $jobid.bestCRISTA_INDEL.txt.alt.risk $jobid.bestCRISTA_INDEL.txt.alt
-# echo -e "Risk score added"
+# ./add_risk_score.py $jobid.bestCFD_INDEL.txt $jobid.bestCFD_INDEL.txt.risk "False"
+# ./add_risk_score.py $jobid.bestCFD_INDEL.txt.alt $jobid.bestCFD_INDEL.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
+# mv $jobid.bestCFD_INDEL.txt.risk $jobid.bestCFD_INDEL.txt
+# mv $jobid.bestCFD_INDEL.txt.alt.risk $jobid.bestCFD_INDEL.txt.alt
+# #scoring bestmmblg_INDEL
+# ./add_risk_score.py $jobid.bestmmblg_INDEL.txt $jobid.bestmmblg_INDEL.txt.risk "False"
+# ./add_risk_score.py $jobid.bestmmblg_INDEL.txt.alt $jobid.bestmmblg_INDEL.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
+# mv $jobid.bestmmblg_INDEL.txt.risk $jobid.bestmmblg_INDEL.txt
+# mv $jobid.bestmmblg_INDEL.txt.alt.risk $jobid.bestmmblg_INDEL.txt.alt
+# #scoring bestCRISTA_INDEL
+# ./add_risk_score.py $jobid.bestCRISTA_INDEL.txt $jobid.bestCRISTA_INDEL.txt.risk "False"
+# ./add_risk_score.py $jobid.bestCRISTA_INDEL.txt.alt $jobid.bestCRISTA_INDEL.txt.alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
+# mv $jobid.bestCRISTA_INDEL.txt.risk $jobid.bestCRISTA_INDEL.txt
+# mv $jobid.bestCRISTA_INDEL.txt.alt.risk $jobid.bestCRISTA_INDEL.txt.alt
+# # echo -e "Risk score added"
 
-#remove N's and dots from rsID from best
-./remove_n_and_dots.py $jobid.bestCFD_INDEL.txt
-./remove_n_and_dots.py $jobid.bestmmblg_INDEL.txt
-./remove_n_and_dots.py $jobid.bestCRISTA_INDEL.txt
-#remove N's and dots from rsID from alt
-./remove_n_and_dots.py $jobid.bestCFD_INDEL.txt.alt
-./remove_n_and_dots.py $jobid.bestmmblg_INDEL.txt.alt
-./remove_n_and_dots.py $jobid.bestCRISTA_INDEL.txt.alt
+# #remove N's and dots from rsID from best
+# ./remove_n_and_dots.py $jobid.bestCFD_INDEL.txt
+# ./remove_n_and_dots.py $jobid.bestmmblg_INDEL.txt
+# ./remove_n_and_dots.py $jobid.bestCRISTA_INDEL.txt
+# #remove N's and dots from rsID from alt
+# ./remove_n_and_dots.py $jobid.bestCFD_INDEL.txt.alt
+# ./remove_n_and_dots.py $jobid.bestmmblg_INDEL.txt.alt
+# ./remove_n_and_dots.py $jobid.bestCRISTA_INDEL.txt.alt
