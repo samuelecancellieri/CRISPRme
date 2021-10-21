@@ -791,7 +791,10 @@ for line in inResult:
     # copy line to avoid problem with memory managament and intrisic pointers
     final_result = line.copy()
     # extract indel data from the INDEL tree
-    indel_data = sorted(INDELS_tree[int(line[4])])[0].data
+    try:
+        indel_data = sorted(INDELS_tree[int(line[4])])[0].data
+    except:
+        print(line)
     # assign extracted data to final target
     final_result[3] = current_chr  # current analyzed chr
     final_result[12] = indel_data[1]  # samples
