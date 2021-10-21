@@ -423,9 +423,6 @@ while read vcf_f; do
 done <$vcf_list
 
 echo -e "Adding header to files"
-# sed -i 1i"#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref\t" "$final_res"
-#header with CRISTA
-# sed -i 1i"#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref\tCRISTA_#Bulge_type\tCRISTA_crRNA\tCRISTA_DNA\tCRISTA_Reference\tCRISTA_Chromosome\tCRISTA_Position\tCRISTA_Cluster_Position\tCRISTA_Direction\tCRISTA_Mismatches\tCRISTA_Bulge_Size\tCRISTA_Total\tCRISTA_PAM_gen\tCRISTA_Var_uniq\tCRISTA_Samples\tCRISTA_Annotation_Type\tCRISTA_Real_Guide\tCRISTA_rsID\tCRISTA_AF\tCRISTA_SNP\tCRISTA_#Seq_in_cluster\tCRISTA_CFD\tCRISTA_CFD_ref" "$final_res"
 
 while read samples; do
 	if [ -z "$samples" ]; then
@@ -443,18 +440,6 @@ sampleID=$output_folder/.sampleID.txt
 # echo -e 'Merging targets' >  $output
 #STOP MERGING IN MAIN FILE
 echo -e 'Merging Targets\tStart\t'$(date) >>$log
-# ./merge_close_targets_cfd.sh $final_res $final_res.trimmed $merge_t
-# mv $final_res.trimmed $final_res
-# mv $final_res.trimmed.discarded_samples $final_res_alt
-
-# echo -e 'Merging Close Targets\tEnd\t'$(date) >> $log
-# echo -e 'Merging Close Targets\tEnd\t'$(date) >&2
-
-# echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >> $log
-# echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >&2
-
-# echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >> $log
-# echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >&2
 echo -e 'Merging Targets\tEnd\t'$(date) >>$log
 
 #create result file for each scoring method
@@ -563,11 +548,6 @@ pr -m -t -J $final_res_alt.bestCFD.txt $final_res_alt.bestmmblg.txt $final_res_a
 ./merge_alt_chr.sh $final_res $final_res.chr_merged
 mv $final_res.chr_merged $final_res
 
-#rm all best and alt files
-# rm *bestCFD* *bestCRISTA* *bestmmblg*
-# rm $final_res.bestCFD.txt $final_res.bestmmblg.txt $final_res.bestCRISTA.txt
-# rm $final_res_alt.bestCFD.txt $final_res_alt.bestmmblg.txt $final_res_alt.bestCRISTA.txt
-
 #update header for final_res and final_res_alt
 sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tHighest_CFD_Risk_Score\tHighest_CFD_Absolute_Risk_Score\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref\tMMBLG_CFD_Risk_Score\tMMBLG_CFD_Absolute_Risk_Score\tCRISTA_#Bulge_type\tCRISTA_crRNA\tCRISTA_DNA\tCRISTA_Reference\tCRISTA_Chromosome\tCRISTA_Position\tCRISTA_Cluster_Position\tCRISTA_Direction\tCRISTA_Mismatches\tCRISTA_Bulge_Size\tCRISTA_Total\tCRISTA_PAM_gen\tCRISTA_Var_uniq\tCRISTA_Samples\tCRISTA_Annotation_Type\tCRISTA_Real_Guide\tCRISTA_rsID\tCRISTA_AF\tCRISTA_SNP\tCRISTA_#Seq_in_cluster\tCRISTA_CFD\tCRISTA_CFD_ref\tCRISTA_CFD_Risk_Score\tCRISTA_CFD_Absolute_Risk_Score/' "$final_res"
 sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tHighest_CFD_Risk_Score\tHighest_CFD_Absolute_Risk_Score\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref\tMMBLG_CFD_Risk_Score\tMMBLG_CFD_Absolute_Risk_Score\tCRISTA_#Bulge_type\tCRISTA_crRNA\tCRISTA_DNA\tCRISTA_Reference\tCRISTA_Chromosome\tCRISTA_Position\tCRISTA_Cluster_Position\tCRISTA_Direction\tCRISTA_Mismatches\tCRISTA_Bulge_Size\tCRISTA_Total\tCRISTA_PAM_gen\tCRISTA_Var_uniq\tCRISTA_Samples\tCRISTA_Annotation_Type\tCRISTA_Real_Guide\tCRISTA_rsID\tCRISTA_AF\tCRISTA_SNP\tCRISTA_#Seq_in_cluster\tCRISTA_CFD\tCRISTA_CFD_ref\tCRISTA_CFD_Risk_Score\tCRISTA_CFD_Absolute_Risk_Score/' "$final_res_alt"
@@ -576,13 +556,6 @@ echo -e 'Annotating results\tEnd\t'$(date) >>$log
 
 # echo -e 'Creating images' >  $output
 echo -e 'Creating images\tStart\t'$(date) >>$log
-# echo -e 'Creating images\tStart\t'$(date) >&2
-# echo -e "Adding risk score"
-# ./add_risk_score.py $final_res $final_res.risk "False"
-# mv "$final_res.risk" "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
-# ./add_risk_score.py $final_res_alt $final_res_alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
-# mv "$final_res_alt.risk" "${output_folder}/$(basename ${output_folder}).altMerge.txt"
-# echo -e "Risk score added"
 
 cd $output_folder
 #FIX FILES NAMES AND REMOVE UNUSED FILES
@@ -632,23 +605,12 @@ else
 	rm dummy.txt
 fi
 echo -e 'Creating images\tEnd\t'$(date) >>$log
-# echo -e 'Creating images\tEnd\t'$(date) >&2
 
-# if [ "$vcf_name" != "_" ]; then
-# 	cp $sampleID $output_folder/.sampleID.txt
-# fi
-# python $starting_dir/remove_n_and_dots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
+
 echo $gene_proximity
 echo -e 'Integrating results\tStart\t'$(date) >>$log
-# echo -e 'Integrating results\tStart\t'$(date) >&2
 echo >>$guide_file
-# while read guide;
-# do
-# 	if [ -z "$guide" ]; then
-# 		continue
-# 	fi
-# 	touch "${output_folder}/imgs/CRISPRme_top_1000_log_for_main_text_${guide}.png"
-# done < $guide_file
+
 if [ $gene_proximity != "_" ]; then
 	touch "${output_folder}/dummy.txt"
 	genome_version=$(echo ${ref_name} | sed 's/_ref//' | sed -e 's/\n//') #${output_folder}/Params.txt | awk '{print $2}' | sed 's/_ref//' | sed -e 's/\n//')
