@@ -516,16 +516,16 @@ done
 
 # echo -e 'Annotating results\tStart\t'$(date) >>$log
 #ANNOTATE BEST TARGETS
-./annotate_final_results.py $final_res.bestCFD.txt $annotationfile $final_res.bestCFD.txt.annotated
-./annotate_final_results.py $final_res.bestmmblg.txt $annotationfile $final_res.bestmmblg.txt.annotated
-./annotate_final_results.py $final_res.bestCRISTA.txt $annotationfile $final_res.bestCRISTA.txt.annotated
+./annotate_final_results.py $final_res.bestCFD.txt $annotation_file $final_res.bestCFD.txt.annotated
+./annotate_final_results.py $final_res.bestmmblg.txt $annotation_file $final_res.bestmmblg.txt.annotated
+./annotate_final_results.py $final_res.bestCRISTA.txt $annotation_file $final_res.bestCRISTA.txt.annotated
 mv $final_res.bestCFD.txt.annotated $final_res.bestCFD.txt
 mv $final_res.bestmmblg.txt.annotated $final_res.bestmmblg.txt
 mv $final_res.bestCRISTA.txt.annotated $final_res.bestCRISTA.txt
 #ANNOTATE ALT TARGETS
-./annotate_final_results.py $final_res_alt.bestCFD.txt $annotationfile $final_res_alt.bestCFD.txt.annotated
-./annotate_final_results.py $final_res_alt.bestmmblg.txt $annotationfile $final_res_alt.bestmmblg.txt.annotated
-./annotate_final_results.py $final_res_alt.bestCRISTA.txt $annotationfile $final_res_alt.bestCRISTA.txt.annotated
+./annotate_final_results.py $final_res_alt.bestCFD.txt $annotation_file $final_res_alt.bestCFD.txt.annotated
+./annotate_final_results.py $final_res_alt.bestmmblg.txt $annotation_file $final_res_alt.bestmmblg.txt.annotated
+./annotate_final_results.py $final_res_alt.bestCRISTA.txt $annotation_file $final_res_alt.bestCRISTA.txt.annotated
 mv $final_res_alt.bestCFD.txt.annotated $final_res_alt.bestCFD.txt
 mv $final_res_alt.bestmmblg.txt.annotated $final_res_alt.bestmmblg.txt
 mv $final_res_alt.bestCRISTA.txt.annotated $final_res_alt.bestCRISTA.txt
