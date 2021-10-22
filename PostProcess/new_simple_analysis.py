@@ -438,6 +438,7 @@ def preprocess_CRISTA_score(target):
     # do_scores = False  # REMOVE TO CALCULATE SCORING
 
     # calculate score
+    crista_score = -1
     if do_scores:
         try:
             crista_score = CRISTA_predict(
