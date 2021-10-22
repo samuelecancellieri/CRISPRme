@@ -170,8 +170,8 @@ saveDict = {
     'Bulges_(highest_CFD)': 'NA',
     'Mismatches+bulges_(highest_CFD)': 'NA',
     "Seed_mismatches+bulges_REF_(highest_CFD)": 'NA',
-    "Seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
     "Non_seed_mismatches+bulges_REF_(highest_CFD)": 'NA',
+    "Seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
     "Non_seed_mismatches+bulges_ALT_(highest_CFD)": 'NA',
     'Bulge_type_(highest_CFD)': 'NA',
     'REF/ALT_origin_(highest_CFD)': 'NA',
@@ -197,8 +197,8 @@ saveDict = {
     'Bulges_(fewest_mm+b)': 'NA',
     'Mismatches+bulges_(fewest_mm+b)': 'NA',
     "Seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA',
-    "Seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
     "Non_seed_mismatches+bulges_REF_(fewest_mm+b)": 'NA',
+    "Seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
     "Non_seed_mismatches+bulges_ALT_(fewest_mm+b)": 'NA',
     'Bulge_type_(fewest_mm+b)': 'NA',
     'REF/ALT_origin_(fewest_mm+b)': 'NA',
@@ -222,8 +222,8 @@ saveDict = {
     'Bulges_(highest_CRISTA)': 'NA',
     'Mismatches+bulges_(highest_CRISTA)': 'NA',
     "Seed_mismatches+bulges_REF_(highest_CRISTA)": 'NA',
-    "Seed_mismatches+bulges_ALT_(highest_CRISTA)": 'NA',
     "Non_seed_mismatches+bulges_REF_(highest_CRISTA)": 'NA',
+    "Seed_mismatches+bulges_ALT_(highest_CRISTA)": 'NA',
     "Non_seed_mismatches+bulges_ALT_(highest_CRISTA)": 'NA',
     'Bulge_type_(highest_CRISTA)': 'NA',
     'REF/ALT_origin_(highest_CRISTA)': 'NA',
@@ -516,7 +516,7 @@ for nline, line in enumerate(inCrispritzResults):
         change_alt_ref_highest_crista = True
 
     if change_alt_ref_highest_cfd:
-        saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)']
+        # saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)']
         saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = 'NA'
         saveDict['REF/ALT_origin_(highest_CFD)'] = 'ref'
         saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = 'NA'
@@ -527,7 +527,7 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['PAM_creation_(highest_CFD)'] = 'NA'
 
     if change_alt_ref_highest_crista:
-        saveDict['Aligned_protospacer+PAM_REF_(highest_CRISTA)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)']
+        # saveDict['Aligned_protospacer+PAM_REF_(highest_CRISTA)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)']
         saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)'] = 'NA'
         saveDict['REF/ALT_origin_(highest_CRISTA)'] = 'ref'
         saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = 'NA'
