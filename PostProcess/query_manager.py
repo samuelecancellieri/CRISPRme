@@ -53,7 +53,7 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
         radio_order = str(radio_order)+"_(highest_CRISTA)"
         orderdrop = str(orderdrop)+"_(highest_CRISTA)"
 
-    print(radio_order, orderdrop)
+    # print(radio_order, orderdrop)
 
     if orderdrop != "None_(highest_CFD)":  # ordinamento doppio
         if maxdrop == None:
@@ -64,7 +64,6 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
         # else:  # min e max
         df = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=? AND \"{}\" BETWEEN {} AND {} ORDER BY \"{}\" {},\"{}\" {}  LIMIT ? OFFSET ?".format(
             guide_column, radio_order, sholddrop, maxdrop, radio_order, asc1, orderdrop, asc1), conn, params=param)
-
     else:  # ordinamento singolo
         if maxdrop == None:  # min
             maxdrop = 1000
