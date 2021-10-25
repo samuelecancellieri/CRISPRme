@@ -84,23 +84,27 @@ for guide in guides:
         for line in f:
             splitted = line.strip().split("\t")
             var = True
-            pam_creation = splitted[11] != "n"
+            pam_creation = splitted[11] != "NA"
 
-            if splitted[13] == "n":
+            if splitted[13] == "NA":
                 var = False
-                # count for mm and bul in CFD target
-                # general_table[guide]['ref'][int(
-                #     splitted[9]), int(splitted[8])] += 1
-                # count for mm and bul in MM_BUL target
-                general_table[guide]['ref'][int(
-                    splitted[33]), int(splitted[32])] += 1
+                if splitted[21] != '-1.0':
+                    # count for mm and bul in CFD target
+                    general_table[guide]['ref'][int(
+                        splitted[9]), int(splitted[8])] += 1
+                else:
+                    # count for mm and bul in MM_BUL target
+                    general_table[guide]['ref'][int(
+                        splitted[33]), int(splitted[32])] += 1
             else:
-                # count for mm and bul in CFD target
-                # general_table[guide]['var'][int(
-                #     splitted[9]), int(splitted[8])] += 1
-                # count for mm and bul in MM_BUL target
-                general_table[guide]['var'][int(
-                    splitted[33]), int(splitted[32])] += 1
+                if splitted[21] != '-1.0':
+                    # count for mm and bul in CFD target
+                    general_table[guide]['var'][int(
+                        splitted[9]), int(splitted[8])] += 1
+                else:
+                    # count for mm and bul in MM_BUL target
+                    general_table[guide]['var'][int(
+                        splitted[33]), int(splitted[32])] += 1
 
             bulge_type = f"{splitted[0]}\t{splitted[8]}\t{splitted[9]}"
             if bulge_type in dict_summary_by_guide.keys():
@@ -122,7 +126,7 @@ for guide in guides:
                 seen_superpop = set()
                 seen_pop = set()
                 for sample in samples:
-                    if sample != "NO_SAMPLES" and sample != '':
+                    if sample != "NO_SAMPLES" and sample != '' and sample != 'NA':
                         dict_samples[sample][3] += 1
                         seen_pop.add(dict_samples[sample][1])
                         seen_superpop.add(dict_samples[sample][2])

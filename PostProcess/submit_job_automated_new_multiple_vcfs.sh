@@ -359,13 +359,14 @@ while read vcf_f; do
 		./pool_post_analisi_snp.py $output_folder $ref_folder $vcf_name $guide_file $mm $bDNA $bRNA $annotation_file $pam_file $dict_folder $final_res $final_res_alt $ncpus
 
 		# echo -e 'Post-analysis SNPs\tEnd\t'$(date) >&2
-		for key in "${real_chroms[@]}"; do
-			echo "Concatenating $key"
-			tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt" >>"$final_res" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-			# tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt" >> "$final_res_alt" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
-			rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt"
-			# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"
-		done
+		#STOP MERGING FILES
+		# for key in "${real_chroms[@]}"; do
+		# 	echo "Concatenating $key"
+		# 	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt" >>"$final_res" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+		# 	# tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt" >> "$final_res_alt" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+		# 	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt"
+		# 	# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"
+		# done
 
 		echo -e 'Post-analysis SNPs\tEnd\t'$(date) >>$log
 
@@ -383,12 +384,13 @@ while read vcf_f; do
 
 		./pool_post_analisi_snp.py $output_folder $ref_folder "_" $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "_" $final_res $final_res_alt $ncpus
 
-		for key in "${real_chroms[@]}"; do
-			tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt" >>"$final_res" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-			# tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt" >> "$final_res_alt" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
-			rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt"
-			# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"
-		done
+		#STOP MERGING FILES
+		# for key in "${real_chroms[@]}"; do
+		# 	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt" >>"$final_res" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+		# 	# tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt" >> "$final_res_alt" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+		# 	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestMerge.txt"
+		# 	# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.altMerge.txt"
+		# done
 		echo -e 'Post-analysis\tEnd\t'$(date) >>$log
 		# echo -e 'Post-analysis\tEnd\t'$(date) >&2
 
@@ -399,28 +401,28 @@ while read vcf_f; do
 		cd "$starting_dir"
 
 		echo -e 'Post-analysis INDELs\tStart\t'$(date) >>$log
+		#SKIP INDELS ANALYSIS
 		if [ $(wc -l <"$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt") -gt 1 ]; then
 
-			# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
-			#commented to avoid indel analysis
+			# 	# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
+			# 	#commented to avoid indel analysis
 			./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
 
-			# echo -e 'Post-analysis INDELs\tEnd\t'$(date) >&2
-			for key in "${array_fake_chroms[@]}"; do
-				echo "Concatenating $key"
-				tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt" >>"$final_res"    #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-				tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt" >>"$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
-				rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
-				rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
-			done
-
+		# 	# echo -e 'Post-analysis INDELs\tEnd\t'$(date) >&2
+		# 	for key in "${array_fake_chroms[@]}"; do
+		# 		echo "Concatenating $key"
+		# 		tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt" >>"$final_res"    #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+		# 		tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt" >>"$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+		# 		rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
+		# 		rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
+		# 	done
 		fi
 		echo -e 'Post-analysis INDELs\tEnd\t'$(date) >>$log
 
 	fi
 done <$vcf_list
+
 echo -e "Adding header to files"
-sed -i 1i"#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref" "$final_res"
 
 while read samples; do
 	if [ -z "$samples" ]; then
@@ -436,65 +438,140 @@ fi
 sampleID=$output_folder/.sampleID.txt
 
 # echo -e 'Merging targets' >  $output
+#STOP MERGING IN MAIN FILE
 echo -e 'Merging Targets\tStart\t'$(date) >>$log
-#echo -e 'Merging Close Targets\tStart\t'$(date) >> $log
-./merge_close_targets_cfd.sh $final_res $final_res.trimmed $merge_t
-mv $final_res.trimmed $final_res
-mv $final_res.trimmed.discarded_samples $final_res_alt
-
-# echo -e 'Merging Close Targets\tEnd\t'$(date) >> $log
-# echo -e 'Merging Close Targets\tEnd\t'$(date) >&2
-
-# echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >> $log
-# echo -e 'Merging Alternative Chromosomes\tStart\t'$(date) >&2
-./merge_alt_chr.sh $final_res $final_res.chr_merged
-
-# echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >> $log
-# echo -e 'Merging Alternative Chromosomes\tEnd\t'$(date) >&2
 echo -e 'Merging Targets\tEnd\t'$(date) >>$log
 
-mv $final_res.chr_merged $final_res
+#create result file for each scoring method
+echo "header" >$final_res.bestCFD.txt
+echo "header" >$final_res.bestmmblg.txt
+echo "header" >$final_res.bestCRISTA.txt
+echo "header" >$final_res_alt.bestCFD.txt
+echo "header" >$final_res_alt.bestmmblg.txt
+echo "header" >$final_res_alt.bestCRISTA.txt
 
-sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' "$final_res"
-sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref/' "$final_res_alt"
+#header into final_res best
+sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref/' "$final_res.bestCFD.txt"
+sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref/' "$final_res.bestmmblg.txt"
+sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref/' "$final_res.bestCRISTA.txt"
+#header into final_res alt
+sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref/' "$final_res_alt.bestCFD.txt"
+sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref/' "$final_res_alt.bestmmblg.txt"
+sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref/' "$final_res_alt.bestCRISTA.txt"
+
+#CONCATENATE REF&VAR RESULTS
+for key in "${real_chroms[@]}"; do
+	echo "Concatenating $key"
+	#concatenate all files into respective final best file and remove them after computation
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt" >>"$final_res.bestCFD.txt"
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt" >>"$final_res.bestmmblg.txt"
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt" >>"$final_res.bestCRISTA.txt"
+	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt"
+	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt"
+	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt"
+	#concatenate all files into respective final alt file and remove them after computation
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt.alt" >>"$final_res_alt.bestCFD.txt"
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt.alt" >>"$final_res_alt.bestmmblg.txt"
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt.alt" >>"$final_res_alt.bestCRISTA.txt"
+	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt.alt"
+	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt.alt"
+	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt.alt"
+done
+
+#CONCATENATE INDELS RESULTS
+for key in "${array_fake_chroms[@]}"; do
+	echo "Concatenating $key"
+	#MERGE BEST INDEL TARGETS
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt" >>"$final_res.bestCFD.txt"       #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt" >>"$final_res.bestCRISTA.txt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt" >>"$final_res.bestmmblg.txt"
+	#MERGE ALT INDEL TARGETS
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt.alt" >>"$final_res_alt.bestCFD.txt"       #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt.alt" >>"$final_res_alt.bestCRISTA.txt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt.alt" >>"$final_res_alt.bestCRISTA.txt"  #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+	#rm BEST INDEL TARGETS
+	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt"
+	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt"
+	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt"
+	#rm ALT INDEL TARGETS
+	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt.alt"
+	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt.alt"
+	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt.alt"
+done
 
 echo -e 'Annotating results\tStart\t'$(date) >>$log
-# echo -e 'Annotating results\tStart\t'$(date) >&2
-./annotate_final_results.py $final_res $annotation_file $final_res.annotated
-./annotate_final_results.py $final_res_alt $annotation_file $final_res_alt.annotated
+
+#ANNOTATE BEST TARGETS
+./annotate_final_results.py $final_res.bestCFD.txt $annotation_file $final_res.bestCFD.txt.annotated
+./annotate_final_results.py $final_res.bestmmblg.txt $annotation_file $final_res.bestmmblg.txt.annotated
+./annotate_final_results.py $final_res.bestCRISTA.txt $annotation_file $final_res.bestCRISTA.txt.annotated
+mv $final_res.bestCFD.txt.annotated $final_res.bestCFD.txt
+mv $final_res.bestmmblg.txt.annotated $final_res.bestmmblg.txt
+mv $final_res.bestCRISTA.txt.annotated $final_res.bestCRISTA.txt
+#ANNOTATE ALT TARGETS
+./annotate_final_results.py $final_res_alt.bestCFD.txt $annotation_file $final_res_alt.bestCFD.txt.annotated
+./annotate_final_results.py $final_res_alt.bestmmblg.txt $annotation_file $final_res_alt.bestmmblg.txt.annotated
+./annotate_final_results.py $final_res_alt.bestCRISTA.txt $annotation_file $final_res_alt.bestCRISTA.txt.annotated
+mv $final_res_alt.bestCFD.txt.annotated $final_res_alt.bestCFD.txt
+mv $final_res_alt.bestmmblg.txt.annotated $final_res_alt.bestmmblg.txt
+mv $final_res_alt.bestCRISTA.txt.annotated $final_res_alt.bestCRISTA.txt
+
+#SCORING BEST RESULTS
+./add_risk_score.py $final_res.bestCFD.txt $final_res.bestCFD.txt.risk "False"
+./add_risk_score.py $final_res.bestmmblg.txt $final_res.bestmmblg.txt.risk "False"
+./add_risk_score.py $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.risk "False"
+mv $final_res.bestCFD.txt.risk $final_res.bestCFD.txt
+mv $final_res.bestmmblg.txt.risk $final_res.bestmmblg.txt
+mv $final_res.bestCRISTA.txt.risk $final_res.bestCRISTA.txt
+#SCORING ALT RESULTS
+./add_risk_score.py $final_res_alt.bestCFD.txt $final_res_alt.bestCFD.txt.risk "False"
+./add_risk_score.py $final_res_alt.bestmmblg.txt $final_res_alt.bestmmblg.txt.risk "False"
+./add_risk_score.py $final_res_alt.bestCRISTA.txt $final_res_alt.bestCRISTA.txt.risk "False"
+mv $final_res_alt.bestCFD.txt.risk $final_res_alt.bestCFD.txt
+mv $final_res_alt.bestmmblg.txt.risk $final_res_alt.bestmmblg.txt
+mv $final_res_alt.bestCRISTA.txt.risk $final_res_alt.bestCRISTA.txt
+
+#remove N's and dots from rsID from BEST FILES
+./remove_n_and_dots.py $final_res.bestCFD.txt
+./remove_n_and_dots.py $final_res.bestmmblg.txt
+./remove_n_and_dots.py $final_res.bestCRISTA.txt
+#remove N's and dots from rsID from ALT FILES
+./remove_n_and_dots.py $final_res_alt.bestCFD.txt
+./remove_n_and_dots.py $final_res_alt.bestmmblg.txt
+./remove_n_and_dots.py $final_res_alt.bestCRISTA.txt
+
+#join targets by columns for BEST and ALT files
+pr -m -t -J $final_res.bestCFD.txt $final_res.bestmmblg.txt $final_res.bestCRISTA.txt >$final_res
+pr -m -t -J $final_res_alt.bestCFD.txt $final_res_alt.bestmmblg.txt $final_res_alt.bestCRISTA.txt >$final_res_alt
+
+#MERGE ALTERNATIVE CHR IF SAME SEQUENCE OF ALIGNED CHR
+./merge_alt_chr.sh $final_res $final_res.chr_merged
+mv $final_res.chr_merged $final_res
+
+#update header for final_res and final_res_alt
+sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tHighest_CFD_Risk_Score\tHighest_CFD_Absolute_Risk_Score\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref\tMMBLG_CFD_Risk_Score\tMMBLG_CFD_Absolute_Risk_Score\tCRISTA_#Bulge_type\tCRISTA_crRNA\tCRISTA_DNA\tCRISTA_Reference\tCRISTA_Chromosome\tCRISTA_Position\tCRISTA_Cluster_Position\tCRISTA_Direction\tCRISTA_Mismatches\tCRISTA_Bulge_Size\tCRISTA_Total\tCRISTA_PAM_gen\tCRISTA_Var_uniq\tCRISTA_Samples\tCRISTA_Annotation_Type\tCRISTA_Real_Guide\tCRISTA_rsID\tCRISTA_AF\tCRISTA_SNP\tCRISTA_#Seq_in_cluster\tCRISTA_CFD\tCRISTA_CFD_ref\tCRISTA_CFD_Risk_Score\tCRISTA_CFD_Absolute_Risk_Score/' "$final_res"
+sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\t#Seq_in_cluster\tCFD\tCFD_ref\tHighest_CFD_Risk_Score\tHighest_CFD_Absolute_Risk_Score\tMMBLG_#Bulge_type\tMMBLG_crRNA\tMMBLG_DNA\tMMBLG_Reference\tMMBLG_Chromosome\tMMBLG_Position\tMMBLG_Cluster_Position\tMMBLG_Direction\tMMBLG_Mismatches\tMMBLG_Bulge_Size\tMMBLG_Total\tMMBLG_PAM_gen\tMMBLG_Var_uniq\tMMBLG_Samples\tMMBLG_Annotation_Type\tMMBLG_Real_Guide\tMMBLG_rsID\tMMBLG_AF\tMMBLG_SNP\tMMBLG_#Seq_in_cluster\tMMBLG_CFD\tMMBLG_CFD_ref\tMMBLG_CFD_Risk_Score\tMMBLG_CFD_Absolute_Risk_Score\tCRISTA_#Bulge_type\tCRISTA_crRNA\tCRISTA_DNA\tCRISTA_Reference\tCRISTA_Chromosome\tCRISTA_Position\tCRISTA_Cluster_Position\tCRISTA_Direction\tCRISTA_Mismatches\tCRISTA_Bulge_Size\tCRISTA_Total\tCRISTA_PAM_gen\tCRISTA_Var_uniq\tCRISTA_Samples\tCRISTA_Annotation_Type\tCRISTA_Real_Guide\tCRISTA_rsID\tCRISTA_AF\tCRISTA_SNP\tCRISTA_#Seq_in_cluster\tCRISTA_CFD\tCRISTA_CFD_ref\tCRISTA_CFD_Risk_Score\tCRISTA_CFD_Absolute_Risk_Score/' "$final_res_alt"
+
 echo -e 'Annotating results\tEnd\t'$(date) >>$log
-# echo -e 'Annotating results\tEnd\t'$(date) >&2
-
-mv $final_res.annotated $final_res
-mv $final_res_alt.annotated $final_res_alt
-
-echo -e "Cleaning directory"
-
-# if ! [ -d "$output_folder/cfd_graphs" ]; then
-# 	mkdir $output_folder/cfd_graphs
-# fi
-# ./assemble_cfd_graphs.py $output_folder
-# mv $output_folder/snps.CFDGraph.txt $output_folder/cfd_graphs
-rm -f $output_folder/*.CFDGraph.txt
-#mv $output_folder/indels.CFDGraph.txt $output_folder/cfd_graphs
-rm -f $output_folder/indels.CFDGraph.txt
 
 # echo -e 'Creating images' >  $output
 echo -e 'Creating images\tStart\t'$(date) >>$log
-# echo -e 'Creating images\tStart\t'$(date) >&2
-echo -e "Adding risk score"
-./add_risk_score.py $final_res $final_res.risk "False"
-mv "$final_res.risk" "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
-./add_risk_score.py $final_res_alt $final_res_alt.risk "False" #"True" change to True if ID_CLUSTER is inserted during merge_phase
-mv "$final_res_alt.risk" "${output_folder}/$(basename ${output_folder}).altMerge.txt"
-echo -e "Risk score added"
 
 cd $output_folder
-# rm -r "cfd_graphs"
+#FIX FILES NAMES AND REMOVE UNUSED FILES
+echo -e "Cleaning directory"
+rm -f *.CFDGraph.txt
+rm -f indels.CFDGraph.txt
 rm -r "crispritz_prof"
 # rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
-rm $final_res
-rm $final_res_alt
+rm $final_res.bestCFD.txt
+rm $final_res.bestmmblg.txt
+rm $final_res.bestCRISTA.txt
+rm $final_res_alt.bestCFD.txt
+rm $final_res_alt.bestmmblg.txt
+rm $final_res_alt.bestCRISTA.txt
+mv $final_res "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
+mv $final_res_alt "${output_folder}/$(basename ${output_folder}).altMerge.txt"
 
 cd $starting_dir
 if [ "$vcf_name" != "_" ]; then
@@ -528,23 +605,11 @@ else
 	rm dummy.txt
 fi
 echo -e 'Creating images\tEnd\t'$(date) >>$log
-# echo -e 'Creating images\tEnd\t'$(date) >&2
 
-# if [ "$vcf_name" != "_" ]; then
-# 	cp $sampleID $output_folder/.sampleID.txt
-# fi
-python $starting_dir/remove_n_and_dots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt"
 echo $gene_proximity
 echo -e 'Integrating results\tStart\t'$(date) >>$log
-# echo -e 'Integrating results\tStart\t'$(date) >&2
 echo >>$guide_file
-# while read guide;
-# do
-# 	if [ -z "$guide" ]; then
-# 		continue
-# 	fi
-# 	touch "${output_folder}/imgs/CRISPRme_top_1000_log_for_main_text_${guide}.png"
-# done < $guide_file
+
 if [ $gene_proximity != "_" ]; then
 	touch "${output_folder}/dummy.txt"
 	genome_version=$(echo ${ref_name} | sed 's/_ref//' | sed -e 's/\n//') #${output_folder}/Params.txt | awk '{print $2}' | sed 's/_ref//' | sed -e 's/\n//')

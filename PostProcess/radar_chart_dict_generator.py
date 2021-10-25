@@ -351,7 +351,7 @@ def fillDict(guide, guideDict, motifDict):
             # count the target in each level, from total to infinite, this way we autoinclude
             # each target in the proper level and in all the following levels
             guideDict[over]['General'] += 1
-            if split[14] != 'n':
+            if split[14] != 'NA':
                 annotationsList = split[14].strip().split(',')
                 # to avoid duplicate categories
                 annotationsList = set(annotationsList)

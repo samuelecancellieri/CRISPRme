@@ -109,60 +109,6 @@ CFD_COLUMN = 'CFD_score_(highest_CFD)'
 RISK_COLUMN = 'CFD_risk_score_(highest_CFD)'
 SAMPLES_COLUMN = 'Variant_samples_(highest_CFD)'
 
-header_integrated = [
-    'Spacer+PAM',
-    'Chromosome',
-    'Start_coordinate_(highest_CFD)',
-    'Strand_(highest_CFD)',
-    'Aligned_spacer+PAM_(highest_CFD)',
-    'Aligned_protospacer+PAM_REF_(highest_CFD)',
-    'Aligned_protospacer+PAM_ALT_(highest_CFD)',
-    'PAM_(highest_CFD)',
-    'Mismatches_(highest_CFD)',
-    'Bulges_(highest_CFD)',
-    'Mismatches+bulges_(highest_CFD)',
-    'Bulge_type_(highest_CFD)',
-    'REF/ALT_origin_(highest_CFD)',
-    'PAM_creation_(highest_CFD)',
-    'CFD_score_(highest_CFD)',
-    'CFD_score_REF_(highest_CFD)',
-    'CFD_score_ALT_(highest_CFD)',
-    'CFD_risk_score_(highest_CFD)',
-    'Variant_info_spacer+PAM_(highest_CFD)',
-    'Variant_info_genome_(highest_CFD)',
-    'Variant_MAF_(highest_CFD)',
-    'Variant_rsID_(highest_CFD)',
-    'Variant_samples_(highest_CFD)',
-    'Not_found_in_REF',
-    'Other_motifs',
-    'Start_coordinate_(fewest_mm+b)',
-    'Strand_(fewest_mm+b)',
-    'Aligned_spacer+PAM_(fewest_mm+b)',
-    'Aligned_protospacer+PAM_REF_(fewest_mm+b)',
-    'Aligned_protospacer+PAM_ALT_(fewest_mm+b)',
-    'PAM_(fewest_mm+b)',
-    'Mismatches_(fewest_mm+b)',
-    'Bulges_(fewest_mm+b)',
-    'Mismatches+bulges_(fewest_mm+b)',
-    'Bulge_type_(fewest_mm+b)',
-    'REF/ALT_origin_(fewest_mm+b)',
-    'PAM_creation_(fewest_mm+b)',
-    'CFD_score_(fewest_mm+b)',
-    'CFD_score_REF_(fewest_mm+b)',
-    'CFD_score_ALT_(fewest_mm+b)',
-    'CFD_risk_score_(fewest_mm+b)',
-    'Variant_info_spacer+PAM_(fewest_mm+b)',
-    'Variant_info_genome_(fewest_mm+b)',
-    'Variant_MAF_(fewest_mm+b)',
-    'Variant_rsID_(fewest_mm+b)',
-    'Variant_samples_(fewest_mm+b)',
-    'Annotation_GENCODE',
-    'Annotation_closest_gene_name',
-    'Annotation_closest_gene_ID',
-    'Annotation_closest_gene_distance_(kb)',
-    'Annotation_ENCODE'
-]
-
 # check header for personal annotation
 
 
@@ -972,6 +918,12 @@ def clusterPage(job_id, hash):
                         'textAlign': 'left',
                         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                         'overflow': 'hidden'
+                    },
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
+                        'textAlign': 'left',
+                        'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                        'overflow': 'hidden'
                     }
                 ],
                 # style_data_conditional=[
@@ -1030,6 +982,12 @@ def clusterPage(job_id, hash):
                     },
                     {
                         'if': {'column_id': 'Variant_samples_(fewest_mm+b)'},
+                        'textAlign': 'left',
+                        'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                        'overflow': 'hidden'
+                    },
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
                         'textAlign': 'left',
                         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                         'overflow': 'hidden'
@@ -1367,6 +1325,12 @@ def samplePage(job_id, hash):
                     },
                     {
                         'if': {'column_id': 'Variant_samples_(fewest_mm+b)'},
+                        'textAlign': 'left',
+                        'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                        'overflow': 'hidden'
+                    },
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
                         'textAlign': 'left',
                         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                         'overflow': 'hidden'
@@ -1985,6 +1949,12 @@ def guidePagev3(job_id, hash):
                     },
                     {
                         'if': {'column_id': 'Variant_samples_(fewest_mm+b)'},
+                        'textAlign': 'left',
+                        'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                        'overflow': 'hidden'
+                    },
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
                         'textAlign': 'left',
                         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                         'overflow': 'hidden'
@@ -2641,6 +2611,12 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
                     },
                     {
                         'if': {'column_id': 'Variant_samples_(fewest_mm+b)'},
+                        'textAlign': 'left',
+                        'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                        'overflow': 'hidden'
+                    },
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
                         'textAlign': 'left',
                         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                         'overflow': 'hidden'
@@ -3443,6 +3419,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                         'textAlign': 'left',
                         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                         'overflow': 'hidden'
+                    },
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
+                        'textAlign': 'left',
+                        'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                        'overflow': 'hidden'
                     }
                 ],
             ),
@@ -3464,6 +3446,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     },
                     {
                         'if': {'column_id': 'Variant_samples_(fewest_mm+b)'},
+                        'textAlign': 'left',
+                        'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                        'overflow': 'hidden'
+                    },
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
                         'textAlign': 'left',
                         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                         'overflow': 'hidden'
@@ -3515,6 +3503,12 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
                     },
                     {
                         'if': {'column_id': 'Variant_samples_(fewest_mm+b)'},
+                        'textAlign': 'left',
+                        'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                        'overflow': 'hidden'
+                    },
+                    {
+                        'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
                         'textAlign': 'left',
                         'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                         'overflow': 'hidden'
@@ -3937,10 +3931,9 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                 html.H4('Select filter criteria for targets'),
                                 dcc.Dropdown(options=[
                                     {'label': 'Fewest Mismatches and Bulges',
-                                     'value': 'fewest'},
+                                        'value': 'fewest'},
                                     {'label': 'CFD score', 'value': 'CFD'},
-                                    {'label': 'User Score',
-                                     'value': 'User'}
+                                    {'label': 'CRISTA Score', 'value': 'CRISTA'}
                                 ], value='fewest',
                                     id='target_filter_dropdown'
                                 )
@@ -4108,6 +4101,12 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
                                         },
                                         {
                                             'if': {'column_id': 'Variant_samples_(fewest_mm+b)'},
+                                            'textAlign': 'left',
+                                            'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                                            'overflow': 'hidden'
+                                        },
+                                        {
+                                            'if': {'column_id': 'Variant_samples_(highest_CRISTA)'},
                                             'textAlign': 'left',
                                             'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
                                             'overflow': 'hidden'
@@ -4667,10 +4666,13 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
             # find col to drop using the user filter
             drop_col = list()
             for elem in list(data.columns):
-                if filter_target_value == 'fewest' and 'highest_CFD' in elem:
+                if filter_target_value == 'fewest' and ('highest_CFD' in elem or 'highest_CRISTA' in elem):
                     drop_col.append(elem)
-                if filter_target_value == 'CFD' and 'fewest' in elem:
+                if filter_target_value == 'CFD' and ('fewest' in elem or 'highest_CRISTA' in elem):
                     drop_col.append(elem)
+                if filter_target_value == 'CRISTA' and ('fewest' in elem or 'highest_CFD' in elem):
+                    drop_col.append(elem)
+            # drop column from datatable to show
             data.drop(drop_col, inplace=True, axis=1)
             # extract cols for datatable
             columns = [{"name": i, "id": i, 'hideable': True}
@@ -4683,6 +4685,9 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
             if filter_target_value == 'CFD':
                 snps = pd.DataFrame(
                     data['Variant_info_genome_(highest_CFD)']).to_dict('records')
+            if filter_target_value == 'CRISTA':
+                snps = pd.DataFrame(
+                    data['Variant_info_genome_(highest_CRISTA)']).to_dict('records')
 
             # extract data and list datas
             data = data.to_dict('records')
