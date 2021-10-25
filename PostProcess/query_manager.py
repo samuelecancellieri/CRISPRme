@@ -43,6 +43,13 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
         radio_order = str(radio_order)+"_(fewest_mm+b)"
         orderdrop = str(orderdrop)+"_(fewest_mm+b)"
     elif target == 'CRISTA':
+        if 'CFD' in radio_order:
+            radio_order = str(radio_order).replace('CFD', 'CRISTA')
+        try:
+            if 'CFD' in orderdrop:
+                orderdrop = str(orderdrop).replace('CFD', 'CRISTA')
+        except:
+            pass
         radio_order = str(radio_order)+"_(highest_CRISTA)"
         orderdrop = str(orderdrop)+"_(highest_CRISTA)"
 
@@ -64,45 +71,6 @@ def shold(target, n_clicks, page_current, page_size, radio_order, orderdrop, sho
             df = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=? AND \"{}\" BETWEEN {} AND {} ORDER BY \"{}\" {} LIMIT ? OFFSET ?".format(
                 guide_column, radio_order, sholddrop, maxdrop, radio_order, asc1), conn, params=param)  # ok
 
-    # print("shold")
-    # if target=="Target2":
-    #   radio_order=str("MMBLG_"+radio_order+"_2")
-    #   orderdrop="MMBLG_"+str(orderdrop)+"_2"
-    # if target=="Target1":
-    #   radio_order=str(radio_order)+"_1"
-    #   orderdrop=str(orderdrop)+"_1"
-
-    # if asc1=='DESC': #decrescente
-    #   if orderdrop!="None_1" and orderdrop!="MMBLG_None_2": #ordinamento doppio
-    #     if maxdrop==None: #min
-    #       df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? AND {}>={} ORDER BY {} DESC,{} DESC LIMIT ? OFFSET ?".format(radio_order,sholddrop,radio_order,orderdrop),conn,params=param)
-    #       #data=df.to_dict('records')
-    #     else:#min e max
-    #       df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? AND {} BETWEEN {} AND {} ORDER BY {} DESC,{} DESC  LIMIT ? OFFSET ?".format(radio_order,sholddrop,maxdrop,radio_order,orderdrop),conn,params=param)
-    #       #data=df.to_dict('records')
-
-    #   else:#ordinamento singolo
-    #     if maxdrop==None: #min
-    #         df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? AND {}>={} ORDER BY {} DESC LIMIT ? OFFSET ?".format(radio_order,sholddrop,radio_order),conn,params=param)  #ok
-    #         #data=df.to_dict('records')
-    #     else:#min e max
-    #         df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? AND {} BETWEEN {} AND {} ORDER BY {} DESC LIMIT ? OFFSET ?".format(radio_order,sholddrop,maxdrop,radio_order),conn,params=param) #ok
-    #         #data=df.to_dict('records')
-    # else: #crescente
-    #   if orderdrop!="None_1" and orderdrop!="MMBLG_None2": #ordinamento doppio
-    #     if maxdrop==None: #min
-    #       df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? AND {}>={} ORDER BY {},{} LIMIT ? OFFSET ?".format(radio_order,sholddrop,radio_order,orderdrop),conn,params=param) #ok
-    #       #data=df.to_dict('records')
-    #     else:#min e max
-    #       df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? AND {} BETWEEN {} AND {} ORDER BY {},{}  LIMIT ? OFFSET ?".format(radio_order,sholddrop,maxdrop,radio_order,orderdrop),conn,params=param)
-    #       #data=df.to_dict('records')
-    #   else:#ordinamento singolo
-    #     if maxdrop==None: #min
-    #       df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? AND {}>={} ORDER BY {} LIMIT ? OFFSET ?".format(radio_order,sholddrop,radio_order),conn,params=param)  #ok
-    #       #data=df.to_dict('records')
-    #     else:#min e max
-    #       df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? AND {} BETWEEN {} AND {} ORDER BY {}  LIMIT ? OFFSET ?".format(radio_order,sholddrop,maxdrop,radio_order),conn,params=param) #ok
-    #       #data=df.to_dict('records')
     conn.commit()
     conn.close()
     data = df
@@ -129,20 +97,17 @@ def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, a
         radio_order = str(radio_order)+"_(fewest_mm+b)"
         orderdrop = str(orderdrop)+"_(fewest_mm+b)"
     elif target == 'CRISTA':
+        if 'CFD' in radio_order:
+            radio_order = str(radio_order).replace('CFD', 'CRISTA')
+        try:
+            if 'CFD' in orderdrop:
+                orderdrop = str(orderdrop).replace('CFD', 'CRISTA')
+        except:
+            pass
         radio_order = str(radio_order)+"_(highest_CRISTA)"
         orderdrop = str(orderdrop)+"_(highest_CRISTA)"
 
     # print(radio_order, orderdrop)
-
-    # if target == "Target2":
-    #     radio_order = str("MMBLG_"+radio_order+"_2")
-    #     orderdrop = "MMBLG_"+str(orderdrop)+"_2"
-
-    # if target == "Target1":
-    #     radio_order = str(radio_order)+"_(highest_CFD)"
-    #     orderdrop = str(orderdrop)+"_(highest_CFD)"
-
-    #print(radio_order, orderdrop)
 
     if orderdrop != "None_(highest_CFD)":
         # query con multiordinamento
@@ -154,36 +119,6 @@ def noshold(target, n_clicks, page_current, page_size, radio_order, orderdrop, a
         #print('single ordering')
         df = pd.read_sql_query("SELECT * FROM final_table WHERE \"{}\"=? ORDER BY \"{}\" {} LIMIT ? OFFSET ?".format(
             guide_column, radio_order, asc1), conn, params=param)
-
-    # if target=="Target2":
-    #   radio_order=str("MMBLG_"+radio_order+"_2")
-    #   orderdrop="MMBLG_"+str(orderdrop)+"_2"
-
-    # if target=="Target1":
-    #   radio_order=str(radio_order)+"_1"
-    #   orderdrop=str(orderdrop)+"_1"
-
-    # if orderdrop!="None_1" and orderdrop!="MMBLG_None_2":
-    #   #query con multiordinamento
-    #   if asc1=='DESC':
-    #     #multiordinamento descrescente
-    #     param=[guide,page_size,page_current * page_size,]
-    #     df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? ORDER BY {} DESC, {} DESC LIMIT ? OFFSET ?".format(radio_order,orderdrop),conn,params=param)
-    #     #data=df.to_dict('records')
-    #   else:
-    #     #multiordinamento crescente
-    #     df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? ORDER BY {},{} LIMIT ? OFFSET ?".format(radio_order,orderdrop),conn,params=param)
-    #     #data=df.to_dict('records')
-    # else:
-    #   #query con ordinamento singolo
-    #   if asc1=='DESC':
-    #     #ordinamento descrescente
-    #     df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? ORDER BY {} DESC LIMIT ? OFFSET ?".format(radio_order),conn,params=param)
-    #     #data=df.to_dict('records')
-    #   else:
-    #     #ordinamento crescente
-    #     df=pd.read_sql_query("SELECT * FROM final_table WHERE Real_Guide_1=? ORDER BY {} LIMIT ? OFFSET ?".format(radio_order),conn,params=param)
-    #     #data=df.to_dict('records')
 
     # query senza soglia
     conn.commit()
