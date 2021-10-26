@@ -4722,7 +4722,7 @@ def set_columns_options(selected_target):
                  'Target2 :with lowest Mismatches + Bulge Count': ['Mismatches', 'Bulges', 'Mismatches+bulges', 'CFD_score', 'CFD_risk_score']}  # , 'CFD_Absolute_Risk_Score'
     # target_options = {'Mismatches': ['Bulge_Size', 'Total', 'CFD'], 'Bulge_Size': ['Mismatches', 'Total', 'CFD'], 'Total': ['Mismatches', 'Bulge_Size', 'CFD'], 'CFD': [
     #     'Mismatches', 'Bulge_Size', 'Total'], 'Highest_CFD_Risk_Score': [], 'Highest_CFD_Absolute_Risk_Score': [], 'CFD_Risk_Score': [], 'CFD_Absolute_Risk_Score': []}
-    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score'],  # , ' Absolute Risk Score'
+    all_options = {'Target1 :with highest CFD': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' Score', ' Risk Score'],  # , ' Absolute Risk Score'
                    'Target2 :with lowest Mismatches + Bulges Count': [' Mismatches', ' Bulges', ' Mismatch+Bulges', ' CFD', ' Risk Score']}  # , ' Absolute Risk Score'
     # target_options = {' Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], ' Bulges': [' Mismatches', ' Mismatch+Bulges', ' CFD'], ' Mismatch+Bulges': [' Mismatches', ' Bulges', ' CFD'], ' CFD': [
     #     ' Mismatches', ' Bulges', ' Mismatch+Bulges'], ' Risk_Score': [], ' Absolute_Risk_Score': [], ' Risk_Score': [], ' Risk_Score': []}
@@ -4777,7 +4777,7 @@ def set_display_children(selected_order):
     # all_options = {'Target1': ['Mismatches', 'Bulge_Size', 'Total','CFD'],'Target2': ['Mismatches', 'Bulge_Size', 'Total','CFD']}
     target_value = {'Mismatches': ['Bulges', 'Mismatches+bulges', 'CFD'], 'Bulges': ['Mismatches', 'Mismatches+bulges', 'CFD_score'], 'Mismatches+bulges': ['Mismatches', 'Bulges', 'CFD_score'], 'CFD_score': [
         'Mismatches', 'Bulges', 'Mismatches+bulges'], 'CFD_risk_score': []}
-    target_label = {'Mismatches': [' Bulges', ' Mismatch+Bulges', ' CFD'], 'Bulges': [' Mismatches', ' Mismatch+Bulges', ' CFD'], 'Mismatches+bulges': [' Mismatches', ' Bulges', ' CFD'],
+    target_label = {'Mismatches': [' Bulges', ' Mismatch+Bulges', ' Score'], 'Bulges': [' Mismatches', ' Mismatch+Bulges', ' Score'], 'Mismatches+bulges': [' Mismatches', ' Bulges', ' Score'],
                     'CFD_score': [' Mismatches', ' Bulges', ' Mismatch+Bulges'], 'Highest CFD Risk Score': [], 'Highest CFD Absolute Risk Score': [], 'CFD_risk_score': [], 'CFD Absolute Risk Score': []}
 
     gi = []
@@ -4880,6 +4880,7 @@ def set_columns_value(available_options):
 
 @ app.callback(
     [Output('order', 'value'),
+     Output('multiorder', 'value'),
      Output('maxdrop', 'value'),
      Output('sholddrop', 'value '),
      Output('Radio-asc-1', 'value')],
@@ -4888,6 +4889,6 @@ def resetbutton(n_clicks):
     # ###print(n_clicks)
     # ###print(type(n_clicks))
     if n_clicks > 0:
-        return None, None, None, None
+        return None, None, None, None, None
     else:
-        return None, None, None, None
+        return None, None, None, None, None
