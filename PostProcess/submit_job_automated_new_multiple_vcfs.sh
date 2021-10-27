@@ -438,9 +438,6 @@ fi
 sampleID=$output_folder/.sampleID.txt
 
 # echo -e 'Merging targets' >  $output
-#STOP MERGING IN MAIN FILE
-echo -e 'Merging Targets\tStart\t'$(date) >>$log
-echo -e 'Merging Targets\tEnd\t'$(date) >>$log
 
 #create result file for each scoring method
 echo "header" >$final_res.bestCFD.txt
@@ -470,12 +467,12 @@ for key in "${real_chroms[@]}"; do
 	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt"
 	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt"
 	#concatenate all files into respective final alt file and remove them after computation
-	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt.alt" >>"$final_res_alt.bestCFD.txt"
-	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt.alt" >>"$final_res_alt.bestmmblg.txt"
-	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt.alt" >>"$final_res_alt.bestCRISTA.txt"
-	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt.alt"
-	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt.alt"
-	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt.alt"
+	# tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt.alt" >>"$final_res_alt.bestCFD.txt"
+	# tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt.alt" >>"$final_res_alt.bestmmblg.txt"
+	# tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt.alt" >>"$final_res_alt.bestCRISTA.txt"
+	# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt.alt"
+	# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt.alt"
+	# rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt.alt"
 done
 
 #CONCATENATE INDELS RESULTS
@@ -485,19 +482,45 @@ for key in "${array_fake_chroms[@]}"; do
 	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt" >>"$final_res.bestCFD.txt"       #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
 	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt" >>"$final_res.bestCRISTA.txt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
 	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt" >>"$final_res.bestmmblg.txt"
-	#MERGE ALT INDEL TARGETS
-	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt.alt" >>"$final_res_alt.bestCFD.txt"       #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt.alt" >>"$final_res_alt.bestCRISTA.txt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt.alt" >>"$final_res_alt.bestCRISTA.txt"  #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
 	#rm BEST INDEL TARGETS
 	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt"
 	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt"
 	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt"
+	#MERGE ALT INDEL TARGETS
+	# tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt.alt" >>"$final_res_alt.bestCFD.txt"       #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+	# tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt.alt" >>"$final_res_alt.bestCRISTA.txt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+	# tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt.alt" >>"$final_res_alt.bestCRISTA.txt"  #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
 	#rm ALT INDEL TARGETS
-	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt.alt"
-	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt.alt"
-	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt.alt"
+	# rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt.alt"
+	# rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt.alt"
+	# rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt.alt"
 done
+
+echo -e 'Merging Targets\tStart\t'$(date) >>$log
+#SORT FILE TO HAVE CHR AND POS IN PROXIMITY TO MERGE THEM
+#sort using guide_seq,chr,cluster_pos,score,total(mm+bul)
+head -1 $final_res.bestCFD.txt >$final_res.tmp
+tail -n +2 $final_res.bestCFD.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -k10,10n -T ./ >>$final_res.tmp && mv $final_res.tmp $final_res.bestCFD.txt
+#sort using guide_seq,chr,cluster_pos,score,total(mm+bul)
+head -1 $final_res.bestCRISTA.txt >$final_res.tmp
+tail -n +2 $final_res.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -k10,10n -T ./ >>$final_res.tmp && mv $final_res.tmp $final_res.bestCRISTA.txt
+#sort using guide_seq,chr,cluster_pos,total(mm+bul)
+head -1 $final_res.bestmmblg.txt >$final_res.tmp
+tail -n +2 $final_res.bestmmblg.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T ./ >>$final_res.tmp && mv $final_res.tmp $final_res.bestmmblg.txt
+
+#MERGE BEST FILES TARGETS TO REMOVE CONTIGOUS
+./merge_close_targets_cfd.sh $final_res.bestCFD.txt $final_res.bestCFD.txt.trimmed $merge_t 'score'
+./merge_close_targets_cfd.sh $final_res.bestmmblg.txt $final_res.bestmmblg.txt.trimmed $merge_t 'total'
+./merge_close_targets_cfd.sh $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.trimmed $merge_t 'score'
+#CHANGE NAME TO BEST AND ALT FILES
+mv $final_res.bestCFD.txt.trimmed $final_res.bestCFD.txt
+mv $final_res.bestCFD.txt.trimmed.discarded_samples $final_res_alt.bestCFD.txt
+mv $final_res.bestmmblg.txt.trimmed $final_res.bestmmblg.txt
+mv $final_res.bestmmblg.txt.trimmed.discarded_samples $final_res_alt.bestmmblg.txt
+mv $final_res.bestCRISTA.txt.trimmed $final_res.bestCRISTA.txt
+mv $final_res.bestCRISTA.txt.trimmed.discarded_samples $final_res_alt.bestCRISTA.txt
+
+echo -e 'Merging Targets\tEnd\t'$(date) >>$log
 
 echo -e 'Annotating results\tStart\t'$(date) >>$log
 

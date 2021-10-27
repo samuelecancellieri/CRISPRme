@@ -108,19 +108,19 @@ rm "$jobid.total.cluster.txt"
 
 echo 'Sorting and adjusting results'
 #copy header in tmp file
-head -1 $jobid.bestCFD_INDEL.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,score
-tail -n +2 $jobid.bestCFD_INDEL.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD_INDEL.txt
+# head -1 $jobid.bestCFD_INDEL.txt >$jobid.tmp
+# #tail file w/o header and sort for realguide,chr,cluster_pos,score
+# tail -n +2 $jobid.bestCFD_INDEL.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD_INDEL.txt
 
-#copy header in tmp file
-head -1 $jobid.bestmmblg_INDEL.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,total(mm+bul)
-tail -n +2 $jobid.bestmmblg_INDEL.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestmmblg_INDEL.txt
+# #copy header in tmp file
+# head -1 $jobid.bestmmblg_INDEL.txt >$jobid.tmp
+# #tail file w/o header and sort for realguide,chr,cluster_pos,total(mm+bul)
+# tail -n +2 $jobid.bestmmblg_INDEL.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestmmblg_INDEL.txt
 
-#copy header in tmp file
-head -1 $jobid.bestCRISTA_INDEL.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,score
-tail -n +2 $jobid.bestCRISTA_INDEL.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA_INDEL.txt
+# #copy header in tmp file
+# head -1 $jobid.bestCRISTA_INDEL.txt >$jobid.tmp
+# #tail file w/o header and sort for realguide,chr,cluster_pos,score
+# tail -n +2 $jobid.bestCRISTA_INDEL.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA_INDEL.txt
 
 ./adjust_cols.py "$jobid.bestCFD_INDEL.txt"
 ./adjust_cols.py "$jobid.bestCRISTA_INDEL.txt"
@@ -137,19 +137,19 @@ tail -n +2 $jobid.bestCRISTA_INDEL.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21
 ./remove_bad_indel_targets.py "$jobid.bestmmblg_INDEL.txt"
 
 #merge targets in same chr when they are at distance 3 from each other (inclusive) preserving the highest scoring one
-./merge_close_targets_cfd.sh $jobid.bestCFD_INDEL.txt $jobid.bestCFD_INDEL.txt.trimmed 3 'score'
-mv $jobid.bestCFD_INDEL.txt.trimmed $jobid.bestCFD_INDEL.txt
-mv $jobid.bestCFD_INDEL.txt.trimmed.discarded_samples $jobid.bestCFD_INDEL.txt.alt
+# ./merge_close_targets_cfd.sh $jobid.bestCFD_INDEL.txt $jobid.bestCFD_INDEL.txt.trimmed 3 'score'
+# mv $jobid.bestCFD_INDEL.txt.trimmed $jobid.bestCFD_INDEL.txt
+# mv $jobid.bestCFD_INDEL.txt.trimmed.discarded_samples $jobid.bestCFD_INDEL.txt.alt
 
-#merge targets in same chr when they are at distance 3 from each other (inclusive) preserving the lowest total(mm+bul) one
-./merge_close_targets_cfd.sh $jobid.bestmmblg_INDEL.txt $jobid.bestmmblg_INDEL.txt.trimmed 3 'total'
-mv $jobid.bestmmblg_INDEL.txt.trimmed $jobid.bestmmblg_INDEL.txt
-mv $jobid.bestmmblg_INDEL.txt.trimmed.discarded_samples $jobid.bestmmblg_INDEL.txt.alt
+# #merge targets in same chr when they are at distance 3 from each other (inclusive) preserving the lowest total(mm+bul) one
+# ./merge_close_targets_cfd.sh $jobid.bestmmblg_INDEL.txt $jobid.bestmmblg_INDEL.txt.trimmed 3 'total'
+# mv $jobid.bestmmblg_INDEL.txt.trimmed $jobid.bestmmblg_INDEL.txt
+# mv $jobid.bestmmblg_INDEL.txt.trimmed.discarded_samples $jobid.bestmmblg_INDEL.txt.alt
 
-#merge targets in same chr when they are at distance 3 from each other (inclusive) preserving the highest scoring one
-./merge_close_targets_cfd.sh $jobid.bestCRISTA_INDEL.txt $jobid.bestCRISTA_INDEL.txt.trimmed 3 'score'
-mv $jobid.bestCRISTA_INDEL.txt.trimmed $jobid.bestCRISTA_INDEL.txt
-mv $jobid.bestCRISTA_INDEL.txt.trimmed.discarded_samples $jobid.bestCRISTA_INDEL.txt.alt
+# #merge targets in same chr when they are at distance 3 from each other (inclusive) preserving the highest scoring one
+# ./merge_close_targets_cfd.sh $jobid.bestCRISTA_INDEL.txt $jobid.bestCRISTA_INDEL.txt.trimmed 3 'score'
+# mv $jobid.bestCRISTA_INDEL.txt.trimmed $jobid.bestCRISTA_INDEL.txt
+# mv $jobid.bestCRISTA_INDEL.txt.trimmed.discarded_samples $jobid.bestCRISTA_INDEL.txt.alt
 
 # echo -e 'Annotating results\tStart\t'$(date) >>$log
 #annotate bestCFD_INDEL
