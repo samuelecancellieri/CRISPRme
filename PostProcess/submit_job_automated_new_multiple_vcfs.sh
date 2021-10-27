@@ -508,6 +508,7 @@ tail -n +2 $final_res.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,2
 head -1 $final_res.bestmmblg.txt >$final_res.tmp
 tail -n +2 $final_res.bestmmblg.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T ./ >>$final_res.tmp && mv $final_res.tmp $final_res.bestmmblg.txt
 
+cp $final_res.bestCFD.txt sorted.bestCFD.txt
 #MERGE BEST FILES TARGETS TO REMOVE CONTIGOUS
 ./merge_close_targets_cfd.sh $final_res.bestCFD.txt $final_res.bestCFD.txt.trimmed $merge_t 'score'
 ./merge_close_targets_cfd.sh $final_res.bestmmblg.txt $final_res.bestmmblg.txt.trimmed $merge_t 'total'

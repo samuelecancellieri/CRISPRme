@@ -98,8 +98,6 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
                 best_var[12] = 'y'
             final_list.append(best_var)
 
-    n_ele = len(final_list)
-
     temp_final_list = list()
     for target in final_list:
         # remove duplicates into snp info col
@@ -115,6 +113,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
 
     # final list with polished targets (no duplicates in snp data)
     final_list = temp_final_list
+    n_ele = len(final_list)
     # sort by total in ascending order
     # final_list.sort(key=lambda x: int(x[total]))
     if n_ele > 1:
