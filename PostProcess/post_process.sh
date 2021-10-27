@@ -46,3 +46,4 @@ rm -f $1.bed $1.found.bed $1.redirectFile.out $1.temp.bed
 cat $1.head $1 >$1.with_head
 #rename file with head with original name
 mv $1.with_head $1
+rm $1.head
