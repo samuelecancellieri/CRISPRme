@@ -460,9 +460,10 @@ sed -i '1 s/^.*$/#Bulge_type\tcrRNA\tDNA\tReference\tChromosome\tPosition\tClust
 for key in "${real_chroms[@]}"; do
 	echo "Concatenating $key"
 	#concatenate all files into respective final best file and remove them after computation
-	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt" >>"$final_res.bestCFD.txt"
-	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt" >>"$final_res.bestmmblg.txt"
-	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt" >>"$final_res.bestCRISTA.txt"
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt" >>"$final_res.bestCFD.txt" &
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt" >>"$final_res.bestmmblg.txt" &
+	tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt" >>"$final_res.bestCRISTA.txt" &
+	wait
 	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCFD.txt"
 	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestmmblg.txt"
 	rm "$output_folder/${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}_$key.bestCRISTA.txt"
@@ -479,9 +480,10 @@ done
 for key in "${array_fake_chroms[@]}"; do
 	echo "Concatenating $key"
 	#MERGE BEST INDEL TARGETS
-	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt" >>"$final_res.bestCFD.txt"       #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt" >>"$final_res.bestCRISTA.txt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt" >>"$final_res.bestmmblg.txt"
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt" >>"$final_res.bestCFD.txt" &
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt" >>"$final_res.bestCRISTA.txt" &
+	tail -n +2 "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestmmblg_INDEL.txt" >>"$final_res.bestmmblg.txt" &
+	wait
 	#rm BEST INDEL TARGETS
 	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCFD_INDEL.txt"
 	rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestCRISTA_INDEL.txt"
@@ -559,11 +561,11 @@ mv $final_res_alt.bestCFD.txt.risk $final_res_alt.bestCFD.txt
 mv $final_res_alt.bestmmblg.txt.risk $final_res_alt.bestmmblg.txt
 mv $final_res_alt.bestCRISTA.txt.risk $final_res_alt.bestCRISTA.txt
 
-#remove N's and dots from rsID from BEST FILES
+#remove N's and dots from columns from BEST FILES
 ./remove_n_and_dots.py $final_res.bestCFD.txt
 ./remove_n_and_dots.py $final_res.bestmmblg.txt
 ./remove_n_and_dots.py $final_res.bestCRISTA.txt
-#remove N's and dots from rsID from ALT FILES
+#remove N's and dots from columns from ALT FILES
 ./remove_n_and_dots.py $final_res_alt.bestCFD.txt
 ./remove_n_and_dots.py $final_res_alt.bestmmblg.txt
 ./remove_n_and_dots.py $final_res_alt.bestCRISTA.txt
