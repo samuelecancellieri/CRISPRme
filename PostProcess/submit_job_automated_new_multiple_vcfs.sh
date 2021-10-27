@@ -509,10 +509,9 @@ head -1 $final_res.bestmmblg.txt >$final_res.tmp
 tail -n +2 $final_res.bestmmblg.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T ./ >>$final_res.tmp && mv $final_res.tmp $final_res.bestmmblg.txt
 
 #MERGE BEST FILES TARGETS TO REMOVE CONTIGOUS
-./merge_close_targets_cfd.sh $final_res.bestCFD.txt $final_res.bestCFD.txt.trimmed $merge_t 'score' &
-./merge_close_targets_cfd.sh $final_res.bestmmblg.txt $final_res.bestmmblg.txt.trimmed $merge_t 'total' &
-./merge_close_targets_cfd.sh $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.trimmed $merge_t 'score' &
-wait
+./merge_close_targets_cfd.sh $final_res.bestCFD.txt $final_res.bestCFD.txt.trimmed $merge_t 'score'
+./merge_close_targets_cfd.sh $final_res.bestmmblg.txt $final_res.bestmmblg.txt.trimmed $merge_t 'total'
+./merge_close_targets_cfd.sh $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.trimmed $merge_t 'score'
 #CHANGE NAME TO BEST AND ALT FILES
 mv $final_res.bestCFD.txt.trimmed $final_res.bestCFD.txt
 mv $final_res.bestCFD.txt.trimmed.discarded_samples $final_res_alt.bestCFD.txt
@@ -526,35 +525,31 @@ echo -e 'Merging Targets\tEnd\t'$(date) >>$log
 echo -e 'Annotating results\tStart\t'$(date) >>$log
 
 #ANNOTATE BEST TARGETS
-./annotate_final_results.py $final_res.bestCFD.txt $annotation_file $final_res.bestCFD.txt.annotated &
-./annotate_final_results.py $final_res.bestmmblg.txt $annotation_file $final_res.bestmmblg.txt.annotated &
-./annotate_final_results.py $final_res.bestCRISTA.txt $annotation_file $final_res.bestCRISTA.txt.annotated &
-wait
+./annotate_final_results.py $final_res.bestCFD.txt $annotation_file $final_res.bestCFD.txt.annotated
+./annotate_final_results.py $final_res.bestmmblg.txt $annotation_file $final_res.bestmmblg.txt.annotated
+./annotate_final_results.py $final_res.bestCRISTA.txt $annotation_file $final_res.bestCRISTA.txt.annotated
 mv $final_res.bestCFD.txt.annotated $final_res.bestCFD.txt
 mv $final_res.bestmmblg.txt.annotated $final_res.bestmmblg.txt
 mv $final_res.bestCRISTA.txt.annotated $final_res.bestCRISTA.txt
 #ANNOTATE ALT TARGETS
-./annotate_final_results.py $final_res_alt.bestCFD.txt $annotation_file $final_res_alt.bestCFD.txt.annotated &
-./annotate_final_results.py $final_res_alt.bestmmblg.txt $annotation_file $final_res_alt.bestmmblg.txt.annotated &
-./annotate_final_results.py $final_res_alt.bestCRISTA.txt $annotation_file $final_res_alt.bestCRISTA.txt.annotated &
-wait
+./annotate_final_results.py $final_res_alt.bestCFD.txt $annotation_file $final_res_alt.bestCFD.txt.annotated
+./annotate_final_results.py $final_res_alt.bestmmblg.txt $annotation_file $final_res_alt.bestmmblg.txt.annotated
+./annotate_final_results.py $final_res_alt.bestCRISTA.txt $annotation_file $final_res_alt.bestCRISTA.txt.annotated
 mv $final_res_alt.bestCFD.txt.annotated $final_res_alt.bestCFD.txt
 mv $final_res_alt.bestmmblg.txt.annotated $final_res_alt.bestmmblg.txt
 mv $final_res_alt.bestCRISTA.txt.annotated $final_res_alt.bestCRISTA.txt
 
 #SCORING BEST RESULTS
-./add_risk_score.py $final_res.bestCFD.txt $final_res.bestCFD.txt.risk "False" &
-./add_risk_score.py $final_res.bestmmblg.txt $final_res.bestmmblg.txt.risk "False" &
-./add_risk_score.py $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.risk "False" &
-wait
+./add_risk_score.py $final_res.bestCFD.txt $final_res.bestCFD.txt.risk "False"
+./add_risk_score.py $final_res.bestmmblg.txt $final_res.bestmmblg.txt.risk "False"
+./add_risk_score.py $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.risk "False"
 mv $final_res.bestCFD.txt.risk $final_res.bestCFD.txt
 mv $final_res.bestmmblg.txt.risk $final_res.bestmmblg.txt
 mv $final_res.bestCRISTA.txt.risk $final_res.bestCRISTA.txt
 #SCORING ALT RESULTS
-./add_risk_score.py $final_res_alt.bestCFD.txt $final_res_alt.bestCFD.txt.risk "False" &
-./add_risk_score.py $final_res_alt.bestmmblg.txt $final_res_alt.bestmmblg.txt.risk "False" &
-./add_risk_score.py $final_res_alt.bestCRISTA.txt $final_res_alt.bestCRISTA.txt.risk "False" &
-wait
+./add_risk_score.py $final_res_alt.bestCFD.txt $final_res_alt.bestCFD.txt.risk "False"
+./add_risk_score.py $final_res_alt.bestmmblg.txt $final_res_alt.bestmmblg.txt.risk "False"
+./add_risk_score.py $final_res_alt.bestCRISTA.txt $final_res_alt.bestCRISTA.txt.risk "False"
 mv $final_res_alt.bestCFD.txt.risk $final_res_alt.bestCFD.txt
 mv $final_res_alt.bestmmblg.txt.risk $final_res_alt.bestmmblg.txt
 mv $final_res_alt.bestCRISTA.txt.risk $final_res_alt.bestCRISTA.txt
