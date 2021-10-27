@@ -435,7 +435,7 @@ def preprocess_CRISTA_score(target):
     # append sequence to DNA list
     DNAseq_from_genome_list = complete_DNA_seq
 
-    # do_scores = False  # REMOVE TO CALCULATE SCORING
+    do_scores = False  # REMOVE TO CALCULATE SCORING
 
     # calculate score
     crista_score = -1
