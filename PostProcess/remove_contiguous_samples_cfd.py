@@ -71,6 +71,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
 
     list_ref.sort(key=lambda x: int(x[total]))
     var_only = False
+    best_ref = ''
     if len(list_ref) > 1:
         best_ref = list_ref[0]
         for ele_ref in list_ref[1:]:
@@ -78,6 +79,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
                 best_ref = ele_ref
         final_list.append(best_ref)
     elif len(list_ref) == 1:
+        best_ref = list_ref[0]
         final_list.append(list_ref[0])
     else:
         var_only = True
@@ -96,6 +98,11 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         else:
             if var_only:
                 best_var[12] = 'y'
+            if var_only == False:
+                # use best aligned ref seq
+                best_var[3] = best_ref[3]
+                # use best aligned ref seq score
+                best_var[cfd+1] = best_ref[cfd+1]
             final_list.append(best_var)
 
     temp_final_list = list()
@@ -124,11 +131,12 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             # sorted_final_list = sorted(
             #     sorted(final_list, key=lambda x: int(x[total]), reverse=False), key=lambda x: float(x[cfd]), reverse=True)
             # final_list = sorted_final_list
+            # select ref as besttarget to save
             if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] == 'n':
                 final_list[1][cfd-1] = str(n_ele-1)  # bestSCORE
                 fileOut.write("\t".join(final_list[1]))
                 bestTarget = final_list.pop(1)
-            else:
+            else:  # select var as besttarget to save
                 final_list[0][cfd-1] = str(n_ele-1)  # best SCORE
                 fileOut.write("\t".join(final_list[0]))
                 bestTarget = final_list.pop(0)
