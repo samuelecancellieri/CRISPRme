@@ -98,7 +98,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
                 # use best aligned ref seq in bestvar target
                 best_var[3] = best_ref[2]
                 # use best aligned ref seq score in bestvar target
-                best_var[cfd+1] = best_ref[cfd]
+                best_var[cfd+1] = best_ref[cfd+1]
             final_list.append(best_var)
         else:
             if var_only:
@@ -107,7 +107,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
                 # use best aligned ref seq in bestvar target
                 best_var[3] = best_ref[2]
                 # use best aligned ref seq score in bestvar target
-                best_var[cfd+1] = best_ref[cfd]
+                best_var[cfd+1] = best_ref[cfd+1]
             final_list.append(best_var)
 
     temp_final_list = list()
