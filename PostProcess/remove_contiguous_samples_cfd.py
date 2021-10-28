@@ -71,7 +71,6 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
 
     list_ref.sort(key=lambda x: int(x[total]))
     var_only = False
-    best_ref = ''
     if len(list_ref) > 1:
         best_ref = list_ref[0]
         for ele_ref in list_ref[1:]:
@@ -80,7 +79,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         final_list.append(best_ref)
     elif len(list_ref) == 1:
         best_ref = list_ref[0]
-        final_list.append(list_ref[0])
+        final_list.append(best_ref)
     else:
         var_only = True
 
@@ -94,20 +93,10 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
                     best_var = ele_var
             if var_only:
                 best_var[12] = 'y'
-            if var_only == False:
-                # use best aligned ref seq in bestvar target
-                best_var[3] = best_ref[2]
-                # use best aligned ref seq score in bestvar target
-                best_var[cfd+1] = best_ref[cfd+1]
             final_list.append(best_var)
         else:
             if var_only:
                 best_var[12] = 'y'
-            if var_only == False:
-                # use best aligned ref seq in bestvar target
-                best_var[3] = best_ref[2]
-                # use best aligned ref seq score in bestvar target
-                best_var[cfd+1] = best_ref[cfd+1]
             final_list.append(best_var)
 
     temp_final_list = list()
