@@ -603,7 +603,7 @@ def preprocess_CRISTA_score(target, do_scores):
     # append sequence to DNA list
     DNAseq_from_genome_list = complete_DNA_seq.upper()
 
-    do_scores = False  # SKIP SCORE CALCULATION
+    # do_scores = False  # SKIP SCORE CALCULATION
 
     # calculate score
     crista_score = -1
