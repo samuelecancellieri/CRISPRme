@@ -608,13 +608,13 @@ def preprocess_CRISTA_score(target, do_scores):
     # calculate score
     crista_score = -1
     if do_scores:
-        try:
-            crista_score = CRISTA_predict(
-                sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
-        except:
-            print('sgRNA_non_aligned_list', sgRNA_non_aligned_list)
-            print('DNA_aligned', DNA_aligned)
-            print('DNAseq_from_genome_list', DNAseq_from_genome_list)
+        # try:
+        crista_score = CRISTA_predict(
+            sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
+        # except:
+        #     print('sgRNA_non_aligned_list', sgRNA_non_aligned_list)
+        #     print('DNA_aligned', DNA_aligned)
+        #     print('DNAseq_from_genome_list', DNAseq_from_genome_list)
     else:
         crista_score = -1
 
@@ -642,13 +642,13 @@ def preprocess_CRISTA_score(target, do_scores):
             DNAseq_from_genome_list = complete_DNA_seq.upper()
 
             # calculate score
-            try:
-                crista_score = CRISTA_predict(
-                    sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
-            except:
-                print('sgRNA_non_aligned_list', sgRNA_non_aligned_list)
-                print('DNA_aligned', DNA_aligned)
-                print('DNAseq_from_genome_list', DNAseq_from_genome_list)
+            # try:
+            crista_score = CRISTA_predict(
+                sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
+            # except:
+            #     print('sgRNA_non_aligned_list', sgRNA_non_aligned_list)
+            #     print('DNA_aligned', DNA_aligned)
+            #     print('DNAseq_from_genome_list', DNAseq_from_genome_list)
         else:
             crista_score = -1
         target[-3] = "{:.3f}".format(crista_score)
