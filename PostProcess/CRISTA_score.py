@@ -19,7 +19,7 @@
 ## be used to determine the propensity of a genomic site to be cleaved ##
 ## by a given sgRNA. CRISTA was trained on a large dataset assembled   ##
 ## from published data of genome-wide unbiased methods for CRISPR-Cas9 ##
-## cleavage sites profiling [1–5]. It accounts for the possibility of  ##
+## cleavage sites profiling [1Ã¢â‚¬â€œ5]. It accounts for the possibility of  ##
 ## bulges and incorporates a wide range of features encompassing those ##
 ## that are specific to the genomic content, features that define the  ##
 ## thermodynamics of the sgRNA, and features concerning the pairwise   ##
@@ -64,8 +64,6 @@ import re
 import numpy as np
 import PA_limitedIndel as PA_script
 import pandas as pd
-import warnings
-warnings.filterwarnings("ignore")
 
 ### globals
 RF_PICKLE_PATH = "CRISTA_predictors.pkl"
@@ -312,85 +310,58 @@ def predict_crista_score(features_lst):
 	return get_avg(predictions) / 8.22
 
 
+# def CRISTA_predict(sgseq_20nt, genomic_seq_29nt):
+#     crista_features = []
+#     for i in range(len(sgseq_20nt)):
+#         sgRNA_seq = sgseq_20nt[i]
+#         full_dna_seq = genomic_seq_29nt[i]
+# 		### validate input: sgrna, genomic
+#         try:
+#             sgRNA_seq_re = re.search("[acgtu]+", sgRNA_seq, re.IGNORECASE)
+#             assert sgRNA_seq_re is not None and len(sgRNA_seq_re.group())==20, "sgRNA sequence must be 20-nt long sequence of ACGTU nucleotides"
+#             full_dna_seq_re = re.search("[acgtu]+", full_dna_seq, re.IGNORECASE)
+#             assert full_dna_seq_re is not None and len(full_dna_seq_re.group())==29, "genomic sequence must be 29-nt long sequence of ACGTU nucleotides"
+#         except:
+#             print("Invalid arguments.")
+#             return 0
+#         sgRNA_seq = sgRNA_seq.upper() + "NGG"
+#         full_dna_seq = full_dna_seq.upper()
+#         aligned_sgRNA, aligned_offtarget, max_score = align_sequences(sgRNA=sgRNA_seq, genomic_extended=full_dna_seq)
+#         features = get_features(full_dna_seq=full_dna_seq, aligned_sgRNA=aligned_sgRNA, aligned_offtarget=aligned_offtarget, pa_score=max_score)
+#         crista_features.append(features[0])
+	
+#     predictions = predict_crista_score(crista_features)
+#     return predictions
+
+def two_chars_score(C1, C2, match_score, mismatch_score, gap_score):
+	"""
+	returns the score of 2 chars comparison
+	"""
+	if C1 == C2:
+		return match_score
+	elif C1 == '-' or C2 =='-':
+		return gap_score
+	else:
+		return mismatch_score
+
 def get_alignment_score(sgRNA, genomic_extended):
-
-	extended_offtarget_seq = genomic_extended[:-3]
-	max_score = float("-inf")
-
-	# for i in [0, 6, 1, 5, 2, 4, 3]: #because starting at 3 is the original - we'd prefer that
-	i = 0
-	current_dna = extended_offtarget_seq
-	# print(sgRNA[:-3])
-	# print(current_dna)
-	(alnA, alnB, score) = PA_script.align_pair(seqA=sgRNA[:-3], seqB=current_dna, match_score=MATCH_SCORE, mismatch_score=MISMATCH_PENALTY, gap_score=GAP_PENALTY, gaps_allowed=MAX_ALLOWED_GAPS) #regular pa
-
-	if re.search("^\-", alnA) is None and score >= max_score:
-			# the target can begin a '-', it means that the last nt of the sg is not paired
-			# the sg cannot begin with a '-' - in that case, a better alignment would be found (shorter DNA).
-			#   However, if we first found this target and then another with a different score- we'd prefer the other
-		(alignmentA, alignmentB, max_score) = (alnA, alnB, score)
-
-	# add PAM
-	aligned_sgRNA = alignmentA + sgRNA[-3:]
-	aligned_offtarget = alignmentB + genomic_extended[-3:]
-
-	# print("Aligned sgRNA:  ", aligned_sgRNA)
-	# print("Aligned target: ", aligned_offtarget)
-	# print(max_score)
-	return aligned_sgRNA, aligned_offtarget, max_score
+	offtarget_seq = genomic_extended[:-3]
+	score = 0
+	for i in range(len(offtarget_seq)):
+		score += two_chars_score(sgRNA[i], offtarget_seq[i], MATCH_SCORE, MISMATCH_PENALTY, GAP_PENALTY)
+	return score
 
 
 def CRISTA_predict(sgseq_aligned, offseq_aligned, genomic_seq_29nt):
     sgRNA_seq = sgseq_aligned.upper()
     aligned_off_seq = offseq_aligned.upper()
     dna_seq_29nt = genomic_seq_29nt.upper()
-    # print(sgRNA_seq)
-    # print(aligned_off_seq)
-    # print(len(sgRNA_seq), len(aligned_off_seq), len(dna_seq_29nt))
-    aligned_sgRNA_t, aligned_offtarget_t, max_score = get_alignment_score(sgRNA_seq, aligned_off_seq)
+ 
+    max_score = get_alignment_score(sgRNA_seq, aligned_off_seq)
 
     crista_features = []
-    if sgRNA_seq == aligned_sgRNA_t and aligned_offtarget_t == aligned_off_seq:
-        features = get_features(full_dna_seq=dna_seq_29nt, aligned_sgRNA=sgRNA_seq, aligned_offtarget=aligned_off_seq, pa_score=max_score)
-        crista_features.append(features[0])
-    else:
-        print("Alignment was changed by CRISTA!")
+    features = get_features(full_dna_seq=dna_seq_29nt, aligned_sgRNA=sgRNA_seq, aligned_offtarget=aligned_off_seq, pa_score=max_score)
+    crista_features.append(features[0])
     predictions = predict_crista_score(crista_features)
-    # print(predictions)
+
     return predictions
-
-
-
-# if __name__ == '__main__':
-# 	parser = argparse.ArgumentParser(description='CRISTA, a tool for CRISPR Target Assessment')
-# 	parser.add_argument('--sgseq', '-s', required=True, help="sgRNA seq of 20 bases (without PAM)")
-# 	parser.add_argument('--genomic_seq', '-d', required=True, help="DNA target sequence with 3 additional bases at each end (total of 29 nucleotides)")
-
-# 	args = parser.parse_args()
-# 	sgRNA_seq = args.sgseq
-# 	full_dna_seq = args.genomic_seq
-
-# 	### validate input: sgrna, genomic
-# 	try:
-# 		sgRNA_seq_re = re.search("[acgtu]+", sgRNA_seq, re.IGNORECASE)
-# 		assert sgRNA_seq_re is not None and len(sgRNA_seq_re.group())==20, "sgRNA sequence must be 20-nt long sequence of ACGTU nucleotides"
-# 		full_dna_seq_re = re.search("[acgtu]+", full_dna_seq, re.IGNORECASE)
-# 		assert full_dna_seq_re is not None and len(full_dna_seq_re.group())==29, "genomic sequence must be 29-nt long sequence of ACGTU nucleotides"
-# 	except:
-# 		print("Invalid arguments.")
-# 		print(parser.parse_args(['-h']))
-# 		exit()
-
-# 	sgRNA_seq = sgRNA_seq.upper() + "NGG"
-# 	full_dna_seq = full_dna_seq.upper()
-
-# 	print("Running CRISTA")
-# 	### align_sequences
-# 	aligned_sgRNA, aligned_offtarget, max_score = align_sequences(sgRNA=sgRNA_seq, genomic_extended=full_dna_seq)
-
-# 	### get features
-# 	features = get_features(full_dna_seq=full_dna_seq, aligned_sgRNA=aligned_sgRNA, aligned_offtarget=aligned_offtarget,
-# 							pa_score=max_score)
-# 	### predict
-# 	prediction = predict_crista_score(features)
-# 	print("CRISTA predicted score:", prediction[0])
