@@ -348,10 +348,12 @@ def predict_crista_score(features_lst):
 #     predictions = predict_crista_score(crista_features)
 #     return predictions
 
+
 def two_chars_score(C1, C2, match_score, mismatch_score, gap_score):
     """
     returns the score of 2 chars comparison
     """
+
     if C1 == C2:
         return match_score
     elif C1 == '-' or C2 == '-':
@@ -373,13 +375,63 @@ def CRISTA_predict(sgseq_aligned, offseq_aligned, genomic_seq_29nt):
     sgRNA_seq = sgseq_aligned.upper()
     aligned_off_seq = offseq_aligned.upper()
     dna_seq_29nt = genomic_seq_29nt.upper()
-
+    # print(sgRNA_seq)
+    # print(aligned_off_seq)
+    # print(len(sgRNA_seq), len(aligned_off_seq), len(dna_seq_29nt))
     max_score = get_alignment_score(sgRNA_seq, aligned_off_seq)
-
+    # print(max_score)
     crista_features = []
     features = get_features(full_dna_seq=dna_seq_29nt, aligned_sgRNA=sgRNA_seq,
                             aligned_offtarget=aligned_off_seq, pa_score=max_score)
     crista_features.append(features[0])
     predictions = predict_crista_score(crista_features)
-
+    # print(predictions)
     return predictions
+
+
+def CRISTA_predict_list(sgseq_aligned_list, offseq_aligned_list, genomic_seq_29nt_list):
+    crista_features = []
+    for i in range(len(sgseq_aligned_list)):
+        sgRNA_seq = sgseq_aligned_list[i].upper()
+        aligned_off_seq = offseq_aligned_list[i].upper()
+        dna_seq_29nt = genomic_seq_29nt_list[i].upper()
+        max_score = get_alignment_score(sgRNA_seq, aligned_off_seq)
+        features = get_features(full_dna_seq=dna_seq_29nt, aligned_sgRNA=sgRNA_seq,
+                                aligned_offtarget=aligned_off_seq, pa_score=max_score)
+        crista_features.append(features[0])
+    predictions = predict_crista_score(crista_features)
+    return predictions
+
+# if __name__ == '__main__':
+# 	parser = argparse.ArgumentParser(description='CRISTA, a tool for CRISPR Target Assessment')
+# 	parser.add_argument('--sgseq', '-s', required=True, help="sgRNA seq of 20 bases (without PAM)")
+# 	parser.add_argument('--genomic_seq', '-d', required=True, help="DNA target sequence with 3 additional bases at each end (total of 29 nucleotides)")
+
+# 	args = parser.parse_args()
+# 	sgRNA_seq = args.sgseq
+# 	full_dna_seq = args.genomic_seq
+
+# 	### validate input: sgrna, genomic
+# 	try:
+# 		sgRNA_seq_re = re.search("[acgtu]+", sgRNA_seq, re.IGNORECASE)
+# 		assert sgRNA_seq_re is not None and len(sgRNA_seq_re.group())==20, "sgRNA sequence must be 20-nt long sequence of ACGTU nucleotides"
+# 		full_dna_seq_re = re.search("[acgtu]+", full_dna_seq, re.IGNORECASE)
+# 		assert full_dna_seq_re is not None and len(full_dna_seq_re.group())==29, "genomic sequence must be 29-nt long sequence of ACGTU nucleotides"
+# 	except:
+# 		print("Invalid arguments.")
+# 		print(parser.parse_args(['-h']))
+# 		exit()
+
+# 	sgRNA_seq = sgRNA_seq.upper() + "NGG"
+# 	full_dna_seq = full_dna_seq.upper()
+
+# 	print("Running CRISTA")
+# 	### align_sequences
+# 	aligned_sgRNA, aligned_offtarget, max_score = align_sequences(sgRNA=sgRNA_seq, genomic_extended=full_dna_seq)
+
+# 	### get features
+# 	features = get_features(full_dna_seq=full_dna_seq, aligned_sgRNA=aligned_sgRNA, aligned_offtarget=aligned_offtarget,
+# 							pa_score=max_score)
+# 	### predict
+# 	prediction = predict_crista_score(features)
+# 	print("CRISTA predicted score:", prediction[0])

@@ -55,7 +55,7 @@ import time
 import json
 import sys
 import warnings
-from CRISTA_score import CRISTA_predict
+from CRISTA_score import CRISTA_predict_list
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings('ignore', category=UserWarning)
 # import azimuth.model_comparison
@@ -537,7 +537,7 @@ def rev_comp(a):
     return 'C'
 
 
-def preprocess_CFD_score(target, do_scores):
+def preprocess_CFD_score(target):
     # preprocess target then calculate CFD score
     if do_scores:
         if target[0] == 'DNA':
@@ -569,106 +569,144 @@ def preprocess_CFD_score(target, do_scores):
     return target
 
 
-def preprocess_CRISTA_score(target, do_scores):
+def preprocess_CRISTA_score(cluster_targets):
+    # list with scored targets
+    cluster_scored = list()
+
+    if do_scores:
+        pass
+    else:
+        for target in cluster_targets:
+            target_CRISTA = target.copy()
+            target_CRISTA.append("{:.3f}".format(-1))
+            target_CRISTA[-3] = "{:.3f}".format(-1)
+            cluster_scored.append(target_CRISTA)
+        return cluster_scored
+
     # preprocess target then calculate CRISTA score
-    # non-aligned sgRNA
-    sgRNA_non_aligned_list = str(target[1])[:len(str(target[1]))-3]+'NGG'
-    # aligned DNA
-    DNA_aligned = (str(target[2]))
-    # DNA seq extracted from the ref genome
-    DNAseq_from_genome_list = str()
-    # first 5 nucleotide to add to protospacer
-    pre_protospacer_DNA = genomeStr[int(target[4])-5:int(target[4])].upper()
-    # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
-    #     pass  # do nothing, then i will implement the check for the valid alt allele
-    # protospacer taken directly from the aligned target
-    protospacerDNA = str(target[2]).replace('-', '')
-    # last 5 nucleotides to add to protospacer
-    post_protospacer_DNA = genomeStr[int(
-        target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
-    # if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
-    #     pass  # do nothing, then i will implement the check for the valid alt allele
+    sgRNA_non_aligned_list = list()
+    DNA_aligned_list = list()
+    DNAseq_from_genome_list = list()
+    # process all found targets
+    for target in cluster_targets:
+        # list with non-aligned sgRNA
+        sgRNA_non_aligned_list.append(
+            str(target[1])[:len(str(target[1]))-3]+'NGG')
+        # list with aligned DNA
+        DNA_aligned_list.append(str(target[2]))
+        # first 5 nucleotide to add to protospacer
+        pre_protospacer_DNA = genomeStr[int(
+            target[4])-5:int(target[4])].upper()
+        # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
+        #     pass  # do nothing, then i will implement the check for the valid alt allele
+        # protospacer taken directly from the aligned target
+        protospacerDNA = str(target[2]).replace('-', '')
+        # last 5 nucleotides to add to protospacer
+        post_protospacer_DNA = genomeStr[int(
+            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
+        # if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
+        #     pass  # do nothing, then i will implement the check for the valid alt allele
 
-    # DNA seq extracted from genome and append to aligned DNA seq from CRISPRme
-    complete_DNA_seq = str(pre_protospacer_DNA) + \
-        protospacerDNA+str(post_protospacer_DNA)
+        # DNA seq extracted from genome and append to aligned DNA seq from CRISPRme
+        complete_DNA_seq = str(pre_protospacer_DNA) + \
+            protospacerDNA+str(post_protospacer_DNA)
 
-    # trim the 3' and 5' end to avoid sequences longer than 29
-    len_DNA_seq = len(complete_DNA_seq)
-    first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
-    second_half = complete_DNA_seq[int(
-        len_DNA_seq/2):int(len_DNA_seq/2)+15]
-    complete_DNA_seq = first_half+second_half
+        # trim the 3' and 5' end to avoid sequences longer than 29
+        len_DNA_seq = len(complete_DNA_seq)
+        first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
+        second_half = complete_DNA_seq[int(
+            len_DNA_seq/2):int(len_DNA_seq/2)+15]
+        complete_DNA_seq = first_half+second_half
 
-    # append sequence to DNA list
-    DNAseq_from_genome_list = complete_DNA_seq.upper()
+        # append sequence to DNA list
+        DNAseq_from_genome_list.append(complete_DNA_seq)
 
-    # do_scores = False  # SKIP SCORE CALCULATION
+    # do_scores = False  # REMOVE TO CALCULATE SCORING
 
     # calculate score
-    crista_score = -1
+    crista_score_list_alt = list()
     if do_scores:
-        # try:
-        crista_score = CRISTA_predict(
-            sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
-        # except:
-        #     print('sgRNA_non_aligned_list', sgRNA_non_aligned_list)
-        #     print('DNA_aligned', DNA_aligned)
-        #     print('DNAseq_from_genome_list', DNAseq_from_genome_list)
-    else:
-        crista_score = -1
+        crista_score_list_alt = CRISTA_predict_list(
+            sgRNA_non_aligned_list, DNA_aligned_list, DNAseq_from_genome_list)
 
-    # append score to target
-    target.append("{:.3f}".format(crista_score))
-
-    if target[-3] == 55:
-        target[-3] = "{:.3f}".format(crista_score)
-    if target[-3] == 33:
-        if do_scores:
-            DNA_aligned = (str(target[-4]))
-            protospacerDNA = str(target[-4]).replace('-', '')
-            complete_DNA_seq = str(pre_protospacer_DNA) + \
-                protospacerDNA + str(post_protospacer_DNA)
-
-            # trim the 3' and 5' end to avoid sequences longer than 29
-            len_DNA_seq = len(complete_DNA_seq)
-            first_half = complete_DNA_seq[int(
-                len_DNA_seq/2)-14:int(len_DNA_seq/2)]
-            second_half = complete_DNA_seq[int(
-                len_DNA_seq/2):int(len_DNA_seq/2)+15]
-            complete_DNA_seq = first_half+second_half
-
-            # set dna seq to use in CRISTA
-            DNAseq_from_genome_list = complete_DNA_seq.upper()
-
-            # calculate score
-            # try:
-            crista_score = CRISTA_predict(
-                sgRNA_non_aligned_list, DNA_aligned, DNAseq_from_genome_list)[0]
-            # except:
-            #     print('sgRNA_non_aligned_list', sgRNA_non_aligned_list)
-            #     print('DNA_aligned', DNA_aligned)
-            #     print('DNAseq_from_genome_list', DNAseq_from_genome_list)
+    # preprocess target then calculate CRISTA score
+    sgRNA_non_aligned_list = list()
+    DNA_aligned_list = list()
+    DNAseq_from_genome_list = list()
+    # process all ref sequences in targets
+    for target in cluster_targets:
+        # print(target)
+        # list with non-aligned sgRNA
+        sgRNA_non_aligned_list.append(
+            str(target[1])[:len(str(target[1]))-3]+'NGG')
+        # list with aligned DNA
+        if 'n' not in target[-3]:
+            DNA_aligned_list.append(str(target[-3]))
         else:
-            crista_score = -1
-        target[-3] = "{:.3f}".format(crista_score)
+            DNA_aligned_list.append(str(target[2]))
+        # first 5 nucleotide to add to protospacer
+        pre_protospacer_DNA = genomeStr[int(
+            target[4])-5:int(target[4])].upper()
+        # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
+        #     pass  # do nothing, then i will implement the check for the valid alt allele
+        # protospacer taken directly from the aligned target
+        if 'n' not in target[-3]:
+            protospacerDNA = str(target[-3]).replace('-', '')
+        else:
+            protospacerDNA = str(target[2]).replace('-', '')
+        # last 5 nucleotides to add to protospacer
+        post_protospacer_DNA = genomeStr[int(
+            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
+        # if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
+        #     pass  # do nothing, then i will implement the check for the valid alt allele
 
-    return target
+        # DNA seq extracted from genome and append to aligned DNA seq from CRISPRme
+        complete_DNA_seq = str(pre_protospacer_DNA) + \
+            protospacerDNA+str(post_protospacer_DNA)
+
+        # trim the 3' and 5' end to avoid sequences longer than 29
+        len_DNA_seq = len(complete_DNA_seq)
+        first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
+        second_half = complete_DNA_seq[int(
+            len_DNA_seq/2):int(len_DNA_seq/2)+15]
+        complete_DNA_seq = first_half+second_half
+
+        # append sequence to DNA list
+        DNAseq_from_genome_list.append(complete_DNA_seq)
+
+    # calculate score
+    crista_score_list_ref = list()
+    if do_scores:
+        crista_score_list_ref = CRISTA_predict_list(
+            sgRNA_non_aligned_list, DNA_aligned_list, DNAseq_from_genome_list)
+
+    for index, target in enumerate(cluster_targets):
+        target_CRISTA = target.copy()
+        if target_CRISTA[-2] == 55:  # reference target have duplicate score
+            target_CRISTA[-2] = "{:.3f}".format(crista_score_list_alt[index])
+            target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
+        if target_CRISTA[-2] == 33:  # alternative target scoring
+            target_CRISTA[-2] = "{:.3f}".format(crista_score_list_ref[index])
+            target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
+        cluster_scored.append(target_CRISTA)
+
+    return cluster_scored
 
 
-def calculate_scores(cluster_to_save, do_scores):
+def calculate_scores(cluster_to_save):
     # function to calculate score for each input target
     # input is target line splitted in list format
     # list of functions to calculate specific score (to add a score, simply add your function to this call and update the clusters list in return)
     cluster_with_CFD_score = list()
     cluster_with_CRISTA_score = list()
-    for target in cluster_to_save:  # calculate scores for target
+    for target in cluster_to_save:  # calculate CFD score for each target
         target_CFD = target.copy()
-        cluster_with_CFD_score.append(
-            preprocess_CFD_score(target_CFD, do_scores))
-        target_CRISTA = target.copy()
-        cluster_with_CRISTA_score.append(
-            preprocess_CRISTA_score(target_CRISTA, do_scores))
+        cluster_with_CFD_score.append(preprocess_CFD_score(target_CFD))
+
+    # process score for each target in cluster, at the same time to improve execution time
+    cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
+    # cluster_with_CRISTA_score.append(
+    #     preprocess_CRISTA_score(cluster_to_save))
     # return clusters with specific scores
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
 
@@ -733,23 +771,17 @@ start_time_total = time.time()
 lines_processed = 0
 allowed_mms = int(sys.argv[6])
 current_guide_chr_pos_direction = 'no'
+
+# save best files
 cfd_best = open(outputFile + '.bestCFD_INDEL.txt', 'w')
 cfd_best.write(header + '\tCFD\n')  # Write header
 
 crista_best = open(outputFile+'.bestCRISTA_INDEL.txt', 'w')
 crista_best.write(header+'\tCFD\n')
 
-# cfd_alt = open(outputFile + '.altCFD.txt', 'w+')
-# cfd_alt.write(header + '\tCFD\n')  # Write header
-
 mmblg_best = open(outputFile + '.bestmmblg_INDEL.txt', 'w')
 mmblg_best.write(header + '\tCFD\n')  # Write header
 
-# mmblg_best = open(outputFile + '.bestmmblg.txt', 'w+')
-# mmblg_best.write(header + '\tCFD\n')  # Write header
-
-# mmblg_alt = open(outputFile + '.altmmblg.txt', 'w+')
-# mmblg_alt.write(header + '\tCFD\n')  # Write header
 
 INDELS_tree = IntervalTree()
 with open(os.path.realpath(sys.argv[4]) + '/log' + current_chr + '.txt', 'r') as log:
@@ -794,9 +826,12 @@ datastore = None
 
 global_start = time.time()
 
+#list saving all the targets reported in chr##
+cluster_to_save = list()
+
 for line in inResult:
     # print(line)
-    cluster_to_save = list()
+
     line = line.strip().split('\t')
     # print(line)
     guide_no_bulge = line[1].replace('-', '')
@@ -865,609 +900,38 @@ for line in inResult:
     final_result.append(0)
     cluster_to_save.append(final_result)
 
-    # ref_generated = alignRefFromVar(
-    #     c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-    # # save the analyzed target into the cluster
-    # cluster_to_save.append(final_result)
+# start processing scores after the whole target file is read
+clusters_with_scores = calculate_scores(cluster_to_save)
 
-    clusters_with_scores = calculate_scores(cluster_to_save, do_scores)
-
-    # write the final target into the best file, the target + aligned ref seq + ref_cfd_score
-    # cfd_best.write('\t'.join(c)+'\t' + ref_this_clus+'\t'+str(cfd_ref))
-    # print('original line', line)
-    for count, cluster in enumerate(clusters_with_scores):
-        for target in cluster:
-            if count == 0:  # CFD target
-                # remove count of tmp_mms
-                target.pop(-2)
-                # save CFD targets
-                # print('CFD', target)
-                cfd_best.write(
-                    '\t'.join(target)+'\t'+str(0)+'\n')
-                # save mm-bul targets
-                mmblg_best.write(
-                    '\t'.join(target)+'\t'+str(0)+'\n')
-            if count == 1:  # CRISTA target
-                # remove count of tmp_mms
-                target.pop(-2)
-                # print('CRISTA', target)
-                # save CRISTA targets
-                crista_best.write('\t'.join(target)+'\t' +
-                                  str(0)+'\n')
-
-    # se ho iupac in posizioni che non c'erano nel top1, fai la scomposizione completa
-    # activate_cluster_scomposition = False
-    # # In current cluster
-    # if (guide_no_bulge + line[3] + line[5] + line[6]) == current_guide_chr_pos_direction:
-    #     if cluster_class[line[0] + line[8]] is None:
-    #         activate_cluster_scomposition = True
-    #     if activate_cluster_scomposition:
-    #         final_result = line.copy()
-    #         indel_data = sorted(INDELS_tree[int(line[4])])[0].data
-
-    #         final_result[3] = current_chr
-    #         final_result[12] = indel_data[1]  # samples
-    #         final_result[15] = indel_data[2]  # rsID
-    #         final_result[16] = indel_data[3]  # MAF
-    #         final_result[17] = indel_data[4]  # INDELinfo
-    #         if pam_at_beginning:
-    #     if line[0] == 'RNA' and line[6] == '-':
-    #         # cluster_position
-    #         fake_start_target = int(line[5]) - int(indel_data[5])
-    #     else:
-    #         # real_position
-    #         fake_start_target = int(line[4]) - int(indel_data[5])
-    # else:
-    #     if line[0] == 'RNA' and line[6] == '+':
-    #         # cluster_position
-    #         fake_start_target = int(line[5]) - int(indel_data[5])
-    #     else:
-    #         # real_position
-    #         fake_start_target = int(line[4]) - int(indel_data[5])
-    # # correct start with real chr spatial info and length of the target
-    # true_start_target = int(indel_data[0].split(
-    # '_')[1].split('-')[0]) + fake_start_target
-    # correct cluster position
-    # diff_pos_clus = int(line[4]) - int(line[5])
-    # real_start
-    # final_result[4] = str(true_start_target)
-    # real_start_cluster
-    # final_result[5] = str(true_start_target - diff_pos_clus)
-
-    #print(int(indel_data[5]), int(line[4]))
-    # real_target
-    # t = final_result[2]
-    # mm_new_t = 0
-    # tmp_pos_mms = None  # lista posizione dei mms
-    # guide_no_pam = line[1][pos_beg:pos_end]
-    # list_t = list(t)
-    # for position_t, char_t in enumerate(t[pos_beg:pos_end]):
-    #     if char_t.upper() != guide_no_pam[position_t]:
-    #         mm_new_t += 1
-    #         tmp_pos_mms = position_t
-    #         if guide_no_pam[position_t] != '-':
-    #             list_t[sum_for_mms + position_t] = char_t.lower()
-    # final_result[2] = ''.join(list_t)  # t
-    # if tmp_pos_mms:
-    #     final_result.append(int(tmp_pos_mms))
-    # else:  # NO mms found
-    #     final_result.append(-1)
-
-    # final_result[14] = last_annotation
-    # save already visited sample
-    # last_samples = final_result[12]
-    # # save already visited ID
-    # last_IDs = final_result[15]
-    # # save already visited MAF
-    # last_AF = final_result[16]
-    # # save already visited real_indel_info
-    # last_INDpos = final_result[17]
-
-    # cluster_to_save.append(final_result)
-    # # tipo bulge+total
-    # clusterkey = line[0] + line[8]
-    # cluster_class[clusterkey] = dict()
-    # #cluster_class[clusterkey]['poscharforcluster'] = pos_char_for_cluster
-    # cluster_class[clusterkey]['lastsamples'] = last_samples
-    # cluster_class[clusterkey]['lastID'] = last_IDs  # ID
-    # # AF (come last_samples)
-    # cluster_class[clusterkey]['lastAF'] = last_AF
-    # cluster_class[clusterkey]['lastINDpos'] = last_INDpos
-    # # save ref sequence from log
-    # cluster_class[clusterkey]['ref_pos_alignement'] = indel_data[6][fake_start_target:
-    # fake_start_target+len(line[2])]
-    #print("sopra", cluster_class[clusterkey]['ref_pos_alignement'])
-    #cluster_class[clusterkey]['lastHaplotype'] = last_haplotype
-
-    # else:
-    #     # Use previous scompositions to create possible scomposition in cluster
-    #     clusterkey = line[0] + line[8]
-    #     #pos_char_for_cluster = cluster_class[clusterkey]['poscharforcluster']
-    #     last_samples = cluster_class[clusterkey]['lastsamples']
-    #     last_IDs = cluster_class[clusterkey]['lastID']
-    #     last_AF = cluster_class[clusterkey]['lastAF']
-    #     last_INDpos = cluster_class[clusterkey]['lastINDpos']
-    #     #last_haplotype = cluster_class[clusterkey]['lastHaplotype']
-    #     t = line[2]
-    #     indel_data = sorted(INDELS_tree[int(line[4])])[0].data
-    #     if pam_at_beginning:
-    #         if line[0] == 'RNA' and line[6] == '-':
-    #             fake_start_target = int(line[5]) - int(indel_data[5])
-    #         else:
-    #             fake_start_target = int(line[4]) - int(indel_data[5])
-    #     else:
-    #         if line[0] == 'RNA' and line[6] == '+':
-    #             fake_start_target = int(line[5]) - int(indel_data[5])
-    #         else:
-    #             fake_start_target = int(line[4]) - int(indel_data[5])
-    #     true_start_target = int(indel_data[0].split(
-    #         '_')[1].split('-')[0]) + fake_start_target
-    #     diff_pos_clus = int(line[4]) - int(line[5])
-    #     line[4] = str(true_start_target)
-    #     line[5] = str(true_start_target - diff_pos_clus)
-    #     # if line[6] == '-':
-    #     #    t = t[::-1]
-    #     mm_new_t = 0
-    #     tmp_pos_mms = None  # lista posizione dei mms
-    #     guide_no_pam = line[1][pos_beg:pos_end]
-    #     list_t = list(t)
-    #     for position_t, char_t in enumerate(t[pos_beg:pos_end]):
-    #         if char_t.upper() != guide_no_pam[position_t]:
-    #             mm_new_t += 1
-    #             tmp_pos_mms = position_t
-    #             if guide_no_pam[position_t] != '-':
-    #                 list_t[sum_for_mms + position_t] = char_t.lower()
-    #     line[2] = ''.join(list_t)  # t
-    #     if tmp_pos_mms:
-    #         line.append(int(tmp_pos_mms))
-    #     else:  # NO mms found
-    #         line.append(-1)
-
-    #     line[3] = current_chr
-    #     line[12] = last_samples
-    #     # line[14] = last_annotation
-    #     line[15] = last_IDs
-    #     line[16] = last_AF
-    #     line[17] = last_INDpos
-
-    #     cluster_to_save.append(line)
-    # else:  # New cluster
-    # New cluster, order previous by CFD, and save the highest CFD
-
-    # check_position = 0
-
-    # Calcolo lo score per ogni target nel cluster
-    # print(len(cluster_to_save))
-    # for t in cluster_to_save:
-    #     if t[0] == 'DNA':
-    #         if do_scores:
-    #             cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(
-    #                 t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
-    #         else:
-    #             cfd_score = -1
-    #         t.append("{:.3f}".format(cfd_score))
-    #     else:
-    #         if do_scores:
-    #             cfd_score = calc_cfd(t[1], t[2].upper()[
-    #                                  :-3], t[2].upper()[-2:], mm_scores, pam_scores)
-    #         else:
-    #             cfd_score = -1
-    #         t.append("{:.3f}".format(cfd_score))
-
-    # cluster_to_save.sort(key=lambda x: (
-    #     float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
-    # cluster_to_save_mmbl = cluster_to_save.copy()
-    # # cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
-    # cluster_to_save_mmbl.sort(key=lambda x: (int(x[9])))
-
-    # keys_seen = []
-    # saved = False
-    # if cluster_to_save:
-    #     c = cluster_to_save[0]
-
-    #     c.pop(-2)
-    #     #best_seq = c[12]
-    #     # print(c)
-    #     cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
-    #     #print("KEY ORIGINALE", cfd_clus_key)
-    #     if c[12] == 'n':
-    #         cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-    #         cfd_best.write('\t'.join(c)+'\tn\t'+str(c[-1]))
-    #     else:
-    #         cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-    #         ref_generated = alignRefFromVar(
-    #             c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-    #         ref_this_clus = ref_generated[0]
-    #         cfd_ref = ref_generated[1]
-    #         reference_pam = ref_this_clus[pam_begin:pam_end]
-    #     found_creation = False
-    #     # print(ref_generated, c[2:8])
-    #     for pos_pam_ref, pam_char_ref in enumerate(reference_pam):
-    #         # ref char not in set of general pam char
-    #         if not iupac_code_set[pam[pos_pam_ref]] & iupac_code_set[pam_char_ref]:
-    #             found_creation = True
-    #     if found_creation:
-    #         c[10] = c[2][pam_begin:pam_end]
-    #     #print(c, ref_this_clus, cfd_ref)
-    #     cfd_best.write('\t'.join(c)+'\t' +
-    #                    ref_this_clus+'\t'+str(cfd_ref))
-    # cluster_to_save.pop(0)
-    # keys_seen.append(cfd_clus_key)
-    # saved = True
-
-    # list_for_alt = []
-    # for c in cluster_to_save:
-    #     c.pop(-2)
-    #     #print(c[3], c[5], c[6], c[-2])
-    #     new_cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
-    #     #print("POSSIBLE NEW KEY", new_cfd_clus_key)
-    #     if new_cfd_clus_key not in keys_seen:
-    #         keys_seen.append(new_cfd_clus_key)
-    #         if c[12] == 'n':
-    #             cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-    #             # cfd_alt.write('\t'.join(c)+'\tn\n')
-    #             list_for_alt.append('\t'.join(c)+'\tn\t'+str(c[-1]))
-    #         else:
-    #             cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-    #             # cfd_alt.write('\t'.join(c)+'\t'+ref_this_clus+'\n')
-    #             ref_generated = alignRefFromVar(
-    #                 c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-    #             ref_this_clus = ref_generated[0]
-    #             reference_pam = ref_this_clus[pam_begin:pam_end]
-    #             cfd_ref = ref_generated[1]
-    #             found_creation = False
-    #             # print(ref_generated, c[2:8])
-    #             for pos_pam_ref, pam_char_ref in enumerate(reference_pam):
-    #                 # ref char not in set of general pam char
-    #                 if not iupac_code_set[pam[pos_pam_ref]] & iupac_code_set[pam_char_ref]:
-    #                     found_creation = True
-    #             if found_creation:
-    #                 c[10] = c[2][pam_begin:pam_end]
-    #             list_for_alt.append(
-    #                 '\t'.join(c)+'\t'+ref_this_clus+'\t'+str(cfd_ref))
-    # if saved:
-    #     cfd_best.write('\t' + str(len(list_for_alt)) + '\n')
-    # for ele in list_for_alt:
-    #     cfd_alt.write(ele+'\t'+str(len(list_for_alt)) + '\n')
-
-    # keys_seen = []
-    # saved = False
-    # if cluster_to_save_mmbl:
-    #     c = cluster_to_save_mmbl[0]
-
-    #     # c.pop(-2)
-    #     best_seq = c[12]
-    #     cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
-
-    #     if c[12] == 'n':
-    #         #cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-    #         mmblg_best.write('\t'.join(c)+'\tn\t'+str(c[-1]))
-    #     else:
-    #         #cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-    #         ref_generated = alignRefFromVar(
-    #             c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-    #         ref_this_clus = ref_generated[0]
-    #         cfd_ref = ref_generated[1]
-    #         mmblg_best.write('\t'.join(c)+'\t' +
-    #                          ref_this_clus+'\t'+str(cfd_ref))
-    #     cluster_to_save_mmbl.pop(0)
-    #     keys_seen.append(cfd_clus_key)
-    #     saved = True
-
-    # list_for_alt = []
-    # for c in cluster_to_save_mmbl:
-    #     # c.pop(-2)
-    #     new_cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
-    #     if new_cfd_clus_key not in keys_seen:
-    #         keys_seen.append(new_cfd_clus_key)
-    #         if c[12] == 'n':
-    #             #cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-    #             # cfd_alt.write('\t'.join(c)+'\tn\n')
-    #             list_for_alt.append('\t'.join(c)+'\tn\t'+str(c[-1]))
-    #         else:
-    #             #cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-    #             # cfd_alt.write('\t'.join(c)+'\t'+ref_this_clus+'\n')
-    #             ref_generated = alignRefFromVar(
-    #                 c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-    #             ref_this_clus = ref_generated[0]
-    #             cfd_ref = ref_generated[1]
-    #             list_for_alt.append(
-    #                 '\t'.join(c)+'\t'+ref_this_clus+'\t'+str(cfd_ref))
-    # if saved:
-    #     mmblg_best.write('\t' + str(len(list_for_alt)) + '\n')
-    # for ele in list_for_alt:
-    #     mmblg_alt.write(ele+'\t'+str(len(list_for_alt)) + '\n')
-
-    # cluster_to_save = []
-    # # Dizionario dove salvare le variabile per ogni tipo di scomposizione (X,DNA1,DNA2,RNA1 etc...)
-    # cluster_class = dict.fromkeys(dictionary_entries)
-    # # Viene re-inizializzato per ogni cluster
-    # current_guide_chr_pos_direction = guide_no_bulge + \
-    #     line[3] + line[5] + line[6]
-    # # print(line)
-    # if line[3][4:] != current_chr:  # New chr section, load a new dictionary
-    # print(os.path.realpath(sys.argv[4]) +
-    #       '/log' + line[3][4:] + '.txt')
-    # if not os.path.exists(os.path.realpath(sys.argv[4]) + '/log' + line[3][4:].split('_')[0] + '.txt'):
-    #     raise Exception("ERROR, NO LOG PASSED")
-    # else:
-    #     # if current_chr != 'none':
-    #     #    print('Done', current_chr, time.time() - start_time)
-    #     current_chr = line[3][4:]
-    #     #chr_name = line[3]
-    #     #datastore = pd.read_csv(os.path.realpath(sys.argv[4]) + '/log' + current_chr + '.txt', sep='\t', index_col=0).fillna('n')
-    #     #datastore = datastore.loc[~datastore.index.duplicated(keep='first')]
-    #     INDELS_tree = IntervalTree()
-    #     with open(os.path.realpath(sys.argv[4]) + '/log' + current_chr + '.txt', 'r') as log:
-    #         log.readline()
-    #     for entry in log:
-    #         splitted = entry.strip().split('\t')
-    #         fake_pos = splitted[5].strip().split(
-    #             ',')  # inizio,fine del fakechr
-    #         # start       end fakechr          #pos_vera,samples,rsID,MAF,INDELinfo,start_fake,ref_seq
-    #         INDELS_tree[int(fake_pos[0]):int(fake_pos[1])] = [
-    #             splitted[0], splitted[1], splitted[2], splitted[3], splitted[4], int(fake_pos[0]), splitted[6]]
-    # #datastore = datastore.to_dict(orient='index')
-    # print('Analysis of ' + current_chr)
-    # start_time = time.time()
-
-    # Calculate samples and all possible true scompositions
-    # pos_snp = []        # lista delle posizioni degli iupac nel target
-    # # array che contiene le tuple composte da (var1,var2..., ref) (al momento abbiamo solo var1 nei dizionari) per ogni iupac nel target
-    # tuple_var_ref = []
-    # # top1_ref = False
-    # # target_combination = []     #lista di tutte le possibili combinazioni di scomposizione di IUPAC
-    # # lista delle posizioni degli iupac nel target riferite alla posizione nel cromosoma
-    # pos_snp_chr = []
-    # # set_list_top1 = []      # lista di set di samples associati ad ogni posizione IUPAC
-    # last_samples = []
-    # last_IDs = []
-    # last_AF = []
-    # last_SNPpos = []
-    # # substitute_ref = []     #List of ref_char used to create the aligned ref target from a var
-    # #last_haplotype = []
-    # # pos_char_for_cluster = [] # lista di liste. Ogni lista corrisponde ad una scomposizione. Per ogni scomposizione mi salvo la posizione nel target e il carattere che ho trovato nella scomposizione
-    # # andrò poi a sostituire questi caratteri negli altri target del cluster che sono nella stessa categoria
-    # final_result = line.copy()
-    # last_samples = []
-    # last_IDs = []
-    # last_AF = []
-    # last_INDpos = []
-    # indel_data = sorted(INDELS_tree[int(line[4])])[0].data
-
-    # final_result[3] = current_chr
-    # final_result[12] = indel_data[1]
-    # final_result[15] = indel_data[2]
-    # final_result[16] = indel_data[3]
-    # final_result[17] = indel_data[4]
-    # if pam_at_beginning:
-    #     if line[0] == 'RNA' and line[6] == '-':
-    #         fake_start_target = int(line[5]) - int(indel_data[5])
-    #     else:
-    #         fake_start_target = int(line[4]) - int(indel_data[5])
-    # else:
-    #     if line[0] == 'RNA' and line[6] == '+':
-    #         fake_start_target = int(line[5]) - int(indel_data[5])
-    #     else:
-    #         fake_start_target = int(line[4]) - int(indel_data[5])
-    # true_start_target = int(indel_data[0].split(
-    #     '_')[1].split('-')[0]) + fake_start_target
-    # diff_pos_clus = int(line[4]) - int(line[5])
-    # final_result[4] = str(true_start_target)
-    # final_result[5] = str(true_start_target - diff_pos_clus)
-
-    #print(int(indel_data[5]), int(line[4]))
-    # if line[10] != "n":
-    #     a = datastore[line[10]]
-    #     final_result[12] = a['SAMPLES']
-    #     final_result[15] = a['rsID']
-    #     final_result[16] = str(a['AF'])
-    #     final_result[17] = a['indel']
-
-    # mm_new_t = 0
-    # t = line[2]
-    # # if line[6] == '-':
-    # #    t = t[::-1]
-    # guide_no_pam = final_result[1][pos_beg:pos_end]
-    # list_t = list(t)
-    # tmp_pos_mms = None
-    # for position_t, char_t in enumerate(final_result[2][pos_beg:pos_end]):
-    #     if char_t.upper() != guide_no_pam[position_t]:
-    #         mm_new_t += 1
-    #         tmp_pos_mms = position_t
-    #         if guide_no_pam[position_t] != '-':
-    #             list_t[sum_for_mms + position_t] = char_t.lower()
-    # final_result[2] = ''.join(list_t)  # t
-    # if tmp_pos_mms:
-    #     final_result.append(int(tmp_pos_mms))
-    # else:  # NO mms found
-    #     final_result.append(-1)
-
-    # Calcolo annotazioni
-    # foundAnnotations = sorted(annotationsTree[int(line[4]):(int(line[4])+int(len(guide_no_bulge))+1)])
-    # string_annotation = []
-    # found_bool = False
-    # for found in range(0, len(foundAnnotations)):
-    #     guide = foundAnnotations[found].data
-    #     guideSplit = guide.split('\t')
-    #     if(str(guideSplit[0]) == str(line[3])):
-    #         found_bool = True
-    #         string_annotation.append(str(guideSplit[1]))
-    # if not found_bool:
-    #     last_annotation = 'n'
-    # else:
-    #     last_annotation = ','.join(string_annotation)
-
-    # final_result[14] = last_annotation
-    # last_samples = final_result[12]
-    # last_IDs = final_result[15]
-    # last_AF = final_result[16]
-    # last_INDpos = final_result[17]
-
-    # cluster_to_save.append(final_result)
-
-    # clusterkey = line[0] + line[8]
-    # cluster_class[clusterkey] = dict()
-    # # cluster_class[clusterkey]['poscharforcluster'] = pos_char_for_cluster       #aggiorno la categoria del target per i prossimi target
-    # cluster_class[clusterkey]['lastsamples'] = last_samples
-    # cluster_class[clusterkey]['lastID'] = last_IDs  # ID
-    # cluster_class[clusterkey]['lastAF'] = last_AF  # AF (come last_samples)
-    # cluster_class[clusterkey]['lastINDpos'] = last_INDpos
-    # cluster_class[clusterkey]['ref_pos_alignement'] = indel_data[6][fake_start_target:
-    # fake_start_target+len(line[2])]
-    #print("sotto", cluster_class[clusterkey]['ref_pos_alignement'])
-
-# LAST CLUSTER
-# for t in cluster_to_save:
-#     if t[0] == 'DNA':
-#         if do_scores:
-#             cfd_score = calc_cfd(t[1][int(t[bulge_pos]):], t[2].upper()[int(
-#                 t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
-#         else:
-#             cfd_score = -1
-#         t.append("{:.3f}".format(cfd_score))
-#     else:
-#         if do_scores:
-#             cfd_score = calc_cfd(t[1], t[2].upper()[:-3],
-#                                  t[2].upper()[-2:], mm_scores, pam_scores)
-#         else:
-#             cfd_score = -1
-#         t.append("{:.3f}".format(cfd_score))
-
-
-# cluster_to_save.sort(key=lambda x: (
-#     float(x[-1]), reversor(int(x[9])), reversor(int(x[-2]))), reverse=True)
-# cluster_to_save_mmbl = cluster_to_save.copy()
-# # cluster_to_save_mmbl.sort(key = lambda x : (int(x[8]), int(x[7])))
-# cluster_to_save_mmbl.sort(key=lambda x: (int(x[9])))
-
-# keys_seen = []
-# saved = False
-
-# if cluster_to_save:
-#     c = cluster_to_save[0]
-
-#     c.pop(-2)
-#     cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
-#     if c[12] == 'n':
-#         cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-#         cfd_best.write('\t'.join(c)+'\tn\t'+str(c[-1]))
-#     else:
-#         cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-#         ref_generated = alignRefFromVar(
-#             c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-#         ref_this_clus = ref_generated[0]
-#         reference_pam = ref_this_clus[pam_begin:pam_end]
-#         cfd_ref = ref_generated[1]
-#         found_creation = False
-#         for pos_pam_ref, pam_char_ref in enumerate(reference_pam):
-#             # ref char not in set of general pam char
-#             if not iupac_code_set[pam[pos_pam_ref]] & iupac_code_set[pam_char_ref]:
-#                 found_creation = True
-#         if found_creation:
-#             c[10] = c[2][pam_begin:pam_end]
-#         cfd_best.write('\t'.join(c)+'\t'+ref_this_clus+'\t'+str(cfd_ref))
-#     cluster_to_save.pop(0)
-#     keys_seen.append(cfd_clus_key)
-    # saved = True
-
-# list_for_alt = []
-# for c in cluster_to_save:
-#     c.pop(-2)
-#     new_cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
-#     if new_cfd_clus_key not in keys_seen:
-#         keys_seen.append(new_cfd_clus_key)
-#         if c[12] == 'n':
-#             cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-#             # cfd_alt.write('\t'.join(c)+'\tn\n')
-#             list_for_alt.append('\t'.join(c)+'\tn\t'+str(c[-1]))
-#         else:
-#             cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-#             ref_generated = alignRefFromVar(
-#                 c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-#             ref_this_clus = ref_generated[0]
-#             reference_pam = ref_this_clus[pam_begin:pam_end]
-#             cfd_ref = ref_generated[1]
-#             found_creation = False
-#             for pos_pam_ref, pam_char_ref in enumerate(reference_pam):
-#                 # ref char not in set of general pam char
-#                 if not iupac_code_set[pam[pos_pam_ref]] & iupac_code_set[pam_char_ref]:
-#                     found_creation = True
-#             if found_creation:
-#                 c[10] = c[2][pam_begin:pam_end]
-#             list_for_alt.append('\t'.join(c)+'\t' +
-#                                 ref_this_clus+'\t'+str(cfd_ref))
-# if saved:
-#     cfd_best.write('\t' + str(len(list_for_alt)) + '\n')
-
-# for ele in list_for_alt:
-#     cfd_alt.write(ele+'\t'+str(len(list_for_alt))+'\n')
-
-# keys_seen = []
-# saved = False
-# if cluster_to_save_mmbl:
-#     c = cluster_to_save_mmbl[0]
-
-#     # c.pop(-2)
-#     best_seq = c[12]
-#     cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
-
-#     if c[12] == 'n':
-#         #cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-#         mmblg_best.write('\t'.join(c)+'\tn\t'+str(c[-1]))
-#     else:
-#         #cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-    #     ref_generated = alignRefFromVar(
-    #         c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-    #     ref_this_clus = ref_generated[0]
-    #     cfd_ref = ref_generated[1]
-    #     mmblg_best.write('\t'.join(c)+'\t'+ref_this_clus+'\t'+str(cfd_ref))
-    # cluster_to_save_mmbl.pop(0)
-    # keys_seen.append(cfd_clus_key)
-    # saved = True
-
-# list_for_alt = []
-# for c in cluster_to_save_mmbl:
-#     # c.pop(-2)
-#     new_cfd_clus_key = c[3] + " " + c[5] + " " + c[6] + " " + c[-2]
-#     if new_cfd_clus_key not in keys_seen:
-#         keys_seen.append(new_cfd_clus_key)
-#         if c[12] == 'n':
-#             #cfd_for_graph['ref'][round(float(c[-1]) * 100)] += 1
-#             # cfd_alt.write('\t'.join(c)+'\tn\n')
-#             list_for_alt.append('\t'.join(c)+'\tn\t'+str(c[-1]))
-#         else:
-#             #cfd_for_graph['var'][round(float(c[-1]) * 100)] += 1
-#             # cfd_alt.write('\t'.join(c)+'\t'+ref_this_clus+'\n')
-#             ref_generated = alignRefFromVar(
-#                 c, cluster_class[c[0] + c[8]]['ref_pos_alignement'])
-#             ref_this_clus = ref_generated[0]
-#             cfd_ref = ref_generated[1]
-#             list_for_alt.append('\t'.join(c)+'\t' +
-#                                 ref_this_clus+'\t'+str(cfd_ref))
-# if saved:
-#     mmblg_best.write('\t' + str(len(list_for_alt)) + '\n')
-# for ele in list_for_alt:
-#     mmblg_alt.write(ele+'\t'+str(len(list_for_alt)) + '\n')
+for count, cluster in enumerate(clusters_with_scores):
+    for target in cluster:
+        if count == 0:  # CFD target
+            # remove count of tmp_mms
+            target.pop(-2)
+            # save CFD targets
+            # print('CFD', target)
+            cfd_best.write(
+                '\t'.join(target)+'\t'+str(0)+'\n')
+            # save mm-bul targets
+            mmblg_best.write(
+                '\t'.join(target)+'\t'+str(0)+'\n')
+        if count == 1:  # CRISTA target
+            # remove count of tmp_mms
+            target.pop(-2)
+            # print('CRISTA', target)
+            # save CRISTA targets
+            crista_best.write('\t'.join(target)+'\t' +
+                              str(0)+'\n')
 
 cfd_best.close()
-# cfd_alt.close()
 mmblg_best.close()
 crista_best.close()
-# mmblg_alt.close()
 
 os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCFD_INDEL.txt')
 os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCRISTA_INDEL.txt')
 os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestmmblg_INDEL.txt')
 
-# os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tCFD\tReference\tCFD_ref\t#Seq_in_cluster/' "+outputFile + '.bestCFD_INDEL.txt')
-# os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tCFD\tReference\tCFD_ref\t#Seq_in_cluster/' "+outputFile + '.bestCRISTA_INDEL.txt')
-# os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tCFD\tReference\tCFD_ref\t#Seq_in_cluster/' "+outputFile + '.bestmmblg_INDEL.txt')
-# os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tCFD\tReference\tCFD_ref\t#Seq_in_cluster/' "+outputFile + '.altmmblg.txt')
 
-# Save dataframe for graph
-# cfd_dataframe = pd.DataFrame.from_dict(cfd_for_graph)
-# cfd_dataframe.to_csv(outputFile + '.CFDGraph.txt', sep='\t', index=False)
 print('Done', current_chr, time.time() - start_time)
 
 print('ANALYSIS COMPLETE IN', time.time() - global_start)
