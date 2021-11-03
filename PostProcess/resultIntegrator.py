@@ -282,8 +282,8 @@ for nline, line in enumerate(inCrispritzResults):
     try:
         annotationLine = inAnnotationFile.readline().strip().split('\t')
     except:
-        annotationFile = 'NA'
-    # print(annotationLine)
+        annotationLine = 'NA'
+
     lowestEmpirical = 100
 
     for key in saveDict:
