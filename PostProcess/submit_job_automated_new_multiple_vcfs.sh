@@ -402,11 +402,11 @@ while read vcf_f; do
 
 		echo -e 'Post-analysis INDELs\tStart\t'$(date) >>$log
 		#SKIP INDELS ANALYSIS
-		# if [ $(wc -l <"$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt") -gt 1 ]; then
+		if [ $(wc -l <"$output_folder/crispritz_targets/indels_${ref_name}+${vcf_name}_${pam_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt") -gt 1 ]; then
 
-		# 	# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
-		# 	#commented to avoid indel analysis
-		./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
+			# 	# echo -e 'Post-analysis INDELs\tStart\t'$(date) >&2
+			# 	#commented to avoid indel analysis
+			./pool_post_analisi_indel.py $output_folder $ref_folder $vcf_folder $guide_file $mm $bDNA $bRNA $annotation_file $pam_file "$current_working_directory/Dictionaries/" $final_res $final_res_alt $ncpus
 
 		# 	# echo -e 'Post-analysis INDELs\tEnd\t'$(date) >&2
 		# 	for key in "${array_fake_chroms[@]}"; do
@@ -416,7 +416,7 @@ while read vcf_f; do
 		# 		rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.bestMerge.txt"
 		# 		rm "$output_folder/${key}_${pam_name}_${guide_name}_${annotation_name}_${mm}_${bDNA}_${bRNA}.altMerge.txt"
 		# 	done
-		# fi
+		fi
 		echo -e 'Post-analysis INDELs\tEnd\t'$(date) >>$log
 
 	fi
