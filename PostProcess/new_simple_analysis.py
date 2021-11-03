@@ -662,6 +662,25 @@ for line in inTarget:
         split.append(0)
         cluster_to_save.append(split)
 
+if len(cluster_to_save):
+    pass
+else:
+    # if cluster to save is empty, skip processing
+    # close all files
+    cfd_best.close()
+    mmblg_best.close()
+    crista_best.close()
+    # rewrite header file
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCFD.txt')
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestmmblg.txt')
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCRISTA.txt')
+    # cfd dataframe write
+    cfd_dataframe = pd.DataFrame.from_dict(cfd_for_graph)
+    cfd_dataframe.to_csv(outputFile + '.CFDGraph.txt', sep='\t', index=False)
+    # print complete and exit with no error
+    print('ANALYSIS COMPLETE IN', time.time() - global_start)
+    exit(0)
+
 # after reading the whole file and creating the cluster, start processing it
 clusters_with_scores = calculate_scores(cluster_to_save)
 
