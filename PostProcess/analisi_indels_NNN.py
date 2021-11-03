@@ -649,11 +649,9 @@ def preprocess_CRISTA_score(cluster_targets):
             target[4])-5:int(target[4])].upper()
         # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
         #     pass  # do nothing, then i will implement the check for the valid alt allele
-        # protospacer taken directly from the aligned target
-        if 'n' not in target[-3]:
-            protospacerDNA = str(target[-3]).replace('-', '')
-        else:
-            protospacerDNA = str(target[2]).replace('-', '')
+        # protospacer taken directly from the ref genome
+        protospacerDNA = genomeStr[int(target[4]):int(
+            target[4])+len(target[1])].upper()
         # last 5 nucleotides to add to protospacer
         post_protospacer_DNA = genomeStr[int(
             target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
@@ -899,6 +897,23 @@ for line in inResult:
     # position of tmp_mms (removed later after processing)
     final_result.append(0)
     cluster_to_save.append(final_result)
+
+if len(cluster_to_save):
+    pass
+else:
+    # if cluster to save is empty, skip processing
+    # close files
+    cfd_best.close()
+    mmblg_best.close()
+    crista_best.close()
+    # update header in files
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCFD_INDEL.txt')
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCRISTA_INDEL.txt')
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestmmblg_INDEL.txt')
+    # print exit messages and exit with no error (exit 0)
+    print('Done', current_chr, time.time() - start_time)
+    print('ANALYSIS COMPLETE IN', time.time() - global_start)
+    exit(0)
 
 # start processing scores after the whole target file is read
 clusters_with_scores = calculate_scores(cluster_to_save)
