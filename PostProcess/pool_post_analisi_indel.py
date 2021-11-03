@@ -35,8 +35,8 @@ for f in os.listdir(vcf_folder):
     if 'vcf.gz' in f:
         chrs.append(f)
 
-t = 6
-if ncpus < 6:
+t = 2
+if ncpus < 2:
     t = ncpus
 with Pool(processes=t) as pool:
     pool.map(start_analysis, chrs)
