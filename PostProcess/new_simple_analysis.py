@@ -187,7 +187,6 @@ def iupac_decomposition(split, guide_no_bulge,
     realTarget = split[2]
     replaceTarget = split[2].replace('-', '')
     refSeq = genomeStr[int(split[4]): int(split[4])+len(replaceTarget)].upper()
-    # replaceTargetsDict = dict()
 
     revert = False
     if split[6] == '-':
@@ -288,15 +287,6 @@ def iupac_decomposition(split, guide_no_bulge,
             # ref sequence with bulges
             refSeq_with_bulges = ''.join(refSeq_with_bulges)
 
-            # if split[0] == 'DNA':
-            #     cfd_score = calc_cfd(split[1][int(split[bulge_pos]):], refSeq_with_bulges.upper()[int(
-            #         split[bulge_pos]): -3], refSeq_with_bulges.upper()[-2:], mm_scores, pam_scores, do_scores)
-            #     cfd_ref_seq = "{:.3f}".format(cfd_score)  # str(cfd_score)
-            # else:
-            #     cfd_score = calc_cfd(split[1], refSeq_with_bulges.upper()[
-            #         : -3], refSeq_with_bulges.upper()[-2:], mm_scores, pam_scores, do_scores)
-            #     cfd_ref_seq = "{:.3f}".format(cfd_score)  # str(cfd_score)
-
             for level in totalDict[count]:
                 for key in totalDict[count][level]:
                     if len(totalDict[count][level][key][1]) > 0:
@@ -365,8 +355,8 @@ def iupac_decomposition(split, guide_no_bulge,
                             final_line.append(33)
                             # position of tmp_mms (removed later after processing)
                             final_line.append(tmp_pos_mms)
+                            # append processed target to cluster to save
                             cluster_to_save.append(final_line)
-    return cluster_to_save
 
 
 def preprocess_CFD_score(target):
@@ -375,10 +365,12 @@ def preprocess_CFD_score(target):
         if target[0] == 'DNA':
             cfd_score = calc_cfd(target[1][int(target[bulge_pos]):], target[2].upper()[int(
                 target[bulge_pos]):-3], target[2].upper()[-2:], mm_scores, pam_scores, do_scores)
+            # append to target the CFD score of the aligned sequence (alt or ref)
             target.append("{:.3f}".format(cfd_score))
-            if target[-3] == 55:
+            # -3 position is a placeholder for ref score
+            if target[-3] == 55:  # if 55 sequence is ref so no score have to be calculated
                 target[-3] = "{:.3f}".format(cfd_score)
-            if target[-3] == 33:
+            if target[-3] == 33:  # if 33 sequence is alt so ref score must be calculated
                 cfd_ref_score = calc_cfd(target[1][int(target[bulge_pos]):], target[-4].upper()[int(
                     target[bulge_pos]):-3], target[-4].upper()[-2:], mm_scores, pam_scores, do_scores)
                 target[-3] = "{:.3f}".format(cfd_ref_score)
@@ -393,6 +385,7 @@ def preprocess_CFD_score(target):
                     :-3], target[-4].upper()[-2:], mm_scores, pam_scores, do_scores)
                 target[-3] = "{:.3f}".format(cfd_ref_score)
     else:
+        # no score calculated, append -1 in CFD score and in position -3 insert -1 value (-1 means no score calculated)
         cfd_score = -1
         target.append("{:.3f}".format(cfd_score))
         target[-3] = "{:.3f}".format(cfd_score)
@@ -410,8 +403,9 @@ def preprocess_CRISTA_score(cluster_targets):
     else:
         for target in cluster_targets:
             target_CRISTA = target.copy()
-            target_CRISTA.append("{:.3f}".format(-1))
-            target_CRISTA[-3] = "{:.3f}".format(-1)
+            crista_score = -1
+            target_CRISTA.append("{:.3f}".format(crista_score))
+            target_CRISTA[-3] = "{:.3f}".format(crista_score)
             cluster_scored.append(target_CRISTA)
         return cluster_scored
 
@@ -481,11 +475,9 @@ def preprocess_CRISTA_score(cluster_targets):
             target[4])-5:int(target[4])].upper()
         # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
         #     pass  # do nothing, then i will implement the check for the valid alt allele
-        # protospacer taken directly from the aligned target
-        if 'n' not in target[-3]:
-            protospacerDNA = str(target[-3]).replace('-', '')
-        else:
-            protospacerDNA = str(target[2]).replace('-', '')
+        # protospacer taken directly from the ref genome
+        protospacerDNA = genomeStr[int(target[4]):int(
+            target[4])+len(target[1])].upper()
         # last 5 nucleotides to add to protospacer
         post_protospacer_DNA = genomeStr[int(
             target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
