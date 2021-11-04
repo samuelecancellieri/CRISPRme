@@ -899,6 +899,23 @@ for line in inResult:
     final_result.append(0)
     cluster_to_save.append(final_result)
 
+if len(cluster_to_save):
+    pass
+else:
+    # skip processing and return empty file
+    # close open files
+    cfd_best.close()
+    mmblg_best.close()
+    crista_best.close()
+    # update header
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCFD_INDEL.txt')
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestCRISTA_INDEL.txt')
+    os.system("sed -i '1s/.*/#Bulge_type\tcrRNA\tDNA\tChromosome\tPosition\tCluster_Position\tDirection\tMismatches\tBulge_Size\tTotal\tPAM_gen\tVar_uniq\tSamples\tAnnotation_Type\tReal_Guide\trsID\tAF\tSNP\tReference\tCFD_ref\tCFD\t#Seq_in_cluster/' "+outputFile + '.bestmmblg_INDEL.txt')
+    # print exit messagge and exit 0
+    print('Done', current_chr, time.time() - start_time)
+    print('ANALYSIS COMPLETE IN', time.time() - global_start)
+    exit(0)
+
 # start processing scores after the whole target file is read
 clusters_with_scores = calculate_scores(cluster_to_save)
 
