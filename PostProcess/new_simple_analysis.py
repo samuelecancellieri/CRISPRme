@@ -422,14 +422,14 @@ def preprocess_CRISTA_score(cluster_targets):
         DNA_aligned_list.append(str(target[2]))
         # first 5 nucleotide to add to protospacer
         pre_protospacer_DNA = genomeStr[int(
-            target[4])-5:int(target[4])].upper()
+            target[4])-5:int(target[4])].upper().replace('N', '')
         # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
         #     pass  # do nothing, then i will implement the check for the valid alt allele
         # protospacer taken directly from the aligned target
         protospacerDNA = str(target[2]).replace('-', '')
         # last 5 nucleotides to add to protospacer
         post_protospacer_DNA = genomeStr[int(
-            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
+            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper().replace('N', '')
         # if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
         #     pass  # do nothing, then i will implement the check for the valid alt allele
 
@@ -472,15 +472,15 @@ def preprocess_CRISTA_score(cluster_targets):
             DNA_aligned_list.append(str(target[2]))
         # first 5 nucleotide to add to protospacer
         pre_protospacer_DNA = genomeStr[int(
-            target[4])-5:int(target[4])].upper()
+            target[4])-5:int(target[4])].upper().replace('N', '')
         # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
         #     pass  # do nothing, then i will implement the check for the valid alt allele
         # protospacer taken directly from the ref genome
         protospacerDNA = genomeStr[int(target[4]):int(
-            target[4])+len(target[1])].upper()
+            target[4])+len(target[1])].upper().replace('N', '')
         # last 5 nucleotides to add to protospacer
         post_protospacer_DNA = genomeStr[int(
-            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
+            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper().replace('N', '')
         # if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
         #     pass  # do nothing, then i will implement the check for the valid alt allele
 
@@ -662,6 +662,30 @@ for line in inTarget:
         split.append(0)
         cluster_to_save.append(split)
 
+    if len(cluster_to_save) >= 1000000:
+        # after reading the 1mln lines from file and creating the cluster, start processing it
+        clusters_with_scores = calculate_scores(cluster_to_save)
+
+        for count, cluster in enumerate(clusters_with_scores):
+            for target in cluster:
+                if count == 0:  # CFD target
+                    # remove count of tmp_mms
+                    target.pop(-2)
+                    # save CFD targets
+                    cfd_best.write(
+                        '\t'.join(target)+'\t'+str(0)+'\n')
+                    # save mm-bul targets
+                    mmblg_best.write(
+                        '\t'.join(target)+'\t'+str(0)+'\n')
+                if count == 1:  # CRISTA target
+                    # remove count of tmp_mms
+                    target.pop(-2)
+                    # save CRISTA targets
+                    crista_best.write('\t'.join(target)+'\t' +
+                                      str(0)+'\n')
+        cluster_to_save = list()
+
+
 if len(cluster_to_save):
     pass
 else:
@@ -681,7 +705,7 @@ else:
     print('ANALYSIS COMPLETE IN', time.time() - global_start)
     exit(0)
 
-# after reading the whole file and creating the cluster, start processing it
+# process cluster of targets if less then 1mln rows total
 clusters_with_scores = calculate_scores(cluster_to_save)
 
 for count, cluster in enumerate(clusters_with_scores):

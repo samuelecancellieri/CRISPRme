@@ -899,6 +899,29 @@ for line in inResult:
     final_result.append(0)
     cluster_to_save.append(final_result)
 
+    if len(cluster_to_save) >= 1000000:
+        # after reading the 1mln lines from file and creating the cluster, start processing it
+        clusters_with_scores = calculate_scores(cluster_to_save)
+
+        for count, cluster in enumerate(clusters_with_scores):
+            for target in cluster:
+                if count == 0:  # CFD target
+                    # remove count of tmp_mms
+                    target.pop(-2)
+                    # save CFD targets
+                    cfd_best.write(
+                        '\t'.join(target)+'\t'+str(0)+'\n')
+                    # save mm-bul targets
+                    mmblg_best.write(
+                        '\t'.join(target)+'\t'+str(0)+'\n')
+                if count == 1:  # CRISTA target
+                    # remove count of tmp_mms
+                    target.pop(-2)
+                    # save CRISTA targets
+                    crista_best.write('\t'.join(target)+'\t' +
+                                      str(0)+'\n')
+        cluster_to_save = list()
+
 if len(cluster_to_save):
     pass
 else:
