@@ -409,8 +409,8 @@ def preprocess_CRISTA_score(cluster_targets):
             cluster_scored.append(target_CRISTA)
         return cluster_scored
 
-    print('creation CRISTA targets')
-    time_start = time.time()
+    # print('creation CRISTA targets')
+    # time_start = time.time()
     # preprocess target then calculate CRISTA score
     sgRNA_non_aligned_list = list()
     DNA_aligned_list = list()
@@ -448,17 +448,17 @@ def preprocess_CRISTA_score(cluster_targets):
 
         # append sequence to DNA list
         DNAseq_from_genome_list.append(complete_DNA_seq)
-    print('CRISTA targets created in time', time.time()-time_start)
+    # print('CRISTA targets created in time', time.time()-time_start)
     # do_scores = False  # REMOVE TO CALCULATE SCORING
 
     # calculate score
-    print('CRISTA Scoring')
-    time_start = time.time()
+    # print('CRISTA Scoring')
+    # time_start = time.time()
     crista_score_list_alt = list()
     if do_scores:
         crista_score_list_alt = CRISTA_predict_list(
             sgRNA_non_aligned_list, DNA_aligned_list, DNAseq_from_genome_list)
-    print('CRISTA score done in time: ', time.time()-time_start)
+    # print('CRISTA score done in time: ', time.time()-time_start)
 
     # preprocess target then calculate CRISTA score
     sgRNA_non_aligned_list = list()
@@ -528,15 +528,25 @@ def calculate_scores(cluster_to_save):
     # list of functions to calculate specific score (to add a score, simply add your function to this call and update the clusters list in return)
     cluster_with_CFD_score = list()
     cluster_with_CRISTA_score = list()
+
+    time_start = time.time()
+    print('CALCULATING CFD SCORE')
+
     for target in cluster_to_save:  # calculate CFD score for each target
         target_CFD = target.copy()
         cluster_with_CFD_score.append(preprocess_CFD_score(target_CFD))
 
+    print('DONE CALCULATING CFD in time', time.time()-time_start)
+
+    time_start = time.time()
+    print('CALCULATING CRISTA SCORE')
     # process score for each target in cluster, at the same time to improve execution time
     cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
     # cluster_with_CRISTA_score.append(
     #     preprocess_CRISTA_score(cluster_to_save))
     # return clusters with specific scores
+    print('DONE CALCULATING CFD in time', time.time()-time_start)
+
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
 
 
