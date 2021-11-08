@@ -34,8 +34,8 @@ for f in os.listdir(ref_folder):
     if '.fa' in f and '.fai' not in f:
         chrs.append(f)
 
-t = 2
-if ncpus < 2:
+t = 6
+if ncpus < 6:
     t = ncpus
 with Pool(processes=t) as pool:
     pool.map(start_analysis, chrs)

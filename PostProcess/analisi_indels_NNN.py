@@ -899,8 +899,8 @@ for line in inResult:
     final_result.append(0)
     cluster_to_save.append(final_result)
 
-    if len(cluster_to_save) >= 1000000:
-        # after reading the 1mln lines from file and creating the cluster, start processing it
+    if len(cluster_to_save) >= 100000:
+        # after reading 100k lines from file and creating the cluster, start processing it
         clusters_with_scores = calculate_scores(cluster_to_save)
 
         for count, cluster in enumerate(clusters_with_scores):
