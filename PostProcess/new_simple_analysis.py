@@ -398,6 +398,9 @@ def preprocess_CRISTA_score(cluster_targets):
     # list with scored targets
     cluster_scored = list()
 
+    # skip scoring for CRISTA, remove to activate scoring
+    do_scores = False
+
     if do_scores:
         pass
     else:
@@ -542,9 +545,6 @@ def calculate_scores(cluster_to_save):
     print('CALCULATING CRISTA SCORE')
     # process score for each target in cluster, at the same time to improve execution time
     cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
-    # cluster_with_CRISTA_score.append(
-    #     preprocess_CRISTA_score(cluster_to_save))
-    # return clusters with specific scores
     print('DONE CALCULATING CFD in time', time.time()-time_start)
 
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
