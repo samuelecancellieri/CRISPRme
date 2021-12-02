@@ -574,7 +574,7 @@ def preprocess_CRISTA_score(cluster_targets):
     cluster_scored = list()
 
     # skip scoring for CRISTA, remove to activate scoring
-    do_scores = False
+    # do_scores = False
 
     if do_scores:
         pass
