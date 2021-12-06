@@ -593,7 +593,7 @@ echo -e "Cleaning directory"
 rm -f *.CFDGraph.txt
 rm -f indels.CFDGraph.txt
 rm -r "crispritz_prof"
-# rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
+rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
 rm $final_res.bestCFD.txt
 rm $final_res.bestmmblg.txt
 rm $final_res.bestCRISTA.txt
