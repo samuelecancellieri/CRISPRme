@@ -860,18 +860,18 @@ for line in inResult:
     # correct position if PAM at beginning and strand
     if pam_at_beginning:
         if line[0] == 'RNA' and line[6] == '-':
-            # real_position
-            fake_start_target = int(line[4]) - int(indel_data[5])
-        else:
             # cluster_position
             fake_start_target = int(line[5]) - int(indel_data[5])
+        else:
+            # real_position
+            fake_start_target = int(line[4]) - int(indel_data[5])
     else:
         if line[0] == 'RNA' and line[6] == '+':
-            # real_position
-            fake_start_target = int(line[4]) - int(indel_data[5])
-        else:
             # cluster_position
             fake_start_target = int(line[5]) - int(indel_data[5])
+        else:
+            # real_position
+            fake_start_target = int(line[4]) - int(indel_data[5])
 
     # correct start with real chr spatial info and length of the target
     true_start_target = int(indel_data[0].split(
