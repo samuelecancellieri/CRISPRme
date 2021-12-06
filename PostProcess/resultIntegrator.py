@@ -354,7 +354,6 @@ for nline, line in enumerate(inCrispritzResults):
             split = str(elem).strip().split('_')
             split_one_len = len(split[2])
             split_second_len = len(split[3])
-            correction = 0
             # if split_one_len != split_second_len:
             #     correction = split_second_len
             if '+' in str(target[7]):
@@ -363,7 +362,7 @@ for nline, line in enumerate(inCrispritzResults):
                 if var_pos < 1:
                     var_pos = 1
                 variantList[count] = str(
-                    split[2])+str(var_pos+correction)+str(split[3])
+                    split[2])+str(var_pos)+str(split[3])
             else:
                 firstcomp = ''
                 secondcomp = ''
@@ -372,14 +371,16 @@ for nline, line in enumerate(inCrispritzResults):
                     var_pos = len(target[1])
                 else:
                     # if var pos non negative, count the position in reverse strand so starting from end of the sequence that is been reversed complemented
+                    if split_second_len < split_one_len:
+                        correction = split_one_len-split_second_len
                     var_pos = abs(
-                        int(split[1])-int(target[5])-1-len(target[1]))
+                        int(split[1])-int(target[5])-1-len(target[1])+correction)
                 for piece in str(split[2]):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
                     secondcomp += rev_comp(piece)
                 variantList[count] = ''.join(
-                    reversed(firstcomp))+str(var_pos+correction)+''.join(reversed(secondcomp))
+                    reversed(firstcomp))+str(var_pos)+''.join(reversed(secondcomp))
     variantList_highest_cfd = variantList
 
     variantList = ['NA']
