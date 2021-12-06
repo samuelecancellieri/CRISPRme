@@ -532,20 +532,20 @@ def calculate_scores(cluster_to_save):
     cluster_with_CFD_score = list()
     cluster_with_CRISTA_score = list()
 
-    time_start = time.time()
-    print('CALCULATING CFD SCORE')
+    # time_start = time.time()
+    # print('CALCULATING CFD SCORE')
 
     for target in cluster_to_save:  # calculate CFD score for each target
         target_CFD = target.copy()
         cluster_with_CFD_score.append(preprocess_CFD_score(target_CFD))
 
-    print('DONE CALCULATING CFD in time', time.time()-time_start)
+    # print('DONE CALCULATING CFD in time', time.time()-time_start)
 
-    time_start = time.time()
-    print('CALCULATING CRISTA SCORE')
+    # time_start = time.time()
+    # print('CALCULATING CRISTA SCORE')
     # process score for each target in cluster, at the same time to improve execution time
     cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
-    print('DONE CALCULATING CFD in time', time.time()-time_start)
+    # print('DONE CALCULATING CFD in time', time.time()-time_start)
 
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
 

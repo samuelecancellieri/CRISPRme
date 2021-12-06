@@ -39,7 +39,8 @@ Added compatibility with dictionary chr_pos -> s1,s2;A,C/sNew;A,T
 # So check if decrease_ref_count is not empty to avoid this (in this case +1 will be added to samples for VAR part of target and +1 for all the
 # other samples for REF part)
 
-import pickle  # to read CFD matrices
+import pickle
+from typing import final  # to read CFD matrices
 from supportFunctions.loadSample import associateSample
 import re
 import multiprocessing
@@ -187,33 +188,48 @@ def alignRefFromVar(line):  # chr_fake, start_pos, len_guide, bulge):
     good_chr_fake = true_chr+':'+str(start_pos)+'-'+str(start_pos+len_guide)
     # dict_ref_seq[good_chr_fake].upper() #file_fasta.readline().strip().upper()
     sequence = genomeStr[start_pos:start_pos+len_guide].upper()
-    # print(sequence, len(sequence), len_guide)
-    if t[6] == '-':  # strand
-        target = t[2][::-1]
+    # print('ref sequence', sequence, len(sequence), len_guide)
+
+    if t[6] == '-':  # if negative strand reverse ref sequence
+        # target = t[2][::-1]
+        sequence = reverse_complement_table(sequence)
+        target = t[2]
     else:
         target = t[2]
-    if t[0] == "RNA":
+
+    if t[0] == "RNA":  # if RNA bulges in sequences find gaps and update ref sequence
         tmp_gap_position = [g.start() for g in re.finditer('-', target)]
         sequence = list(sequence)
+        # cut sequence to extract only the part interested by counting the RNA bulges
+        sequence = sequence[len(tmp_gap_position):]
         for tmp_g_p in tmp_gap_position:
-            sequence[tmp_g_p] = '-'
-        if t[6] == '-':
-            sequence = reverse_complement_table(''.join(sequence))
+            # sequence[tmp_g_p] = '-'
+            sequence.insert(tmp_g_p, '-')
+        # if t[6] == '-':
+        #     sequence = reverse_complement_table(''.join(sequence))
+        # else:
+
+        # sequence = sequence[len(tmp_gap_position):]
+        sequence = ''.join(sequence)
         # if t[6] == '+':
         #     sequence = sequence[0:len_guide]
         # else:
         #     sequence = reverse_complement_table(''.join(sequence))
         #     sequence = sequence[len(tmp_gap_position):]
-    elif t[6] == '-':
-        sequence = reverse_complement_table(sequence)
+    # elif t[6] == '-':
+    #     sequence = reverse_complement_table(sequence)
     guide_no_pam = t[1][pos_beg:pos_end]
     list_t = list(sequence)
+
+    # print('ref seq with bulges', sequence)
     # align ref sequence with var
     for position_t, char_t in enumerate(sequence[pos_beg:pos_end]):
         if char_t.upper() != guide_no_pam[position_t]:
             if guide_no_pam[position_t] != '-':
                 list_t[sum_for_mms + position_t] = char_t.lower()
     sequence = ''.join(list_t)
+
+    # print('ref seq realigned', sequence)
     # t[2] = sequence
     # if t[0] == 'DNA':
     #     if do_scores:
@@ -702,20 +718,20 @@ def calculate_scores(cluster_to_save):
     cluster_with_CFD_score = list()
     cluster_with_CRISTA_score = list()
 
-    time_start = time.time()
-    print('CALCULATING CFD SCORE')
+    # time_start = time.time()
+    # print('CALCULATING CFD SCORE')
 
     for target in cluster_to_save:  # calculate CFD score for each target
         target_CFD = target.copy()
         cluster_with_CFD_score.append(preprocess_CFD_score(target_CFD))
 
-    print('DONE CALCULATING CFD in time', time.time()-time_start)
+    # print('DONE CALCULATING CFD in time', time.time()-time_start)
 
-    time_start = time.time()
-    print('CALCULATING CRISTA SCORE')
+    # time_start = time.time()
+    # print('CALCULATING CRISTA SCORE')
     # process score for each target in cluster, at the same time to improve execution time
     cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
-    print('DONE CALCULATING CFD in time', time.time()-time_start)
+    # print('DONE CALCULATING CFD in time', time.time()-time_start)
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
 
 
@@ -838,7 +854,7 @@ global_start = time.time()
 cluster_to_save = list()
 
 for line in inResult:
-    # print(line)
+    # print('line in INDEL analysis', line)
 
     line = line.strip().split('\t')
     # print(line)
@@ -857,6 +873,7 @@ for line in inResult:
     final_result[15] = indel_data[2]  # rsID
     final_result[16] = indel_data[3]  # MAF
     final_result[17] = indel_data[4]  # INDELinfo
+
     # correct position if PAM at beginning and strand
     if pam_at_beginning:
         if line[0] == 'RNA' and line[6] == '-':
@@ -884,22 +901,26 @@ for line in inResult:
     final_result[5] = str(true_start_target - diff_pos_clus)
 
     # real_target
-    t = final_result[2]
-    mm_new_t = 0
-    tmp_pos_mms = None  # lista posizione dei mms
-    guide_no_pam = line[1][pos_beg:pos_end]
-    list_t = list(t)
-    for position_t, char_t in enumerate(t[pos_beg:pos_end]):
-        if char_t.upper() != guide_no_pam[position_t]:
-            mm_new_t += 1
-            tmp_pos_mms = position_t
-            if guide_no_pam[position_t] != '-':
-                list_t[sum_for_mms + position_t] = char_t.lower()
-    final_result[2] = ''.join(list_t)  # t
+    # t = final_result[2]
+    # mm_new_t = 0
+    # tmp_pos_mms = None  # lista posizione dei mms
+    # guide_no_pam = line[1][pos_beg:pos_end]
+    # list_t = list(t)
+    # for position_t, char_t in enumerate(t[pos_beg:pos_end]):
+    #     if char_t.upper() != guide_no_pam[position_t]:
+    #         mm_new_t += 1
+    #         tmp_pos_mms = position_t
+    #         if guide_no_pam[position_t] != '-':
+    #             list_t[sum_for_mms + position_t] = char_t.lower()
+    # final_result[2] = ''.join(list_t)  # t
+
+    # print('target with no process', final_result[2])
     # if tmp_pos_mms:
     #     final_result.append(int(tmp_pos_mms))
     # else:  # NO mms found
     #     final_result.append(-1)
+
+    # print('results before calc and ref alignment', final_result)
 
     final_result.append(alignRefFromVar(final_result))
     # number to activate ref score calculation (active if target is alternative)
