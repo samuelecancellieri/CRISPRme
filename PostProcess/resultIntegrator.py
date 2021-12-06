@@ -372,7 +372,8 @@ for nline, line in enumerate(inCrispritzResults):
                     var_pos = len(target[1])
                 else:
                     # if var pos non negative, count the position in reverse strand so starting from end of the sequence that is been reversed complemented
-                    var_pos = int(split[1])-int(target[5])-1-len(target[1])
+                    var_pos = abs(
+                        int(split[1])-int(target[5])-1-len(target[1]))
                 for piece in str(split[2]):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
