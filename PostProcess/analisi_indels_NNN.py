@@ -637,7 +637,6 @@ def preprocess_CRISTA_score(cluster_targets):
         second_half = complete_DNA_seq[int(
             len_DNA_seq/2):int(len_DNA_seq/2)+15]
         complete_DNA_seq = first_half+second_half
-        complete_DNA_seq = complete_DNA_seq.replace('N', '')
 
         # append sequence to DNA list
         DNAseq_from_genome_list.append(complete_DNA_seq)
@@ -689,7 +688,6 @@ def preprocess_CRISTA_score(cluster_targets):
         second_half = complete_DNA_seq[int(
             len_DNA_seq/2):int(len_DNA_seq/2)+15]
         complete_DNA_seq = first_half+second_half
-        complete_DNA_seq = complete_DNA_seq.replace('N', '')
 
         # append sequence to DNA list
         DNAseq_from_genome_list.append(complete_DNA_seq)
