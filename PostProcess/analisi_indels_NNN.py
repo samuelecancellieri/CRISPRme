@@ -248,50 +248,6 @@ def alignRefFromVar(line):  # chr_fake, start_pos, len_guide, bulge):
     # return [sequence, cfd]
     return sequence
 
-
-'''
-def alignRefFromVar(line):#chr_fake, start_pos, len_guide, bulge):
-    t = line.copy()
-    chr_fake = t[10]
-    len_guide = len(t[1])
-    start_pos = int(t[5])
-    true_chr = t[3]
-    file_bed = open(true_chr+"_tmp_fake.bed", 'w')
-    #file_bed.write("CHROM\tSTART\tEND\n")
-    file_bed.write(true_chr+"\t"+str(start_pos)+"\t"+str(start_pos+len_guide)+"\n")
-    file_bed.close()
-    os.system("bedtools getfasta -fi "+sys.argv[7]+"/"+true_chr+".fa -bed "+true_chr+"_tmp_fake.bed -fo "+true_chr+".true.fa")
-    file_fasta = open(true_chr+".true.fa", 'r')
-    header = file_fasta.readline()
-    sequence = file_fasta.readline().strip().upper()
-    if t[6] == '-':
-        sequence = reverse_complement_table(sequence)
-    file_fasta.close()
-    if t[0] == "RNA":
-        tmp_gap_position = [g.start() for g in re.finditer('-', t[2])]
-        sequence = list(sequence)
-        for tmp_g_p in tmp_gap_position:
-            sequence.insert(tmp_g_p, '-')
-        sequence = ''.join(sequence[0:len_guide])
-    guide_no_pam = t[1][pos_beg:pos_end]  
-    list_t = list(sequence)  
-    for position_t, char_t in enumerate(sequence[pos_beg:pos_end]): 
-        if char_t.upper() != guide_no_pam[position_t]:
-            if guide_no_pam[position_t] != '-':
-                list_t[sum_for_mms + position_t] = char_t.lower()
-    sequence = ''.join(list_t)
-    t[2] = sequence
-    if t[0] == 'DNA':
-        cfd_score = calc_cfd(t[1][int(line[bulge_pos]):], t[2].upper()[int(t[bulge_pos]):-3], t[2].upper()[-2:], mm_scores, pam_scores)
-        cfd = str(cfd_score)
-    else:
-        cfd_score = calc_cfd(t[1], t[2].upper()[:-3], t[2].upper()[-2:], mm_scores, pam_scores)
-        cfd = str(cfd_score)
-    os.system("rm "+true_chr+"_tmp_fake.bed")
-    os.system("rm "+true_chr+".true.fa")
-    return [sequence, cfd]
-'''
-
 # print('ESECUZIONE DI ANNOTATION E CALC SAMPLE INSIEME')
 # print('TEST PER ANNOTAZIONE COMPLETA: I TARGET SENZA ANNOTAZIONE SONO SALVATI COME \"n\"')
 # print('SE UN  TARGET HA 1+ ANNOTAZIONI, LE SALVA IN SINGOLA UNICA RIGA')
@@ -322,6 +278,7 @@ def alignRefFromVar(line):#chr_fake, start_pos, len_guide, bulge):
 # superpopulation = ['EAS', 'EUR', 'AFR', 'AMR','SAS']
 
 #dict_sample_to_pop, dict_pop_to_sup, dict_superpop_to_pop, dict_pop_to_sample, all_samples, all_pop, superpopulation, gender_sample = associateSample.loadSampleAssociation(sys.argv[11])
+
 
 # READ INPUT FILES
 annotationFile = sys.argv[1]  # file with annotation
