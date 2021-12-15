@@ -342,6 +342,7 @@ for nline, line in enumerate(inCrispritzResults):
             split_second_len = len(split[3])
             # if split_one_len != split_second_len:
             #     correction = split_second_len
+            correction = 0
             if '+' in str(target[7]):
                 # var pos is equal to pos_of_variant-real_position
                 var_pos = int(split[1])-int(target[5])
@@ -382,6 +383,7 @@ for nline, line in enumerate(inCrispritzResults):
             split = str(elem).strip().split('_')
             split_one_len = len(split[2])
             split_second_len = len(split[3])
+            correction = 0
             # if split_one_len != split_second_len:
             #     correction = split_second_len
             if '+' in str(target[7]):
