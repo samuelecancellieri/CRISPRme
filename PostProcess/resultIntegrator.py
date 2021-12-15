@@ -488,7 +488,7 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['CRISTA_score_ALT_(highest_CRISTA)'] = str(target[68])
     saveDict['CRISTA_risk_score_(highest_CRISTA)'] = str(target[70])
     saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = ','.join(
-        variantList_fewest_mm_b)
+        variantList_highest_cfd)
     saveDict['Variant_info_genome_(highest_CRISTA)'] = str(target[66])
     saveDict['Variant_MAF_(highest_CRISTA)'] = str(target[65])
     saveDict['Variant_rsID_(highest_CRISTA)'] = 'NA' if str(
