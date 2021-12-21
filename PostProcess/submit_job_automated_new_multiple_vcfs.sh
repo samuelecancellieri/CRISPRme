@@ -514,9 +514,10 @@ tail -n +2 $final_res.bestmmblg.txt | LC_ALL=C sort -k16,16 -k5,5 -k7,7n -k11,11
 
 # cp $final_res.bestCFD.txt $final_res.sorted.bestCFD.txt
 #MERGE BEST FILES TARGETS TO REMOVE CONTIGOUS
-./merge_close_targets_cfd.sh $final_res.bestCFD.txt $final_res.bestCFD.txt.trimmed $merge_t 'score'
-./merge_close_targets_cfd.sh $final_res.bestmmblg.txt $final_res.bestmmblg.txt.trimmed $merge_t 'total'
-./merge_close_targets_cfd.sh $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.trimmed $merge_t 'score'
+./merge_close_targets_cfd.sh $final_res.bestCFD.txt $final_res.bestCFD.txt.trimmed $merge_t 'score' &
+./merge_close_targets_cfd.sh $final_res.bestmmblg.txt $final_res.bestmmblg.txt.trimmed $merge_t 'total' &
+./merge_close_targets_cfd.sh $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.trimmed $merge_t 'score' &
+wait
 #CHANGE NAME TO BEST AND ALT FILES
 mv $final_res.bestCFD.txt.trimmed $final_res.bestCFD.txt
 mv $final_res.bestCFD.txt.trimmed.discarded_samples $final_res_alt.bestCFD.txt
@@ -547,28 +548,32 @@ mv $final_res_alt.bestmmblg.txt.annotated $final_res_alt.bestmmblg.txt
 mv $final_res_alt.bestCRISTA.txt.annotated $final_res_alt.bestCRISTA.txt
 
 #SCORING BEST RESULTS
-./add_risk_score.py $final_res.bestCFD.txt $final_res.bestCFD.txt.risk "False"
-./add_risk_score.py $final_res.bestmmblg.txt $final_res.bestmmblg.txt.risk "False"
-./add_risk_score.py $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.risk "False"
+./add_risk_score.py $final_res.bestCFD.txt $final_res.bestCFD.txt.risk "False" &
+./add_risk_score.py $final_res.bestmmblg.txt $final_res.bestmmblg.txt.risk "False" &
+./add_risk_score.py $final_res.bestCRISTA.txt $final_res.bestCRISTA.txt.risk "False" &
+wait
 mv $final_res.bestCFD.txt.risk $final_res.bestCFD.txt
 mv $final_res.bestmmblg.txt.risk $final_res.bestmmblg.txt
 mv $final_res.bestCRISTA.txt.risk $final_res.bestCRISTA.txt
 #SCORING ALT RESULTS
-./add_risk_score.py $final_res_alt.bestCFD.txt $final_res_alt.bestCFD.txt.risk "False"
-./add_risk_score.py $final_res_alt.bestmmblg.txt $final_res_alt.bestmmblg.txt.risk "False"
-./add_risk_score.py $final_res_alt.bestCRISTA.txt $final_res_alt.bestCRISTA.txt.risk "False"
+./add_risk_score.py $final_res_alt.bestCFD.txt $final_res_alt.bestCFD.txt.risk "False" &
+./add_risk_score.py $final_res_alt.bestmmblg.txt $final_res_alt.bestmmblg.txt.risk "False" &
+./add_risk_score.py $final_res_alt.bestCRISTA.txt $final_res_alt.bestCRISTA.txt.risk "False" &
+wait
 mv $final_res_alt.bestCFD.txt.risk $final_res_alt.bestCFD.txt
 mv $final_res_alt.bestmmblg.txt.risk $final_res_alt.bestmmblg.txt
 mv $final_res_alt.bestCRISTA.txt.risk $final_res_alt.bestCRISTA.txt
 
 #remove N's and dots from rsID from BEST FILES
-./remove_n_and_dots.py $final_res.bestCFD.txt
-./remove_n_and_dots.py $final_res.bestmmblg.txt
-./remove_n_and_dots.py $final_res.bestCRISTA.txt
+./remove_n_and_dots.py $final_res.bestCFD.txt &
+./remove_n_and_dots.py $final_res.bestmmblg.txt &
+./remove_n_and_dots.py $final_res.bestCRISTA.txt &
+wait
 #remove N's and dots from rsID from ALT FILES
-./remove_n_and_dots.py $final_res_alt.bestCFD.txt
-./remove_n_and_dots.py $final_res_alt.bestmmblg.txt
-./remove_n_and_dots.py $final_res_alt.bestCRISTA.txt
+./remove_n_and_dots.py $final_res_alt.bestCFD.txt &
+./remove_n_and_dots.py $final_res_alt.bestmmblg.txt &
+./remove_n_and_dots.py $final_res_alt.bestCRISTA.txt &
+wait
 
 #join targets by columns for BEST and ALT files
 pr -m -t -J $final_res.bestCFD.txt $final_res.bestmmblg.txt $final_res.bestCRISTA.txt >$final_res
