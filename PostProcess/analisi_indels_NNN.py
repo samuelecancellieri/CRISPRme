@@ -577,6 +577,8 @@ def preprocess_CRISTA_score(cluster_targets):
             target[4])-5:int(target[4])].upper()
         # protospacer taken directly from the aligned target
         protospacerDNA = str(target[2]).replace('-', '')
+        if target[6] == '-':
+            protospacerDNA = reverse_complement_table(protospacerDNA)
         # last 5 nucleotides to add to protospacer
         post_protospacer_DNA = genomeStr[int(
             target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
@@ -591,6 +593,8 @@ def preprocess_CRISTA_score(cluster_targets):
         second_half = complete_DNA_seq[int(
             len_DNA_seq/2):int(len_DNA_seq/2)+15]
         complete_DNA_seq = first_half+second_half
+        if target[6] == '-':
+            complete_DNA_seq = reverse_complement_table(complete_DNA_seq)
 
         if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq:
             complete_DNA_seq = 'A'*29
@@ -640,6 +644,8 @@ def preprocess_CRISTA_score(cluster_targets):
         second_half = complete_DNA_seq[int(
             len_DNA_seq/2):int(len_DNA_seq/2)+15]
         complete_DNA_seq = first_half+second_half
+        if target[6] == '-':
+            complete_DNA_seq = reverse_complement_table(complete_DNA_seq)
         print('sequenza estratta ref di 29 nt', complete_DNA_seq)
 
         if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq:
