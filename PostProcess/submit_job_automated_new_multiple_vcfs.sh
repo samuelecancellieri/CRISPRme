@@ -710,6 +710,3 @@ fi
 
 #keep log_error but no block visualization
 mv $output_folder/log_error.txt $output_folder/log_error_no_check.txt
-
-#remove any unnecessary BEST file
-rm -f $output_folder/*best*
