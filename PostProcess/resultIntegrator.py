@@ -511,7 +511,7 @@ for nline, line in enumerate(inCrispritzResults):
         change_alt_ref_highest_cfd = True
 
     change_alt_ref_highest_crista = False
-    if saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and float(saveDict['CFD_score_REF_(highest_CRISTA)']) >= float(saveDict['CFD_score_ALT_(highest_CRISTA)']):
+    if saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and float(saveDict['CRISTA_score_REF_(highest_CRISTA)']) >= float(saveDict['CRISTA_score_ALT_(highest_CRISTA)']):
         change_alt_ref_highest_crista = True
 
     if change_alt_ref_highest_cfd:
