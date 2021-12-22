@@ -623,16 +623,20 @@ def preprocess_CRISTA_score(cluster_targets):
 
     for index, target in enumerate(cluster_targets):
         target_CRISTA = target.copy()
-        if target_CRISTA[-2] == 55:  # reference target have duplicate score
-            target_CRISTA[-2] = "{:.3f}".format(crista_score_list_alt[index])
-            target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
-        if target_CRISTA[-2] == 33:  # alternative target scoring
-            target_CRISTA[-2] = "{:.3f}".format(crista_score_list_ref[index])
-            target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
-        if index in index_to_null:  # if any of the scored target is not valid, due to Ns in the sequence, return a -1 score
+        # if any of the scored target is not valid, due to Ns in the sequence, return a -1 score
+        if index in index_to_null:
             crista_score = -1  # null score
             target_CRISTA[-2] = "{:.3f}".format(crista_score)
             target_CRISTA.append("{:.3f}".format(crista_score))
+        else:
+            # else report the correct score
+            if target_CRISTA[-2] == 55:  # reference target have duplicate score
+                target_CRISTA[-2] = "{:.3f}".format(crista_score_list_alt[index])
+                target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
+            if target_CRISTA[-2] == 33:  # alternative target scoring
+                target_CRISTA[-2] = "{:.3f}".format(crista_score_list_ref[index])
+                target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
+        # append to final score cluster
         cluster_scored.append(target_CRISTA)
 
     return cluster_scored
