@@ -397,6 +397,7 @@ def preprocess_CFD_score(target):
 def preprocess_CRISTA_score(cluster_targets):
     # list with scored targets
     cluster_scored = list()
+    index_to_null = list()
 
     # skip scoring for CRISTA, remove to activate scoring
     # do_scores = False
@@ -406,20 +407,18 @@ def preprocess_CRISTA_score(cluster_targets):
     else:
         for target in cluster_targets:
             target_CRISTA = target.copy()
-            crista_score = -1
+            crista_score = -1  # null score
+            target_CRISTA[-2] = "{:.3f}".format(crista_score)
             target_CRISTA.append("{:.3f}".format(crista_score))
-            target_CRISTA[-3] = "{:.3f}".format(crista_score)
             cluster_scored.append(target_CRISTA)
         return cluster_scored
 
-    # print('creation CRISTA targets')
-    # time_start = time.time()
     # preprocess target then calculate CRISTA score
     sgRNA_non_aligned_list = list()
     DNA_aligned_list = list()
     DNAseq_from_genome_list = list()
     # process all found targets
-    for target in cluster_targets:
+    for index, target in enumerate(cluster_targets):
         # list with non-aligned sgRNA
         sgRNA_non_aligned_list.append(
             str(target[1])[:len(str(target[1]))-3]+'NGG')
@@ -427,16 +426,12 @@ def preprocess_CRISTA_score(cluster_targets):
         DNA_aligned_list.append(str(target[2]))
         # first 5 nucleotide to add to protospacer
         pre_protospacer_DNA = genomeStr[int(
-            target[4])-5:int(target[4])].upper().replace('N', '')
-        # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
-        #     pass  # do nothing, then i will implement the check for the valid alt allele
+            target[4])-5:int(target[4])].upper()
         # protospacer taken directly from the aligned target
         protospacerDNA = str(target[2]).replace('-', '')
         # last 5 nucleotides to add to protospacer
         post_protospacer_DNA = genomeStr[int(
-            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper().replace('N', '')
-        # if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
-        #     pass  # do nothing, then i will implement the check for the valid alt allele
+            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper()
 
         # DNA seq extracted from genome and append to aligned DNA seq from CRISPRme
         complete_DNA_seq = str(pre_protospacer_DNA) + \
@@ -449,27 +444,25 @@ def preprocess_CRISTA_score(cluster_targets):
             len_DNA_seq/2):int(len_DNA_seq/2)+15]
         complete_DNA_seq = first_half+second_half
 
+        if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq:
+            complete_DNA_seq = 'A'*29
+            index_to_null.append(index)
+
         # append sequence to DNA list
         DNAseq_from_genome_list.append(complete_DNA_seq)
-    # print('CRISTA targets created in time', time.time()-time_start)
-    # do_scores = False  # REMOVE TO CALCULATE SCORING
 
-    # calculate score
-    # print('CRISTA Scoring')
-    # time_start = time.time()
+    # calculate scores for alt sequence
     crista_score_list_alt = list()
     if do_scores:
         crista_score_list_alt = CRISTA_predict_list(
             sgRNA_non_aligned_list, DNA_aligned_list, DNAseq_from_genome_list)
-    # print('CRISTA score done in time: ', time.time()-time_start)
 
     # preprocess target then calculate CRISTA score
     sgRNA_non_aligned_list = list()
     DNA_aligned_list = list()
     DNAseq_from_genome_list = list()
     # process all ref sequences in targets
-    for target in cluster_targets:
-        # print(target)
+    for index, target in enumerate(cluster_targets):
         # list with non-aligned sgRNA
         sgRNA_non_aligned_list.append(
             str(target[1])[:len(str(target[1]))-3]+'NGG')
@@ -480,17 +473,13 @@ def preprocess_CRISTA_score(cluster_targets):
             DNA_aligned_list.append(str(target[2]))
         # first 5 nucleotide to add to protospacer
         pre_protospacer_DNA = genomeStr[int(
-            target[4])-5:int(target[4])].upper().replace('N', '')
-        # if any((c in iupac_nucleotides) for c in pre_protospacer_DNA):
-        #     pass  # do nothing, then i will implement the check for the valid alt allele
+            target[4])-5:int(target[4])]
         # protospacer taken directly from the ref genome
         protospacerDNA = genomeStr[int(target[4]):int(
-            target[4])+len(target[1])].upper().replace('N', '')
+            target[4])+len(target[1])]
         # last 5 nucleotides to add to protospacer
         post_protospacer_DNA = genomeStr[int(
-            target[4])+len(target[1]):int(target[4])+len(target[1])+5].upper().replace('N', '')
-        # if any((c in iupac_nucleotides) for c in post_protospacer_DNA):
-        #     pass  # do nothing, then i will implement the check for the valid alt allele
+            target[4])+len(target[1]):int(target[4])+len(target[1])+5]
 
         # DNA seq extracted from genome and append to aligned DNA seq from CRISPRme
         complete_DNA_seq = str(pre_protospacer_DNA) + \
@@ -502,6 +491,10 @@ def preprocess_CRISTA_score(cluster_targets):
         second_half = complete_DNA_seq[int(
             len_DNA_seq/2):int(len_DNA_seq/2)+15]
         complete_DNA_seq = first_half+second_half
+
+        if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq:
+            complete_DNA_seq = 'A'*29
+            index_to_null.append(index)
 
         # append sequence to DNA list
         DNAseq_from_genome_list.append(complete_DNA_seq)
@@ -520,6 +513,10 @@ def preprocess_CRISTA_score(cluster_targets):
         if target_CRISTA[-2] == 33:  # alternative target scoring
             target_CRISTA[-2] = "{:.3f}".format(crista_score_list_ref[index])
             target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
+        if index in index_to_null:  # if any of the scored target is not valid, due to Ns in the sequence, return a -1 score
+            crista_score = -1  # null score
+            target_CRISTA[-2] = "{:.3f}".format(crista_score)
+            target_CRISTA.append("{:.3f}".format(crista_score))
         cluster_scored.append(target_CRISTA)
 
     return cluster_scored
