@@ -22,10 +22,10 @@ import random
 import multiprocessing
 import json
 
+warnings.filterwarnings("ignore")
 # matplotlib.use("TkAgg")
 matplotlib.use('Agg')
 
-warnings.filterwarnings("ignore")
 
 plt.style.use('seaborn-poster')
 matplotlib.rcParams['pdf.fonttype'] = 42
