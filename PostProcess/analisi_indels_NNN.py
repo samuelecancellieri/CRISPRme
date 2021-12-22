@@ -621,7 +621,6 @@ def preprocess_CRISTA_score(cluster_targets):
         # list with aligned DNA
         if 'n' not in target[-3]:
             DNA_aligned_list.append(str(target[-3]))
-            print('sequenza ref INDEL', str(target[-3]))
         else:
             DNA_aligned_list.append(str(target[2]))
         # first 5 nucleotide to add to protospacer
@@ -646,7 +645,6 @@ def preprocess_CRISTA_score(cluster_targets):
         complete_DNA_seq = first_half+second_half
         if target[6] == '-':
             complete_DNA_seq = reverse_complement_table(complete_DNA_seq)
-        print('sequenza estratta ref di 29 nt', complete_DNA_seq)
 
         if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq:
             complete_DNA_seq = 'A'*29

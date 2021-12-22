@@ -507,12 +507,12 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)'] = 'NA'
 
     change_alt_ref_highest_cfd = False
-    # if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and float(saveDict['CFD_score_REF_(highest_CFD)']) >= float(saveDict['CFD_score_ALT_(highest_CFD)']):
-    #     change_alt_ref_highest_cfd = True
+    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and float(saveDict['CFD_score_REF_(highest_CFD)']) >= float(saveDict['CFD_score_ALT_(highest_CFD)']):
+        change_alt_ref_highest_cfd = True
 
     change_alt_ref_highest_crista = False
-    # if saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and float(saveDict['CRISTA_score_REF_(highest_CRISTA)']) >= float(saveDict['CRISTA_score_ALT_(highest_CRISTA)']):
-    #     change_alt_ref_highest_crista = True
+    if saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and float(saveDict['CRISTA_score_REF_(highest_CRISTA)']) >= float(saveDict['CRISTA_score_ALT_(highest_CRISTA)']):
+        change_alt_ref_highest_crista = True
 
     if change_alt_ref_highest_cfd:
         saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = 'NA'
