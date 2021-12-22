@@ -510,6 +510,38 @@ def rev_comp(a):
     return 'C'
 
 
+def preprocess_CFD_score(target):
+    # preprocess target then calculate CFD score
+    if do_scores:
+        if target[0] == 'DNA':
+            cfd_score = calc_cfd(target[1][int(target[bulge_pos]):], target[2].upper()[int(
+                target[bulge_pos]):-3], target[2].upper()[-2:], mm_scores, pam_scores, do_scores)
+            target.append("{:.3f}".format(cfd_score))
+            if target[-3] == 55:
+                target[-3] = "{:.3f}".format(cfd_score)
+            if target[-3] == 33:
+                cfd_ref_score = calc_cfd(target[1][int(target[bulge_pos]):], target[-4].upper()[int(
+                    target[bulge_pos]):-3], target[-4].upper()[-2:], mm_scores, pam_scores, do_scores)
+                target[-3] = "{:.3f}".format(cfd_ref_score)
+        else:
+            cfd_score = calc_cfd(target[1], target[2].upper()[
+                :-3], target[2].upper()[-2:], mm_scores, pam_scores, do_scores)
+            target.append("{:.3f}".format(cfd_score))
+            if target[-3] == 55:
+                target[-3] = "{:.3f}".format(cfd_score)
+            if target[-3] == 33:
+                cfd_ref_score = calc_cfd(target[1], target[-4].upper()[
+                    :-3], target[-4].upper()[-2:], mm_scores, pam_scores, do_scores)
+                target[-3] = "{:.3f}".format(cfd_ref_score)
+    else:
+        cfd_score = -1
+        target.append("{:.3f}".format(cfd_score))
+        target[-3] = "{:.3f}".format(cfd_score)
+    # print(target)
+    # print('cfd', cfd_score)
+    return target
+
+
 def preprocess_CRISTA_score(cluster_targets):
     # list with scored targets
     cluster_scored = list()
@@ -631,11 +663,15 @@ def preprocess_CRISTA_score(cluster_targets):
         else:
             # else report the correct score
             if target_CRISTA[-2] == 55:  # reference target have duplicate score
-                target_CRISTA[-2] = "{:.3f}".format(crista_score_list_alt[index])
-                target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
+                target_CRISTA[-2] = "{:.3f}".format(
+                    crista_score_list_alt[index])
+                target_CRISTA.append("{:.3f}".format(
+                    crista_score_list_alt[index]))
             if target_CRISTA[-2] == 33:  # alternative target scoring
-                target_CRISTA[-2] = "{:.3f}".format(crista_score_list_ref[index])
-                target_CRISTA.append("{:.3f}".format(crista_score_list_alt[index]))
+                target_CRISTA[-2] = "{:.3f}".format(
+                    crista_score_list_ref[index])
+                target_CRISTA.append("{:.3f}".format(
+                    crista_score_list_alt[index]))
         # append to final score cluster
         cluster_scored.append(target_CRISTA)
 
