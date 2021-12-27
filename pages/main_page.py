@@ -871,7 +871,8 @@ def checkInput(n, n_close, genome_selected, pam, guide_type, text_guides, mms, d
         text_update = {'width': '300px',
                        'height': '30px', 'border': '1px solid red'}
         update_style = True
-        miss_input_list.append('Input at least one correct guide')
+        miss_input_list.append(
+            'Input at least one correct guide, correct guides must have the length requested for the selected PAM sequence (e.g., 20bp, 21bp, etc)')
 
     miss_input = html.Div(
         [

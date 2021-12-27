@@ -282,8 +282,8 @@ for nline, line in enumerate(inCrispritzResults):
     try:
         annotationLine = inAnnotationFile.readline().strip().split('\t')
     except:
-        annotationFile = 'NA'
-    # print(annotationLine)
+        annotationLine = 'NA'
+
     lowestEmpirical = 100
 
     for key in saveDict:
@@ -335,40 +335,39 @@ for nline, line in enumerate(inCrispritzResults):
             samples = target[13]
             target[17] = createBedforMultiAlternative(variantList, samples)
             target[17] = str(target[17])[:7]
-        var_pos = []
-        # generate variant position corrected to be in the positive strand
-        if '+' in str(target[7]):
-            refseq = str(target[3])
-            altseq = str(target[2])
-            for pos, nucleotide in enumerate(refseq):
-                if altseq[pos].lower() != nucleotide.lower():
-                    var_pos.append(pos+1)
-        else:
-            refseq = str(target[3])
-            altseq = str(target[2])
-            for pos in range(len(refseq)-1, -1, -1):
-                if refseq[pos].lower() != altseq[pos].lower():
-                    var_pos.append(pos+1)
         # generate variant nucleotide reverse complemented always in positive strand
         for count, elem in enumerate(variantList):
             split = str(elem).strip().split('_')
             split_one_len = len(split[2])
             split_second_len = len(split[3])
+            # if split_one_len != split_second_len:
+            #     correction = split_second_len
             correction = 0
-            if split_one_len != split_second_len:
-                correction = split_second_len
             if '+' in str(target[7]):
+                # var pos is equal to pos_of_variant-real_position
+                var_pos = int(split[1])-int(target[5])
+                if var_pos < 1:
+                    var_pos = 1
                 variantList[count] = str(
-                    split[2])+str(int(var_pos[count])+correction)+str(split[3])
+                    split[2])+str(var_pos)+str(split[3])
             else:
                 firstcomp = ''
                 secondcomp = ''
+                var_pos = int(split[1])-int(target[5])
+                if var_pos < 1:
+                    var_pos = len(target[1])
+                else:
+                    # if var pos non negative, count the position in reverse strand so starting from end of the sequence that is been reversed complemented
+                    if split_second_len < split_one_len:
+                        correction = split_one_len-split_second_len
+                    var_pos = abs(
+                        int(split[1])-int(target[5])-1-len(target[1])+correction)
                 for piece in str(split[2]):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
                     secondcomp += rev_comp(piece)
                 variantList[count] = ''.join(
-                    reversed(firstcomp))+str(int(var_pos[count])+correction)+''.join(reversed(secondcomp))
+                    reversed(firstcomp))+str(var_pos)+''.join(reversed(secondcomp))
     variantList_highest_cfd = variantList
 
     variantList = ['NA']
@@ -380,38 +379,38 @@ for nline, line in enumerate(inCrispritzResults):
             target[41] = str(target[41])[:7]
         var_pos = []
         # generate variant position corrected to be in the positive strand
-        if '+' in str(target[31]):
-            refseq = str(target[27])
-            altseq = str(target[26])
-            for pos, nucleotide in enumerate(refseq):
-                if altseq[pos].lower() != nucleotide.lower():
-                    var_pos.append(pos+1)
-        else:
-            refseq = str(target[27])
-            altseq = str(target[26])
-            for pos in range(len(refseq)-1, -1, -1):
-                if refseq[pos].lower() != altseq[pos].lower():
-                    var_pos.append(pos+1)
-        # generate variant nucleotide reverse complemented always in positive strand
         for count, elem in enumerate(variantList):
             split = str(elem).strip().split('_')
             split_one_len = len(split[2])
             split_second_len = len(split[3])
             correction = 0
-            if split_one_len != split_second_len:
-                correction = split_second_len
-            if '+' in str(target[31]):
+            # if split_one_len != split_second_len:
+            #     correction = split_second_len
+            if '+' in str(target[7]):
+                # var pos is equal to pos_of_variant-real_position
+                var_pos = int(split[1])-int(target[5])
+                if var_pos < 1:
+                    var_pos = 1
                 variantList[count] = str(
-                    split[2])+str(int(var_pos[count])+correction)+str(split[3])
+                    split[2])+str(var_pos)+str(split[3])
             else:
                 firstcomp = ''
                 secondcomp = ''
+                var_pos = int(split[1])-int(target[5])
+                if var_pos < 1:
+                    var_pos = len(target[1])
+                else:
+                    # if var pos non negative, count the position in reverse strand so starting from end of the sequence that is been reversed complemented
+                    if split_second_len < split_one_len:
+                        correction = split_one_len-split_second_len
+                    var_pos = abs(
+                        int(split[1])-int(target[5])-1-len(target[1])+correction)
                 for piece in str(split[2]):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
                     secondcomp += rev_comp(piece)
                 variantList[count] = ''.join(
-                    reversed(firstcomp))+str(int(var_pos[count])+correction)+''.join(reversed(secondcomp))
+                    reversed(firstcomp))+str(var_pos)+''.join(reversed(secondcomp))
     variantList_fewest_mm_b = variantList
 
     saveDict['Spacer+PAM'] = str(target[15])
@@ -489,7 +488,7 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['CRISTA_score_ALT_(highest_CRISTA)'] = str(target[68])
     saveDict['CRISTA_risk_score_(highest_CRISTA)'] = str(target[70])
     saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = ','.join(
-        variantList_fewest_mm_b)
+        variantList_highest_cfd)
     saveDict['Variant_info_genome_(highest_CRISTA)'] = str(target[66])
     saveDict['Variant_MAF_(highest_CRISTA)'] = str(target[65])
     saveDict['Variant_rsID_(highest_CRISTA)'] = 'NA' if str(
@@ -516,7 +515,6 @@ for nline, line in enumerate(inCrispritzResults):
         change_alt_ref_highest_crista = True
 
     if change_alt_ref_highest_cfd:
-        # saveDict['Aligned_protospacer+PAM_REF_(highest_CFD)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)']
         saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = 'NA'
         saveDict['REF/ALT_origin_(highest_CFD)'] = 'ref'
         saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = 'NA'
@@ -527,7 +525,6 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['PAM_creation_(highest_CFD)'] = 'NA'
 
     if change_alt_ref_highest_crista:
-        # saveDict['Aligned_protospacer+PAM_REF_(highest_CRISTA)'] = saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)']
         saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)'] = 'NA'
         saveDict['REF/ALT_origin_(highest_CRISTA)'] = 'ref'
         saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = 'NA'

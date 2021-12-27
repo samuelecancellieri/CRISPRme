@@ -100,21 +100,21 @@ rm "$jobid.total.cluster.txt"
 
 echo 'Sorting and adjusting results'
 #copy header in tmp file
-head -1 $jobid.bestCFD.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,score,total(mm+bul)
-tail -n +2 $jobid.bestCFD.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD.txt
-# cp $jobid.bestCFD.txt $jobid.bestCFD.txt.after_sort
+# head -1 $jobid.bestCFD.txt >$jobid.tmp
+# #tail file w/o header and sort for realguide,chr,cluster_pos,score,total(mm+bul)
+# tail -n +2 $jobid.bestCFD.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCFD.txt
+# # cp $jobid.bestCFD.txt $jobid.bestCFD.txt.after_sort
 
-#copy header in tmp file
-head -1 $jobid.bestmmblg.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,total(mm+bul)
-tail -n +2 $jobid.bestmmblg.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestmmblg.txt
-# cp $jobid.bestmmblg.txt $jobid.bestmmblg.txt.after_sort
+# #copy header in tmp file
+# head -1 $jobid.bestmmblg.txt >$jobid.tmp
+# #tail file w/o header and sort for realguide,chr,cluster_pos,total(mm+bul)
+# tail -n +2 $jobid.bestmmblg.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestmmblg.txt
+# # cp $jobid.bestmmblg.txt $jobid.bestmmblg.txt.after_sort
 
-#copy header in tmp file
-head -1 $jobid.bestCRISTA.txt >$jobid.tmp
-#tail file w/o header and sort for realguide,chr,cluster_pos,score,total(mm+bul)
-tail -n +2 $jobid.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA.txt
+# #copy header in tmp file
+# head -1 $jobid.bestCRISTA.txt >$jobid.tmp
+# #tail file w/o header and sort for realguide,chr,cluster_pos,score,total(mm+bul)
+# tail -n +2 $jobid.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg -k10,10n -T ./ >>$jobid.tmp && mv $jobid.tmp $jobid.bestCRISTA.txt
 # cp $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.after_sort
 
 #adjustin columns to have the correct order and remove uncessary ones
@@ -147,25 +147,25 @@ tail -n +2 $jobid.bestCRISTA.txt | LC_ALL=C sort -k15,15 -k4,4 -k6,6n -k21,21rg 
 #echo -e 'Merging Close Targets\tStart\t'$(date) >> $log
 
 #merge targets in same chr when they are at distance 3 from each other (inclusive)
-./merge_close_targets_cfd.sh $jobid.bestCFD.txt $jobid.bestCFD.txt.trimmed 3 'score'
-# cp $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt.check_merge
-# cp $jobid.bestCFD.txt.trimmed.discarded_samples $jobid.bestCFD.txt.trimmed.discarded_samples.check_merge
-mv $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt
-mv $jobid.bestCFD.txt.trimmed.discarded_samples $jobid.bestCFD.txt.alt
+# ./merge_close_targets_cfd.sh $jobid.bestCFD.txt $jobid.bestCFD.txt.trimmed 3 'score'
+# # cp $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt.check_merge
+# # cp $jobid.bestCFD.txt.trimmed.discarded_samples $jobid.bestCFD.txt.trimmed.discarded_samples.check_merge
+# mv $jobid.bestCFD.txt.trimmed $jobid.bestCFD.txt
+# mv $jobid.bestCFD.txt.trimmed.discarded_samples $jobid.bestCFD.txt.alt
 
-#merge targets in same chr when they are at distance 3 from each other (inclusive)
-./merge_close_targets_cfd.sh $jobid.bestmmblg.txt $jobid.bestmmblg.txt.trimmed 3 'total'
-# cp $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt.check_merge
-# cp $jobid.bestmmblg.txt.trimmed.discarded_samples $jobid.bestmmblg.txt.trimmed.discarded_samples.check_merge
-mv $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt
-mv $jobid.bestmmblg.txt.trimmed.discarded_samples $jobid.bestmmblg.txt.alt
+# #merge targets in same chr when they are at distance 3 from each other (inclusive)
+# ./merge_close_targets_cfd.sh $jobid.bestmmblg.txt $jobid.bestmmblg.txt.trimmed 3 'total'
+# # cp $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt.check_merge
+# # cp $jobid.bestmmblg.txt.trimmed.discarded_samples $jobid.bestmmblg.txt.trimmed.discarded_samples.check_merge
+# mv $jobid.bestmmblg.txt.trimmed $jobid.bestmmblg.txt
+# mv $jobid.bestmmblg.txt.trimmed.discarded_samples $jobid.bestmmblg.txt.alt
 
-#merge targets in same chr when they are at distance 3 from each other (inclusive)
-./merge_close_targets_cfd.sh $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.trimmed 3 'score'
-# cp $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt.check_merge
-# cp $jobid.bestCRISTA.txt.trimmed.discarded_samples $jobid.bestCRISTA.txt.trimmed.discarded_samples.check_merge
-mv $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt
-mv $jobid.bestCRISTA.txt.trimmed.discarded_samples $jobid.bestCRISTA.txt.alt
+# #merge targets in same chr when they are at distance 3 from each other (inclusive)
+# ./merge_close_targets_cfd.sh $jobid.bestCRISTA.txt $jobid.bestCRISTA.txt.trimmed 3 'score'
+# # cp $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt.check_merge
+# # cp $jobid.bestCRISTA.txt.trimmed.discarded_samples $jobid.bestCRISTA.txt.trimmed.discarded_samples.check_merge
+# mv $jobid.bestCRISTA.txt.trimmed $jobid.bestCRISTA.txt
+# mv $jobid.bestCRISTA.txt.trimmed.discarded_samples $jobid.bestCRISTA.txt.alt
 
 # echo -e 'Annotating results\tStart\t'$(date) >>$log
 #annotate bestCFD

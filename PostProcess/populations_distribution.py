@@ -44,9 +44,16 @@ import math
 import matplotlib
 from matplotlib.ticker import ScalarFormatter
 # matplotlib.use("TkAgg")
-matplotlib.use('Agg')
-
+# SUPPRESS ALL WARNINGS
 warnings.filterwarnings("ignore")
+# do not use X11
+matplotlib.use('Agg')
+# set matplotlib for pdf editing
+plt.rcParams["figure.dpi"] = 400
+# matplotlib.rcParams["figure.figsize"] = 10, 3
+plt.rcParams['pdf.fonttype'] = 42
+plt.rcParams['ps.fonttype'] = 42
+plt.style.use('seaborn-poster')
 
 
 def adjust_lightness(color, amount=0.5):
@@ -57,12 +64,6 @@ def adjust_lightness(color, amount=0.5):
     c = colorsys.rgb_to_hls(*mc.to_rgb(c))
     return colorsys.hls_to_rgb(c[0], max(0, min(1, amount * c[1])), c[2])
 
-
-plt.rcParams["figure.dpi"] = 400
-# matplotlib.rcParams["figure.figsize"] = 10, 3
-plt.rcParams['pdf.fonttype'] = 42
-plt.rcParams['ps.fonttype'] = 42
-plt.style.use('seaborn-poster')
 
 # matplotlib.rcParams["figure.figsize"] = 7, 5
 ax = plt.figure()
