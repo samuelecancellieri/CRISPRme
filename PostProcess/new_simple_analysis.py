@@ -450,8 +450,9 @@ def preprocess_CRISTA_score(cluster_targets):
 
         # if 'N' is present in the reference DNA seq, we must use a fake DNA seq to complete the aligned
         # that will be discarded after
-        if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq:
+        if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq or 'N' in DNA_aligned_list[-1] or 'n' in DNA_aligned_list[-1]:
             complete_DNA_seq = 'A'*29
+            DNA_aligned_list[-1] = 'A'*len(str(target[2]))
             index_to_null.append(index)
 
         # append sequence to DNA list
@@ -504,7 +505,7 @@ def preprocess_CRISTA_score(cluster_targets):
         # that will be discarded after
         if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq or 'N' in DNA_aligned_list[-1] or 'n' in DNA_aligned_list[-1]:
             complete_DNA_seq = 'A'*29
-            DNA_aligned_list[-1] = 'A'*29
+            DNA_aligned_list[-1] = 'A'*len(str(target[2]))
             index_to_null.append(index)
 
         # append sequence to DNA list
