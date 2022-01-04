@@ -52,4 +52,7 @@ def sendMail():
 
 
 # function call
-sendMail()
+try:
+    sendMail()
+except:
+    print('NO mail requested by user')
