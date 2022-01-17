@@ -264,7 +264,7 @@ def iupac_decomposition(split, guide_no_bulge,
                                 totalDict[count][size+1][combinedKey] = [
                                     replaceTarget2, resultSet, listInfo2]
                                 # remove the new generated sample set from all lower levels
-                                # remember to uncomment this when new release
+                                # (this should be done only with phased VCF since unphased cannot be verified)
                                 if haplotype_check:
                                     totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
                                         totalDict[count][size +
