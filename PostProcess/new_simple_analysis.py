@@ -265,13 +265,13 @@ def iupac_decomposition(split, guide_no_bulge,
                                     replaceTarget2, resultSet, listInfo2]
                                 # remove the new generated sample set from all lower levels
                                 # remember to uncomment this when new release
-                                # if haplotype_check:
-                                totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
-                                    totalDict[count][size +
-                                                     1][combinedKey][1]
-                                totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
-                                    totalDict[count][size +
-                                                     1][combinedKey][1]
+                                if haplotype_check:
+                                    totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
+                                        totalDict[count][size +
+                                                         1][combinedKey][1]
+                                    totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
+                                        totalDict[count][size +
+                                                         1][combinedKey][1]
 
             refSeq_with_bulges = list(refSeq)
             for pos, char in enumerate(realTarget):
