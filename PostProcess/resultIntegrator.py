@@ -349,7 +349,9 @@ for nline, line in enumerate(inCrispritzResults):
                 if var_pos < 1:
                     var_pos = 1
                 variantList[count] = str(
-                    split[2])+str(var_pos)+str(split[3])
+                    var_pos)+str(split[2])+'>'+str(split[3])
+                # variantList[count] = str(
+                #     split[2])+str(var_pos)+str(split[3])
             else:
                 firstcomp = ''
                 secondcomp = ''
@@ -366,8 +368,8 @@ for nline, line in enumerate(inCrispritzResults):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
                     secondcomp += rev_comp(piece)
-                variantList[count] = ''.join(
-                    reversed(firstcomp))+str(var_pos)+''.join(reversed(secondcomp))
+                variantList[count] = str(var_pos)+''.join(
+                    reversed(firstcomp))+'>'+''.join(reversed(secondcomp))
     variantList_highest_cfd = variantList
 
     variantList = ['NA']
@@ -392,7 +394,9 @@ for nline, line in enumerate(inCrispritzResults):
                 if var_pos < 1:
                     var_pos = 1
                 variantList[count] = str(
-                    split[2])+str(var_pos)+str(split[3])
+                    var_pos)+str(split[2])+'>'+str(split[3])
+                # variantList[count] = str(
+                #     split[2])+str(var_pos)+str(split[3])
             else:
                 firstcomp = ''
                 secondcomp = ''
@@ -409,8 +413,8 @@ for nline, line in enumerate(inCrispritzResults):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
                     secondcomp += rev_comp(piece)
-                variantList[count] = ''.join(
-                    reversed(firstcomp))+str(var_pos)+''.join(reversed(secondcomp))
+                variantList[count] = str(var_pos)+''.join(
+                    reversed(firstcomp))+'>'+''.join(reversed(secondcomp))
     variantList_fewest_mm_b = variantList
 
     saveDict['Spacer+PAM'] = str(target[15])
