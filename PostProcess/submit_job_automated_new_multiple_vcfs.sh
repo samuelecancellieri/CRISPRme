@@ -685,19 +685,17 @@ if [ $gene_proximity != "_" ]; then
 	echo $genome_version
 	bash $starting_dir/post_process.sh "${output_folder}/$(basename ${output_folder}).bestMerge.txt" "${gene_proximity}" "${output_folder}/dummy.txt" "${guide_file}" $genome_version "${output_folder}" "vuota"
 	rm "${output_folder}/dummy.txt"
-	while read guide; do
-		if [ -z "$guide" ]; then
-			continue
-		fi
-		head -1 "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >>"${output_folder}/tmp_linda_plot_file_${guide}.txt"
-		fgrep "$guide" "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >>"${output_folder}/tmp_linda_plot_file_${guide}.txt"
-		python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &>"${output_folder}/warnings.txt"
-		#QUI METTERE QUELLO CON MMvBUL DA USARE QUANDO CFD SCORE NON CALCOLATO
-		#INTRODURRE IMMAGINI PER MMVBUL E CRISTA
-		# python $starting_dir/CRISPRme_plots_MMvBUL.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &>"${output_folder}/warnings.txt"
-		rm -f "${output_folder}/warnings.txt"
-		rm "${output_folder}/tmp_linda_plot_file_${guide}.txt"
-	done <$guide_file
+	# while read guide; do
+	# 	if [ -z "$guide" ]; then
+	# 		continue
+	# 	fi
+	# head -1 "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >>"${output_folder}/tmp_linda_plot_file_${guide}.txt"
+	# fgrep "$guide" "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" >>"${output_folder}/tmp_linda_plot_file_${guide}.txt"
+	# python $starting_dir/CRISPRme_plots.py "${output_folder}/tmp_linda_plot_file_${guide}.txt" "${output_folder}/imgs/" $guide &>"${output_folder}/warnings.txt"
+	python $starting_dir/CRISPRme_plots.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt.integrated_results.tsv" "${output_folder}/imgs/" &>"${output_folder}/warnings.txt"
+	rm -f "${output_folder}/warnings.txt" #delete warnings file
+	# rm "${output_folder}/tmp_linda_plot_file_${guide}.txt"
+	# done <$guide_file
 fi
 echo -e 'Integrating results\tEnd\t'$(date) >>$log
 truncate -s -1 $guide_file
