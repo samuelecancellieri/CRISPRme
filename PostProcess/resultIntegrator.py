@@ -440,7 +440,20 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = ','.join(
         variantList_highest_cfd)
     saveDict['Variant_info_genome_(highest_CFD)'] = str(target[18])
-    saveDict['Variant_MAF_(highest_CFD)'] = str(target[17])
+
+    # remove 0 MAF
+    maf_list = list()
+    for elem in target[17].strip().split(','):
+        if elem != 'NA':
+            if float(elem) < 0.01:
+                maf_list.append(str(0.001))
+            else:
+                maf_list.append(str(elem))
+        else:
+            maf_list.append('NA')
+
+    saveDict['Variant_MAF_(highest_CFD)'] = ','.join(maf_list)
+
     saveDict['Variant_rsID_(highest_CFD)'] = 'NA' if str(
         target[16]) == '.' else str(target[16])
     saveDict['Variant_samples_(highest_CFD)'] = str(target[13])
@@ -468,7 +481,19 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Variant_info_spacer+PAM_(fewest_mm+b)'] = ','.join(
         variantList_fewest_mm_b)
     saveDict['Variant_info_genome_(fewest_mm+b)'] = str(target[42])
-    saveDict['Variant_MAF_(fewest_mm+b)'] = str(target[41])
+
+    maf_list = list()
+    for elem in target[41].strip().split(','):
+        if elem != 'NA':
+            if float(elem) < 0.01:
+                maf_list.append(str(0.001))
+            else:
+                maf_list.append(str(elem))
+        else:
+            maf_list.append('NA')
+
+    saveDict['Variant_MAF_(fewest_mm+b)'] = ','.join(maf_list)
+
     saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA' if str(
         target[40]) == '.' else str(target[40])
     saveDict['Variant_samples_(fewest_mm+b)'] = str(target[37])
@@ -494,7 +519,19 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = ','.join(
         variantList_highest_cfd)
     saveDict['Variant_info_genome_(highest_CRISTA)'] = str(target[66])
-    saveDict['Variant_MAF_(highest_CRISTA)'] = str(target[65])
+
+    maf_list = list()
+    for elem in target[65].strip().split(','):
+        if elem != 'NA':
+            if float(elem) < 0.01:
+                maf_list.append(str(0.001))
+            else:
+                maf_list.append(str(elem))
+        else:
+            maf_list.append('NA')
+
+    saveDict['Variant_MAF_(highest_CRISTA)'] = ','.join(maf_list)
+
     saveDict['Variant_rsID_(highest_CRISTA)'] = 'NA' if str(
         target[64]) == '.' else str(target[64])
     saveDict['Variant_samples_(highest_CRISTA)'] = str(target[61])

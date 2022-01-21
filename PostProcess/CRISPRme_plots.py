@@ -55,8 +55,8 @@ def plot_with_MMvBUL(df, out_folder, guide):
                                                                           'Mismatches+bulges_(fewest_mm+b)']
 
     # sort in order to have highest REF mm+bul on top
-    df.sort_values('Mismatches+bulges_REF_(fewest_mm+b)',
-                   ascending=False, inplace=True)
+    df.sort_values('Mismatches+bulges_(fewest_mm+b)',
+                   ascending=True, inplace=True)
     # top1000 targets
     df = df.head(1000)
     # Make index column that numbers the OTs starting from 1
