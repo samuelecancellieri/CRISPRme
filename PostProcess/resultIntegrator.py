@@ -445,8 +445,8 @@ for nline, line in enumerate(inCrispritzResults):
     maf_list = list()
     for elem in target[17].strip().split(','):
         if elem != 'NA':
-            if float(elem) < 0.01:
-                maf_list.append(str(0.001))
+            if float(elem) == 0:
+                maf_list.append(str(0.00001))
             else:
                 maf_list.append(str(elem))
         else:
@@ -485,8 +485,8 @@ for nline, line in enumerate(inCrispritzResults):
     maf_list = list()
     for elem in target[41].strip().split(','):
         if elem != 'NA':
-            if float(elem) < 0.01:
-                maf_list.append(str(0.001))
+            if float(elem) == 0:
+                maf_list.append(str(0.00001))
             else:
                 maf_list.append(str(elem))
         else:
@@ -523,8 +523,8 @@ for nline, line in enumerate(inCrispritzResults):
     maf_list = list()
     for elem in target[65].strip().split(','):
         if elem != 'NA':
-            if float(elem) < 0.01:
-                maf_list.append(str(0.001))
+            if float(elem) == 0:
+                maf_list.append(str(0.00001))
             else:
                 maf_list.append(str(elem))
         else:
