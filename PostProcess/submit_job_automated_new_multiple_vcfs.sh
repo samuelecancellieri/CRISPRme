@@ -72,7 +72,7 @@ while read vcf_f; do
 	for file_chr in "$ref_folder"/*.fa; do
 		file_name=$(basename $file_chr)
 		chr=$(echo -e $file_name | cut -f 1 -d'.')
-		echo -e "$chr"
+		# echo -e "$chr"
 		real_chroms+=("$chr")
 	done
 
