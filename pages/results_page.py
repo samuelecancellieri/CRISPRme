@@ -320,6 +320,35 @@ def resultPage(job_id):
         )
     )
 
+    #### PUT drop-down here
+    final_list.append(html.Br())
+
+    final_list.append(
+        html.Div(
+            dbc.Row(
+                dbc.Col(
+                    html.Div(
+                        [
+                            html.H4('Select filter criteria for targets'),
+                            dcc.Dropdown(
+                                options=[
+                                    {
+                                        'label': 'Fewest Mismatches and Bulges',
+                                        'value': 'fewest'
+                                    },
+                                    {'label': 'CFD score', 'value': 'CFD'},
+                                    {'label': 'CRISTA Score', 'value': 'CRISTA'}
+                                ], 
+                                value='CFD',
+                                id='target_filter_dropdown'
+                            )
+                        ]
+                    )
+                )
+            ),
+        )
+    )
+
     final_list.append(html.Br())
 
     if genome_type == 'ref':
@@ -2830,20 +2859,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
         query_tab_content = html.Div(
             [
-                dbc.Row(
-                    dbc.Col(
-                        html.Div(
-                            [
-                                html.H4('Select filter criteria for targets'),
-                                dcc.Dropdown(options=[
-                                    {'label': 'Fewest Mismatches and Bulges',
-                                        'value': 'fewest'},
-                                    {'label': 'CFD score', 'value': 'CFD'},
-                                    {'label': 'CRISTA Score', 'value': 'CRISTA'}
-                                ], value='CFD',
-                                    id='target_filter_dropdown'
-                                )
-                            ]))),
+                # dbc.Row(
+                #     dbc.Col(
+                #         html.Div(
+                #             [
+                #                 html.H4('Select filter criteria for targets'),
+                #                 dcc.Dropdown(options=[
+                #                     {'label': 'Fewest Mismatches and Bulges',
+                #                         'value': 'fewest'},
+                #                     {'label': 'CFD score', 'value': 'CFD'},
+                #                     {'label': 'CRISTA Score', 'value': 'CRISTA'}
+                #                 ], value='CFD',
+                #                     id='target_filter_dropdown'
+                #                 )
+                #             ]))),
                 dbc.Row(  # row with main group by, secondo group by and thresholds
                     [
                         dbc.Col(  # col0 phantom target select
