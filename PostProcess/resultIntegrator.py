@@ -279,10 +279,14 @@ else:
 
 for nline, line in enumerate(inCrispritzResults):
     target = line.strip().split('\t')
-    try:
-        annotationLine = inAnnotationFile.readline().strip().split('\t')
-    except:
-        annotationLine = 'NA'
+    # print(line)
+    # file annotation reported after gencode association with gene
+    annotationLine = inAnnotationFile.readline().strip().split('\t')
+
+    # try:
+    #     annotationLine = inAnnotationFile.readline().strip().split('\t')
+    # except:
+    #     annotationLine = 'NA'
 
     lowestEmpirical = 100
 
@@ -836,6 +840,9 @@ for nline, line in enumerate(inCrispritzResults):
     save += '\n'
     outFile.write(save)
 
+# close integrated file
+outFile.close()
+
 if check_personal_existence:
     # maintain the personal annotation column
     pass
@@ -854,5 +861,8 @@ notFoundFile = open(outputDir + originFileName +
 for count, line in enumerate(inEmpiricalResults):
     if count not in empiricalList:
         notFoundFile.write(line)
+
+# close notfound file
+notFoundFile.close()
 
 print("INTEGRATION COMPLETED IN: %s seconds" % (time.time() - start_time))
