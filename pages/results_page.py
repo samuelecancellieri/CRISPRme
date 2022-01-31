@@ -1742,6 +1742,7 @@ def colorSelectedRow(sel_cel, all_guides):
      State('div-current-page-table-position', 'children'),
      State('div-mms-bulges-position', 'children')]
 )
+# FUNCTION TO GENERATE POSITION TABLE IN QUERY GENOMIC REGIONS
 def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, mms_bulge):  # nPrev, nNext,
 
     if sel_cel is None:
@@ -2304,6 +2305,7 @@ def updateImagesTabs(mm, sel_cel, search, all_guides):
      State('general-profile-table', 'data'),
      State('url', 'search')]
 )
+# FUNCTION TO GENERATE SAMPLE CARD, UPDATE WITH FILTER DROPDOWN
 def generate_sample_card(n, sample, sel_cel, all_guides, search):
     if n is None:
         raise PreventUpdate
@@ -3413,6 +3415,7 @@ def update_output(n_clicks, page_current, filter_target_value, page_size, sel_ce
                                              radio_order, orderdrop, asc1, url, guide, current_working_directory)
 
             # find col to drop using the user filter
+            # COPIARE PER FARE DROP COLONNE NON VOLUTE IN TARGET FILTER
             drop_col = list()
             for elem in list(data.columns):
                 if filter_target_value == 'fewest' and ('highest_CFD' in elem or 'highest_CRISTA' in elem):

@@ -439,6 +439,10 @@ def preprocess_CRISTA_score(cluster_targets):
         complete_DNA_seq = str(pre_protospacer_DNA) + \
             protospacerDNA+str(post_protospacer_DNA)
 
+        for elem in iupac_nucleotides:
+            if elem in complete_DNA_seq:
+                complete_DNA_seq = complete_DNA_seq.replace(elem, '')
+
         # trim the 3' and 5' end to avoid sequences longer than 29
         len_DNA_seq = len(complete_DNA_seq)
         first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
@@ -491,6 +495,10 @@ def preprocess_CRISTA_score(cluster_targets):
         # DNA seq extracted from genome and append to aligned DNA seq from CRISPRme
         complete_DNA_seq = str(pre_protospacer_DNA) + \
             protospacerDNA+str(post_protospacer_DNA)
+
+        for elem in iupac_nucleotides:
+            if elem in complete_DNA_seq:
+                complete_DNA_seq = complete_DNA_seq.replace(elem, '')
 
         # trim the 3' and 5' end to avoid sequences longer than 29
         len_DNA_seq = len(complete_DNA_seq)
