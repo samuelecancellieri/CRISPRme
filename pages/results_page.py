@@ -1,4 +1,60 @@
-import glob
+"""Script to manage and print the results page. The results page allows the user 
+to navigate through the CRISPRme analysis results, providing several different
+filtering options to visualize the results.
+
+The result page consists of 2 (?) layers the ... on the top of the page and 
+tab selection layer to select the way to visualize the results. 
+Options (tabs) to visualize the results:
+    - Custom Ranking
+        Display the best targets for each input guide, according to the scoring
+        criterion selected by the user.
+    - Summary by Mismatch/Bulges
+    - Summary by Sample
+        Display the best targets for each individual sample considered during 
+        CRISPRme analysis.
+    - Query Genomic Region
+        Display the best targets for each input guide in a specific genomic
+        region. The results are sorted according to the scoring criterion 
+        selected by the user.
+    - Graphical Reports
+        Plot information regarding the target guides (plots computed at execution
+        time -> could require few secs to complete).
+    - Personal Risk Card (displayed only if used individual data)
+
+The results could be sorted and filtered according to 3 criteria:
+    - CFD score
+    - CRISTA score
+    - Number of mismacthes and bulges
+
+TODO: complete doc string with missing info --> read paper carefully
+"""
+
+from .results_page_utils import (
+    PAGE_SIZE,
+    BARPLOT_LEN,
+    COL_REF,
+    COL_REF_TYPE,
+    COL_REF_RENAME,
+    COL_BOTH,
+    COL_BOTH_TYPE,
+    COL_BOTH_RENAME,
+    GENOME_DATABASE,
+    GUIDE_COLUMN,
+    CHR_COLUMN,
+    POS_COLUMN,
+    MM_COLUMN,
+    BLG_COLUMN,
+    TOTAL_COLUMN,
+    BLG_T_COLUMN,
+    CFD_COLUMN,
+    RISK_COLUMN,
+    SAMPLES_COLUMN
+)
+
+from glob import glob
+
+import os
+
 from sqlite3.dbapi2 import Row
 import sys
 from dash.exceptions import PreventUpdate
@@ -16,7 +72,7 @@ from app import current_working_directory, cache, app_main_directory, operators
 from PostProcess import CFDGraph
 from PostProcess.supportFunctions.loadSample import associateSample
 from os.path import isfile, isdir, join  # for getting directories
-import os
+
 from os import listdir
 import subprocess
 import math
@@ -30,59 +86,60 @@ import flask
 # import send_from_directory
 
 
-PAGE_SIZE = 10  # number of entries in each page of the table in view report
-BARPLOT_LEN = 4  # number of barplots in each row of Populations Distributions
-COL_REF = ['Bulge Type', 'crRNA', 'Off target_motif', 'Reference sequence', 'Chromosome',
-           'Position', 'Direction', 'Mismatches',
-           'Bulge Size', 'PAM gen', 'Samples', 'Variant',
-           'CFD', 'CFD ref', 'Highest CFD Risk Score',
-           'AF', 'Annotation Type']
-COL_REF_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
-                'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
-                'numeric', 'numeric', 'numeric', 'numeric', 'text']
-COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
-                  8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
-                  16: 'rsID', 17: 'AF', 18: 'Variant', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
-COL_BOTH = ['Highest_CFD_Strand', 'Chromosome', 'Highest_CFD_start_coordinate',
-            'Highest_CFD_aligned_spacer+PAM',
-            'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
-            'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges',
-            'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
-            'Highest_CFD_risk_score', 'Not_found_in_REF', 'Highest_CFD_variant_info_genome',
-            'Highest_CFD_variant_MAF', 'Highest_CFD_variant_rsID',
-            'Highest_CFD_variant_samples', 'Other_motifs', 'Annotation_ENCODE']
-COL_BOTH_TYPE = ['text', 'text', 'numeric', 'text',
-                 'text', 'text',
-                 'numeric', 'numeric', 'numeric',
-                 'text', 'text', 'numeric', 'numeric',
-                 'numeric', 'text', 'text', 'numeric', 'text',
-                 'text', 'numeric', 'text']
-COL_BOTH_RENAME = {0: 'Highest_CFD_Strand', 1: 'Chromosome', 2: 'Highest_CFD_start_coordinate',
-                   3: 'Highest_CFD_aligned_spacer+PAM', 4: 'Highest_CFD_aligned_protospacer+PAM_REF',
-                   5: 'Highest_CFD_aligned_protospacer+PAM_ALT', 6: 'Highest_CFD_mismatches',
-                   7: 'Highest_CFD_bulges', 8: 'Highest_CFD_mismatches+bulges',
-                   9: 'Highest_CFD_bulge_type', 10: 'Highest_CFD_PAM_gen', 11: 'Highest_CFD_score',
-                   12: 'Highest_CFD_score_REF', 13: 'Highest_CFD_risk_score',
-                   14: 'Not_found_in_REF', 15: 'Highest_CFD_variant_info_genome',
-                   16: 'Highest_CFD_variant_MAF', 17: 'Highest_CFD_variant_rsID',
-                   18: 'Highest_CFD_variant_samples', 19: 'Other_motifs', 37: 'Annotation_ENCODE'}
-GENOME_DATABASE = ['Reference', 'Enriched',
-                   'Samples', 'Dictionary', 'Annotation']
-GUIDE_COLUMN = 'Spacer+PAM'
-CHR_COLUMN = 'Chromosome'
-POS_COLUMN = 'Start_coordinate_(highest_CFD)'
-MM_COLUMN = 'Mismatches_(highest_CFD)'
-BLG_COLUMN = 'Bulges_(highest_CFD)'
-TOTAL_COLUMN = 'Mismatches+bulges_(highest_CFD)'
-BLG_T_COLUMN = 'Bulge_type_(highest_CFD)'
-CFD_COLUMN = 'CFD_score_(highest_CFD)'
-RISK_COLUMN = 'CFD_risk_score_(highest_CFD)'
-SAMPLES_COLUMN = 'Variant_samples_(highest_CFD)'
+# TODO: delete comment lines
+# PAGE_SIZE = 10  # number of entries in each page of the table in view report
+# BARPLOT_LEN = 4  # number of barplots in each row of Populations Distributions
+# COL_REF = ['Bulge Type', 'crRNA', 'Off target_motif', 'Reference sequence', 'Chromosome',
+#            'Position', 'Direction', 'Mismatches',
+#            'Bulge Size', 'PAM gen', 'Samples', 'Variant',
+#            'CFD', 'CFD ref', 'Highest CFD Risk Score',
+#            'AF', 'Annotation Type']
+# COL_REF_TYPE = ['text', 'text', 'text', 'text', 'text', 'numeric',
+#                 'numeric', 'text', 'numeric', 'numeric', 'text', 'text', 'text',
+#                 'numeric', 'numeric', 'numeric', 'numeric', 'text']
+# COL_REF_RENAME = {0: 'Bulge Type', 1: 'crRNA', 2: 'Off target motif', 3: 'Reference sequence', 4: 'Chromosome', 5: 'Position', 6: 'Cluster Position', 7: 'Direction',
+#                   8: 'Mismatches', 9: 'Bulge Size', 10: 'Total', 11: 'PAM gen', 12: 'Variant Unique', 13: 'Samples', 14: 'Annotation Type', 15: 'Real Guide',
+#                   16: 'rsID', 17: 'AF', 18: 'Variant', 19: '#Seq in cluster', 20: 'CFD', 21: 'CFD ref', 22: 'Highest CFD Risk Score'}
+# COL_BOTH = ['Highest_CFD_Strand', 'Chromosome', 'Highest_CFD_start_coordinate',
+#             'Highest_CFD_aligned_spacer+PAM',
+#             'Highest_CFD_aligned_protospacer+PAM_REF', 'Highest_CFD_aligned_protospacer+PAM_ALT',
+#             'Highest_CFD_mismatches', 'Highest_CFD_bulges', 'Highest_CFD_mismatches+bulges',
+#             'Highest_CFD_bulge_type', 'Highest_CFD_PAM_gen', 'Highest_CFD_score', 'Highest_CFD_score_REF',
+#             'Highest_CFD_risk_score', 'Not_found_in_REF', 'Highest_CFD_variant_info_genome',
+#             'Highest_CFD_variant_MAF', 'Highest_CFD_variant_rsID',
+#             'Highest_CFD_variant_samples', 'Other_motifs', 'Annotation_ENCODE']
+# COL_BOTH_TYPE = ['text', 'text', 'numeric', 'text',
+#                  'text', 'text',
+#                  'numeric', 'numeric', 'numeric',
+#                  'text', 'text', 'numeric', 'numeric',
+#                  'numeric', 'text', 'text', 'numeric', 'text',
+#                  'text', 'numeric', 'text']
+# COL_BOTH_RENAME = {0: 'Highest_CFD_Strand', 1: 'Chromosome', 2: 'Highest_CFD_start_coordinate',
+#                    3: 'Highest_CFD_aligned_spacer+PAM', 4: 'Highest_CFD_aligned_protospacer+PAM_REF',
+#                    5: 'Highest_CFD_aligned_protospacer+PAM_ALT', 6: 'Highest_CFD_mismatches',
+#                    7: 'Highest_CFD_bulges', 8: 'Highest_CFD_mismatches+bulges',
+#                    9: 'Highest_CFD_bulge_type', 10: 'Highest_CFD_PAM_gen', 11: 'Highest_CFD_score',
+#                    12: 'Highest_CFD_score_REF', 13: 'Highest_CFD_risk_score',
+#                    14: 'Not_found_in_REF', 15: 'Highest_CFD_variant_info_genome',
+#                    16: 'Highest_CFD_variant_MAF', 17: 'Highest_CFD_variant_rsID',
+#                    18: 'Highest_CFD_variant_samples', 19: 'Other_motifs', 37: 'Annotation_ENCODE'}
+# GENOME_DATABASE = ['Reference', 'Enriched',
+#                    'Samples', 'Dictionary', 'Annotation']
+# GUIDE_COLUMN = 'Spacer+PAM'
+# CHR_COLUMN = 'Chromosome'
+# POS_COLUMN = 'Start_coordinate_(highest_CFD)'
+# MM_COLUMN = 'Mismatches_(highest_CFD)'
+# BLG_COLUMN = 'Bulges_(highest_CFD)'
+# TOTAL_COLUMN = 'Mismatches+bulges_(highest_CFD)'
+# BLG_T_COLUMN = 'Bulge_type_(highest_CFD)'
+# CFD_COLUMN = 'CFD_score_(highest_CFD)'
+# RISK_COLUMN = 'CFD_risk_score_(highest_CFD)'
+# SAMPLES_COLUMN = 'Variant_samples_(highest_CFD)'
 
 # check header for personal annotation
 
 
-def resultPage(job_id):
+def resultPage(job_id: int) -> html.Div:
     '''
     La funzione ritorna il layout della pagina risultati (tabella delle guide + eventuali immagini). Nella tabella delle guide
     carico il profile ottenuto dalla ricerca. Carica inoltre l'ACFD, che è il cfd score aggregato per tutti i risultati di una singola guida.
@@ -92,20 +149,39 @@ def resultPage(job_id):
     ai mms).
     '''
     value = job_id
-    job_directory = current_working_directory + 'Results/' + job_id + '/'
-    integrated_file_name = glob.glob(
-        current_working_directory + 'Results/' +
-        job_id + '/' + '*integrated*')[0]
-    integrated_file_name = str(integrated_file_name)
-    integrated_file_name_zip = integrated_file_name.replace('tsv', 'zip')
+    job_directory = os.path.join(
+        current_working_directory, "Results", f"{job_id}"
+    )
+    integrated_file_name = glob(
+        os.path.join(
+            current_working_directory, "Results", f"{job_id}", "*integrated*"
+        )
+    )[0]  # take the first list element
+    assert isinstance(integrated_file_name, str)
+    #integrated_file_name = str(integrated_file_name)
+    integrated_file_name_zip = integrated_file_name.replace("tsv", "zip")
     warning_message = []
-    if (not isdir(job_directory)):
-        return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
-
+    if (not os.path.isdir(job_directory)):
+        return html.Div(
+            dbc.Alert("The selected result does not exist", color="danger")
+        )
     count_guides = 0
-    with open(current_working_directory + 'Results/' + value + '/.guides.txt') as g:
-        for line in g:
-            count_guides += 1
+    guides_file = os.path.join(
+        current_working_directory, "Results", f"{value}", ".guides.txt"
+    )
+    assert os.path.isfile(guides_file)
+    try:
+        with open(guides_file) as handle:
+            for line in handle:
+                count_guides += 1
+    except:
+        raise IOError(f"Unable to read {guides_file}.")
+    finally:
+        handle.close()
+
+    #@#############################
+    # DONE TILL HERE
+    ##############################
 
     # Load mismatches
     with open(current_working_directory + 'Results/' + value + '/.Params.txt') as p:
@@ -317,6 +393,35 @@ def resultPage(job_id):
                     #                        'width': '10%',
                     #                        }],
                 ), id='div-general-profile-table', style={"margin-left": "5%", "margin-right": "5%"})
+        )
+    )
+
+    #### PUT drop-down here
+    final_list.append(html.Br())
+
+    final_list.append(
+        html.Div(
+            dbc.Row(
+                dbc.Col(
+                    html.Div(
+                        [
+                            html.H4('Select filter criteria for targets'),
+                            dcc.Dropdown(
+                                options=[
+                                    {
+                                        'label': 'Fewest Mismatches and Bulges',
+                                        'value': 'fewest'
+                                    },
+                                    {'label': 'CFD score', 'value': 'CFD'},
+                                    {'label': 'CRISTA Score', 'value': 'CRISTA'}
+                                ], 
+                                value='CFD',
+                                id='target_filter_dropdown'
+                            )
+                        ]
+                    )
+                )
+            ),
         )
     )
 
@@ -880,7 +985,7 @@ def global_get_sample_targets(job_id, sample, guide, page):
 
     if job_id is None:
         return ''
-    path_db = glob.glob(
+    path_db = glob(
         current_working_directory + 'Results/' +
         job_id + '/.*.db')[0]
     path_db = str(path_db)
@@ -996,7 +1101,7 @@ def samplePage(job_id, hash):
 
     # file_to_grep = current_working_directory + 'Results/' + \
     #     job_id + '/.' + job_id + '.bestMerge.txt'
-    integrated_file_name = glob.glob(
+    integrated_file_name = glob(
         current_working_directory + 'Results/' +
         job_id + '/' + '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
@@ -1013,7 +1118,7 @@ def samplePage(job_id, hash):
                  style={'display': 'none'}, id='div-info-sumbysample-targets')
     )
 
-    path_db = glob.glob(
+    path_db = glob(
         current_working_directory + 'Results/' +
         job_id + '/.*.db')[0]
     path_db = str(path_db)
@@ -1212,7 +1317,7 @@ def guidePagev3(job_id, hash):
             ]
         )
     )
-    integrated_file_name = glob.glob(
+    integrated_file_name = glob(
         current_working_directory + 'Results/' +
         job_id + '/' + '*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
@@ -1228,7 +1333,7 @@ def guidePagev3(job_id, hash):
                  guide+'.targets', style={'display': 'none'}, id='div-info-sumbyguide-targets')
     )
 
-    path_db = glob.glob(
+    path_db = glob(
         current_working_directory + 'Results/' +
         job_id + '/.*.db')[0]
     path_db = str(path_db)
@@ -1295,7 +1400,7 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
     '''
     if value is None:
         return ''
-    path_db = glob.glob(
+    path_db = glob(
         current_working_directory + 'Results/' +
         value + '/.*.db')[0]
     path_db = str(path_db)
@@ -1333,7 +1438,7 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
     '''
     if value is None:
         return ''
-    path_db = glob.glob(
+    path_db = glob(
         current_working_directory + 'Results/' +
         value + '/.*.db')[0]
     path_db = str(path_db)
@@ -1646,7 +1751,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
     outfile.close()
 
     # zip integrated results
-    integrated_file_name = glob.glob(
+    integrated_file_name = glob(
         current_working_directory + 'Results/' +
         job_id + '/'+'*integrated*')[0]
     integrated_file_name = str(integrated_file_name)
@@ -1731,6 +1836,9 @@ def colorSelectedRow(sel_cel, all_guides):
     ]
 
 
+#-------------------------------------------------------------------------------
+# Query genomic region tab
+#
 @app.callback(
     [Output('div-table-position', 'children'),
      Output('div-current-page-table-position', 'children')],
@@ -1772,7 +1880,7 @@ def filterPositionTable(filter_q, n, search, sel_cel, all_guides, current_page, 
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
-    path_db = glob.glob(
+    path_db = glob(
         current_working_directory + 'Results/' +
         job_id + '/.*.db')[0]
     path_db = str(path_db)
@@ -2332,7 +2440,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         pam_creation = df.loc[int_sample, 7]
 
         # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
-        integrated_file_name = glob.glob(
+        integrated_file_name = glob(
             job_directory + '*integrated*')[0]
         integrated_file_name = str(integrated_file_name)
         # integrated_to_grep = job_directory+job_id + \
@@ -2343,7 +2451,7 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
         integrated_private = job_directory + job_id + '.' + \
             sample + '.' + guide + '.private_targets.tsv'
 
-        path_db = glob.glob(
+        path_db = glob(
             current_working_directory + 'Results/' +
             job_id + '/.*.db')[0]
         path_db = str(path_db)
@@ -2832,20 +2940,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
 
         query_tab_content = html.Div(
             [
-                dbc.Row(
-                    dbc.Col(
-                        html.Div(
-                            [
-                                html.H4('Select filter criteria for targets'),
-                                dcc.Dropdown(options=[
-                                    {'label': 'Fewest Mismatches and Bulges',
-                                        'value': 'fewest'},
-                                    {'label': 'CFD score', 'value': 'CFD'},
-                                    {'label': 'CRISTA Score', 'value': 'CRISTA'}
-                                ], value='CFD',
-                                    id='target_filter_dropdown'
-                                )
-                            ]))),
+                # dbc.Row(
+                #     dbc.Col(
+                #         html.Div(
+                #             [
+                #                 html.H4('Select filter criteria for targets'),
+                #                 dcc.Dropdown(options=[
+                #                     {'label': 'Fewest Mismatches and Bulges',
+                #                         'value': 'fewest'},
+                #                     {'label': 'CFD score', 'value': 'CFD'},
+                #                     {'label': 'CRISTA Score', 'value': 'CRISTA'}
+                #                 ], value='CFD',
+                #                     id='target_filter_dropdown'
+                #                 )
+                #             ]))),
                 dbc.Row(  # row with main group by, secondo group by and thresholds
                     [
                         dbc.Col(  # col0 phantom target select
@@ -3380,7 +3488,7 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
      Output("message-alert", "is_open"), ],
     [Input('submit-val', 'n_clicks'),
      Input('live_table', "page_current"),
-     Input('target_filter_dropdown', 'value')],
+     Input('target_filter_dropdown', 'value')],  # take this value (as state)
     [State('live_table', "page_size"),
      State('general-profile-table', 'selected_cells'),
      State('target', 'value'),
@@ -3394,6 +3502,7 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
      State("message-alert", "is_open"),
      ]
 )
+# see here
 def update_output(n_clicks, page_current, filter_target_value, page_size, sel_cel, target, radio_order, all_guides, orderdrop, sholddrop, asc1, maxdrop, url, alert):
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
 
