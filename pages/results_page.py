@@ -412,12 +412,12 @@ def resultPage(job_id: int) -> html.Div:
                             html.H4('Select filter criteria for targets'),
                             dcc.Dropdown(
                                 options=[
+                                    {'label': 'CFD score', 'value': 'CFD'},
+                                    {'label': 'CRISTA Score', 'value': 'CRISTA'},
                                     {
                                         'label': 'Fewest Mismatches and Bulges',
                                         'value': 'fewest'
-                                    },
-                                    {'label': 'CFD score', 'value': 'CFD'},
-                                    {'label': 'CRISTA Score', 'value': 'CRISTA'}
+                                    }
                                 ],
                                 value='CFD',
                                 id='target_filter_dropdown'
