@@ -45,10 +45,14 @@ from .results_page_utils import (
     MM_COLUMN,
     BLG_COLUMN,
     TOTAL_COLUMN,
+    TOTAL_FEWEST_COLUMN,
     BLG_T_COLUMN,
     CFD_COLUMN,
+    CRISTA_COLUMN,
     RISK_COLUMN,
-    SAMPLES_COLUMN
+    SAMPLES_COLUMN,
+    SAMPLES_CRISTA_COLUMN,
+    SAMPLES_FEWEST_COLUMN
 )
 
 from glob import glob
@@ -218,7 +222,7 @@ def resultPage(job_id: int) -> html.Div:
     mms = int(mms[0])
 
     # load acfd for each guide
-    with open(current_working_directory + 'Results/' + value + '/.'+value+'.acfd.txt') as a:
+    with open(current_working_directory + 'Results/' + value + '/.'+value+'.acfd_CFD.txt') as a:
         all_scores = a.read().strip().split('\n')
 
     list_error_guides = []
@@ -396,7 +400,7 @@ def resultPage(job_id: int) -> html.Div:
         )
     )
 
-    #### PUT drop-down here
+    # PUT drop-down here
     final_list.append(html.Br())
 
     final_list.append(
@@ -414,7 +418,7 @@ def resultPage(job_id: int) -> html.Div:
                                     },
                                     {'label': 'CFD score', 'value': 'CFD'},
                                     {'label': 'CRISTA Score', 'value': 'CRISTA'}
-                                ], 
+                                ],
                                 value='CFD',
                                 id='target_filter_dropdown'
                             )
@@ -1564,10 +1568,11 @@ def toggleCollapseDistributionPopulations(n, is_open):
     [Input('general-profile-table', "page_current"),
      Input('general-profile-table', "page_size"),
      Input('general-profile-table', 'sort_by'),
-     Input('general-profile-table', 'filter_query')],
+     Input('general-profile-table', 'filter_query'),
+     Input('target_filter_dropdown', 'value')],
     [State('url', 'search')]
 )
-def update_table_general_profile(page_current, page_size, sort_by, filter, search):
+def update_table_general_profile(page_current, page_size, sort_by, filter, selection_criteria, search):
     job_id = search.split('=')[-1]
 
     with open(current_working_directory + 'Results/' + job_id + '/.Params.txt') as p:
@@ -1604,7 +1609,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         guides.sort()
 
     # load acfd for each guide
-    with open(current_working_directory + 'Results/' + job_id + '/.'+job_id+'.'+'acfd.txt') as a:
+    with open(current_working_directory + 'Results/' + job_id + '/.'+job_id+'.'+'acfd_'+selection_criteria+'.txt') as a:
         all_scores = a.read().strip().split('\n')
 
     # Load scores
@@ -1634,7 +1639,7 @@ def update_table_general_profile(page_current, page_size, sort_by, filter, searc
         # append nuclease to table
         table_to_file.append('Nuclease: '+str(nuclease))
         data_general_count = pd.read_csv(current_working_directory + 'Results/' +
-                                         job_id + '/.' + job_id + '.general_target_count.'+g+".txt", sep='\t', na_filter=False)
+                                         job_id + '/.' + job_id + '.general_target_count.'+g+'_'+selection_criteria+".txt", sep='\t', na_filter=False)
 
         data_guides = dict()
         data_guides['Guide'] = g
@@ -1836,7 +1841,7 @@ def colorSelectedRow(sel_cel, all_guides):
     ]
 
 
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Query genomic region tab
 #
 @app.callback(
@@ -1974,14 +1979,15 @@ def updatePositionFilter(n, chrom, pos_start, pos_end):  # , pos_end
      Output('div-current-page-table-samples', 'children')],
     [Input('prev-page-sample', 'n_clicks_timestamp'),
      Input('next-page-sample', 'n_clicks_timestamp'),
-     Input('div-sample-filter-query', 'children')],
+     Input('div-sample-filter-query', 'children'),
+     Input('target_filter_dropdown', 'value')],
     [State('button-filter-population-sample', 'n_clicks_timestamp'),
      State('url', 'search'),
      State('general-profile-table', 'selected_cells'),
      State('general-profile-table', 'data'),
      State('div-current-page-table-samples', 'children')]
 )
-def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, current_page):
+def filterSampleTable(nPrev, nNext, filter_q, selection_criteria, n, search, sel_cel, all_guides, current_page):
     if sel_cel is None:
         raise PreventUpdate
     if nPrev is None and nNext is None and n is None:
@@ -2037,11 +2043,11 @@ def filterSampleTable(nPrev, nNext, filter_q, n, search, sel_cel, all_guides, cu
     if max(btn_sample_section) == n:
         if genome_type == 'both':
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
+                             guide + '_'+selection_criteria+'.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
         else:
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
+                             guide + '_'+selection_criteria+'.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
 
         more_info_col = []
@@ -2315,11 +2321,12 @@ def check_existance_sample(job_directory, job_id, sample):
      Output('div-sample-image', 'children'),
      Output('row-radar-chart-sample', 'children')],
     [Input('mm-dropdown', 'value'),
-     Input('general-profile-table', 'selected_cells')],
+     Input('general-profile-table', 'selected_cells'),
+     Input('target_filter_dropdown', 'value')],
     [State('url', 'search'),
      State('general-profile-table', 'data')]
 )
-def updateImagesTabs(mm, sel_cel, search, all_guides):
+def updateImagesTabs(mm, sel_cel, selection_criteria, search, all_guides):
     bulge = 0
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
@@ -2340,7 +2347,7 @@ def updateImagesTabs(mm, sel_cel, search, all_guides):
                 html.A(
                     html.Img(
                         src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                            current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total.png', 'rb').read()).decode()),
+                            current_working_directory + 'Results/' + job_id + '/imgs/populations_distribution_' + guide + '_' + str(int(mm)+int(bulge)) + 'total'+'_'+selection_criteria+'.png', 'rb').read()).decode()),
                         id='distribution-population' + str(int(mm)+int(bulge)), width="100%", height="auto"
                     ),
                     target="_blank",
@@ -2361,8 +2368,8 @@ def updateImagesTabs(mm, sel_cel, search, all_guides):
 
     radar_img_encode_gencode = '/imgs/summary_single_guide_' + \
         guide + '_' + str(mm) + \
-        '.' + str(bulge) + '_TOTAL.ENCODE+GENCODE.png'
-    os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/.guide_dict_{guide}.json {job_directory}/.motif_dict_{guide}.json {mm} {bulge} TOTAL {job_directory}/imgs/")
+        '.' + str(bulge) + '_TOTAL_'+selection_criteria+'.ENCODE+GENCODE.png'
+    os.system(f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/.guide_dict_{guide}_{selection_criteria}.json {job_directory}/.motif_dict_{guide}_{selection_criteria}.json {mm} {bulge} TOTAL_{selection_criteria} {job_directory}/imgs/")
 
     img_found = False
     try:
@@ -2408,87 +2415,103 @@ def updateImagesTabs(mm, sel_cel, search, all_guides):
      Output('div-table-sample-card', 'children'),
      Output('div-top-target-sample-card', 'children')],
     [Input('button-sample-card', 'n_clicks')],
-    [State('dropdown-sample-card', 'value'),
+    [State('target_filter_dropdown', 'value'),
+     State('dropdown-sample-card', 'value'),
      State('general-profile-table', 'selected_cells'),
      State('general-profile-table', 'data'),
      State('url', 'search')]
 )
 # FUNCTION TO GENERATE SAMPLE CARD, UPDATE WITH FILTER DROPDOWN
-def generate_sample_card(n, sample, sel_cel, all_guides, search):
+def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, search):
     if n is None:
         raise PreventUpdate
 
     # convert sample to str to avoid concatenation errrors
     sample = str(sample)
+    # print('leggo sample')
     guide = all_guides[int(sel_cel[0]['row'])]['Guide']
+    # print('leggo gen table')
     job_id = search.split('=')[-1]
     job_directory = current_working_directory + 'Results/' + job_id + '/'
     file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
     sample_grep_result = current_working_directory + 'Results/' + \
         job_id + '/' + job_id + '.' + sample + '.' + guide + '.private.txt'
-    if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
-        df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                         guide+'.txt', sep='\t', skiprows=2, index_col=0, header=None, na_filter=False)
-        # df = df.astype(str)
-        try:
-            int_sample = int(sample)
-        except:
-            int_sample = sample
-        # personal = df.loc[sample, 4]
-        # pam_creation = df.loc[sample, 7]
-        personal = df.loc[int_sample, 4]
-        pam_creation = df.loc[int_sample, 7]
 
-        # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
-        integrated_file_name = glob(
-            job_directory + '*integrated*')[0]
-        integrated_file_name = str(integrated_file_name)
-        # integrated_to_grep = job_directory+job_id + \
-        #     '.bestMerge.txt.integrated_results.tsv'
-        integrated_to_grep = integrated_file_name
-        integrated_personal = job_directory + job_id + '.' + \
-            sample + '.' + guide + '.personal_targets.txt'
-        integrated_private = job_directory + job_id + '.' + \
-            sample + '.' + guide + '.private_targets.tsv'
+# if not os.path.exists(current_working_directory + 'Results/' + job_id + '/' + job_id + '.' + sample + '.' + guide + '.sample_card.txt'):
+    df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
+                     guide+'_'+selection_criteria+'.txt', sep='\t', skiprows=2, index_col=0, header=None, na_filter=False)
+    try:
+        int_sample = int(sample)
+    except:
+        int_sample = sample
 
-        path_db = glob(
-            current_working_directory + 'Results/' +
-            job_id + '/.*.db')[0]
-        path_db = str(path_db)
-        conn = sqlite3.connect(path_db)
-        c = conn.cursor()
-        #print('start queries sample card')
-        result_personal = pd.read_sql_query(
-            "SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample), conn)
-        result_personal = result_personal.sort_values(
-            [CFD_COLUMN, TOTAL_COLUMN], ascending=[False, True])
+    personal = df.loc[int_sample, 4]
+    pam_creation = df.loc[int_sample, 7]
 
-        result_private = result_personal[result_personal[SAMPLES_COLUMN] == sample]
+    # file_to_grep = job_directory + '.' + job_id + '.bestMerge.txt'
+    integrated_file_name = glob(
+        job_directory + '*integrated*')[0]
+    integrated_file_name = str(integrated_file_name)
+    # integrated_to_grep = job_directory+job_id + \
+    #     '.bestMerge.txt.integrated_results.tsv'
+    integrated_to_grep = integrated_file_name
+    integrated_personal = job_directory + job_id + '.' + \
+        sample + '.' + guide + '.personal_targets.txt'
+    integrated_private = job_directory + job_id + '.' + \
+        sample + '.' + guide + '.private_targets.tsv'
 
-        conn.commit()
-        conn.close()
+    path_db = glob(
+        current_working_directory + 'Results/' +
+        job_id + '/.*.db')[0]
+    path_db = str(path_db)
+    conn = sqlite3.connect(path_db)
+    c = conn.cursor()
 
-        result_personal.to_csv(integrated_personal, sep='\t', index=False)
-        result_private.to_csv(integrated_private, sep='\t', index=False)
-
-        integrated_private_zip = integrated_private.replace('tsv', 'zip')
-
-        os.system(f"zip -j {integrated_private_zip} {integrated_private}")
-
-        # plot for images in personal card
-        os.system(
-            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
-        os.system(
-            f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
-        os.system(
-            f"rm -f {integrated_personal}")
-
-        private = result_private.shape[0]
-
-        results_table = pd.DataFrame([[personal, pam_creation, private]], columns=[
-            'Personal', 'PAM Creation', 'Private']).astype(str)
+    if selection_criteria == 'CFD':
+        sample_col = SAMPLES_COLUMN
+        sort_col = CFD_COLUMN
+    elif selection_criteria == 'CRISTA':
+        sample_col = SAMPLES_CRISTA_COLUMN
+        sort_col = CRISTA_COLUMN
     else:
-        pass
+        sample_col = SAMPLES_FEWEST_COLUMN
+        sort_col = TOTAL_FEWEST_COLUMN
+
+    result_personal = pd.read_sql_query(
+        "SELECT * FROM final_table WHERE \"{}\"=\'{}\' AND \"{}\" LIKE \'%{}%\'".format(GUIDE_COLUMN, guide, sample_col, sample), conn)
+    # result_personal = result_personal.sort_values(
+    #     [CFD_COLUMN, TOTAL_COLUMN], ascending=[False, True])
+    result_personal = result_personal.sort_values(
+        [sort_col], ascending=[False])
+
+    result_private = result_personal[result_personal[sample_col] == sample]
+
+    conn.commit()
+    conn.close()
+
+    result_personal.to_csv(integrated_personal, sep='\t', index=False)
+    result_private.to_csv(integrated_private, sep='\t', index=False)
+
+    integrated_private_zip = integrated_private.replace('tsv', 'zip')
+
+    os.system(f"zip -j {integrated_private_zip} {integrated_private}")
+
+    # plot for images in personal card
+    # print('faccio personal')
+    os.system(
+        f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_personal} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.personal > /dev/null 2>&1")
+    # print('faccio private')
+    os.system(
+        f"python {app_main_directory}/PostProcess/CRISPRme_plots_personal.py {integrated_private} {current_working_directory}/Results/{job_id}/imgs/ {guide}.{sample}.private > /dev/null 2>&1")
+    os.system(
+        f"rm -f {integrated_personal}")
+
+    private = result_private.shape[0]
+
+    results_table = pd.DataFrame([[personal, pam_creation, private]], columns=[
+        'Personal', 'PAM Creation', 'Private']).astype(str)
+# else:
+#     pass
 
     try:  # to read the private targets file, if not created, pass
         ans = result_private
@@ -2498,9 +2521,9 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
     # image for personal and private
     try:
         image_personal_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.personal.png', 'rb').read()).decode())
+            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_{selection_criteria}_top_1000_log_for_main_text_{guide}.{sample}.personal.png', 'rb').read()).decode())
         image_private_top = 'data:image/png;base64,{}'.format(base64.b64encode(open(
-            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.{sample}.private.png', 'rb').read()).decode())
+            current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_{selection_criteria}_top_1000_log_for_main_text_{guide}.{sample}.private.png', 'rb').read()).decode())
     except:
         sys.stderr.write('PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED')
 
@@ -2648,12 +2671,13 @@ def generate_sample_card(n, sample, sel_cel, all_guides, search):
 @ app.callback(
     Output('div-tab-content', 'children'),
     [Input('tabs-reports', 'value'),
-     Input('general-profile-table', 'selected_cells')],
+     Input('general-profile-table', 'selected_cells'),
+     Input('target_filter_dropdown', 'value')],
     [State('general-profile-table', 'data'),
      State('url', 'search'),
      State('div-genome-type', 'children')]
 )
-def updateContentTab(value, sel_cel, all_guides, search, genome_type):
+def updateContentTab(value, sel_cel, selection_criteria, all_guides, search, genome_type):
     if value is None or sel_cel is None or not sel_cel or not all_guides:
         raise PreventUpdate
 
@@ -2680,6 +2704,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
     if nuclease != 'SpCas9':
         CFD_notification = html.Div(
             'CFD score is not calculated if the used nuclease is not SpCas9')
+        selection_criteria = 'fewest'
     else:
         CFD_notification = html.Div('', hidden=True)
 
@@ -2701,7 +2726,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         )
         fl.append(html.Br())
         df = pd.read_csv(job_directory + job_id +
-                         '.summary_by_guide.' + guide + '.txt', sep='\t', na_filter=False)
+                         '.summary_by_guide.' + guide + '_'+selection_criteria+'.txt', sep='\t', na_filter=False)
         more_info_col = []
         total_col = []
         for i in range(df.shape[0]):
@@ -2724,13 +2749,13 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
+                             guide + '_'+selection_criteria + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
         else:
             col_names_sample = ['Sample', 'Sex', 'Population', 'Super Population',  # 'Targets in Reference',
                                 'Targets in Variant', 'Targets in Population', 'Targets in Super Population', 'PAM Creation']
             df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                             guide + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
+                             guide + '_'+selection_criteria + '.txt', sep='\t', names=col_names_sample, skiprows=2, na_filter=False)
             df = df.sort_values('Targets in Variant', ascending=False)
 
         more_info_col = []
@@ -2881,7 +2906,7 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
         return fl
     elif value == 'tab-graphical-sample-card':
         df = pd.read_csv(job_directory + job_id + '.summary_by_samples.' +
-                         guide+'.txt', skiprows=2, sep='\t', header=None, na_filter=False)
+                         guide+'_'+selection_criteria+'.txt', skiprows=2, sep='\t', header=None, na_filter=False)
         samples = df.iloc[:, 0]
         fl.append(
             html.P(
@@ -3199,20 +3224,20 @@ def updateContentTab(value, sel_cel, all_guides, search, genome_type):
             populations = []
         # CRISPRme_top_1000_log_for_main_text_{guide}_MMvBUL.png
         try:
-            if nuclease == 'SpCas9':  # IMPLEMENTARE DROPDOWN PER VISUALIZZARE CFD,CRISTA,MMBUL
-                top1000_image = html.Div(
-                    html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                    current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
-                                    id='top-1000-score', width="80%", height="auto"),
-                           target="_blank")
-                )
-            else:
-                top1000_image = html.Div(
-                    html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
-                                    current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}_MMvBUL.png', 'rb').read()).decode()),
-                                    id='top-1000-score', width="80%", height="auto"),
-                           target="_blank")
-                )
+            # if nuclease == 'SpCas9':  # IMPLEMENTARE DROPDOWN PER VISUALIZZARE CFD,CRISTA,MMBUL
+            top1000_image = html.Div(
+                html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+                                current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_{selection_criteria}_top_1000_log_for_main_text_{guide}.png', 'rb').read()).decode()),
+                                id='top-1000-score', width="80%", height="auto"),
+                       target="_blank")
+            )
+            # else:
+            #     top1000_image = html.Div(
+            #         html.A(html.Img(src='data:image/png;base64,{}'.format(base64.b64encode(open(
+            #                         current_working_directory + 'Results/' + job_id + f'/imgs/CRISPRme_top_1000_log_for_main_text_{guide}_MMvBUL.png', 'rb').read()).decode()),
+            #                         id='top-1000-score', width="80%", height="auto"),
+            #                target="_blank")
+            #     )
         except:
             top1000_image = html.Div('')
 

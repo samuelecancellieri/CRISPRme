@@ -146,7 +146,7 @@ def plot_with_MMvBUL(df, out_folder, guide):
     # Save
     plt.tight_layout()
     plt.savefig(
-        out_folder+f"CRISPRme_MMvBUL_top_1000_log_for_main_text_{guide}.png")
+        out_folder+f"CRISPRme_fewest_top_1000_log_for_main_text_{guide}.png")
     plt.clf()
 
 

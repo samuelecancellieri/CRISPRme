@@ -644,9 +644,10 @@ rm -f *.CFDGraph.txt
 rm -f indels.CFDGraph.txt
 rm -r "crispritz_prof"
 rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
-rm $final_res.bestCFD.txt
-rm $final_res.bestmmblg.txt
-rm $final_res.bestCRISTA.txt
+#prevent deletion of single best file to use in further creations of data files (summary,charts and plots)
+# rm $final_res.bestCFD.txt
+# rm $final_res.bestmmblg.txt
+# rm $final_res.bestCRISTA.txt
 rm $final_res_alt.bestCFD.txt
 rm $final_res_alt.bestmmblg.txt
 rm $final_res_alt.bestCRISTA.txt
@@ -655,9 +656,15 @@ mv $final_res_alt "${output_folder}/$(basename ${output_folder}).altMerge.txt"
 
 cd $starting_dir
 if [ "$vcf_name" != "_" ]; then
-	./process_summaries.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $guide_file $sampleID $mm $bMax "${output_folder}" "var"
+	# ./process_summaries.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $guide_file $sampleID $mm $bMax "${output_folder}" "var"
+	./process_summaries.py $final_res.bestCFD.txt $guide_file $sampleID $mm $bMax "${output_folder}" "var" "CFD"
+	./process_summaries.py $final_res.bestmmblg.txt $guide_file $sampleID $mm $bMax "${output_folder}" "var" "fewest"
+	./process_summaries.py $final_res.bestCRISTA.txt $guide_file $sampleID $mm $bMax "${output_folder}" "var" "CRISTA"
 else
-	./process_summaries.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $guide_file $sampleID $mm $bMax "${output_folder}" "ref"
+	# ./process_summaries.py "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $guide_file $sampleID $mm $bMax "${output_folder}" "ref"
+	./process_summaries.py $final_res.bestCFD.txt $guide_file $sampleID $mm $bMax "${output_folder}" "ref" "CFD"
+	./process_summaries.py $final_res.bestmmblg.txt $guide_file $sampleID $mm $bMax "${output_folder}" "ref" "fewest"
+	./process_summaries.py $final_res.bestCRISTA.txt $guide_file $sampleID $mm $bMax "${output_folder}" "ref" "CRISTA"
 fi
 
 if ! [ -d "$output_folder/imgs" ]; then
@@ -668,7 +675,10 @@ if [ "$vcf_name" != "_" ]; then
 	cd "$output_folder/imgs"
 	while IFS= read -r line || [ -n "$line" ]; do
 		for total in $(seq 0 $(expr $mm + $bMax)); do
-			python $starting_dir/populations_distribution.py "${output_folder}/.$(basename ${output_folder}).PopulationDistribution.txt" $total $line
+			# python $starting_dir/populations_distribution.py "${output_folder}/.$(basename ${output_folder}).PopulationDistribution.txt" $total $line
+			python $starting_dir/populations_distribution.py "${output_folder}/.$(basename ${output_folder}).PopulationDistribution_CFD.txt" $total $line "CFD"
+			python $starting_dir/populations_distribution.py "${output_folder}/.$(basename ${output_folder}).PopulationDistribution_CRISTA.txt" $total $line "CRISTA"
+			python $starting_dir/populations_distribution.py "${output_folder}/.$(basename ${output_folder}).PopulationDistribution_fewest.txt" $total $line "fewest"
 		done
 
 	done <$guide_file
@@ -676,12 +686,16 @@ fi
 
 cd $starting_dir
 if [ "$vcf_name" != "_" ]; then
-	#./radar_chart.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $sampleID $annotation_file "$output_folder/imgs" $ncpus
-	./radar_chart_dict_generator.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $sampleID $annotation_file "$output_folder" $ncpus $mm $bMax
+	# ./radar_chart_dict_generator.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" $sampleID $annotation_file "$output_folder" $ncpus $mm $bMax
+	./radar_chart_dict_generator.py $guide_file $final_res.bestCFD.txt $sampleID $annotation_file "$output_folder" $ncpus $mm $bMax "CFD"
+	./radar_chart_dict_generator.py $guide_file $final_res.bestCRISTA.txt $sampleID $annotation_file "$output_folder" $ncpus $mm $bMax "CRISTA"
+	./radar_chart_dict_generator.py $guide_file $final_res.bestmmblg.txt $sampleID $annotation_file "$output_folder" $ncpus $mm $bMax "fewest"
 else
 	echo -e "dummy_file" >dummy.txt
-	#./radar_chart.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" dummy.txt $annotation_file "$output_folder/imgs" $ncpus
-	./radar_chart_dict_generator.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" dummy.txt $annotation_file "$output_folder" $ncpus $mm $bMax
+	# ./radar_chart_dict_generator.py $guide_file "${output_folder}/$(basename ${output_folder}).bestMerge.txt" dummy.txt $annotation_file "$output_folder" $ncpus $mm $bMax
+	./radar_chart_dict_generator.py $guide_file $final_res.bestCFD.txt dummy.txt $annotation_file "$output_folder" $ncpus $mm $bMax "CFD"
+	./radar_chart_dict_generator.py $guide_file $final_res.bestCRISTA.txt dummy.txt $annotation_file "$output_folder" $ncpus $mm $bMax "CRISTA"
+	./radar_chart_dict_generator.py $guide_file $final_res.bestmmblg.txt dummy.txt $annotation_file "$output_folder" $ncpus $mm $bMax "fewest"
 	rm dummy.txt
 fi
 echo -e 'Creating images\tEnd\t'$(date) >>$log
@@ -754,3 +768,7 @@ fi
 
 #keep log_error but no block visualization
 mv $output_folder/log_error.txt $output_folder/log_error_no_check.txt
+#removing single best files after use
+rm $final_res.bestCFD.txt
+rm $final_res.bestmmblg.txt
+rm $final_res.bestCRISTA.txt
