@@ -241,7 +241,7 @@ def resultPage(job_id: int) -> html.Div:
         {'name': ['', 'gRNA (spacer+PAM)'], 'id':'Guide', 'type':'text'},
         {'name': ['', 'Nuclease', ''], 'id':'Nuclease', 'type':'text'},
         {'name': [
-            '', 'CFD specificity score (0-100)'], 'id':'CFD', 'type':'text'},
+            '', 'Aggregated Specificity Score (0-100)'], 'id':'CFD', 'type':'text'},
         {'name': [
             'Off-targets for Mismatch (MM) and Bulge (B) Value', 'Total'], 'id':'Total', 'type':'text'}
     ]  # Column of headers . Remove the entries accordingly when checking type of genome
