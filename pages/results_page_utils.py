@@ -1,7 +1,7 @@
 """Python script containing static variables used in CRISPRme's result page. 
 """
 
-from typing import List
+from typing import Dict, List
 from app import current_working_directory
 
 import pandas as pd
@@ -188,7 +188,7 @@ SAMPLES_FEWEST_COLUMN = "Variant_samples_(fewest_mm+b)"
 # results filtering criteria
 FILTERING_CRITERIA = ["fewest", "CFD", "CRISTA"]
 # filter mms + bulges
-MMBULGES_FILTER = "fewest"
+MMBULGES_FILTER = "fewest_mm+b"
 # filter CFD
 CFD_FILTER = "highest_CFD"
 # filter CRISTA
@@ -280,3 +280,30 @@ def read_json() -> str:
         handle.close()
     assert filter_criterion in FILTERING_CRITERIA
     return filter_criterion
+
+
+def get_query_column(filter_criterion: str) -> Dict[str, str]:
+    query_columns = {
+        "start":"Start_coordinate",
+        "mm":"Mismatches",
+        "bul":"Bulges",
+        "bul_type":"Bulge_type"
+    }
+    if filter_criterion == FILTERING_CRITERIA[0]:
+        for key in query_columns.keys():
+            query_columns[key] = "_".join(
+                [query_columns[key], f"({MMBULGES_FILTER})"]
+            )
+    elif filter_criterion == FILTERING_CRITERIA[1]:
+        for key in query_columns.keys():
+            query_columns[key] = "_".join(
+                [query_columns[key], f"({CFD_FILTER})"]
+            )
+    elif filter_criterion == FILTERING_CRITERIA[2]:
+        for key in query_columns.keys():
+            query_columns[key] = "_".join(
+                [query_columns[key], f"({CRISTA_FILTER})"]
+            )
+    else:
+        raise ValueError
+    return query_columns
