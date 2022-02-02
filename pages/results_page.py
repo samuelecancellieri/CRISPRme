@@ -59,6 +59,7 @@ from .results_page_utils import (
     drop_columns,
     write_json,
     read_json,
+    get_query_column
 )
 
 from typing import Dict, List, Tuple
@@ -178,12 +179,15 @@ def resultPage(job_id: str) -> html.Div:
 
     # check input function arguments
     if not isinstance(job_id, str):
-        raise TypeError(f"Expected {str.__name__}, got {type(job_id).__name__}")
+        raise TypeError(
+            f"Expected {str.__name__}, got {type(job_id).__name__}")
     # start result page creation code
     value = job_id
-    job_directory = os.path.join(current_working_directory, "Results", f"{job_id}")
+    job_directory = os.path.join(
+        current_working_directory, "Results", f"{job_id}")
     integrated_file_name = glob(
-        os.path.join(current_working_directory, "Results", f"{job_id}", "*integrated*")
+        os.path.join(current_working_directory, "Results",
+                     f"{job_id}", "*integrated*")
     )[
         0
     ]  # take the first list element
@@ -208,7 +212,8 @@ def resultPage(job_id: str) -> html.Div:
     # Load mismatches
     try:
         with open(
-            os.path.join(current_working_directory, RESULTS_DIR, value, ".Params.txt")
+            os.path.join(current_working_directory,
+                         RESULTS_DIR, value, ".Params.txt")
         ) as p:
             all_params = p.read()
             real_genome_name = (
@@ -224,7 +229,8 @@ def resultPage(job_id: str) -> html.Div:
                 "\t"
             )[-1]
             genome_type_f = (
-                next(s for s in all_params.split("\n") if "Genome_selected" in s)
+                next(s for s in all_params.split(
+                    "\n") if "Genome_selected" in s)
             ).split("\t")[-1]
             ref_comp = (
                 next(s for s in all_params.split("\n") if "Ref_comp" in s)
@@ -360,7 +366,8 @@ def resultPage(job_id: str) -> html.Div:
                     "Warning: Some guides have too many targets! ",
                     html.A(
                         "Click here",
-                        href=os.path.join(URL, DATA_DIR, job_id, "guides_error.txt"),
+                        href=os.path.join(
+                            URL, DATA_DIR, job_id, "guides_error.txt"),
                         className="alert-link",
                     ),
                     " to view them",
@@ -582,7 +589,8 @@ def resultPage(job_id: str) -> html.Div:
                     dcc.Tab(
                         label="Query Genomic Region", value="tab-summary-by-position"
                     ),
-                    dcc.Tab(label="Graphical Reports", value="tab-summary-graphical"),
+                    dcc.Tab(label="Graphical Reports",
+                            value="tab-summary-graphical"),
                 ],
             )
         )
@@ -604,7 +612,8 @@ def resultPage(job_id: str) -> html.Div:
                     ),
                     dbc.Collapse(
                         dbc.Card(
-                            dbc.CardBody(html.Div(id="content-collapse-population"))
+                            dbc.CardBody(
+                                html.Div(id="content-collapse-population"))
                         ),
                         id="collapse-populations",
                     ),
@@ -623,11 +632,13 @@ def resultPage(job_id: str) -> html.Div:
                         label="Summary by Mismatches/Bulges",
                         value="tab-summary-by-guide",
                     ),
-                    dcc.Tab(label="Summary by Sample", value="tab-summary-by-sample"),
+                    dcc.Tab(label="Summary by Sample",
+                            value="tab-summary-by-sample"),
                     dcc.Tab(
                         label="Query Genomic Region", value="tab-summary-by-position"
                     ),
-                    dcc.Tab(label="Graphical Reports", value="tab-summary-graphical"),
+                    dcc.Tab(label="Graphical Reports",
+                            value="tab-summary-graphical"),
                     dcc.Tab(
                         label="Personal Risk Cards", value="tab-graphical-sample-card"
                     ),
@@ -649,9 +660,11 @@ def resultPage(job_id: str) -> html.Div:
 @app.callback(
     Output("store", "data"),
     [Input("target_filter_dropdown", "value")],
+    [State("url", "search")]
 )
-def sendto_write_json(filter_criterion: str) -> None:
-    write_json(filter_criterion)
+def sendto_write_json(filter_criterion: str, search: str) -> None:
+    job_id = search.split("=")[-1]
+    write_json(filter_criterion, job_id)
 
 
 @app.callback(
@@ -835,7 +848,7 @@ def update_iupac_scomposition_table_cluster(
     job_directory = current_working_directory + "Results/" + job_id + "/"
     hash = hash.split("#")[1]
     guide = hash[: hash.find("-Pos-")]
-    chr_pos = hash[hash.find("-Pos-") + 5 :]
+    chr_pos = hash[hash.find("-Pos-") + 5:]
     chromosome = chr_pos.split("-")[0]
     position = chr_pos.split("-")[1]
 
@@ -893,7 +906,7 @@ def update_iupac_scomposition_table_cluster(
     # Calculate sample count
 
     data_to_send = dff.iloc[
-        page_current * page_size : (page_current + 1) * page_size
+        page_current * page_size: (page_current + 1) * page_size
     ].to_dict("records")
 
     return data_to_send
@@ -917,7 +930,7 @@ def update_table_cluster(
     job_directory = current_working_directory + "Results/" + job_id + "/"
     hash = hash.split("#")[1]
     guide = hash[: hash.find("-Pos-")]
-    chr_pos = hash[hash.find("-Pos-") + 5 :]
+    chr_pos = hash[hash.find("-Pos-") + 5:]
     chromosome = chr_pos.split("-")[0]
     position = chr_pos.split("-")[1]
 
@@ -991,7 +1004,7 @@ def update_table_cluster(
     # Calculate sample count
 
     data_to_send = dff.iloc[
-        page_current * page_size : (page_current + 1) * page_size
+        page_current * page_size: (page_current + 1) * page_size
     ].to_dict("records")
     if genome_type != "ref":
         (
@@ -1028,7 +1041,7 @@ def update_table_cluster(
 
 def clusterPage(job_id, hash):
     guide = hash[: hash.find("-Pos-")]
-    chr_pos = hash[hash.find("-Pos-") + 5 :]
+    chr_pos = hash[hash.find("-Pos-") + 5:]
     chromosome = chr_pos.split("-")[0]
     position = chr_pos.split("-")[1]
     if not isdir(current_working_directory + "Results/" + job_id):
@@ -1052,7 +1065,8 @@ def clusterPage(job_id, hash):
         style_hide_reference = {}
         value_hide_reference = ["hide-ref", "hide-cluster"]
     final_list = []
-    final_list.append(html.H3("Selected Position: " + chromosome + " - " + position))
+    final_list.append(html.H3("Selected Position: " +
+                      chromosome + " - " + position))
 
     if genome_type == "ref":
         cols = [
@@ -1248,7 +1262,8 @@ def clusterPage(job_id, hash):
                             "Generating download link, Please wait...",
                             id="download-link-sumbyposition",
                         ),
-                        dcc.Interval(interval=5 * 1000, id="interval-sumbyposition"),
+                        dcc.Interval(interval=5 * 1000,
+                                     id="interval-sumbyposition"),
                     ]
                 ),
             ]
@@ -1401,13 +1416,18 @@ def global_get_sample_targets(job_id, sample, guide, page):
 
     if job_id is None:
         return ""
-    path_db = glob(current_working_directory + "Results/" + job_id + "/.*.db")[0]
+    path_db = glob(current_working_directory +
+                   "Results/" + job_id + "/.*.db")[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
+
+    selection_criteria = read_json(job_id)
+    query_cols = get_query_column(selection_criteria)
+
     result = pd.read_sql_query(
         "SELECT * FROM final_table WHERE \"{}\"='{}' AND \"{}\" LIKE '%{}%' LIMIT {} OFFSET {}".format(
-            GUIDE_COLUMN, guide, SAMPLES_COLUMN, sample, PAGE_SIZE, page * PAGE_SIZE
+            GUIDE_COLUMN, guide, query_cols['samples'], sample, PAGE_SIZE, page * PAGE_SIZE
         ),
         conn,
     )
@@ -1450,15 +1470,18 @@ def global_get_sample_targets(job_id, sample, guide, page):
         + guide
         + ".personal_targets.tsv"
     )
-    integrated_sample_personal_zip = integrated_sample_personal.replace("tsv", "zip")
+    integrated_sample_personal_zip = integrated_sample_personal.replace(
+        "tsv", "zip")
 
-    os.system(f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal} &")
+    os.system(
+        f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal} &")
 
     return result
 
 
 @app.callback(
-    [Output("table-sample-target", "data"), Output("table-sample-target", "columns")],
+    [Output("table-sample-target", "data"),
+     Output("table-sample-target", "columns")],
     [
         Input("table-sample-target", "page_current"),
         Input("table-sample-target", "page_size"),
@@ -1468,12 +1491,13 @@ def global_get_sample_targets(job_id, sample, guide, page):
     [State("url", "search"), State("url", "hash")],
 )
 def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
-    filter_criterion = read_json()
+
     job_id = search.split("=")[-1]
+    filter_criterion = read_json(job_id)
     job_directory = current_working_directory + "Results/" + job_id + "/"
     hash = hash.split("#")[1]
     guide = hash[: hash.find("-Sample-")]
-    sample = str(hash[hash.rfind("-") + 1 :])
+    sample = str(hash[hash.rfind("-") + 1:])
     with open(current_working_directory + "Results/" + job_id + "/.Params.txt") as p:
         all_params = p.read()
         genome_type_f = (
@@ -1506,7 +1530,7 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
 def samplePage(job_id, hash):
     # ###print("SAMPLE PAGE LOADED FOR", job_id, hash)
     guide = hash[: hash.find("-Sample-")]
-    sample = str(hash[hash.rfind("-") + 1 :])
+    sample = str(hash[hash.rfind("-") + 1:])
     if not isdir(current_working_directory + "Results/" + job_id):
         return html.Div(dbc.Alert("The selected result does not exist", color="danger"))
 
@@ -1541,7 +1565,8 @@ def samplePage(job_id, hash):
                             "Generating download link, Please wait...",
                             id="download-link-sumbysample",
                         ),
-                        dcc.Interval(interval=5 * 1000, id="interval-sumbysample"),
+                        dcc.Interval(interval=5 * 1000,
+                                     id="interval-sumbysample"),
                     ]
                 ),
             ]
@@ -1588,7 +1613,8 @@ def samplePage(job_id, hash):
         + guide
         + ".personal_targets.tsv"
     )
-    integrated_sample_personal_zip = integrated_sample_personal.replace("tsv", "zip")
+    integrated_sample_personal_zip = integrated_sample_personal.replace(
+        "tsv", "zip")
     final_list.append(
         html.Div(
             job_id + "." + sample + "." + guide + ".personal_targets",
@@ -1597,7 +1623,8 @@ def samplePage(job_id, hash):
         )
     )
 
-    path_db = glob(current_working_directory + "Results/" + job_id + "/.*.db")[0]
+    path_db = glob(current_working_directory +
+                   "Results/" + job_id + "/.*.db")[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
@@ -1679,7 +1706,8 @@ def global_store_general(path_file_to_load):
     if path_file_to_load is None:
         return ""
     if os.path.getsize(path_file_to_load) > 0:
-        df = pd.read_csv(path_file_to_load, sep="\t", index_col=False, na_filter=False)
+        df = pd.read_csv(path_file_to_load, sep="\t",
+                         index_col=False, na_filter=False)
     else:
         df = None
     return df
@@ -1723,8 +1751,9 @@ def update_table_subset(
     all'id delle colonne della tabella nella pagina.
     Se non ci sono targets ritorna un avviso di errore
     """
-    filter_criterion = read_json()
+
     job_id = search.split("=")[-1]
+    filter_criterion = read_json(job_id)
     job_directory = current_working_directory + "Results/" + job_id + "/"
     with open(current_working_directory + "Results/" + job_id + "/.Params.txt") as p:
         all_params = p.read()
@@ -1746,7 +1775,7 @@ def update_table_subset(
     if not (filter is None):
         filtering_expressions = filter.split(" && ")
     # filtering_expressions.append(['{crRNA} = ' + guide])
-    guide = hash_guide[1 : hash_guide.find("new")]
+    guide = hash_guide[1: hash_guide.find("new")]
     mms = hash_guide[-1:]
     bulge_s = hash_guide[-2:-1]
     if "DNA" in hash_guide:
@@ -1797,7 +1826,8 @@ def guidePagev3(job_id, hash):
         ref_comp = (next(s for s in all_params.split("\n") if "Ref_comp" in s)).split(
             "\t"
         )[-1]
-        pam = (next(s for s in all_params.split("\n") if "Pam" in s)).split("\t")[-1]
+        pam = (next(s for s in all_params.split(
+            "\n") if "Pam" in s)).split("\t")[-1]
 
     job_directory = current_working_directory + "Results/" + job_id + "/"
     genome_type = "ref"
@@ -1818,13 +1848,15 @@ def guidePagev3(job_id, hash):
     if pam_at_start:
         final_list.append(
             html.H3(
-                "Selected Guide: " + str(pam) + str(guide).replace("N", "") + add_header
+                "Selected Guide: " +
+                str(pam) + str(guide).replace("N", "") + add_header
             )
         )
     else:
         final_list.append(
             html.H3(
-                "Selected Guide: " + str(guide).replace("N", "") + str(pam) + add_header
+                "Selected Guide: " +
+                str(guide).replace("N", "") + str(pam) + add_header
             )
         )
     final_list.append(
@@ -1833,7 +1865,8 @@ def guidePagev3(job_id, hash):
                 # 'Select a row to view the target IUPAC character scomposition. The rows highlighted in red indicates that the target was found only in the genome with variants.',
                 "List of Targets found for the selected guide.",
                 dcc.Checklist(
-                    options=[{"label": "Hide Reference Targets", "value": "hide-ref"}],
+                    options=[
+                        {"label": "Hide Reference Targets", "value": "hide-ref"}],
                     id="hide-reference-targets",
                     value=value_hide_reference,
                     style=style_hide_reference,
@@ -1844,7 +1877,8 @@ def guidePagev3(job_id, hash):
                             "Generating download link, Please wait...",
                             id="download-link-sumbyguide",
                         ),
-                        dcc.Interval(interval=5 * 1000, id="interval-sumbyguide"),
+                        dcc.Interval(interval=5 * 1000,
+                                     id="interval-sumbyguide"),
                     ]
                 ),
             ]
@@ -1889,7 +1923,8 @@ def guidePagev3(job_id, hash):
         )
     )
 
-    path_db = glob(current_working_directory + "Results/" + job_id + "/.*.db")[0]
+    path_db = glob(current_working_directory +
+                   "Results/" + job_id + "/.*.db")[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
@@ -1964,56 +1999,32 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
     """
     if value is None:
         return ""
-    path_db = glob(current_working_directory + "Results/" + value + "/.*.db")[0]
+    path_db = glob(current_working_directory +
+                   "Results/" + value + "/.*.db")[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
+
+    selection_criteria = read_json(job_id)
+    query_cols = get_query_column(selection_criteria)
+
     result = pd.read_sql_query(
         'SELECT * FROM final_table WHERE "{}"=\'{}\' AND "{}"=\'{}\' AND "{}"={} AND "{}"={} AND "{}"<>\'NA\' LIMIT {} OFFSET {}'.format(
             GUIDE_COLUMN,
             guide,
-            BLG_T_COLUMN,
+            query_cols['bul_type'],
             bulge_t,
-            BLG_COLUMN,
+            query_cols['bul'],
             bulge_s,
-            MM_COLUMN,
+            query_cols['mm'],
             mms,
-            SAMPLES_COLUMN,
+            query_cols['samples'],
             PAGE_SIZE,
             page * PAGE_SIZE,
         ),
         conn,
     )
     # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
-
-    target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"='{guide}' AND \"Mismatches_(highest_CFD)\"='{mms}' AND \"Bulges_(highest_CFD)\"='{bulge_s}' AND \"Bulge_type_(highest_CFD)\"='{bulge_t}'"
-    with open(
-        current_working_directory
-        + "/Results/"
-        + job_id
-        + "/"
-        + job_id
-        + "."
-        + str(bulge_t)
-        + "."
-        + str(mms)
-        + "."
-        + str(bulge_s)
-        + "."
-        + guide
-        + ".targets.tsv",
-        "w",
-    ) as f_out:
-        # f_out.write('\t'.join(header_integrated)+'\n')
-        rows = c.execute(target_with_mm_b)
-        db_header = [description[0] for description in rows.description]
-        f_out.write("\t".join(db_header) + "\n")
-        for row in rows:
-            row = [str(ele) for ele in row]
-            f_out.write("\t".join(row) + "\n")
-    conn.commit()
-    conn.close()
-
     targets_with_mm_bul = (
         current_working_directory
         + "Results/"
@@ -2030,6 +2041,52 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
         + guide
         + ".targets.tsv"
     )
+    result.to_csv(targets_with_mm_bul, sep='\t', na_rep='NA', index=False)
+
+    # target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"='{guide}' AND \"Mismatches_(highest_CFD)\"='{mms}' AND \"Bulges_(highest_CFD)\"='{bulge_s}' AND \"Bulge_type_(highest_CFD)\"='{bulge_t}'"
+    # with open(
+    #     current_working_directory
+    #     + "/Results/"
+    #     + job_id
+    #     + "/"
+    #     + job_id
+    #     + "."
+    #     + str(bulge_t)
+    #     + "."
+    #     + str(mms)
+    #     + "."
+    #     + str(bulge_s)
+    #     + "."
+    #     + guide
+    #     + ".targets.tsv",
+    #     "w",
+    # ) as f_out:
+    #     # f_out.write('\t'.join(header_integrated)+'\n')
+    #     rows = c.execute(target_with_mm_b)
+    #     db_header = [description[0] for description in rows.description]
+    #     f_out.write("\t".join(db_header) + "\n")
+    #     for row in rows:
+    #         row = [str(ele) for ele in row]
+    #         f_out.write("\t".join(row) + "\n")
+    # conn.commit()
+    # conn.close()
+
+    # targets_with_mm_bul = (
+    #     current_working_directory
+    #     + "Results/"
+    #     + job_id
+    #     + "/"
+    #     + job_id
+    #     + "."
+    #     + str(bulge_t)
+    #     + "."
+    #     + str(mms)
+    #     + "."
+    #     + str(bulge_s)
+    #     + "."
+    #     + guide
+    #     + ".targets.tsv"
+    # )
     targets_with_mm_bul_zip = targets_with_mm_bul.replace("tsv", "zip")
 
     os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
@@ -2044,54 +2101,30 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
     """
     if value is None:
         return ""
-    path_db = glob(current_working_directory + "Results/" + value + "/.*.db")[0]
+    path_db = glob(current_working_directory +
+                   "Results/" + value + "/.*.db")[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
+
+    selection_criteria = read_json(job_id)
+    query_cols = get_query_column(selection_criteria)
+
     result = pd.read_sql_query(
         'SELECT * FROM final_table WHERE "{}"=\'{}\' AND "{}"=\'{}\' AND "{}"={} AND "{}"={} LIMIT {} OFFSET {}'.format(
             GUIDE_COLUMN,
             guide,
-            BLG_T_COLUMN,
+            query_cols['bul_type'],
             bulge_t,
-            BLG_COLUMN,
+            query_cols['bul'],
             bulge_s,
-            MM_COLUMN,
+            query_cols['mm'],
             mms,
             PAGE_SIZE,
             page * PAGE_SIZE,
         ),
         conn,
     )
-    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
-
-    target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"='{guide}' AND \"Mismatches_(highest_CFD)\"='{mms}' AND \"Bulges_(highest_CFD)\"='{bulge_s}' AND \"Bulge_type_(highest_CFD)\"='{bulge_t}'"
-    with open(
-        current_working_directory
-        + "/Results/"
-        + job_id
-        + "/"
-        + job_id
-        + "."
-        + str(bulge_t)
-        + "."
-        + str(mms)
-        + "."
-        + str(bulge_s)
-        + "."
-        + guide
-        + ".targets.tsv",
-        "w",
-    ) as f_out:
-        # f_out.write('\t'.join(header_integrated)+'\n')
-        rows = c.execute(target_with_mm_b)
-        db_header = [description[0] for description in rows.description]
-        f_out.write("\t".join(db_header) + "\n")
-        for row in rows:
-            row = [str(ele) for ele in row]
-            f_out.write("\t".join(row) + "\n")
-    conn.commit()
-    conn.close()
 
     targets_with_mm_bul = (
         current_working_directory
@@ -2109,6 +2142,53 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
         + guide
         + ".targets.tsv"
     )
+    result.to_csv(targets_with_mm_bul, sep='\t', na_rep='NA', index=False)
+    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
+
+    # target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"='{guide}' AND \"Mismatches_(highest_CFD)\"='{mms}' AND \"Bulges_(highest_CFD)\"='{bulge_s}' AND \"Bulge_type_(highest_CFD)\"='{bulge_t}'"
+    # with open(
+    #     current_working_directory
+    #     + "/Results/"
+    #     + job_id
+    #     + "/"
+    #     + job_id
+    #     + "."
+    #     + str(bulge_t)
+    #     + "."
+    #     + str(mms)
+    #     + "."
+    #     + str(bulge_s)
+    #     + "."
+    #     + guide
+    #     + ".targets.tsv",
+    #     "w",
+    # ) as f_out:
+    #     # f_out.write('\t'.join(header_integrated)+'\n')
+    #     rows = c.execute(target_with_mm_b)
+    #     db_header = [description[0] for description in rows.description]
+    #     f_out.write("\t".join(db_header) + "\n")
+    #     for row in rows:
+    #         row = [str(ele) for ele in row]
+    #         f_out.write("\t".join(row) + "\n")
+    # conn.commit()
+    # conn.close()
+
+    # targets_with_mm_bul = (
+    #     current_working_directory
+    #     + "Results/"
+    #     + job_id
+    #     + "/"
+    #     + job_id
+    #     + "."
+    #     + str(bulge_t)
+    #     + "."
+    #     + str(mms)
+    #     + "."
+    #     + str(bulge_s)
+    #     + "."
+    #     + guide
+    #     + ".targets.tsv"
+    # )
     targets_with_mm_bul_zip = targets_with_mm_bul.replace("tsv", "zip")
 
     os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
@@ -2401,7 +2481,8 @@ def update_table_general_profile(
 
             # table_to_file.append('IN THE FOLLOWING MATRIX, THE FIRST GROUP OF '+str(max_bulges)+' LINES, ARE REFERED TO REFERENCE TARGET, THE SECOND GROUP OF '+str(max_bulges)+' LINES ARE REFERED TO VARIANT GENOME')
 
-            table_to_file.append(data_general_count_copy.to_string(index=False))
+            table_to_file.append(
+                data_general_count_copy.to_string(index=False))
 
             if genome_type == "both":
                 data_guides["Doench 2016"] = doench[x]
@@ -2423,7 +2504,8 @@ def update_table_general_profile(
                 for i in range(len(data_guides["# Bulges"].split("\n")) - 1):
                     if i == 1:
                         data_guides["Total"].append(
-                            "REFERENCE\t" + str(sum(data_general_count.iloc[i, :]))
+                            "REFERENCE\t" +
+                            str(sum(data_general_count.iloc[i, :]))
                         )
                     elif i == 2:
                         data_guides["Total"].append(
@@ -2432,7 +2514,8 @@ def update_table_general_profile(
                         data_guides["Total"].append("\t")
                     elif i == 4:
                         data_guides["Total"].append(
-                            "VARIANT\t\t" + str(sum(data_general_count.iloc[i, :]))
+                            "VARIANT\t\t" +
+                            str(sum(data_general_count.iloc[i, :]))
                         )
                     else:
                         data_guides["Total"].append(
@@ -2442,12 +2525,14 @@ def update_table_general_profile(
                 for i in range(len(data_guides["# Bulges"].split("\n")) - 1):
                     if i == 1:
                         data_guides["Total"].append(
-                            "REFERENCE\t" + str(sum(data_general_count.iloc[i, :]))
+                            "REFERENCE\t" +
+                            str(sum(data_general_count.iloc[i, :]))
                         )
                         data_guides["Total"].append("\t")
                     elif i == 3:
                         data_guides["Total"].append(
-                            "VARIANT\t\t" + str(sum(data_general_count.iloc[i, :]))
+                            "VARIANT\t\t" +
+                            str(sum(data_general_count.iloc[i, :]))
                         )
                     else:
                         data_guides["Total"].append(
@@ -2457,12 +2542,14 @@ def update_table_general_profile(
                 for i in range(len(data_guides["# Bulges"].split("\n")) - 1):
                     if i == 0:
                         data_guides["Total"].append(
-                            "REFERENCE\t" + str(sum(data_general_count.iloc[i, :]))
+                            "REFERENCE\t" +
+                            str(sum(data_general_count.iloc[i, :]))
                         )
                         data_guides["Total"].append("\t")
                     elif i == 1:
                         data_guides["Total"].append(
-                            "VARIANT\t\t" + str(sum(data_general_count.iloc[i, :]))
+                            "VARIANT\t\t" +
+                            str(sum(data_general_count.iloc[i, :]))
                         )
         else:
             for i in range(len(data_guides["# Bulges"].split("\n"))):
@@ -2483,7 +2570,8 @@ def update_table_general_profile(
         else:
             for i in range(mms + 1):
                 tmp = list(
-                    data_general_count.iloc[: max_bulges + 1, i].values.astype(str)
+                    data_general_count.iloc[: max_bulges +
+                                            1, i].values.astype(str)
                 )
                 # tmp.insert(len(tmp)//2, "")
                 data_guides[str(i) + "MM"] = "\n".join(tmp)
@@ -2520,9 +2608,11 @@ def update_table_general_profile(
 
     if "NO SCORES" not in all_scores:
         try:
-            dff = dff.sort_values(["CFD", "Doench 2016"], ascending=[False, False])
+            dff = dff.sort_values(["CFD", "Doench 2016"],
+                                  ascending=[False, False])
         except:  # for BOTH
-            dff = dff.sort_values(["CFD", "Enriched"], ascending=[False, False])
+            dff = dff.sort_values(["CFD", "Enriched"],
+                                  ascending=[False, False])
     else:
         try:
             dff = dff.sort_values("On-Targets Reference", ascending=True)
@@ -2555,7 +2645,7 @@ def update_table_general_profile(
     # Calculate sample count
 
     data_to_send = dff.iloc[
-        page_current * page_size : (page_current + 1) * page_size
+        page_current * page_size: (page_current + 1) * page_size
     ].to_dict("records")
     return data_to_send, [{"row": 0, "column": 0}]
 
@@ -2655,13 +2745,16 @@ def filterPositionTable(
     if not filter_criterion in FILTERING_CRITERIA:
         raise ValueError(f"Forbidden filtering criterion {filter_criterion}")
     if not isinstance(search, str):
-        raise TypeError(f"Expected {str.__name__}, got {type(search).__name__}")
+        raise TypeError(
+            f"Expected {str.__name__}, got {type(search).__name__}")
     if not isinstance(sel_cel, list):
-        raise TypeError(f"Expected {list.__name__}, got {type(sel_cel).__name__}")
+        raise TypeError(
+            f"Expected {list.__name__}, got {type(sel_cel).__name__}")
     if not bool(sel_cel):
         raise ValueError("Empty Dictionary, stopping execution.")
     if not isinstance(all_guides, list):
-        raise TypeError(f"Expected {list.__name__}, got {type(all_guides).__name__}")
+        raise TypeError(
+            f"Expected {list.__name__}, got {type(all_guides).__name__}")
     if not bool(all_guides):
         raise ValueError("Empty Dictionary, stopping execution.")
 
@@ -2690,7 +2783,8 @@ def filterPositionTable(
         raise PreventUpdate
     current_page = int(current_page.split("/")[0])
     job_id = search.split("=")[-1]
-    job_directory = os.path.join(current_working_directory, RESULTS_DIR, job_id)
+    job_directory = os.path.join(
+        current_working_directory, RESULTS_DIR, job_id)
     guide = all_guides[int(sel_cel[0]["row"])]["Guide"]
     # recover db file
     db_path = glob(
@@ -2702,9 +2796,13 @@ def filterPositionTable(
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     query = 'SELECT * FROM final_table WHERE "{}"=\'{}\' AND "{}">={} AND "{}"<={} AND "{}"=\'{}\''
+
+    selection_criteria = read_json(job_id)
+    query_cols = get_query_column(selection_criteria)
+
     result = pd.read_sql_query(
         query.format(
-            GUIDE_COLUMN, guide, POS_COLUMN, start, POS_COLUMN, end, CHR_COLUMN, chrom
+            GUIDE_COLUMN, guide, query_cols['start'], start, query_cols['start'], end, CHR_COLUMN, chrom
         ),
         conn,
     )
@@ -2814,9 +2912,11 @@ def updatePositionFilter(
     if not isinstance(chrom, str):
         raise TypeError(f"Expected {str.__name__}, got {type(chrom).__name__}")
     if not isinstance(pos_start, str):
-        raise TypeError(f"Expected {str.__name__}, got {type(pos_start).__name__}")
+        raise TypeError(
+            f"Expected {str.__name__}, got {type(pos_start).__name__}")
     if not isinstance(pos_end, str):
-        raise TypeError(f"Expected {str.__name__}, got {type(pos_end).__name__}")
+        raise TypeError(
+            f"Expected {str.__name__}, got {type(pos_end).__name__}")
 
     if n is None:  # no click -> no page update
         raise PreventUpdate
@@ -3027,12 +3127,14 @@ def filterSampleTable(
                     if pop is None or pop == "":
                         df.drop(
                             df[
-                                (~(df["Population"].isin(population_1000gp[sup_pop])))
+                                (~(df["Population"].isin(
+                                    population_1000gp[sup_pop])))
                             ].index,
                             inplace=True,
                         )
                     else:
-                        df.drop(df[(df["Population"] != pop)].index, inplace=True)
+                        df.drop(df[(df["Population"] != pop)].index,
+                                inplace=True)
                 else:
                     df.drop(df[(df["Sample"] != samp)].index, inplace=True)
 
@@ -3081,12 +3183,14 @@ def filterSampleTable(
                     if pop is None or pop == "":
                         df.drop(
                             df[
-                                (~(df["Population"].isin(population_1000gp[sup_pop])))
+                                (~(df["Population"].isin(
+                                    population_1000gp[sup_pop])))
                             ].index,
                             inplace=True,
                         )
                     else:
-                        df.drop(df[(df["Population"] != pop)].index, inplace=True)
+                        df.drop(df[(df["Population"] != pop)].index,
+                                inplace=True)
                 else:
                     df.drop(df[(df["Sample"] != samp)].index, inplace=True)
             max_page = len(df.index)
@@ -3137,7 +3241,8 @@ def updateSampleDrop(pop, search):
         return [], None
     job_id = search.split("=")[-1]
     job_directory = current_working_directory + "Results/" + job_id + "/"
-    dict_pop = associateSample.loadSampleAssociation(job_directory + ".sampleID.txt")[3]
+    dict_pop = associateSample.loadSampleAssociation(
+        job_directory + ".sampleID.txt")[3]
     return [{"label": sam, "value": sam} for sam in dict_pop[pop]], None
 
 
@@ -3262,7 +3367,7 @@ def generate_table_position(
                 dataframe.iloc[i + (page - 1) * max_rows][col],
                 style={"vertical-align": "middle", "text-align": "center"},
             )
-            for col in dataframe.columns[5 : 5 + mms + 1]
+            for col in dataframe.columns[5: 5 + mms + 1]
         ]
         data.append(
             html.Tr(
@@ -3278,16 +3383,19 @@ def generate_table_position(
                             + guide
                             + "-Pos-"
                             + str(
-                                dataframe.iloc[i + (page - 1) * max_rows]["Chromosome"]
+                                dataframe.iloc[i + (page - 1)
+                                               * max_rows]["Chromosome"]
                             )
                             + "-"
                             + str(
-                                dataframe.iloc[i + (page - 1) * max_rows]["Position"]
+                                dataframe.iloc[i + (page - 1)
+                                               * max_rows]["Position"]
                             ),
                             target="_blank",
                         ),
                         rowSpan=str(bulges + 1),
-                        style={"vertical-align": "middle", "text-align": "center"},
+                        style={"vertical-align": "middle",
+                               "text-align": "center"},
                     )
                 ]
             )
@@ -3298,13 +3406,14 @@ def generate_table_position(
                     [
                         html.Th(
                             str(b + 1) + " Bulge",
-                            style={"vertical-align": "middle", "text-align": "center"},
+                            style={"vertical-align": "middle",
+                                   "text-align": "center"},
                         )
                     ]
                     + [
                         html.Td(dataframe.iloc[i + (page - 1) * max_rows][col])
                         for col in dataframe.columns[
-                            5 + (b + 1) * (mms + 1) : 5 + (b + 1) * (mms + 1) + mms + 1
+                            5 + (b + 1) * (mms + 1): 5 + (b + 1) * (mms + 1) + mms + 1
                         ]
                     ]
                 )
@@ -3334,7 +3443,8 @@ def generate_table_samples(dataframe, id_table, page, guide="", job_id="", max_r
                             + "#"
                             + guide
                             + "-Sample-"
-                            + dataframe.iloc[i + (page - 1) * max_rows]["Sample"],
+                            + dataframe.iloc[i + \
+                                             (page - 1) * max_rows]["Sample"],
                             target="_blank",
                         )
                     )
@@ -3393,7 +3503,8 @@ def generate_table(
     header.append(
         html.Tr(
             [
-                html.Th(x, style={"vertical-align": "middle", "text-align": "center"})
+                html.Th(x, style={"vertical-align": "middle",
+                        "text-align": "center"})
                 for x in ["Reference", "Variant", "Combined"]
             ]
         )
@@ -3417,12 +3528,14 @@ def generate_table(
                             + str(dataframe.iloc[i]["Mismatches"]),
                             target="_blank",
                         ),
-                        style={"vertical-align": "middle", "text-align": "center"},
+                        style={"vertical-align": "middle",
+                               "text-align": "center"},
                     )
                     if col == ""
                     else html.Td(
                         dataframe.iloc[i][col],
-                        style={"vertical-align": "middle", "text-align": "center"},
+                        style={"vertical-align": "middle",
+                               "text-align": "center"},
                     )
                     for col in dataframe.columns
                 ]
@@ -3500,7 +3613,8 @@ def updateImagesTabs(mm, sel_cel, selection_criteria, search, all_guides):
                                 ).read()
                             ).decode()
                         ),
-                        id="distribution-population" + str(int(mm) + int(bulge)),
+                        id="distribution-population" +
+                        str(int(mm) + int(bulge)),
                         width="100%",
                         height="auto",
                     ),
@@ -3519,7 +3633,8 @@ def updateImagesTabs(mm, sel_cel, selection_criteria, search, all_guides):
     except:
         population_barplots = [
             html.Div(
-                html.H2("No result found for this combination of mismatches and bulges")
+                html.H2(
+                    "No result found for this combination of mismatches and bulges")
             )
         ]
 
@@ -3672,32 +3787,28 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
         job_directory + job_id + "." + sample + "." + guide + ".private_targets.tsv"
     )
 
-    path_db = glob(current_working_directory + "Results/" + job_id + "/.*.db")[0]
+    path_db = glob(current_working_directory +
+                   "Results/" + job_id + "/.*.db")[0]
     path_db = str(path_db)
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
 
-    if selection_criteria == "CFD":
-        sample_col = SAMPLES_COLUMN
-        sort_col = CFD_COLUMN
-    elif selection_criteria == "CRISTA":
-        sample_col = SAMPLES_CRISTA_COLUMN
-        sort_col = CRISTA_COLUMN
-    else:
-        sample_col = SAMPLES_FEWEST_COLUMN
-        sort_col = TOTAL_FEWEST_COLUMN
+    query_cols = get_query_column(selection_criteria)
 
     result_personal = pd.read_sql_query(
         "SELECT * FROM final_table WHERE \"{}\"='{}' AND \"{}\" LIKE '%{}%'".format(
-            GUIDE_COLUMN, guide, sample_col, sample
+            GUIDE_COLUMN, guide, query_cols['samples'], sample
         ),
         conn,
     )
-    # result_personal = result_personal.sort_values(
-    #     [CFD_COLUMN, TOTAL_COLUMN], ascending=[False, True])
-    result_personal = result_personal.sort_values([sort_col], ascending=[False])
-
-    result_private = result_personal[result_personal[sample_col] == sample]
+    # sort personal data targets
+    order = False
+    if selection_criteria == 'fewest':
+        order = True
+    result_personal = result_personal.sort_values(
+        [query_cols['sort']], ascending=[order])
+    # extract sample private targets
+    result_private = result_personal[result_personal[query_cols['samples']] == sample]
 
     conn.commit()
     conn.close()
@@ -3979,7 +4090,8 @@ def updateContentTab(
         max_bulges = (
             next(s for s in all_params.split("\n") if "Max_bulges" in s)
         ).split("\t")[-1]
-        pam = (next(s for s in all_params.split("\n") if "Pam" in s)).split("\t")[-1]
+        pam = (next(s for s in all_params.split(
+            "\n") if "Pam" in s)).split("\t")[-1]
         nuclease = (next(s for s in all_params.split("\n") if "Nuclease" in s)).split(
             "\t"
         )[-1]
@@ -3999,7 +4111,8 @@ def updateContentTab(
     if str(guide)[0] == "N":
         pam_at_start = True
     if pam_at_start:
-        fl.append(html.H5("Focus on: " + str(pam) + str(guide).replace("N", "")))
+        fl.append(html.H5("Focus on: " + str(pam) +
+                  str(guide).replace("N", "")))
     else:
         fl.append(html.H5("Focus on: " + str(guide).replace("N", "") + str(pam)))
 
@@ -4109,7 +4222,8 @@ def updateContentTab(
         population_1000gp = associateSample.loadSampleAssociation(
             job_directory + ".sampleID.txt"
         )[2]
-        super_populations = [{"label": i, "value": i} for i in population_1000gp.keys()]
+        super_populations = [{"label": i, "value": i}
+                             for i in population_1000gp.keys()]
         populations = []
         for k in population_1000gp.keys():
             for i in population_1000gp[k]:
@@ -4204,7 +4318,8 @@ def updateContentTab(
         )
         max_page = len(df.index)
         max_page = math.floor(max_page / 10) + 1
-        fl.append(html.Div("1/" + str(max_page), id="div-current-page-table-samples"))
+        fl.append(html.Div("1/" + str(max_page),
+                  id="div-current-page-table-samples"))
         return fl
     elif value == "tab-summary-by-position":
         # Show Summary by position table
@@ -4262,7 +4377,8 @@ def updateContentTab(
             ]
         )
         chr_file += chr_file_unset
-        chr_file = [{"label": chr_name, "value": chr_name} for chr_name in chr_file]
+        chr_file = [{"label": chr_name, "value": chr_name}
+                    for chr_name in chr_file]
 
         # Colonne tabella: chr, pos, target migliore, min mm, min bulges, num target per ogni categoria di mm e bulge, show targets; ordine per total, poi mm e poi bulge
         # TODO inserire failsafe se non ci sono chr, esempio elenco chr da 1 a 22
@@ -4298,7 +4414,8 @@ def updateContentTab(
                             ),
                             dbc.Col(
                                 html.Div(
-                                    html.Button("Filter", id="button-filter-position")
+                                    html.Button(
+                                        "Filter", id="button-filter-position")
                                 )
                             ),
                             html.Br()
@@ -4320,9 +4437,11 @@ def updateContentTab(
         )
         # start_time = time.time()
         fl.append(html.Br())
-        fl.append(html.Div(style={"text-align": "center"}, id="div-table-position"))
+        fl.append(
+            html.Div(style={"text-align": "center"}, id="div-table-position"))
         max_page = 1
-        fl.append(html.Div("1/" + str(max_page), id="div-current-page-table-position"))
+        fl.append(html.Div("1/" + str(max_page),
+                  id="div-current-page-table-position"))
         fl.append(
             html.Div(
                 mms + "-" + max_bulges,
@@ -4370,11 +4489,13 @@ def updateContentTab(
                             ),
                             dbc.Col(
                                 html.Div(
-                                    html.Button("Generate", id="button-sample-card")
+                                    html.Button(
+                                        "Generate", id="button-sample-card")
                                 )
                             ),
                             dbc.Col(
-                                html.Div(id="download-link-personal-card", hidden=True)
+                                html.Div(
+                                    id="download-link-personal-card", hidden=True)
                             ),
                         ]
                     ),
@@ -4500,7 +4621,8 @@ def updateContentTab(
                             html.Div(
                                 [
                                     html.H4("Group by"),
-                                    dcc.RadioItems(id="order", value="CFD_score"),
+                                    dcc.RadioItems(
+                                        id="order", value="CFD_score"),
                                 ]
                             ),
                             width=3,
@@ -4541,7 +4663,8 @@ def updateContentTab(
                                                     html.Div(
                                                         [
                                                             html.H6("Max"),
-                                                            dcc.Dropdown(id="maxdrop"),
+                                                            dcc.Dropdown(
+                                                                id="maxdrop"),
                                                         ]
                                                     )
                                                 ]
@@ -4559,8 +4682,10 @@ def updateContentTab(
                                     dcc.RadioItems(
                                         id="Radio-asc-1",
                                         options=[
-                                            {"label": " Ascending", "value": "ASC"},
-                                            {"label": " Descending", "value": "DESC"},
+                                            {"label": " Ascending",
+                                                "value": "ASC"},
+                                            {"label": " Descending",
+                                                "value": "DESC"},
                                         ],
                                         value="DESC",
                                         labelStyle={
@@ -4862,7 +4987,8 @@ def updateContentTab(
             html.Div(
                 [
                     CFD_notification,
-                    dbc.Row(dbc.Col(top1000_image, width={"size": 10, "offset": 2})),
+                    dbc.Row(dbc.Col(top1000_image, width={
+                            "size": 10, "offset": 2})),
                     dbc.Row(total_buttons, justify="center"),
                     html.Br(),
                 ]
@@ -4877,7 +5003,8 @@ def updateContentTab(
         sample_image_content = html.Div(id="div-sample-image")
 
         if genome_type != "ref":
-            graph_summary_both = [populations_barplots, radar_chart_encode_gencode]
+            graph_summary_both = [
+                populations_barplots, radar_chart_encode_gencode]
         else:
             graph_summary_both = [radar_chart_encode_gencode]
 
@@ -4939,7 +5066,7 @@ def split_filter_part(filter_part):
         for operator in operator_type:
             if operator in filter_part:
                 name_part, value_part = filter_part.split(operator, 1)
-                name = name_part[name_part.find("{") + 1 : name_part.rfind("}")]
+                name = name_part[name_part.find("{") + 1: name_part.rfind("}")]
 
                 value_part = value_part.strip()
                 v0 = value_part[0]
@@ -5077,7 +5204,7 @@ def update_table(page_current, page_size, sort_by, filter, search, hash_guide):
             "No results were found with the given parameters", color="warning"
         )
 
-    return dff.iloc[page_current * page_size : (page_current + 1) * page_size].to_dict(
+    return dff.iloc[page_current * page_size: (page_current + 1) * page_size].to_dict(
         "records"
     )
 
@@ -5375,13 +5502,15 @@ def set_display_children(selected_order):
 
 
 @app.callback(
-    Output("maxdrop", "options"), [Input("sholddrop", "value"), Input("order", "value")]
+    Output("maxdrop", "options"), [
+        Input("sholddrop", "value"), Input("order", "value")]
 )
 def maxdrop(sholddrop, order):
     if order == "Mismatches":
         if sholddrop:
             start_value = int(sholddrop)
-            data = [{"label": str(i), "value": str(i)} for i in range(start_value, 7)]
+            data = [{"label": str(i), "value": str(i)}
+                    for i in range(start_value, 7)]
         else:
             data = []
 
@@ -5409,14 +5538,16 @@ def maxdrop(sholddrop, order):
     elif order == "Bulges":
         if sholddrop:
             start_value = int(sholddrop)
-            data = [{"label": str(i), "value": str(i)} for i in range(start_value, 3)]
+            data = [{"label": str(i), "value": str(i)}
+                    for i in range(start_value, 3)]
         else:
             data = []
 
     elif order == "Mismatches+bulges":
         if sholddrop:
             start_value = int(sholddrop)
-            data = [{"label": str(i), "value": str(i)} for i in range(start_value, 9)]
+            data = [{"label": str(i), "value": str(i)}
+                    for i in range(start_value, 9)]
         else:
             data = []
 

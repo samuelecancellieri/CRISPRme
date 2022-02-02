@@ -152,7 +152,8 @@ COL_BOTH_RENAME = {
     37: "Annotation_ENCODE",
 }
 # genome database fields
-GENOME_DATABASE = ["Reference", "Enriched", "Samples", "Dictionary", "Annotation"]
+GENOME_DATABASE = ["Reference", "Enriched",
+                   "Samples", "Dictionary", "Annotation"]
 # results directory
 RESULTS_DIR = "Results"
 # data directory
@@ -214,7 +215,8 @@ def drop_columns(table: pd.DataFrame, filter_criterion: str) -> List[str]:
     """
 
     if not isinstance(table, pd.DataFrame):
-        raise TypeError(f"Expected {pd.DataFrame.__name__}, got {type(table).__name__}")
+        raise TypeError(
+            f"Expected {pd.DataFrame.__name__}, got {type(table).__name__}")
     if not isinstance(filter_criterion, str):
         raise TypeError(
             f"Expected {str.__name__}, got {type(filter_criterion).__name__}"
@@ -246,11 +248,12 @@ def drop_columns(table: pd.DataFrame, filter_criterion: str) -> List[str]:
     return drops
 
 
-def write_json(dropdown_value: str) -> None:
+def write_json(dropdown_value: str, job_id: str) -> None:
     if not isinstance(dropdown_value, str):
-        raise TypeError(f"Expected {str.__name__}, got {type(dropdown_value).__name__}")
+        raise TypeError(
+            f"Expected {str.__name__}, got {type(dropdown_value).__name__}")
     dropdown_json_file = os.path.join(
-        current_working_directory, RESULTS_DIR, ".dropdown.json"
+        current_working_directory, RESULTS_DIR, job_id, ".dropdown.json"
     )
     try:
         handle = open(dropdown_json_file, mode="w")
@@ -261,9 +264,9 @@ def write_json(dropdown_value: str) -> None:
         handle.close()
 
 
-def read_json() -> str:
+def read_json(job_id: str) -> str:
     dropdown_json_file = os.path.join(
-        current_working_directory, RESULTS_DIR, ".dropdown.json"
+        current_working_directory, RESULTS_DIR, job_id, ".dropdown.json"
     )
     if not os.path.isfile(dropdown_json_file):
         raise FileNotFoundError(f"Unable to locate {dropdown_json_file}")
@@ -284,26 +287,34 @@ def read_json() -> str:
 
 def get_query_column(filter_criterion: str) -> Dict[str, str]:
     query_columns = {
-        "start":"Start_coordinate",
-        "mm":"Mismatches",
-        "bul":"Bulges",
-        "bul_type":"Bulge_type"
+        "start": "Start_coordinate",
+        "mm": "Mismatches",
+        "bul": "Bulges",
+        "bul_type": "Bulge_type",
+        "sort": "",
+        "samples": ""
     }
     if filter_criterion == FILTERING_CRITERIA[0]:
         for key in query_columns.keys():
             query_columns[key] = "_".join(
                 [query_columns[key], f"({MMBULGES_FILTER})"]
             )
+            query_columns['sort'] = TOTAL_FEWEST_COLUMN
+            query_columns['samples'] = SAMPLES_FEWEST_COLUMN
     elif filter_criterion == FILTERING_CRITERIA[1]:
         for key in query_columns.keys():
             query_columns[key] = "_".join(
                 [query_columns[key], f"({CFD_FILTER})"]
             )
+            query_columns['sort'] = CFD_COLUMN
+            query_columns['samples'] = SAMPLES_COLUMN
     elif filter_criterion == FILTERING_CRITERIA[2]:
         for key in query_columns.keys():
             query_columns[key] = "_".join(
                 [query_columns[key], f"({CRISTA_FILTER})"]
             )
+            query_columns['sort'] = CRISTA_COLUMN
+            query_columns['samples'] = SAMPLES_CRISTA_COLUMN
     else:
         raise ValueError
     return query_columns
