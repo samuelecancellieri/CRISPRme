@@ -1422,8 +1422,8 @@ def global_get_sample_targets(job_id, sample, guide, page):
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
 
-    selection_criteria = read_json(job_id)
-    query_cols = get_query_column(selection_criteria)
+    filter_criterion = read_json(job_id)
+    query_cols = get_query_column(filter_criterion)
 
     result = pd.read_sql_query(
         "SELECT * FROM final_table WHERE \"{}\"='{}' AND \"{}\" LIKE '%{}%' LIMIT {} OFFSET {}".format(
@@ -1431,50 +1431,6 @@ def global_get_sample_targets(job_id, sample, guide, page):
         ),
         conn,
     )
-    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
-
-    total_private_sample = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"='{guide}' AND \"Variant_samples_(highest_CFD)\" LIKE '%{sample}%'"
-    with open(
-        current_working_directory
-        + "/Results/"
-        + job_id
-        + "/"
-        + job_id
-        + "."
-        + str(sample)
-        + "."
-        + guide
-        + ".personal_targets.tsv",
-        "w",
-    ) as f_out:
-        # f_out.write('\t'.join(header_integrated)+'\n')
-        rows = c.execute(total_private_sample)
-        db_header = [description[0] for description in rows.description]
-        f_out.write("\t".join(db_header) + "\n")
-        for row in rows:
-            row = [str(ele) for ele in row]
-            f_out.write("\t".join(row) + "\n")
-
-    conn.commit()
-    conn.close()
-
-    integrated_sample_personal = (
-        current_working_directory
-        + "Results/"
-        + job_id
-        + "/"
-        + job_id
-        + "."
-        + sample
-        + "."
-        + guide
-        + ".personal_targets.tsv"
-    )
-    integrated_sample_personal_zip = integrated_sample_personal.replace(
-        "tsv", "zip")
-
-    os.system(
-        f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal} &")
 
     return result
 
@@ -1518,6 +1474,30 @@ def update_table_sample(page_current, page_size, sort_by, filter, search, hash):
     df = global_get_sample_targets(job_id, sample, guide, page_current)
     drop_cols = drop_columns(df, filter_criterion)
     df.drop(drop_cols, inplace=True, axis=1)
+
+    # name of file to report personal targets
+    integrated_sample_personal = (
+        current_working_directory
+        + "Results/"
+        + job_id
+        + "/"
+        + job_id
+        + "."
+        + sample
+        + "."
+        + guide
+        + ".personal_targets.tsv"
+    )
+
+    # save dataframe to personal targets file
+    df.to_csv(integrated_sample_personal, sep='\t', na_rep='NA', index=False)
+    # zip name of the file
+    integrated_sample_personal_zip = integrated_sample_personal.replace(
+        "tsv", "zip")
+    # zip operation, non blocking
+    os.system(
+        f"zip -j {integrated_sample_personal_zip} {integrated_sample_personal} &")
+
     columns_df = [
         {"name": i, "id": i, "hideable": True} for col, i in enumerate(df.columns)
     ]
@@ -1795,6 +1775,31 @@ def update_table_subset(
         )
     drop_cols = drop_columns(result, filter_criterion)
     result = result.drop(drop_cols, axis=1)
+
+    # name of target file filtered with bul-type, mm and bul
+    targets_with_mm_bul = (
+        current_working_directory
+        + "Results/"
+        + job_id
+        + "/"
+        + job_id
+        + "."
+        + str(bulge_t)
+        + "."
+        + str(mms)
+        + "."
+        + str(bulge_s)
+        + "."
+        + guide
+        + ".targets.tsv"
+    )
+    # save df to tsv with filtered data
+    result.to_csv(targets_with_mm_bul, sep='\t', na_rep='NA', index=False)
+    # change name to zip file
+    targets_with_mm_bul_zip = targets_with_mm_bul.replace("tsv", "zip")
+    # zip operation, non blocking
+    os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
+
     columns_result = [
         {"name": i, "id": i, "hideable": True} for col, i in enumerate(result.columns)
     ]
@@ -2005,8 +2010,8 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
 
-    selection_criteria = read_json(job_id)
-    query_cols = get_query_column(selection_criteria)
+    filter_criterion = read_json(job_id)
+    query_cols = get_query_column(filter_criterion)
 
     result = pd.read_sql_query(
         'SELECT * FROM final_table WHERE "{}"=\'{}\' AND "{}"=\'{}\' AND "{}"={} AND "{}"={} AND "{}"<>\'NA\' LIMIT {} OFFSET {}'.format(
@@ -2024,72 +2029,6 @@ def global_store_subset_no_ref(value, bulge_t, bulge_s, mms, guide, page, job_id
         ),
         conn,
     )
-    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
-    targets_with_mm_bul = (
-        current_working_directory
-        + "Results/"
-        + job_id
-        + "/"
-        + job_id
-        + "."
-        + str(bulge_t)
-        + "."
-        + str(mms)
-        + "."
-        + str(bulge_s)
-        + "."
-        + guide
-        + ".targets.tsv"
-    )
-    result.to_csv(targets_with_mm_bul, sep='\t', na_rep='NA', index=False)
-
-    # target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"='{guide}' AND \"Mismatches_(highest_CFD)\"='{mms}' AND \"Bulges_(highest_CFD)\"='{bulge_s}' AND \"Bulge_type_(highest_CFD)\"='{bulge_t}'"
-    # with open(
-    #     current_working_directory
-    #     + "/Results/"
-    #     + job_id
-    #     + "/"
-    #     + job_id
-    #     + "."
-    #     + str(bulge_t)
-    #     + "."
-    #     + str(mms)
-    #     + "."
-    #     + str(bulge_s)
-    #     + "."
-    #     + guide
-    #     + ".targets.tsv",
-    #     "w",
-    # ) as f_out:
-    #     # f_out.write('\t'.join(header_integrated)+'\n')
-    #     rows = c.execute(target_with_mm_b)
-    #     db_header = [description[0] for description in rows.description]
-    #     f_out.write("\t".join(db_header) + "\n")
-    #     for row in rows:
-    #         row = [str(ele) for ele in row]
-    #         f_out.write("\t".join(row) + "\n")
-    # conn.commit()
-    # conn.close()
-
-    # targets_with_mm_bul = (
-    #     current_working_directory
-    #     + "Results/"
-    #     + job_id
-    #     + "/"
-    #     + job_id
-    #     + "."
-    #     + str(bulge_t)
-    #     + "."
-    #     + str(mms)
-    #     + "."
-    #     + str(bulge_s)
-    #     + "."
-    #     + guide
-    #     + ".targets.tsv"
-    # )
-    targets_with_mm_bul_zip = targets_with_mm_bul.replace("tsv", "zip")
-
-    os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
 
     return result
 
@@ -2107,8 +2046,8 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
 
-    selection_criteria = read_json(job_id)
-    query_cols = get_query_column(selection_criteria)
+    filter_criterion = read_json(job_id)
+    query_cols = get_query_column(filter_criterion)
 
     result = pd.read_sql_query(
         'SELECT * FROM final_table WHERE "{}"=\'{}\' AND "{}"=\'{}\' AND "{}"={} AND "{}"={} LIMIT {} OFFSET {}'.format(
@@ -2143,55 +2082,6 @@ def global_store_subset(value, bulge_t, bulge_s, mms, guide, page, job_id):
         + ".targets.tsv"
     )
     result.to_csv(targets_with_mm_bul, sep='\t', na_rep='NA', index=False)
-    # result.drop([GUIDE_COLUMN], axis=1, inplace=True)
-
-    # target_with_mm_b = f"SELECT * FROM final_table WHERE \"Spacer+PAM\"='{guide}' AND \"Mismatches_(highest_CFD)\"='{mms}' AND \"Bulges_(highest_CFD)\"='{bulge_s}' AND \"Bulge_type_(highest_CFD)\"='{bulge_t}'"
-    # with open(
-    #     current_working_directory
-    #     + "/Results/"
-    #     + job_id
-    #     + "/"
-    #     + job_id
-    #     + "."
-    #     + str(bulge_t)
-    #     + "."
-    #     + str(mms)
-    #     + "."
-    #     + str(bulge_s)
-    #     + "."
-    #     + guide
-    #     + ".targets.tsv",
-    #     "w",
-    # ) as f_out:
-    #     # f_out.write('\t'.join(header_integrated)+'\n')
-    #     rows = c.execute(target_with_mm_b)
-    #     db_header = [description[0] for description in rows.description]
-    #     f_out.write("\t".join(db_header) + "\n")
-    #     for row in rows:
-    #         row = [str(ele) for ele in row]
-    #         f_out.write("\t".join(row) + "\n")
-    # conn.commit()
-    # conn.close()
-
-    # targets_with_mm_bul = (
-    #     current_working_directory
-    #     + "Results/"
-    #     + job_id
-    #     + "/"
-    #     + job_id
-    #     + "."
-    #     + str(bulge_t)
-    #     + "."
-    #     + str(mms)
-    #     + "."
-    #     + str(bulge_s)
-    #     + "."
-    #     + guide
-    #     + ".targets.tsv"
-    # )
-    targets_with_mm_bul_zip = targets_with_mm_bul.replace("tsv", "zip")
-
-    os.system(f"zip -j {targets_with_mm_bul_zip} {targets_with_mm_bul} &")
 
     return result
 
@@ -2338,7 +2228,7 @@ def toggleCollapseDistributionPopulations(n, is_open):
     [State("url", "search")],
 )
 def update_table_general_profile(
-    page_current, page_size, sort_by, filter, selection_criteria, search
+    page_current, page_size, sort_by, filter, filter_criterion, search
 ):
     job_id = search.split("=")[-1]
 
@@ -2393,7 +2283,7 @@ def update_table_general_profile(
         current_working_directory,
         RESULTS_DIR,
         job_id,
-        "".join([".", job_id, ".acfd_", selection_criteria, ".txt"]),
+        "".join([".", job_id, ".acfd_", filter_criterion, ".txt"]),
     )
     if not os.path.isfile(acfd_file):
         raise FileNotFoundError(f"Unable to locate {acfd_file}")
@@ -2450,7 +2340,7 @@ def update_table_general_profile(
             + ".general_target_count."
             + g
             + "_"
-            + selection_criteria
+            + filter_criterion
             + ".txt",
             sep="\t",
             na_filter=False,
@@ -2797,8 +2687,8 @@ def filterPositionTable(
     cursor = conn.cursor()
     query = 'SELECT * FROM final_table WHERE "{}"=\'{}\' AND "{}">={} AND "{}"<={} AND "{}"=\'{}\''
 
-    selection_criteria = read_json(job_id)
-    query_cols = get_query_column(selection_criteria)
+    filter_criterion = read_json(job_id)
+    query_cols = get_query_column(filter_criterion)
 
     result = pd.read_sql_query(
         query.format(
@@ -2954,7 +2844,7 @@ def filterSampleTable(
     nPrev,
     nNext,
     filter_q,
-    selection_criteria,
+    filter_criterion,
     n,
     search,
     sel_cel,
@@ -3040,7 +2930,7 @@ def filterSampleTable(
                 + ".summary_by_samples."
                 + guide
                 + "_"
-                + selection_criteria
+                + filter_criterion
                 + ".txt",
                 sep="\t",
                 names=col_names_sample,
@@ -3055,7 +2945,7 @@ def filterSampleTable(
                 + ".summary_by_samples."
                 + guide
                 + "_"
-                + selection_criteria
+                + filter_criterion
                 + ".txt",
                 sep="\t",
                 names=col_names_sample,
@@ -3575,7 +3465,7 @@ def check_existance_sample(job_directory, job_id, sample):
     ],
     [State("url", "search"), State("general-profile-table", "data")],
 )
-def updateImagesTabs(mm, sel_cel, selection_criteria, search, all_guides):
+def updateImagesTabs(mm, sel_cel, filter_criterion, search, all_guides):
     bulge = 0
     job_id = search.split("=")[-1]
     job_directory = current_working_directory + "Results/" + job_id + "/"
@@ -3607,7 +3497,7 @@ def updateImagesTabs(mm, sel_cel, selection_criteria, search, all_guides):
                                     + str(int(mm) + int(bulge))
                                     + "total"
                                     + "_"
-                                    + selection_criteria
+                                    + filter_criterion
                                     + ".png",
                                     "rb",
                                 ).read()
@@ -3626,7 +3516,10 @@ def updateImagesTabs(mm, sel_cel, selection_criteria, search, all_guides):
                     + guide
                     + "_"
                     + str(int(mm) + int(bulge))
-                    + "total.png",
+                    + "total"
+                    + "_"
+                    + filter_criterion
+                    + ".png",
                 ),
             ]
         )
@@ -3646,11 +3539,11 @@ def updateImagesTabs(mm, sel_cel, selection_criteria, search, all_guides):
         + "."
         + str(bulge)
         + "_TOTAL_"
-        + selection_criteria
+        + filter_criterion
         + ".ENCODE+GENCODE.png"
     )
     os.system(
-        f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/.guide_dict_{guide}_{selection_criteria}.json {job_directory}/.motif_dict_{guide}_{selection_criteria}.json {mm} {bulge} TOTAL_{selection_criteria} {job_directory}/imgs/"
+        f"python {app_main_directory}/PostProcess/generate_img_radar_chart.py {guide} {job_directory}/.guide_dict_{guide}_{filter_criterion}.json {job_directory}/.motif_dict_{guide}_{filter_criterion}.json {mm} {bulge} TOTAL_{filter_criterion} {job_directory}/imgs/"
     )
 
     img_found = False
@@ -3726,7 +3619,7 @@ def updateImagesTabs(mm, sel_cel, selection_criteria, search, all_guides):
     ],
 )
 # FUNCTION TO GENERATE SAMPLE CARD, UPDATE WITH FILTER DROPDOWN
-def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, search):
+def generate_sample_card(n, filter_criterion, sample, sel_cel, all_guides, search):
     if n is None:
         raise PreventUpdate
 
@@ -3758,7 +3651,7 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
         + ".summary_by_samples."
         + guide
         + "_"
-        + selection_criteria
+        + filter_criterion
         + ".txt",
         sep="\t",
         skiprows=2,
@@ -3793,7 +3686,8 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
     conn = sqlite3.connect(path_db)
     c = conn.cursor()
 
-    query_cols = get_query_column(selection_criteria)
+    query_cols = get_query_column(filter_criterion)
+    print(query_cols)
 
     result_personal = pd.read_sql_query(
         "SELECT * FROM final_table WHERE \"{}\"='{}' AND \"{}\" LIKE '%{}%'".format(
@@ -3803,12 +3697,15 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
     )
     # sort personal data targets
     order = False
-    if selection_criteria == 'fewest':
+    if filter_criterion == 'fewest':
         order = True
     result_personal = result_personal.sort_values(
         [query_cols['sort']], ascending=[order])
     # extract sample private targets
     result_private = result_personal[result_personal[query_cols['samples']] == sample]
+
+    # print(result_personal)
+    # print(result_private)
 
     conn.commit()
     conn.close()
@@ -3834,7 +3731,7 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
     private = result_private.shape[0]
 
     results_table = pd.DataFrame(
-        [[personal, pam_creation, private]],
+        [[len(result_personal.index), pam_creation, len(result_private.index)]],
         columns=["Personal", "PAM Creation", "Private"],
     ).astype(str)
     # else:
@@ -3853,7 +3750,7 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
                     current_working_directory
                     + "Results/"
                     + job_id
-                    + f"/imgs/CRISPRme_{selection_criteria}_top_1000_log_for_main_text_{guide}.{sample}.personal.png",
+                    + f"/imgs/CRISPRme_{filter_criterion}_top_1000_log_for_main_text_{guide}.{sample}.personal.png",
                     "rb",
                 ).read()
             ).decode()
@@ -3864,13 +3761,15 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
                     current_working_directory
                     + "Results/"
                     + job_id
-                    + f"/imgs/CRISPRme_{selection_criteria}_top_1000_log_for_main_text_{guide}.{sample}.private.png",
+                    + f"/imgs/CRISPRme_{filter_criterion}_top_1000_log_for_main_text_{guide}.{sample}.private.png",
                     "rb",
                 ).read()
             ).decode()
         )
     except:
         sys.stderr.write("PERSONAL AND PRIVATE LOLLIPOP PLOTS NOT GENERATED")
+
+    filter_criterion = read_json(job_id)
 
     try:
         # file_to_load = job_id + '.' + sample + '.' + guide + '.private.zip'
@@ -3885,7 +3784,7 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
             ),
             False,
             [
-                html.P("Top 100 Personal Targets per CFD score"),
+                html.P("Top 100 Personal Targets ordered by "+filter_criterion),
                 html.A(
                     html.Img(
                         src=image_personal_top,
@@ -3897,7 +3796,7 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
                 ),
             ],
             [
-                html.P("Top 100 Private Targets per CFD score"),
+                html.P("Top 100 Private Targets ordered by "+filter_criterion),
                 html.A(
                     html.Img(
                         src=image_private_top,
@@ -3992,7 +3891,7 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
             ),
             True,
             [
-                html.P("Top 100 Personal Targets per CFD score"),
+                html.P("Top 100 Personal Targets ordered by "+filter_criterion),
                 html.A(
                     html.Img(
                         src=image_personal_top,
@@ -4004,7 +3903,7 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
                 ),
             ],
             [
-                html.P("Top 100 Private Targets per CFD score"),
+                html.P("Top 100 Private Targets ordered by "+filter_criterion),
                 html.A(
                     html.Img(
                         src=image_private_top,
@@ -4070,7 +3969,7 @@ def generate_sample_card(n, selection_criteria, sample, sel_cel, all_guides, sea
     ],
 )
 def updateContentTab(
-    value, sel_cel, selection_criteria, all_guides, search, genome_type
+    value, sel_cel, filter_criterion, all_guides, search, genome_type
 ):
     if value is None or sel_cel is None or not sel_cel or not all_guides:
         raise PreventUpdate
@@ -4103,7 +4002,7 @@ def updateContentTab(
         CFD_notification = html.Div(
             "CFD score is not calculated if the used nuclease is not SpCas9"
         )
-        selection_criteria = "fewest"
+        filter_criterion = "fewest"
     else:
         CFD_notification = html.Div("", hidden=True)
 
@@ -4134,7 +4033,7 @@ def updateContentTab(
             + ".summary_by_guide."
             + guide
             + "_"
-            + selection_criteria
+            + filter_criterion
             + ".txt",
             sep="\t",
             na_filter=False,
@@ -4180,7 +4079,7 @@ def updateContentTab(
                 + ".summary_by_samples."
                 + guide
                 + "_"
-                + selection_criteria
+                + filter_criterion
                 + ".txt",
                 sep="\t",
                 names=col_names_sample,
@@ -4205,7 +4104,7 @@ def updateContentTab(
                 + ".summary_by_samples."
                 + guide
                 + "_"
-                + selection_criteria
+                + filter_criterion
                 + ".txt",
                 sep="\t",
                 names=col_names_sample,
@@ -4457,7 +4356,7 @@ def updateContentTab(
             + ".summary_by_samples."
             + guide
             + "_"
-            + selection_criteria
+            + filter_criterion
             + ".txt",
             skiprows=2,
             sep="\t",
@@ -4895,7 +4794,7 @@ def updateContentTab(
                                     current_working_directory
                                     + "Results/"
                                     + job_id
-                                    + f"/imgs/CRISPRme_{selection_criteria}_top_1000_log_for_main_text_{guide}.png",
+                                    + f"/imgs/CRISPRme_{filter_criterion}_top_1000_log_for_main_text_{guide}.png",
                                     "rb",
                                 ).read()
                             ).decode()
