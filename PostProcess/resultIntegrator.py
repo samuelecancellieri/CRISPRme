@@ -279,10 +279,14 @@ else:
 
 for nline, line in enumerate(inCrispritzResults):
     target = line.strip().split('\t')
-    try:
-        annotationLine = inAnnotationFile.readline().strip().split('\t')
-    except:
-        annotationLine = 'NA'
+    # print(line)
+    # file annotation reported after gencode association with gene
+    annotationLine = inAnnotationFile.readline().strip().split('\t')
+
+    # try:
+    #     annotationLine = inAnnotationFile.readline().strip().split('\t')
+    # except:
+    #     annotationLine = 'NA'
 
     lowestEmpirical = 100
 
@@ -349,7 +353,9 @@ for nline, line in enumerate(inCrispritzResults):
                 if var_pos < 1:
                     var_pos = 1
                 variantList[count] = str(
-                    split[2])+str(var_pos)+str(split[3])
+                    var_pos)+str(split[2])+'>'+str(split[3])
+                # variantList[count] = str(
+                #     split[2])+str(var_pos)+str(split[3])
             else:
                 firstcomp = ''
                 secondcomp = ''
@@ -366,8 +372,8 @@ for nline, line in enumerate(inCrispritzResults):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
                     secondcomp += rev_comp(piece)
-                variantList[count] = ''.join(
-                    reversed(firstcomp))+str(var_pos)+''.join(reversed(secondcomp))
+                variantList[count] = str(var_pos)+''.join(
+                    reversed(firstcomp))+'>'+''.join(reversed(secondcomp))
     variantList_highest_cfd = variantList
 
     variantList = ['NA']
@@ -392,7 +398,9 @@ for nline, line in enumerate(inCrispritzResults):
                 if var_pos < 1:
                     var_pos = 1
                 variantList[count] = str(
-                    split[2])+str(var_pos)+str(split[3])
+                    var_pos)+str(split[2])+'>'+str(split[3])
+                # variantList[count] = str(
+                #     split[2])+str(var_pos)+str(split[3])
             else:
                 firstcomp = ''
                 secondcomp = ''
@@ -409,8 +417,8 @@ for nline, line in enumerate(inCrispritzResults):
                     firstcomp += rev_comp(piece)
                 for piece in str(split[3]):
                     secondcomp += rev_comp(piece)
-                variantList[count] = ''.join(
-                    reversed(firstcomp))+str(var_pos)+''.join(reversed(secondcomp))
+                variantList[count] = str(var_pos)+''.join(
+                    reversed(firstcomp))+'>'+''.join(reversed(secondcomp))
     variantList_fewest_mm_b = variantList
 
     saveDict['Spacer+PAM'] = str(target[15])
@@ -436,7 +444,20 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = ','.join(
         variantList_highest_cfd)
     saveDict['Variant_info_genome_(highest_CFD)'] = str(target[18])
-    saveDict['Variant_MAF_(highest_CFD)'] = str(target[17])
+
+    # remove 0 MAF
+    maf_list = list()
+    for elem in target[17].strip().split(','):
+        if elem != 'NA':
+            if float(elem) == 0:
+                maf_list.append(str(0.00001))
+            else:
+                maf_list.append(str(elem))
+        else:
+            maf_list.append('NA')
+
+    saveDict['Variant_MAF_(highest_CFD)'] = ','.join(maf_list)
+
     saveDict['Variant_rsID_(highest_CFD)'] = 'NA' if str(
         target[16]) == '.' else str(target[16])
     saveDict['Variant_samples_(highest_CFD)'] = str(target[13])
@@ -464,7 +485,19 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Variant_info_spacer+PAM_(fewest_mm+b)'] = ','.join(
         variantList_fewest_mm_b)
     saveDict['Variant_info_genome_(fewest_mm+b)'] = str(target[42])
-    saveDict['Variant_MAF_(fewest_mm+b)'] = str(target[41])
+
+    maf_list = list()
+    for elem in target[41].strip().split(','):
+        if elem != 'NA':
+            if float(elem) == 0:
+                maf_list.append(str(0.00001))
+            else:
+                maf_list.append(str(elem))
+        else:
+            maf_list.append('NA')
+
+    saveDict['Variant_MAF_(fewest_mm+b)'] = ','.join(maf_list)
+
     saveDict['Variant_rsID_(fewest_mm+b)'] = 'NA' if str(
         target[40]) == '.' else str(target[40])
     saveDict['Variant_samples_(fewest_mm+b)'] = str(target[37])
@@ -490,7 +523,19 @@ for nline, line in enumerate(inCrispritzResults):
     saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = ','.join(
         variantList_highest_cfd)
     saveDict['Variant_info_genome_(highest_CRISTA)'] = str(target[66])
-    saveDict['Variant_MAF_(highest_CRISTA)'] = str(target[65])
+
+    maf_list = list()
+    for elem in target[65].strip().split(','):
+        if elem != 'NA':
+            if float(elem) == 0:
+                maf_list.append(str(0.00001))
+            else:
+                maf_list.append(str(elem))
+        else:
+            maf_list.append('NA')
+
+    saveDict['Variant_MAF_(highest_CRISTA)'] = ','.join(maf_list)
+
     saveDict['Variant_rsID_(highest_CRISTA)'] = 'NA' if str(
         target[64]) == '.' else str(target[64])
     saveDict['Variant_samples_(highest_CRISTA)'] = str(target[61])
@@ -507,11 +552,11 @@ for nline, line in enumerate(inCrispritzResults):
         saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)'] = 'NA'
 
     change_alt_ref_highest_cfd = False
-    if saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
+    if saveDict['Not_found_in_REF'] == 'NA' and saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
         change_alt_ref_highest_cfd = True
 
     change_alt_ref_highest_crista = False
-    if saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] == saveDict['CRISTA_score_ALT_(highest_CRISTA)']:
+    if saveDict['Not_found_in_REF'] == 'NA' and saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] == saveDict['CRISTA_score_ALT_(highest_CRISTA)']:
         change_alt_ref_highest_crista = True
 
     if change_alt_ref_highest_cfd:
@@ -795,6 +840,9 @@ for nline, line in enumerate(inCrispritzResults):
     save += '\n'
     outFile.write(save)
 
+# close integrated file
+outFile.close()
+
 if check_personal_existence:
     # maintain the personal annotation column
     pass
@@ -813,5 +861,8 @@ notFoundFile = open(outputDir + originFileName +
 for count, line in enumerate(inEmpiricalResults):
     if count not in empiricalList:
         notFoundFile.write(line)
+
+# close notfound file
+notFoundFile.close()
 
 print("INTEGRATION COMPLETED IN: %s seconds" % (time.time() - start_time))

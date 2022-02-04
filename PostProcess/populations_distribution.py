@@ -78,9 +78,12 @@ fontsize = 17
 barplot_values = dict()  # barplot_values -> EAS -> [1,2]
 total = int(sys.argv[2])
 guide = sys.argv[3]
+# criteria to generate the plots (CFD,CRISTA,FEWEST)
+selection_criteria = sys.argv[4]
 max_value = 0
 number_bars = 0
 previous_bar = []
+# open pop distribution file
 with open(sys.argv[1]) as summary:
     for line in summary:
         if guide in line:
@@ -229,4 +232,4 @@ plt.yticks(y_range, size=size_y_ticks)  # , size=size_y_ticks)
 plt.tight_layout()
 # plt.subplots_adjust(top=0.95, bottom=0.06, left=0.1, right=0.99)
 plt.savefig("populations_distribution_" + guide + '_' +
-            str(total) + "total" + ".png", format='png')
+            str(total) + "total_" + selection_criteria + ".png", format='png')

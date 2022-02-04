@@ -264,14 +264,14 @@ def iupac_decomposition(split, guide_no_bulge,
                                 totalDict[count][size+1][combinedKey] = [
                                     replaceTarget2, resultSet, listInfo2]
                                 # remove the new generated sample set from all lower levels
-                                # remember to uncomment this when new release
-                                # if haplotype_check:
-                                totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
-                                    totalDict[count][size +
-                                                     1][combinedKey][1]
-                                totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
-                                    totalDict[count][size +
-                                                     1][combinedKey][1]
+                                # (this should be done only with phased VCF since unphased cannot be verified)
+                                if haplotype_check:
+                                    totalDict[count][size][key][1] = totalDict[count][size][key][1] - \
+                                        totalDict[count][size +
+                                                         1][combinedKey][1]
+                                    totalDict[count][0][newkey][1] = totalDict[count][0][newkey][1] - \
+                                        totalDict[count][size +
+                                                         1][combinedKey][1]
 
             refSeq_with_bulges = list(refSeq)
             for pos, char in enumerate(realTarget):
@@ -439,6 +439,10 @@ def preprocess_CRISTA_score(cluster_targets):
         complete_DNA_seq = str(pre_protospacer_DNA) + \
             protospacerDNA+str(post_protospacer_DNA)
 
+        for elem in iupac_nucleotides:
+            if elem in complete_DNA_seq:
+                complete_DNA_seq = complete_DNA_seq.replace(elem, '')
+
         # trim the 3' and 5' end to avoid sequences longer than 29
         len_DNA_seq = len(complete_DNA_seq)
         first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
@@ -450,8 +454,9 @@ def preprocess_CRISTA_score(cluster_targets):
 
         # if 'N' is present in the reference DNA seq, we must use a fake DNA seq to complete the aligned
         # that will be discarded after
-        if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq:
+        if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq or 'N' in DNA_aligned_list[-1] or 'n' in DNA_aligned_list[-1]:
             complete_DNA_seq = 'A'*29
+            DNA_aligned_list[-1] = 'A'*len(str(target[2]))
             index_to_null.append(index)
 
         # append sequence to DNA list
@@ -491,6 +496,10 @@ def preprocess_CRISTA_score(cluster_targets):
         complete_DNA_seq = str(pre_protospacer_DNA) + \
             protospacerDNA+str(post_protospacer_DNA)
 
+        for elem in iupac_nucleotides:
+            if elem in complete_DNA_seq:
+                complete_DNA_seq = complete_DNA_seq.replace(elem, '')
+
         # trim the 3' and 5' end to avoid sequences longer than 29
         len_DNA_seq = len(complete_DNA_seq)
         first_half = complete_DNA_seq[int(len_DNA_seq/2)-14:int(len_DNA_seq/2)]
@@ -504,7 +513,7 @@ def preprocess_CRISTA_score(cluster_targets):
         # that will be discarded after
         if 'N' in complete_DNA_seq or 'n' in complete_DNA_seq or 'N' in DNA_aligned_list[-1] or 'n' in DNA_aligned_list[-1]:
             complete_DNA_seq = 'A'*29
-            DNA_aligned_list[-1] = 'A'*29
+            DNA_aligned_list[-1] = 'A'*len(str(target[2]))
             index_to_null.append(index)
 
         # append sequence to DNA list
