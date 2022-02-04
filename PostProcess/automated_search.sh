@@ -28,12 +28,11 @@ vcf_name=$(basename $2)
 guide_name=$(basename $3)
 
 declare -A pids_fake_chroms
-for file_chr in "$ref_folder"/*.fa
-do
+for file_chr in "$ref_folder"/*.fa; do
 	file_name=$(basename $file_chr)
 	chr=$(echo $file_name | cut -f 1 -d'.')
 	echo "$chr"
-	pids_fake_chroms+=(["$chr"]="$!")	
+	pids_fake_chroms+=(["$chr"]="$!")
 done
 
 if ! [ -d "$output_folder" ]; then
@@ -61,13 +60,11 @@ if [ "$vcf_name" != "_" ]; then
 		cd "$output_folder"
 	else
 		echo "INDELs extraction already present"
-		for key in "${!pids_fake_chroms[@]}"
-		do
+		for key in "${!pids_fake_chroms[@]}"; do
 			touch finished$key.txt
 		done
 	fi
 fi
-	
 
 fullseqpam=$(cut -f1 -d' ' "$pam_file")
 pos=$(cut -f2 -d' ' "$pam_file")
@@ -103,14 +100,14 @@ if [ "$vcf_name" != "_" ]; then
 fi
 
 if ! [ -f "${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
-	crispritz.py search "genome_library/"$true_pam"_${bMax}_$ref_name/" "$pam_file" "$guide_file" "${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t  -th 2
+	crispritz.py search "genome_library/"$true_pam"_${bMax}_$ref_name/" "$pam_file" "$guide_file" "${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th 2
 else
 	echo "Search for reference already done"
 fi
 
 if [ "$vcf_name" != "_" ]; then
 	if ! [ -f "${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" ]; then
-		crispritz.py search "genome_library/"$true_pam"_${bMax}_${ref_name}+${vcf_name}/" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t  -th 2 -var
+		crispritz.py search "genome_library/"$true_pam"_${bMax}_${ref_name}+${vcf_name}/" "$pam_file" "$guide_file" "${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" -index -mm $mm -bDNA $bDNA -bRNA $bRNA -t -th 2 -var
 	else
 		echo "Search for variant already done"
 	fi
@@ -135,17 +132,16 @@ if [ "$vcf_name" != "_" ]; then
 		touch "$final_res_alt"
 	fi
 
-	for key in "${!pids_fake_chroms[@]}"
-	do
+	for key in "${!pids_fake_chroms[@]}"; do
 		echo "Processing SNPs for $key"
-		LC_ALL=C fgrep $key "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
-		LC_ALL=C fgrep $key "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
+		LC_ALL=C grep -F $key "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" >"$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
+		LC_ALL=C grep -F $key "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" >"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
 		./scriptAnalisiNNN_v3.sh "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key" "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key" "${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" "$annotation_file" "$dict_folder" "$ref_folder" $mm $bDNA $bRNA "$guide_file" "$pam_file" "$sampleID" "$output_folder"
 		rm "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
 		rm "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
 		header=$(head -1 "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt")
-		tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt" >> "$final_res" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-		tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt" >> "$final_res_alt" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+		tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt" >>"$final_res"    #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+		tail -n +2 "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt" >>"$final_res_alt" #"$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
 		#cat "$final_res" "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp" > "$final_res.tmp"
 		#cat "$final_res_alt" "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp" > "$final_res_alt.tmp"
 		#mv "$final_res.tmp" "$final_res"
@@ -166,17 +162,16 @@ else
 	if ! [ -f "$final_res_alt" ]; then
 		touch "$final_res_alt"
 	fi
-	for key in "${!pids_fake_chroms[@]}"
-	do
+	for key in "${!pids_fake_chroms[@]}"; do
 		echo "Processing $key"
-		LC_ALL=C fgrep $key "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
+		LC_ALL=C grep -F $key "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" >"$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
 		touch "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
 		./scriptAnalisiNNN_v3.sh "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key" "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key" "${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}" "$annotation_file" "_" "$ref_folder" $mm $bDNA $bRNA "$guide_file" "$pam_file" "$sampleID" "$output_folder"
 		rm "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
 		rm "$output_folder/${ref_name}+${vcf_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$key"
 		header=$(head -1 "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt")
-		tail -n +2 "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt" >> "$final_res" #"$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
-		tail -n +2 "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt" >> "$final_res_alt" #"$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+		tail -n +2 "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt" >>"$final_res"    #"$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+		tail -n +2 "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt" >>"$final_res_alt" #"$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
 		#cat "$final_res" "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp" > "$final_res.tmp"
 		#cat "$final_res_alt" "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp" > "$final_res_alt.tmp"
 		#mv "$final_res.tmp" "$final_res"
@@ -197,10 +192,8 @@ sed -i 1i"$header" "$final_res_alt"
 if [ "$vcf_name" != "_" ]; then
 	echo "SNPs analysis ended. Starting INDELs analysis"
 	cd "$starting_dir"
-	while [ ${#pids_fake_chroms[@]} -ne 0 ];
-	do
-		for key in "${!pids_fake_chroms[@]}"
-		do
+	while [ ${#pids_fake_chroms[@]} -ne 0 ]; do
+		for key in "${!pids_fake_chroms[@]}"; do
 			echo "Checking for INDELs results for $key"
 			if ! [ -f "$output_folder/finished$key.txt" ]; then #kill "-0" ${pids_fake_chroms[$key]} &>/dev/null
 				continue
@@ -208,14 +201,14 @@ if [ "$vcf_name" != "_" ]; then
 				echo "Found results for $key, starting post-analysis"
 				true_chr=$key
 				fake_chr="fake$true_chr"
-				
-				LC_ALL=C fgrep $true_chr "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" > "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
-				./analisi_indels_NNN.sh "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr" "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}" "$annotation_file" "$output_folder/log_indels_$vcf_name" "$ref_folder/$true_chr.fa" $mm $bDNA $bRNA "$guide_file" "$pam_file" "$sampleID" "$output_folder" 
+
+				LC_ALL=C grep -F $true_chr "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" >"$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
+				./analisi_indels_NNN.sh "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr" "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt" "${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}" "$annotation_file" "$output_folder/log_indels_$vcf_name" "$ref_folder/$true_chr.fa" $mm $bDNA $bRNA "$guide_file" "$pam_file" "$sampleID" "$output_folder"
 				rm "$output_folder/${ref_name}_${guide_name}_${mm}_${bDNA}_${bRNA}.targets.txt.$true_chr"
-				tail -n +2 "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt" >> "$final_res" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
+				tail -n +2 "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt" >>"$final_res" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp"
 				#cat "$final_res" "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt.tmp" > "$final_res.tmp"
 				#mv "$final_res.tmp" "$final_res"
-				tail -n +2 "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt" >> "$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
+				tail -n +2 "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt" >>"$final_res_alt" #"$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp"
 				#cat "$final_res_alt" "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.altCFD.txt.tmp" > "$final_res_alt.tmp"
 				#mv "$final_res_alt.tmp" "$final_res_alt"
 				rm "$output_folder/${fake_chr}_${guide_name}_${mm}_${bDNA}_${bRNA}.bestCFD.txt"
@@ -225,7 +218,7 @@ if [ "$vcf_name" != "_" ]; then
 			fi
 		done
 		sleep 10
-	done 	
+	done
 fi
 
 cd "$starting_dir"
@@ -242,8 +235,6 @@ if [ "$vcf_name" != "_" ]; then
 fi
 
 echo "AUTOMATED SEARCH END"
-
-
 
 : ' 
 	declare -A pids_fake_chroms

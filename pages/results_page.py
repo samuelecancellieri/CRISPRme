@@ -1117,7 +1117,7 @@ def clusterPage(job_id, hash):
         if genome_type == "ref":  # NOTE HEADER NON SALVATO
             get_annotation = subprocess.Popen(
                 [
-                    " fgrep "
+                    " grep -F "
                     + guide
                     + " "
                     + current_working_directory
@@ -1140,7 +1140,7 @@ def clusterPage(job_id, hash):
             annotation_type = out.decode("UTF-8").strip().split("\t")[-1]
             os.popen(
                 put_header
-                + " fgrep "
+                + " grep -F "
                 + guide
                 + " "
                 + current_working_directory
@@ -1162,7 +1162,7 @@ def clusterPage(job_id, hash):
             # ###print('qui cluster in grep')     #NOTE HEADER NON SALVATO
             os.popen(
                 put_header
-                + " fgrep "
+                + " grep -F "
                 + guide
                 + " "
                 + current_working_directory
@@ -1223,7 +1223,7 @@ def clusterPage(job_id, hash):
         # if not os.path.exists(scomposition_file):
         # os.system(f'touch {scomposition_file}')
         os.popen(
-            " fgrep "
+            " grep -F "
             + guide
             + " "
             + current_working_directory

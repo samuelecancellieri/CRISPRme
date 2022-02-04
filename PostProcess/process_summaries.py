@@ -63,8 +63,8 @@ count_for = '(' + ' - '.join([str(tot)
 #                     count_for + '\tOff-Targets Enriched ' + count_for + '\n')
 
 for guide in guides:
-    os.system(f"LC_ALL=C fgrep {guide} {path_best} > {path_best}.{guide}")
-    #os.system(f"LC_ALL=C fgrep {guide} {path_alt} >> {path_best}.{guide}")
+    os.system(f"LC_ALL=C grep -F {guide} {path_best} > {path_best}.{guide}")
+    #os.system(f"LC_ALL=C grep -F {guide} {path_alt} >> {path_best}.{guide}")
 
     sum_cfds = 0
     on_targets = []

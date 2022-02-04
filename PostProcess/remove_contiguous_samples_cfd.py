@@ -54,8 +54,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
     # avoid crush when cluster is empty in the first call
     if not cluster:
         return
-    final_list = []
-    list_ref = []
+    list_ref = list()
     dict_var = dict()
     for ele in cluster:
         if ele[snp_info] == 'n':
@@ -72,50 +71,25 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             else:
                 dict_var[(ele[pos], ele[snp_info])] = [ele]
 
-    list_ref.sort(key=lambda x: int(x[total]))
     final_list_best_ref = list()
     var_only = False
-    if len(list_ref) > 1:
-        # best_ref = list_ref[0]
-        for target in list_ref:
-            final_list_best_ref.append(target)
-        # for ele_ref in list_ref[1:]:
-        #     if float(ele_ref[cfd]) > float(best_ref[cfd]):
-        #         best_ref = ele_ref
-        # final_list.append(best_ref)
-        # final_list_best_ref.append(best_ref)
-    elif len(list_ref) == 1:
-        best_ref = list_ref[0]
-        # final_list.append(best_ref)
-        final_list_best_ref.append(best_ref)
-    else:
+    for target in list_ref:
+        final_list_best_ref.append(target)
+    if not final_list_best_ref:
         var_only = True
 
     final_list_best_var = list()
+    # for each snp_info in dict, extract the targets
     for key in dict_var.keys():
         list_var = dict_var[key]
-        list_var.sort(key=lambda x: int(x[total]))
-        best_var = list_var[0]
-        if len(list_var) > 1:
-            for target in list_var:
-                if var_only:
-                    target[12] = 'y'
-                final_list_best_var.append(target)
-            # for ele_var in list_var[1:]:
-                # if float(ele_var[cfd]) > float(best_var[cfd]):
-                #     best_var = ele_var
-            # if var_only:
-            #     best_var[12] = 'y'
-            # # final_list.append(best_var)
-            # final_list_best_var.append(best_var)
-        else:
+        # copy the targets in the variant list, adding unique if no ref target is found
+        for target in list_var:
             if var_only:
-                best_var[12] = 'y'
-            # final_list.append(best_var)
-            final_list_best_var.append(best_var)
+                target[12] = 'y'
+            final_list_best_var.append(target)
 
     temp_final_list_best_var = list()
-    # for target in final_list:
+    # for target in final_list_best_var:
     for target in final_list_best_var:
         # remove duplicates into snp info col
         target[snp_info] = ','.join(set(target[snp_info].split(',')))
@@ -129,21 +103,17 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         temp_final_list_best_var.append(target)
 
     # final list with polished targets (no duplicates in snp data)
-    # final_list = temp_final_list_best_var
     final_list_best_var = temp_final_list_best_var
 
+    # check if lists are empty
     validity_check_ref = False
     validity_check_var = False
-    if len(final_list_best_ref):
+    if final_list_best_ref:
         validity_check_ref = True
-    if len(final_list_best_var):
+    if final_list_best_var:
         validity_check_var = True
-    # n_ele = len(final_list)
-    # n_ele = len(final_list_best_var)
 
-    # print('list_ref', final_list_best_ref)
-    # print('list_var', final_list_best_var)
-
+    # extract best target for each criteria
     if sort_order == 'score':
         # sort per score (CFD or CRISTA)
         if validity_check_ref:
@@ -153,8 +123,11 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             final_list_best_var = sorted(final_list_best_var, key=lambda x: (
                 float(x[cfd]), -int(x[total])))
         if var_only:  # no ref found
+            # count the residual targets in the list
             final_list_best_var[0][cfd-1] = str(len(final_list_best_var)-1)
+            # append the best target to best_file
             fileOut.write("\t".join(final_list_best_var[0]))
+            # pop the best target from the list
             bestTarget = final_list_best_var.pop(0)
         elif validity_check_ref and validity_check_var:  # ref and var targets found
             if float(final_list_best_ref[0][cfd]) >= float(final_list_best_var[0][cfd]):
@@ -188,11 +161,14 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             final_list_best_var = sorted(final_list_best_var, key=lambda x: (
                 -int(x[total-2]), -int(x[total-1])))
         if var_only:  # no ref found
+            # count the residual targets in the list
             final_list_best_var[0][cfd-1] = str(len(final_list_best_var)-1)
+            # append the best target to best_file
             fileOut.write("\t".join(final_list_best_var[0]))
+            # pop the best target from the list
             bestTarget = final_list_best_var.pop(0)
         elif validity_check_ref and validity_check_var:  # ref and var targets found
-            if int(final_list_best_ref[0][total]) <= int(final_list_best_var[0][cfd]):
+            if int(final_list_best_ref[0][total]) <= int(final_list_best_var[0][total]):
                 final_list_best_ref[0][cfd-1] = str(
                     len(final_list_best_ref)+len(final_list_best_var)-1)
                 fileOut.write("\t".join(final_list_best_ref[0]))
@@ -214,35 +190,6 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
             final_list_best_var[count][cfd-1] = str(
                 len(final_list_best_ref)+len(final_list_best_var)-1)
             fileOut_disc.write(("\t".join(elem)))
-
-    # if n_ele > 1:
-    #     if str(final_list[0][cfd]) != '-1.0' and sort_order == 'score':
-    #         # sort by score in descending order
-    #         final_list.sort(key=lambda x: float(x[cfd]), reverse=True)
-    #         # sort ascending total and then descending score
-    #         # sorted_final_list = sorted(
-    #         #     sorted(final_list, key=lambda x: int(x[total]), reverse=False), key=lambda x: float(x[cfd]), reverse=True)
-    #         # final_list = sorted_final_list
-    #         # select ref as besttarget to save
-    #         if final_list[0][cfd] == final_list[1][cfd] and final_list[1][cfd-2] == 'n':
-    #             final_list[1][cfd-1] = str(n_ele-1)  # bestSCORE
-    #             fileOut.write("\t".join(final_list[1]))
-    #             bestTarget = final_list.pop(1)
-    #         else:  # select var as besttarget to save
-    #             final_list[0][cfd-1] = str(n_ele-1)  # best SCORE
-    #             fileOut.write("\t".join(final_list[0]))
-    #             bestTarget = final_list.pop(0)
-    #     else:
-    #         # sort for total (mm+bul) in target
-    #         final_list.sort(key=lambda x: int(x[total]))
-    #         final_list[0][cfd-1] = str(n_ele-1)  # bestMM_BUL when not scored
-    #         fileOut.write("\t".join(final_list[0]))
-    #         bestTarget = final_list.pop(0)
-    #     for ele in final_list:
-    #         final_list[0][cfd-1] = str(n_ele-1)  # discarded targets in cluster
-    #         fileOut_disc.write(("\t".join(ele)))
-    # elif n_ele == 1:
-    #     fileOut.write("\t".join(final_list[0]))
 
 
 tau = int(sys.argv[3])  # range in bp to merge targets
