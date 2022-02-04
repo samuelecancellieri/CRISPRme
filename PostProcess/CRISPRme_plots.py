@@ -27,6 +27,27 @@ warnings.filterwarnings("ignore")
 matplotlib.use('Agg')
 
 
+def reference_count_analysis(row):
+    # check if target is alternative
+    if row['REF/ALT_origin_(fewest_mm+b)'] == 'alt':
+        # if yes, calculate ref mm count
+        refTarget = str(
+            row['Aligned_protospacer+PAM_REF_(fewest_mm+b)'])
+        countMM = 0
+        for nt in refTarget:
+            if nt.islower():
+                countMM += 1
+        # return ref mm+bul count wrt to alt mm+bul count
+        row['Mismatches+bulges_REF_(fewest_mm+b)'] = countMM + \
+            int(row['Bulges_(fewest_mm+b)'])
+        row['Mismatches+bulges_ALT_(fewest_mm+b)'] = row['Mismatches+bulges_(fewest_mm+b)']
+    else:
+        # if no, ref and alt total count are identical
+        row['Mismatches+bulges_REF_(fewest_mm+b)'] = row['Mismatches+bulges_(fewest_mm+b)']
+        row['Mismatches+bulges_ALT_(fewest_mm+b)'] = row['Mismatches+bulges_(fewest_mm+b)']
+    return row
+
+
 def plot_with_MMvBUL(df, out_folder, guide):
     # Remove targets ref with mm+bul<=1 for on-targets and on-targets variant-induced
     df = df.loc[df["Mismatches+bulges_(fewest_mm+b)"] > 1]
@@ -35,24 +56,29 @@ def plot_with_MMvBUL(df, out_folder, guide):
     df['Mismatches+bulges_REF_(fewest_mm+b)'] = 0
     df['Mismatches+bulges_ALT_(fewest_mm+b)'] = 0
 
+    # compute analysis to reference_count_analysis
+    df = df.apply(reference_count_analysis, axis=1)
+    # df = df.apply(
+    #     lambda row: reference_count_analysis(row), axis=1)
+
     # if col is alt calculate score for ref and alt, if ref skip
-    for index in df.index:
-        if df.loc[index, 'REF/ALT_origin_(fewest_mm+b)'] == 'alt':
-            refTarget = str(
-                df.loc[index, 'Aligned_protospacer+PAM_REF_(fewest_mm+b)'])
-            countMM = 0
-            for nt in refTarget:
-                if nt.islower():
-                    countMM += 1
-            df.loc[index, 'Mismatches+bulges_REF_(fewest_mm+b)'] = countMM + \
-                int(df.loc[index, 'Bulges_(fewest_mm+b)'])
-            df.loc[index, 'Mismatches+bulges_ALT_(fewest_mm+b)'] = df.loc[index,
-                                                                          'Mismatches+bulges_(fewest_mm+b)']
-        else:
-            df.loc[index, 'Mismatches+bulges_REF_(fewest_mm+b)'] = df.loc[index,
-                                                                          'Mismatches+bulges_(fewest_mm+b)']
-            df.loc[index, 'Mismatches+bulges_ALT_(fewest_mm+b)'] = df.loc[index,
-                                                                          'Mismatches+bulges_(fewest_mm+b)']
+    # for index in df.index:
+    #     if df.loc[index, 'REF/ALT_origin_(fewest_mm+b)'] == 'alt':
+    #         refTarget = str(
+    #             df.loc[index, 'Aligned_protospacer+PAM_REF_(fewest_mm+b)'])
+    #         countMM = 0
+    #         for nt in refTarget:
+    #             if nt.islower():
+    #                 countMM += 1
+    #         df.loc[index, 'Mismatches+bulges_REF_(fewest_mm+b)'] = countMM + \
+    #             int(df.loc[index, 'Bulges_(fewest_mm+b)'])
+    #         df.loc[index, 'Mismatches+bulges_ALT_(fewest_mm+b)'] = df.loc[index,
+    #                                                                       'Mismatches+bulges_(fewest_mm+b)']
+    #     else:
+    #         df.loc[index, 'Mismatches+bulges_REF_(fewest_mm+b)'] = df.loc[index,
+    #                                                                       'Mismatches+bulges_(fewest_mm+b)']
+    #         df.loc[index, 'Mismatches+bulges_ALT_(fewest_mm+b)'] = df.loc[index,
+    #                                                                       'Mismatches+bulges_(fewest_mm+b)']
 
     # sort in order to have highest REF mm+bul on top
     df.sort_values('Mismatches+bulges_(fewest_mm+b)',
