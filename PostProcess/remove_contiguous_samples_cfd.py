@@ -7,47 +7,6 @@ Created on Fri Aug 28 15:58:04 2020
 import sys
 import time
 
-'''
-def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
-    list_ref = []
-    dict_var = dict()
-    for ele in cluster:
-        if ele[snp_info] == 'n':
-            list_ref.append(ele)
-        else:
-            if ele[snp_info] in dict_var.keys():
-                dict_var[ele[snp_info]].append(ele)
-            else:
-                dict_var[ele[snp_info]] = [ele]
-    
-    list_ref.sort(key = lambda x : x[total])
-    if len(list_ref) > 1:
-        best_ref = list_ref[0]
-        for ele_ref in list_ref[1:]:
-            if float(ele_ref[cfd]) > float(best_ref[cfd]):
-                fileOut_disc.write("\t".join(best_ref))
-                best_ref = ele_ref
-            else:
-                fileOut_disc.write("\t".join(ele_ref))
-        fileOut.write("\t".join(best_ref))
-    elif len(list_ref) == 1:
-        fileOut.write("\t".join(list_ref[0]))
-    
-    for key in dict_var.keys():
-        list_var = dict_var[key]
-        list_var.sort(key = lambda x : x[total])
-        best_var = list_var[0]
-        if len(list_var) > 1:
-            for ele_var in list_var[1:]:
-                if float(ele_var[cfd]) > float(best_var[cfd]):
-                    fileOut_disc.write("\t".join(best_var))
-                    best_var = ele_var
-                else:
-                    fileOut_disc.write("\t".join(ele_var))
-            fileOut.write("\t".join(best_var))
-        else:
-            fileOut.write("\t".join(best_var))
-'''
 
 
 def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
@@ -144,6 +103,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
                 len(final_list_best_ref)-1)
             fileOut.write("\t".join(final_list_best_ref[0]))
             bestTarget = final_list_best_ref.pop(0)
+        # write all the remaining targets in the alt file
         for count, elem in enumerate(final_list_best_ref):
             final_list_best_ref[count][cfd-1] = str(
                 len(final_list_best_ref)+len(final_list_best_var)-1)
@@ -182,6 +142,7 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
                 len(final_list_best_ref)-1)
             fileOut.write("\t".join(final_list_best_ref[0]))
             bestTarget = final_list_best_ref.pop(0)
+        # write all the remaining targets in the alt file
         for count, elem in enumerate(final_list_best_ref):
             final_list_best_ref[count][cfd-1] = str(
                 len(final_list_best_ref)+len(final_list_best_var)-1)
