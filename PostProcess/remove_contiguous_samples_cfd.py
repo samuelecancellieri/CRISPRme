@@ -8,7 +8,6 @@ import sys
 import time
 
 
-
 def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
     # avoid crush when cluster is empty in the first call
     if not cluster:
@@ -77,10 +76,10 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         # sort per score (CFD or CRISTA)
         if validity_check_ref:
             final_list_best_ref = sorted(final_list_best_ref, key=lambda x: (
-                float(x[cfd]), -int(x[total])))
+                -float(x[cfd]), int(x[total])))
         if validity_check_var:
             final_list_best_var = sorted(final_list_best_var, key=lambda x: (
-                float(x[cfd]), -int(x[total])))
+                -float(x[cfd]), int(x[total])))
         if var_only:  # no ref found
             # count the residual targets in the list
             final_list_best_var[0][cfd-1] = str(len(final_list_best_var)-1)
@@ -116,10 +115,10 @@ def get_best_targets(cluster, fileOut, fileOut_disc, cfd, snp_info):
         # sort for total (mm+bul) in target
         if validity_check_ref:
             final_list_best_ref = sorted(final_list_best_ref, key=lambda x: (
-                -int(x[total-2]), -int(x[total-1])))
+                int(x[total-2]), int(x[total-1])))
         if validity_check_var:
             final_list_best_var = sorted(final_list_best_var, key=lambda x: (
-                -int(x[total-2]), -int(x[total-1])))
+                int(x[total-2]), int(x[total-1])))
         if var_only:  # no ref found
             # count the residual targets in the list
             final_list_best_var[0][cfd-1] = str(len(final_list_best_var)-1)
