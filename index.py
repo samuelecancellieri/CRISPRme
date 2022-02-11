@@ -6,7 +6,6 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 # SYSTEM IMPORT
 import os
-import concurrent
 import sys
 # APP IMPORT
 from app import app, URL, current_working_directory, cache
