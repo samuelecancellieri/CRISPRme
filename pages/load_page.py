@@ -213,7 +213,7 @@ def load_page():
                             style={'border-radius': '5px', 'border': '2px solid', 'border-color': 'blue',
                                    'width': '100%', 'display': 'inline-block', 'margin': '5px'}
                         ),
-                        # html.P('Results will be kept available for 3 days')
+                        html.P('Results will be kept available for 3 days')
                     ],
                     style={'display': 'inline-block'}
                 ),
