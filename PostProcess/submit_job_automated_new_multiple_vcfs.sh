@@ -612,7 +612,8 @@ echo -e "Cleaning directory"
 rm -f *.CFDGraph.txt
 rm -f indels.CFDGraph.txt
 rm -r "crispritz_prof"
-rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
+#keep targets to check them
+# rm -r "crispritz_targets" #remove targets in online version to avoid memory saturation
 #prevent deletion of single best file to use in further creations of data files (summary,charts and plots)
 # rm $final_res.bestCFD.txt
 # rm $final_res.bestmmblg.txt
