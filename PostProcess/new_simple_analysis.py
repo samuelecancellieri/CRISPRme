@@ -565,14 +565,17 @@ def calculate_scores(cluster_to_save):
     # process score for each target in cluster, at the same time to improve execution time
     cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
 
+    # analyze CFD scored targets, returning for each guide,chr,cluster_pos the highest scoring target (or multiple in case of equal)
     df_CFD = pd.DataFrame(cluster_with_CFD_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
                                                            'Position', 'Cluster_Position', 'Direction', 'Mismatches',
                                                            'Bulge_Size', 'Total', 'PAM_gen', 'Var_uniq', 'Samples', 'Annotation_Type',
                                                            'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
                                                            'Seq_in_cluster', 'CFD_ref'])
+    # group by over real_guide,chr,cluster_pos to avoid mixing targets
     idx_max_score = df_CFD.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position'])[
         'CFD'].transform(max) == df_CFD['CFD']
     df_CFD = df_CFD[idx_max_score]
+    # remove duplicate rows (possible due to haplotypes and variants)
     df_CFD.drop_duplicates(inplace=True)
     cluster_with_CFD_score = df_CFD.values.tolist()
 
