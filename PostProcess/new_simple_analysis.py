@@ -573,6 +573,7 @@ def calculate_scores(cluster_to_save):
     idx_max_score = df_CFD.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position'])[
         'CFD'].transform(max) == df_CFD['CFD']
     df_CFD = df_CFD[idx_max_score]
+    df_CFD.drop_duplicates(inplace=True)
     cluster_with_CFD_score = df_CFD.values.tolist()
 
     df_CRISTA = pd.DataFrame(cluster_with_CRISTA_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
@@ -583,6 +584,7 @@ def calculate_scores(cluster_to_save):
     idx_max_score = df_CRISTA.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position'])[
         'CFD'].transform(max) == df_CRISTA['CFD']
     df_CRISTA = df_CRISTA[idx_max_score]
+    df_CRISTA.drop_duplicates(inplace=True)
     cluster_with_CRISTA_score = df_CRISTA.values.tolist()
 
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
