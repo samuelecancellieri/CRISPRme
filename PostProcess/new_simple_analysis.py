@@ -564,6 +564,11 @@ def calculate_scores(cluster_to_save):
     # process score for each target in cluster, at the same time to improve execution time
     cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
 
+    for target in cluster_with_CFD_score:
+        print(target)
+    # df_CFD = pd.DataFrame(cluster_with_CFD_score)
+    # idx = df_CFD.groupby(['Mt'])['count'].transform(max) == df_CFD['count']
+
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
 
 
