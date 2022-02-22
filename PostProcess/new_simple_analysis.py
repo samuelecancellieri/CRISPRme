@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from math import trunc
+from operator import index
 import sys
 import json
 import os
@@ -564,10 +565,25 @@ def calculate_scores(cluster_to_save):
     # process score for each target in cluster, at the same time to improve execution time
     cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
 
-    for target in cluster_with_CFD_score:
-        print(target)
-    # df_CFD = pd.DataFrame(cluster_with_CFD_score)
-    # idx = df_CFD.groupby(['Mt'])['count'].transform(max) == df_CFD['count']
+    df_CFD = pd.DataFrame(cluster_with_CFD_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
+                                                           'Position', 'Cluster_Position', 'Direction', 'Mismatches',
+                                                           'Bulge_Size', 'Total', 'PAM_gen', 'Var_uniq', 'Samples', 'Annotation_Type',
+                                                           'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
+                                                           'Seq_in_cluster', 'CFD_ref'])
+    idx_max_score = df_CFD.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position'])[
+        'CFD'].transform(max) == df_CFD['CFD']
+    df_CFD = df_CFD[idx_max_score]
+    cluster_with_CFD_score = df_CFD.values.tolist()
+
+    df_CRISTA = pd.DataFrame(cluster_with_CRISTA_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
+                                                                 'Position', 'Cluster_Position', 'Direction', 'Mismatches',
+                                                                 'Bulge_Size', 'Total', 'PAM_gen', 'Var_uniq', 'Samples', 'Annotation_Type',
+                                                                 'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
+                                                                 'Seq_in_cluster', 'CFD_ref'])
+    idx_max_score = df_CRISTA.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position'])[
+        'CFD'].transform(max) == df_CRISTA['CFD']
+    df_CRISTA = df_CRISTA[idx_max_score]
+    cluster_with_CRISTA_score = df_CRISTA.values.tolist()
 
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
 
