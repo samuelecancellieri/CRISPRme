@@ -566,29 +566,31 @@ def calculate_scores(cluster_to_save):
     cluster_with_CRISTA_score = preprocess_CRISTA_score(cluster_to_save)
 
     # analyze CFD scored targets, returning for each guide,chr,cluster_pos the highest scoring target (or multiple in case of equal)
-    # df_CFD = pd.DataFrame(cluster_with_CFD_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
-    #                                                        'Position', 'Cluster_Position', 'Direction', 'Mismatches',
-    #                                                        'Bulge_Size', 'Total', 'PAM_gen', 'Var_uniq', 'Samples', 'Annotation_Type',
-    #                                                        'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
-    #                                                        'Seq_in_cluster', 'CFD_ref'])
-    # # group by over real_guide,chr,cluster_pos to avoid mixing targets
-    # idx_max_score = df_CFD.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position', 'Samples'])[
-    #     'CFD'].transform(max) == df_CFD['CFD']
-    # df_CFD = df_CFD[idx_max_score]
-    # # remove duplicate rows (possible due to haplotypes and variants)
-    # df_CFD.drop_duplicates(inplace=True)
-    # cluster_with_CFD_score = df_CFD.values.tolist()
+    df_CFD = pd.DataFrame(cluster_with_CFD_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
+                                                           'Position', 'Cluster_Position', 'Direction', 'Mismatches',
+                                                           'Bulge_Size', 'Total', 'PAM_gen', 'Var_uniq', 'Samples', 'Annotation_Type',
+                                                           'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
+                                                           'Seq_in_cluster', 'CFD_ref'])
+    # group by over real_guide,chr,cluster_pos to avoid mixing targets
+    idx_max_score = df_CFD.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples'])[
+        'CFD'].transform(max) == df_CFD['CFD']
+    df_CFD = df_CFD[idx_max_score]
+    # remove duplicate rows (possible due to haplotypes and variants)
+    df_CFD.drop_duplicates(['Real_Guide', 'Chromosome',
+                           'Cluster_Position', 'SNP', 'Samples', 'CFD'], inplace=True)
+    cluster_with_CFD_score = df_CFD.values.tolist()
 
-    # df_CRISTA = pd.DataFrame(cluster_with_CRISTA_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
-    #                                                              'Position', 'Cluster_Position', 'Direction', 'Mismatches',
-    #                                                              'Bulge_Size', 'Total', 'PAM_gen', 'Var_uniq', 'Samples', 'Annotation_Type',
-    #                                                              'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
-    #                                                              'Seq_in_cluster', 'CFD_ref'])
-    # idx_max_score = df_CRISTA.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position', 'Samples'])[
-    #     'CFD'].transform(max) == df_CRISTA['CFD']
-    # df_CRISTA = df_CRISTA[idx_max_score]
-    # df_CRISTA.drop_duplicates(inplace=True)
-    # cluster_with_CRISTA_score = df_CRISTA.values.tolist()
+    df_CRISTA = pd.DataFrame(cluster_with_CRISTA_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
+                                                                 'Position', 'Cluster_Position', 'Direction', 'Mismatches',
+                                                                 'Bulge_Size', 'Total', 'PAM_gen', 'Var_uniq', 'Samples', 'Annotation_Type',
+                                                                 'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
+                                                                 'Seq_in_cluster', 'CFD_ref'])
+    idx_max_score = df_CRISTA.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples'])[
+        'CFD'].transform(max) == df_CRISTA['CFD']
+    df_CRISTA = df_CRISTA[idx_max_score]
+    df_CRISTA.drop_duplicates(
+        ['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples', 'CFD'], inplace=True)
+    cluster_with_CRISTA_score = df_CRISTA.values.tolist()
 
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
 
