@@ -540,33 +540,33 @@ for nline, line in enumerate(inCrispritzResults):
         target[64]) == '.' else str(target[64])
     saveDict['Variant_samples_(highest_CRISTA)'] = str(target[61])
 
-    change_alt_ref_highest_cfd = False
-    if saveDict['Not_found_in_REF'] == 'NA' and saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
-        change_alt_ref_highest_cfd = True
+    # change_alt_ref_highest_cfd = False
+    # if saveDict['Not_found_in_REF'] == 'NA' and saveDict['REF/ALT_origin_(highest_CFD)'] == 'alt' and saveDict['CFD_score_REF_(highest_CFD)'] != '-1.0' and saveDict['CFD_score_REF_(highest_CFD)'] == saveDict['CFD_score_ALT_(highest_CFD)']:
+    #     change_alt_ref_highest_cfd = True
 
-    change_alt_ref_highest_crista = False
-    if saveDict['Not_found_in_REF'] == 'NA' and saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] == saveDict['CRISTA_score_ALT_(highest_CRISTA)']:
-        change_alt_ref_highest_crista = True
+    # change_alt_ref_highest_crista = False
+    # if saveDict['Not_found_in_REF'] == 'NA' and saveDict['REF/ALT_origin_(highest_CRISTA)'] == 'alt' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] != '-1.0' and saveDict['CRISTA_score_REF_(highest_CRISTA)'] == saveDict['CRISTA_score_ALT_(highest_CRISTA)']:
+    #     change_alt_ref_highest_crista = True
 
-    if change_alt_ref_highest_cfd:
-        saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = 'NA'
-        saveDict['REF/ALT_origin_(highest_CFD)'] = 'ref'
-        saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = 'NA'
-        saveDict['Variant_info_genome_(highest_CFD)'] = 'NA'
-        saveDict['Variant_MAF_(highest_CFD)'] = 'NA'
-        saveDict['Variant_rsID_(highest_CFD)'] = 'NA'
-        saveDict['Variant_samples_(highest_CFD)'] = 'NA'
-        saveDict['PAM_creation_(highest_CFD)'] = 'NA'
+    # if change_alt_ref_highest_cfd:
+    #     saveDict['Aligned_protospacer+PAM_ALT_(highest_CFD)'] = 'NA'
+    #     saveDict['REF/ALT_origin_(highest_CFD)'] = 'ref'
+    #     saveDict['Variant_info_spacer+PAM_(highest_CFD)'] = 'NA'
+    #     saveDict['Variant_info_genome_(highest_CFD)'] = 'NA'
+    #     saveDict['Variant_MAF_(highest_CFD)'] = 'NA'
+    #     saveDict['Variant_rsID_(highest_CFD)'] = 'NA'
+    #     saveDict['Variant_samples_(highest_CFD)'] = 'NA'
+    #     saveDict['PAM_creation_(highest_CFD)'] = 'NA'
 
-    if change_alt_ref_highest_crista:
-        saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)'] = 'NA'
-        saveDict['REF/ALT_origin_(highest_CRISTA)'] = 'ref'
-        saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = 'NA'
-        saveDict['Variant_info_genome_(highest_CRISTA)'] = 'NA'
-        saveDict['Variant_MAF_(highest_CRISTA)'] = 'NA'
-        saveDict['Variant_rsID_(highest_CRISTA)'] = 'NA'
-        saveDict['Variant_samples_(highest_CRISTA)'] = 'NA'
-        saveDict['PAM_creation_(highest_CRISTA)'] = 'NA'
+    # if change_alt_ref_highest_crista:
+    #     saveDict['Aligned_protospacer+PAM_ALT_(highest_CRISTA)'] = 'NA'
+    #     saveDict['REF/ALT_origin_(highest_CRISTA)'] = 'ref'
+    #     saveDict['Variant_info_spacer+PAM_(highest_CRISTA)'] = 'NA'
+    #     saveDict['Variant_info_genome_(highest_CRISTA)'] = 'NA'
+    #     saveDict['Variant_MAF_(highest_CRISTA)'] = 'NA'
+    #     saveDict['Variant_rsID_(highest_CRISTA)'] = 'NA'
+    #     saveDict['Variant_samples_(highest_CRISTA)'] = 'NA'
+    #     saveDict['PAM_creation_(highest_CRISTA)'] = 'NA'
 
     # check how long is the pam counting Ns in the guide
     count_N_in_guide = str(target[15]).count('N')
