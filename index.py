@@ -98,7 +98,10 @@ if __name__ == '__main__':
         app.run_server(host='0.0.0.0', port=8080, debug=False,
                        dev_tools_ui=False, dev_tools_props_check=False)
         cache.clear()  # delete cache when server is closed
-    else:
+    elif '--website' in sys.argv[1:]:
         app.run_server(host='0.0.0.0', port=80, debug=False,
                        dev_tools_ui=False, dev_tools_props_check=False)
         cache.clear()  # delete cache when server is closed
+    else:
+        print('Please select a valid destination (local or website)')
+        print('If you are using CRISPRme for personal use, use --local (e.g. python index.py --local)')
