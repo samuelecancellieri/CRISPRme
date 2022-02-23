@@ -572,12 +572,21 @@ def calculate_scores(cluster_to_save):
                                                            'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
                                                            'Seq_in_cluster', 'CFD_ref'])
     # group by over real_guide,chr,cluster_pos to avoid mixing targets
+    # select lowest count of mm+bul
+    idx_fewest_mm_bul = df_CFD.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples'])[
+        'Total'].transform(min) == df_CFD['Total']
+    df_CFD_fewest = df_CFD[idx_fewest_mm_bul]
+    df_CFD_fewest.drop_duplicates(
+        ['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples', 'Mismatches', 'Bulge_Size'], inplace=True)
+    # select highest score
     idx_max_score = df_CFD.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples'])[
         'CFD'].transform(max) == df_CFD['CFD']
-    df_CFD = df_CFD[idx_max_score]
+    df_CFD_best_score = df_CFD[idx_max_score]
     # remove duplicate rows (possible due to haplotypes and variants)
-    df_CFD.drop_duplicates(['Real_Guide', 'Chromosome',
-                           'Cluster_Position', 'SNP', 'Samples', 'CFD'], inplace=True)
+    df_CFD_best_score.drop_duplicates(['Real_Guide', 'Chromosome',
+                                       'Cluster_Position', 'SNP', 'Samples', 'CFD'], inplace=True)
+    frames = [df_CFD_fewest, df_CFD_best_score]
+    df_CFD = pd.concat(frames)
     cluster_with_CFD_score = df_CFD.values.tolist()
 
     df_CRISTA = pd.DataFrame(cluster_with_CRISTA_score, columns=['Bulge_type', 'crRNA', 'DNA', 'Chromosome',
@@ -585,11 +594,21 @@ def calculate_scores(cluster_to_save):
                                                                  'Bulge_Size', 'Total', 'PAM_gen', 'Var_uniq', 'Samples', 'Annotation_Type',
                                                                  'Real_Guide', 'rsID', 'AF', 'SNP', 'Reference_target', 'CFD',
                                                                  'Seq_in_cluster', 'CFD_ref'])
+    # select lowest count of mm+bul
+    idx_fewest_mm_bul = df_CRISTA.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples'])[
+        'Total'].transform(min) == df_CRISTA['Total']
+    df_CRISTA_fewest = df_CRISTA[idx_fewest_mm_bul]
+    df_CRISTA_fewest.drop_duplicates(
+        ['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples', 'Mismatches', 'Bulge_Size'], inplace=True)
+    # select highest score
     idx_max_score = df_CRISTA.groupby(['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples'])[
         'CFD'].transform(max) == df_CRISTA['CFD']
-    df_CRISTA = df_CRISTA[idx_max_score]
-    df_CRISTA.drop_duplicates(
-        ['Real_Guide', 'Chromosome', 'Cluster_Position', 'SNP', 'Samples', 'CFD'], inplace=True)
+    df_CRISTA_best_score = df_CRISTA[idx_max_score]
+    # remove duplicate rows (possible due to haplotypes and variants)
+    df_CRISTA_best_score.drop_duplicates(['Real_Guide', 'Chromosome',
+                                          'Cluster_Position', 'SNP', 'Samples', 'CFD'], inplace=True)
+    frames = [df_CRISTA_fewest, df_CRISTA_best_score]
+    df_CRISTA = pd.concat(frames)
     cluster_with_CRISTA_score = df_CRISTA.values.tolist()
 
     return [cluster_with_CFD_score, cluster_with_CRISTA_score]
