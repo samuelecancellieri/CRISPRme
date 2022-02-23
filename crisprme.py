@@ -255,9 +255,7 @@ def complete_search():
             exit(1)
 
     if "--thread" not in input_args:
-        # print("--thread must be contained in the input")
-        # exit(1)
-        thread = len(os.sched_getaffinity(0))-2
+        thread = 4  # set to avoid errors in following procedures
     else:
         try:
             thread = input_args[input_args.index("--thread")+1]
@@ -269,10 +267,9 @@ def complete_search():
         except:
             print("Please input a number for flag thread")
             exit(1)
-        if thread <= 0 or thread > len(os.sched_getaffinity(0))-2:
-            print("thread is set to default (ALL available minus 2)")
-            thread = len(os.sched_getaffinity(0))-2
-            # exit(1)
+        if thread <= 0:
+            print("thread is set to default (4) ")
+            thread = 4
 
     if "--vcf" not in input_args:
         variant = False
@@ -841,8 +838,7 @@ def web_interface():
         print("This function must be launched without input, it starts a local server to use the web interface.")
         print("Open your web-browser and write 127.0.0.1:8080 in the search bar if you are executing locally, if you are executing on an external server write <yourserverip>:8080 in search bar")
         exit(0)
-    # print(corrected_web_path)
-    subprocess.run(corrected_web_path+'/./index.py')
+    subprocess.run(corrected_web_path+'/./index.py', '--local')
 
 
 # HELP FUNCTION
